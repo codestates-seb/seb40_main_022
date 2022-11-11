@@ -5,8 +5,8 @@ const Maincontainer = styled.main`
   height: 100vh;
 `;
 
-const Main = () => {
-  return <Maincontainer></Maincontainer>;
-};
+function Main() {
+  return <Maincontainer />;
+}
 
 export default Main;
