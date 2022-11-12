@@ -3,7 +3,8 @@ package com.backend.fitchallenge.global.error.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-    MEMBER_NOT_FOUND(404, "Member not found");
+    MEMBER_NOT_FOUND(404, "Member not found"),
+    TOKEN_NOT_FOUND(404, "Token not found");
 
     @Getter
     private final int status;
