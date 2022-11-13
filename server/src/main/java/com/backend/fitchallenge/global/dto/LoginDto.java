@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.global.security.dto;
+package com.backend.fitchallenge.global.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

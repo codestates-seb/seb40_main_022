@@ -6,8 +6,10 @@ import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshToken;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.domain.refreshtoken.exception.TokenNotExist;
+import com.backend.fitchallenge.global.security.exception.TokenNotValid;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -17,13 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -44,13 +42,12 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
 
-    /**
-     * secretkey를 암호화한다.
-     */
+    //secretKey 암호화
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
+    //secretKey 복호화
     private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
         Key key = Keys.hmacShaKeyFor(keyBytes);
@@ -58,11 +55,20 @@ public class JwtTokenProvider {
         return key;
     }
 
-    /**
-     * accesstoken을 생성한다.
-     *
-     */
-    public String generateAccessToken(Map<String, Object> claims,
+    //만료시간 구하는 메서드
+    public Date getTokenExpiration(int expirationMinutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, expirationMinutes);
+        Date expiration = calendar.getTime();
+
+        return expiration;
+    }
+
+
+
+
+    //accessToken 생성방법
+    public String accessTokenAssembly(Map<String, Object> claims,
                                       String subject,
                                       Date expiration,
                                       String base64EncodedSecretKey) {
@@ -77,8 +83,25 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // refreshtoken 생성
-    public String generateRefreshToken(String subject,
+    // principal 에서 정보 뽑아내서 액세스토큰 생성
+    public String createAccessToken(Member member) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", member.getEmail());
+        claims.put("roles", member.getAuthority().toString()); // 수정 가능성 존재 11/12
+
+        String subject = member.getEmail();
+        Date expiration = getTokenExpiration(accessTokenExpirationMinutes);
+
+        String base64EncodedSecretKey = encodeBase64SecretKey(secretKey);
+
+        String accessToken = accessTokenAssembly(claims, subject, expiration, base64EncodedSecretKey);
+
+        return accessToken;
+    }
+
+    // refreshToken 생성방법
+    public String refreshTokenAssembly(String subject,
                                        Date expiration,
                                        String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
@@ -91,16 +114,35 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // claim 정보를 얻기 위한 메서드
+    // principal 에서 정보 뽑아내서 리프레시토큰 생성
+    public String createRefreshToken(Member member) {
+
+        String subject = member.getEmail();
+        Date expiration = getTokenExpiration(refreshTokenExpirationMinutes);
+        String base64EncodedSecretKey = encodeBase64SecretKey(secretKey);
+
+        String refreshToken = refreshTokenAssembly(subject, expiration, base64EncodedSecretKey);
+
+        return refreshToken;
+    }
+
+
+
+
+    // 토큰 검증 후 claim 반환
     public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        Jws<Claims> claimsJws = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jws);
-
-        return claimsJws;
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jws);
+            return claimsJws;
+        }
+        catch(JwtException e){
+            throw new TokenNotValid();
+        }
     }
 
     public void verifySignature(String jws, String base64EncodedSecretKey) {
@@ -113,21 +155,12 @@ public class JwtTokenProvider {
     }
 
 
-    public Date getTokenExpiration(int expirationMinutes) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, expirationMinutes);
-        Date expiration = calendar.getTime();
-
-        return expiration;
-    }
-
 
     // 외부에서 쓸 메서드들
     public Member findMember(String email){
 
         return memberRepository.findByEmail(email).orElseThrow(()->new MemberNotExist());
     }
-
 
     public void saveRefreshToken(Long memberId, String refreshToken){
         Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findById(memberId);

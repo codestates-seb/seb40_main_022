@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.global.security.config;
+package com.backend.fitchallenge.global.config;
 
 import com.backend.fitchallenge.global.security.filter.JwtAuthenticationFilter;
 import com.backend.fitchallenge.global.security.filter.JwtVerificationFilter;
@@ -9,7 +9,6 @@ import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,7 +27,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
@@ -91,13 +90,15 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter jwtAuthenticationFilter =
                     new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider);
+
+            JwtVerificationFilter jwtVerificationFilter =
+                    new JwtVerificationFilter(jwtTokenProvider, authorityUtils);
+
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
 
             //핸들러 작성 전
 //            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthSuccessHandler());
 //            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthFailureHandler());
-
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenProvider, authorityUtils);
 
             builder.addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);

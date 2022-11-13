@@ -1,7 +1,7 @@
 package com.backend.fitchallenge.global.security.filter;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
-import com.backend.fitchallenge.global.security.dto.LoginDto;
+import com.backend.fitchallenge.global.dto.LoginDto;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -47,8 +42,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) {
         Member member = (Member) authResult.getPrincipal();
 
-        String accessToken = delegateAccessToken(member);
-        String refreshToken = delegateRefreshToken(member);
+        String accessToken = jwtTokenProvider.createAccessToken(member);
+        String refreshToken = jwtTokenProvider.createRefreshToken(member);
 
         Member findMember = jwtTokenProvider.findMember(member.getEmail());
         jwtTokenProvider.saveRefreshToken(findMember.getId(), refreshToken); // 리프레시 토큰 저장
@@ -57,36 +52,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("RefreshToken", refreshToken);
-    }
-    private String delegateAccessToken(Member member) {
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("username", member.getEmail());
-        claims.put("roles", member.getAuthority().toString()); // 수정 가능성 존재 11/12
-
-        String subject = member.getEmail();
-        Date expiration = jwtTokenProvider.getTokenExpiration(jwtTokenProvider.getAccessTokenExpirationMinutes());
-
-        String base64EncodedSecretKey = jwtTokenProvider.encodeBase64SecretKey(jwtTokenProvider.getSecretKey());
-
-        String accessToken = jwtTokenProvider.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
-        return accessToken;
-    }
-
-    /**
-     * RefreshToken 생성 로직
-     * @Param 인증된 Authentication의 principal field에서 찾아온 member정보
-     * @Return RefreshToken
-     */
-    private String delegateRefreshToken(Member member) {
-
-        String subject = member.getEmail();
-        Date expiration = jwtTokenProvider.getTokenExpiration(jwtTokenProvider.getRefreshTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenProvider.encodeBase64SecretKey(jwtTokenProvider.getSecretKey());
-
-        String refreshToken = jwtTokenProvider.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-
-        return refreshToken;
     }
 }

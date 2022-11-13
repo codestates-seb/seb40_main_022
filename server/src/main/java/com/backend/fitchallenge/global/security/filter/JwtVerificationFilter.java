@@ -31,11 +31,13 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         try {
-//            String refreshToken = jwtTokenizer.getRefreshTokenFromReq(request.getCookies());
+//
             String refreshToken = request.getHeader("refreshToken");
             jwtTokenProvider.verifiedRefreshToken(refreshToken);
+
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
+
         } catch (SignatureException se) {
             request.setAttribute("exception", se);
         } catch (ExpiredJwtException ee) {
@@ -54,7 +56,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return authorization == null || !authorization.startsWith("Bearer");
     }
 
-    // 서버가 생성해서 준 jwt가 다시 request로 돌아왔을 경우 검증
+    // 토큰으로부터 클레임 생성
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
         String base64EncodedSecretKey = jwtTokenProvider.encodeBase64SecretKey(jwtTokenProvider.getSecretKey());
@@ -63,10 +65,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return claims;
     }
 
-    // Authentication 객체를 SecurityContext에 저장
+    // 토큰으로부터 뽑아낸 Authentication 객체를 SecurityContext에 저장
     private void setAuthenticationToContext(Map<String, Object> claims) {
         String username = (String) claims.get("username"); // loginDto에서 설정한 이름
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles")); // security를 위한 권한정보
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
