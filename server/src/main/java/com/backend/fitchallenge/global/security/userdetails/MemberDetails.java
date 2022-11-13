@@ -16,8 +16,8 @@ import java.util.List;
  * 인증된 멤버의 정보가 담겨있다.
  */
 @Getter
+@RequiredArgsConstructor
 public class MemberDetails extends Member implements UserDetails {
-
 
     private Long memberId;
     private String email;

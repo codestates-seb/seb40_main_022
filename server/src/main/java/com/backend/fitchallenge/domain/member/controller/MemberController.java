@@ -1,11 +1,14 @@
 package com.backend.fitchallenge.domain.member.controller;
 
+import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/members")
@@ -16,9 +19,11 @@ public class MemberController {
 
     //회원가입
     @PostMapping("/signup")
-    public ResponseEntity create(){
+    public ResponseEntity create(@RequestBody @Valid MemberCreate memberCreate){
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        Long createdId = memberService.createMember(memberCreate);
+
+        return new ResponseEntity(createdId, HttpStatus.CREATED);
     }
 
     //회원 정보 수정

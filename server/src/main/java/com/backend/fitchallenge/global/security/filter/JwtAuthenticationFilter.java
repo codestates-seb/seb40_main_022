@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //추후 쿠키 이용시 여기서 추가할 것
 
         response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("refreshToken", refreshToken);
+        response.setHeader("RefreshToken", refreshToken);
     }
     private String delegateAccessToken(Member member) {
 

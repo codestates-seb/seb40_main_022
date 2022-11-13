@@ -4,6 +4,7 @@ import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -23,10 +24,10 @@ public class MemberCreate {
     @NotBlank(message = "활동을 위한 닉네임을 설정해주세요.")
     private String username;
 
-    public Member toMember(){
+    public Member toMember(PasswordEncoder passwordEncoder){
         return Member.builder()
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .username(username)
                 .build();
     }

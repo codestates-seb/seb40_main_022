@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -52,8 +54,11 @@ public class Member extends Auditable {
     @Column(name = "SPLIT")
     private String split;
 
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    private List<String> roles = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
-    private Authority authority;
+    private Authority authority = Authority.ROLE_USER;
 
     @Embedded
     private MemberActivity memberActivity = new MemberActivity();
@@ -64,11 +69,5 @@ public class Member extends Auditable {
         this.email = email;
         this.password = password;
         this.username = username;
-    }
-
-    public enum Authority{
-        ROLE_ADMIN,
-        ROLE_PROFESSIONAL,
-        ROLE_USER
     }
 }
