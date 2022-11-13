@@ -167,14 +167,6 @@ public class JwtTokenProvider {
         optionalRefreshToken.ifPresent(refreshTokenRepository::delete);
         refreshTokenRepository.save(new RefreshToken(memberId, refreshToken));
     }
-    //리이슈할때
-    public void reissueRefreshToken(Long memberId, String refreshToken){
-
-        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findById(memberId);
-        RefreshToken foundRefreshToken = optionalRefreshToken.orElseThrow(()->new TokenNotExist());
-
-        refreshTokenRepository.save(foundRefreshToken.updateTokenValue(refreshToken));
-    }
 
     //db에 토큰 존재하는가 (로그인상태확인)
     public void verifiedRefreshToken(String refreshToken){
@@ -182,5 +174,4 @@ public class JwtTokenProvider {
         if(!optionalRefreshToken.isPresent())
             throw new TokenNotExist();
     }
-
 }
