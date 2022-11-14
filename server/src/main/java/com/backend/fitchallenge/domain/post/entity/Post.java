@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.post.entity;
 import com.backend.fitchallenge.domain.member.Member;
 import com.backend.fitchallenge.domain.picture.entity.Picture;
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
+import com.backend.fitchallenge.domain.postcomment.entity.PostComment;
 import com.backend.fitchallenge.domain.tag.domain.Tag;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
@@ -44,6 +45,9 @@ public class Post extends Auditable {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostTag> postTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostComment> postComments = new ArrayList<>();
 
     @Builder
     public Post(Member member, String content, Long view) {

@@ -1,17 +1,14 @@
 package com.backend.fitchallenge.domain.post.controller;
 
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
-import com.backend.fitchallenge.domain.post.dto.PostUpdate;
 import com.backend.fitchallenge.domain.post.dto.PostUpdateVO;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.post.service.PostService;
-import com.backend.fitchallenge.global.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import com.backend.fitchallenge.global.dto.response.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +28,7 @@ public class PostController {
     /**
      * 게시물 작성
      * AuthenticationPrincipal을 통해 로그인세션 정보를 불러옴
-     * @param postCreateVO 게시물 작성 요청 정보
+     * @param postCreate 게시물 작성 요청 정보
      * @return 생성된 게시물 id, 응답상태코드 - created
      */
     @PostMapping
@@ -51,7 +48,6 @@ public class PostController {
      * 무한 스크롤 페이지네이션
      * @return  최신순으로 페이지네이션된 게시물 목록
      */
-
     @GetMapping
     public ResponseEntity<MultiResponse<?>> getList(Pageable pageable) {
 

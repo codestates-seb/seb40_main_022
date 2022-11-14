@@ -12,7 +12,10 @@ public enum ExceptionCode {
     UPLOAD_FAILED(404, "Upload Failed"),
 
     //Tag
-    TAG_NOT_FOUND(404, "Tag Not Found");
+    TAG_NOT_FOUND(404, "Tag Not Found"),
+
+    //Comment
+    COMMENT_NOT_FOUND(404, "Comment Not Found");
 
     @Getter
     private final int status;

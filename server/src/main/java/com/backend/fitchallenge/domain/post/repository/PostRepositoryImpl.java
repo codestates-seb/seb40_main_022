@@ -44,7 +44,7 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
     }
 
     @Override
-    public Long pagingCount(Pageable pageable) {
+    public Long pagingCount() {
         return jpaQueryFactory
                 .select(post.id.count())
                 .from(post)

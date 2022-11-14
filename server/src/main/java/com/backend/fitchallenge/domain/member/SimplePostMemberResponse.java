@@ -17,7 +17,7 @@ public class SimplePostMemberResponse {
         this.username = username;
     }
 
-    @Builder
+
     public static SimplePostMemberResponse toResponse(Member member) {
         return SimplePostMemberResponse.builder()
                 .userId(member.getId())

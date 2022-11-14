@@ -49,8 +49,8 @@ public class PostService {
             List<Tag> tags = createTag(postCreate.getTagDtos());
             Post postWithTag = Post.toPostWithTag(postCreate, tags, member, imagePathList);
             return postRepository.save(postWithTag).getId();
-        }else {
-        //Tag 없는 경우
+        } else {
+            //Tag 없는 경우
             Post post = Post.toPost(postCreate, member, imagePathList);
             return postRepository.save(post).getId();
         }
@@ -60,18 +60,18 @@ public class PostService {
     private List<Tag> createTag(List<TagDto> tagDtos) {
         return tagDtos.stream()
                 .map(dto ->
-                   tagService.createTag(dto))
+                        tagService.createTag(dto))
                 .collect(toList());
     }
 
     /**
-     *  무한 스크롤 페이지네이션
-     *  postId에 해당하는 사진들을 picture 테이블에 저장한 image path로 불러온다.
+     * 무한 스크롤 페이지네이션
+     * postId에 해당하는 사진들을 picture 테이블에 저장한 image path로 불러온다.
      */
     @Transactional(readOnly = true)
     public MultiResponse<?> getPostList(Pageable pageable) {
 
-        Long total = postRepository.pagingCount(pageable);
+        Long total = postRepository.pagingCount();
         Map<Long, List<String>> postPictureMap = postRepository.findListWithPicture(pageable).stream().collect(
                 groupingBy(tuple -> tuple.get(post.id),
                         mapping(tuple -> tuple.get(picture.path), toList())));
@@ -101,14 +101,15 @@ public class PostService {
         List<String> paths = post.getPictures().stream().
                 map(picture -> {
                     int index = picture.getPath().lastIndexOf("/");
-                    return picture.getPath().substring(index);}).collect(toList());
+                    return picture.getPath().substring(index);
+                }).collect(toList());
 
         List<String> imagePaths = awsS3Service.UpdateFile(paths, postUpdate.getFiles());
 
-        if(postUpdate.getTagDtos() != null) {
+        if (postUpdate.getTagDtos() != null) {
             List<Tag> tags = createTag(postUpdate.getTagDtos());
             post.patchWithTag(postUpdate.getContent(), imagePaths, tags);
-        }else{
+        } else {
             post.patch(postUpdate.getContent(), imagePaths);
         }
         return PostUpdateResponse.toResponse(post);
@@ -121,7 +122,8 @@ public class PostService {
         List<String> paths = post.getPictures().stream().
                 map(picture -> {
                     int index = picture.getPath().lastIndexOf("/");
-                    return picture.getPath().substring(index);}).collect(toList());
+                    return picture.getPath().substring(index);
+                }).collect(toList());
         //s3에서 포스트에 해당하는 사진 삭제
         awsS3Service.DeleteFile(paths);
 
@@ -129,15 +131,15 @@ public class PostService {
         postRepository.delete(post);
 
     }
-    private Post findPostById(Long postId) {
+
+    public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(PostNotFound::new);
     }
 
     public Member init() {
-       return  new Member(new Random().nextLong(), "abc@gmail.com", "1234", "잉스기", "https://unsplash.com/photos/yMSecCHsIBc",
+        return new Member(new Random().nextLong(), "abc@gmail.com", "1234", "잉스기", "https://unsplash.com/photos/yMSecCHsIBc",
                 "남", "개발자", "경기도 성남시 판교로", 25L, 180L, 75L, "3분할", "user");
     }
-
 
 
 }
