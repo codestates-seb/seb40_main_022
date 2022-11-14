@@ -2,12 +2,11 @@ package com.backend.fitchallenge.domain.member.service;
 
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
-import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
 import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
+import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractActivity;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractMember;
 import com.backend.fitchallenge.domain.member.entity.Member;
-import com.backend.fitchallenge.domain.member.entity.MemberActivity;
 import com.backend.fitchallenge.domain.member.exception.MemberExist;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
@@ -91,7 +90,7 @@ public class MemberService {
         Member findMember = findVerifiedMember(loginMemberEmail);
 
         //post연결해야함
-        return MyPageResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()));
+        return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()));
 
     }
 
@@ -104,7 +103,8 @@ public class MemberService {
 
         Member findMember = findVerifiedMemberById(memberId);
 
-        return DetailsMemberResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()));
+        //post연결해야함
+        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()));
     }
 
     // todo : 인플루언서 랭킹별로 조회하기.

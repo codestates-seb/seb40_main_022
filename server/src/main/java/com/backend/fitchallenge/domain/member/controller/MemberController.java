@@ -2,11 +2,10 @@ package com.backend.fitchallenge.domain.member.controller;
 
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
-import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
 import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
+import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
 import com.backend.fitchallenge.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
