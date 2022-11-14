@@ -29,7 +29,9 @@ const variables = createGlobalStyle`
     --footerblack : #232629;
     --backgreen : #D6E3E3;
     --headgray : #626262;
-    --backwhite : #FDFDFD; 
+    --backwhite : #FDFDFD;
+    --footerfont : #AEAEAE; 
+    --backcolor : #D6E3E3;
     --white: hsl(0,0%,100%);
     --black-025: hsl(210, 8%, 97.5%);
     --black-050: hsl(210, 8%, 95%);
@@ -46,6 +48,7 @@ const variables = createGlobalStyle`
     --black-750: hsl(210, 8%, 20%);
     --black-800: hsl(210, 8%, 15%);
     --black-900: hsl(210, 8%, 5%);
+    --box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   }
 `;
 
