@@ -2,8 +2,10 @@ package com.backend.fitchallenge.domain.question.service;
 
 import com.backend.fitchallenge.domain.answer.dto.response.AnswerResponse;
 import com.backend.fitchallenge.domain.answer.repository.AnswerRepository;
-import com.backend.fitchallenge.domain.member.Member;
-import com.backend.fitchallenge.domain.member.dto.MemberResponse;
+import com.backend.fitchallenge.domain.member.dto.response.MemberResponse;
+import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
+import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
@@ -31,13 +33,15 @@ import java.util.stream.Collectors;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+    private final MemberRepository memberRepository;
 
-    public Long createQuestion(Long memberId, QuestionCreate questionCreate) {
+    /**
+     * 요청을 보낸 사용자 조회하는 로직 필요
+     */
+    public Long createQuestion(QuestionCreate questionCreate) {
 
-        // Member stub 데이터로 대체
-        Member member = getStubMember(memberId);
-
+        // 요청 사용자 조회 로직 적용시 수정
+        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
         Question question = Question.createQuestion(questionCreate, member);
 
         return questionRepository.save(question).getId();
@@ -51,7 +55,7 @@ public class QuestionService {
         List<AnswerResponse> answerResponses = question.getAnswers().stream().map(AnswerResponse::of).collect(Collectors.toList());
 
         // Member stub 데이터로 대체
-        MemberResponse memberResponse = MemberResponse.of(getStubMember(0L));
+        MemberResponse memberResponse = MemberResponse.of(question.getMember());
 
         return DetailQuestionResponse.of(question, memberResponse, answerResponses);
     }
@@ -61,33 +65,42 @@ public class QuestionService {
 
         Long total = questionRepository.pagingCount();
 
-        // Member stub 데이터로 대체
         Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findAll(pageable).stream()
                 .map(question -> SimpleQuestionResponse.builder()
                         .question(question)
-                        .memberResponse(MemberResponse.of(getStubMember(0L)))
+                        .memberResponse(MemberResponse.of(question.getMember()))
                         .answerCount(question.getAnswers().size())
                         .build()).collect(Collectors.toList()), pageable, total);
 
         return MultiResponse.of(questionResponses);
     }
 
-    public Long updateQuestion(Long memberId, Long id, QuestionUpdate questionUpdate) {
+    /**
+     * 요청을 보낸 사용자 조회하는 로직 필요
+     */
+    public Long updateQuestion(Long id, QuestionUpdate questionUpdate) {
 
+        // 요청 사용자 조회 로직 적용시 수정
+        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
         Question findQuestion = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
 
-        verifyWriter(memberId, findQuestion);
+        verifyWriter(member.getId(), findQuestion);
 
         findQuestion.updateQuestion(questionUpdate);
 
         return questionRepository.save(findQuestion).getId();
     }
 
-    public Long deleteQuestion(Long memberId, Long id) {
+    /**
+     * 요청을 보낸 사용자 조회하는 로직 필요
+     */
+    public Long deleteQuestion(Long id) {
 
+        // 요청 사용자 조회 로직 적용시 수정
+        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
         Question findQuestion = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
 
-        verifyWriter(memberId, findQuestion);
+        verifyWriter(member.getId(), findQuestion);
 
         questionRepository.delete(findQuestion);
 
@@ -102,15 +115,5 @@ public class QuestionService {
         if (!writerId.equals(memberId)) {
             throw new QuestionException(ExceptionCode.NOT_QUESTION_WRITER);
         }
-    }
-
-    private Member getStubMember(Long memberId) {
-        return Member.builder()
-                .id(memberId)
-                .email("hgd@email.com")
-                .password("ghdrlfehd")
-                .username("홍길동")
-                .point(0L)
-                .build();
     }
 }

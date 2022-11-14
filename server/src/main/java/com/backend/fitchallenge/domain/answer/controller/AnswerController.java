@@ -19,9 +19,8 @@ public class AnswerController {
     @PostMapping("/answers")
     public ResponseEntity<Long> create(@PathVariable Long id,
                                        @RequestBody AnswerCreate answerCreate) {
-        Long memberId = 0L;
 
-        return ResponseEntity.ok(answerService.createAnswer(memberId, id, answerCreate));
+        return ResponseEntity.ok(answerService.createAnswer(id, answerCreate));
     }
 
     @PatchMapping("/answers/{answer-id}")
@@ -29,14 +28,19 @@ public class AnswerController {
                                        @PathVariable("answer-id") Long answerId,
                                        @RequestBody AnswerUpdate answerUpdate) {
 
-        return ResponseEntity.ok(answerService.updateAnswer(id, answerId, answerUpdate));
+        return ResponseEntity.ok(answerService.updateAnswer(answerId, answerUpdate));
     }
 
     @DeleteMapping("/answers/{answer-id}")
     public ResponseEntity<Long> delete(@PathVariable("answer-id") Long answerId) {
 
-        Long memberId = 1L;
+        return ResponseEntity.ok(answerService.deleteAnswer(answerId));
+    }
 
-        return ResponseEntity.ok(answerService.deleteAnswer(memberId, answerId));
+    @PostMapping("/answers/{answer-id}/accept")
+    public ResponseEntity<Long> accept(@PathVariable Long id,
+                                       @PathVariable("answer-id") Long answerId) {
+
+        return ResponseEntity.ok(answerService.accept(id, answerId));
     }
 }

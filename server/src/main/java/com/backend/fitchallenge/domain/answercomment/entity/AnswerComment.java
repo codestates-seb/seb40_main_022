@@ -1,10 +1,9 @@
 package com.backend.fitchallenge.domain.answercomment.entity;
 
-import com.backend.fitchallenge.domain.answer.dto.request.AnswerUpdate;
 import com.backend.fitchallenge.domain.answer.entity.Answer;
 import com.backend.fitchallenge.domain.answercomment.dto.request.AnswerCommentCreate;
 import com.backend.fitchallenge.domain.answercomment.dto.request.AnswerCommentUpdate;
-import com.backend.fitchallenge.domain.member.Member;
+import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,7 +22,7 @@ public class AnswerComment extends Auditable {
     @Column(name = "ANSWER_COMMENT_ID", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

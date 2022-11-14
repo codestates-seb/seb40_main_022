@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.member.entity;
 
-import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
+import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -63,6 +63,9 @@ public class Member extends Auditable {
 
     @Embedded
     private MemberActivity memberActivity = new MemberActivity();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 
     //MemberCreate로 부터 받아오기 위함.
     @Builder(builderMethodName = "createBuilder")

@@ -25,6 +25,7 @@ public class MultiResponse<T> {
         return new MultiResponse(items);
     }
 
+    @Getter
     static class PageInfo {
         private int page;
         private int size;

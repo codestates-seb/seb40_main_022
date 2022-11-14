@@ -1,7 +1,7 @@
 package com.backend.fitchallenge.domain.question.entity;
 
 import com.backend.fitchallenge.domain.answer.entity.Answer;
-import com.backend.fitchallenge.domain.member.Member;
+import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
 import com.backend.fitchallenge.global.audit.Auditable;
@@ -23,22 +23,23 @@ public class Question extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id", nullable = false)
+    @Column(name = "QUESTION_ID", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Enumerated(value = EnumType.STRING)
     private QuestionTag questionTag;
 
-    @Column(nullable = false)
+    @Column(name = "VIEW", nullable = false)
     private Long view;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)

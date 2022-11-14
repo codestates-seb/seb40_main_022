@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.question.dto.request;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,4 +20,11 @@ public class QuestionUpdate {
     private String content;
 
     private String tag;
+
+    @Builder
+    public QuestionUpdate(String title, String content, String tag) {
+        this.title = title;
+        this.content = content;
+        this.tag = tag;
+    }
 }

@@ -5,7 +5,9 @@ import com.backend.fitchallenge.domain.answer.dto.request.AnswerUpdate;
 import com.backend.fitchallenge.domain.answer.entity.Answer;
 import com.backend.fitchallenge.domain.answer.repository.AnswerRepository;
 import com.backend.fitchallenge.domain.answer.exception.AnswerException;
-import com.backend.fitchallenge.domain.member.Member;
+import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
+import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.question.exception.QuestionException;
 import com.backend.fitchallenge.domain.question.repository.QuestionRepository;
@@ -23,33 +25,72 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
+    private final MemberRepository memberRepository;
 
-    public Long createAnswer(Long memberId, Long id, AnswerCreate answerCreate) {
+    /**
+     * 요청을 보낸 사용자 조회하는 로직 필요
+     */
+    public Long createAnswer(Long id, AnswerCreate answerCreate) {
 
+        // 요청 사용자 조회 로직 적용시 수정
+        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
         Question question = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
-        Member member = getStubMember(memberId);
 
         return answerRepository.save(Answer.createAnswer(answerCreate, question, member)).getId();
     }
 
-    public Long updateAnswer(Long answerId, Long memberId, AnswerUpdate answerUpdate) {
+    /**
+     * 요청을 보낸 사용자 조회하는 로직 필요
+     */
+    public Long updateAnswer(Long answerId, AnswerUpdate answerUpdate) {
 
-        Answer findAnswer = answerRepository.findById(answerId).orElseThrow(() -> new AnswerException(ExceptionCode.ANSWER_NOT_FOUND));
+        Answer findAnswer = findVerifiedAnswer(answerId);
 
-        verifyWriter(memberId, findAnswer);
+        // 요청 사용자 조회 로직 적용시 수정
+        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        verifyWriter(member.getId(), findAnswer);
 
         findAnswer.updateAnswer(answerUpdate);
 
         return answerRepository.save(findAnswer).getId();
     }
 
-    public Long deleteAnswer(Long memberId, Long answerId) {
+    /**
+     * 요청을 보낸 사용자 조회하는 로직 필요
+     */
+    public Long deleteAnswer(Long answerId) {
 
-        Answer findAnswer = answerRepository.findById(answerId).orElseThrow(() -> new AnswerException(ExceptionCode.ANSWER_NOT_FOUND));
+        Answer findAnswer = findVerifiedAnswer(answerId);
 
-        verifyWriter(memberId, findAnswer);
+        // 요청 사용자 조회 로직 적용시 수정
+        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        verifyWriter(member.getId(), findAnswer);
 
         answerRepository.delete(findAnswer);
+
+        return answerId;
+    }
+
+    /**
+     * 1. 요청을 보낸 사용자 조회하는 로직 필요
+     * 2. Member 클래스에 Community Point 늘리는 메서드 추가되면 반영
+     */
+    public Long accept(Long id, Long answerId) {
+
+        Answer findAnswer = findVerifiedAnswer(answerId);
+
+        // 요청 사용자 조회 로직 적용시 수정
+        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        Question question = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
+
+        if (member.getId().equals(question.getMember().getId())) {
+            findAnswer.accept();
+            if (!findAnswer.getMember().getId().equals(member.getId())) {
+                // 채택자의 Community Point가 증가
+            }
+        } else {
+            throw new QuestionException(ExceptionCode.NOT_QUESTION_WRITER);
+        }
 
         return answerId;
     }
@@ -63,13 +104,10 @@ public class AnswerService {
         }
     }
 
-    private Member getStubMember(Long memberId) {
-        return Member.builder()
-                .id(memberId)
-                .email("hgd@email.com")
-                .password("ghdrlfehd")
-                .username("홍길동")
-                .point(0L)
-                .build();
+    @Transactional(readOnly = true)
+    private Answer findVerifiedAnswer(Long answerId) {
+
+        return answerRepository.findById(answerId)
+                .orElseThrow(() -> new AnswerException(ExceptionCode.ANSWER_NOT_FOUND));
     }
 }

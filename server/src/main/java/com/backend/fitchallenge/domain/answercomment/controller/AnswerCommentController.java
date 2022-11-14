@@ -22,23 +22,19 @@ public class AnswerCommentController {
     public ResponseEntity<Long> create(@PathVariable("answer-id") Long answerId,
                                        @Valid @RequestBody AnswerCommentCreate answerCommentCreate) {
 
-        Long memberId = 0L;
-
-        return ResponseEntity.ok(answerCommentService.createAnswerComment(memberId, answerId, answerCommentCreate));
+        return ResponseEntity.ok(answerCommentService.createAnswerComment(answerId, answerCommentCreate));
     }
 
     @PatchMapping("/answer-comments/{answer-comment-id}")
     public ResponseEntity<Long> update(@PathVariable("answer-comment-id") Long answerCommentId,
                                        @Valid @RequestBody AnswerCommentUpdate answerCommentUpdate) {
-        Long memberId = 0L;
 
-        return ResponseEntity.ok(answerCommentService.updateAnswerComment(memberId, answerCommentId, answerCommentUpdate));
+        return ResponseEntity.ok(answerCommentService.updateAnswerComment(answerCommentId, answerCommentUpdate));
     }
 
     @DeleteMapping("/answer-comments/{answer-comment-id}")
     public ResponseEntity<Long> delete(@PathVariable("answer-comment-id") Long answerCommentId) {
-        Long memberId = 0L;
 
-        return ResponseEntity.ok(answerCommentService.deleteAnswerComment(memberId, answerCommentId));
+        return ResponseEntity.ok(answerCommentService.deleteAnswerComment(answerCommentId));
     }
 }

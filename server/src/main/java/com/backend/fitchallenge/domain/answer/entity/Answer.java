@@ -3,7 +3,7 @@ package com.backend.fitchallenge.domain.answer.entity;
 import com.backend.fitchallenge.domain.answer.dto.request.AnswerCreate;
 import com.backend.fitchallenge.domain.answer.dto.request.AnswerUpdate;
 import com.backend.fitchallenge.domain.answercomment.entity.AnswerComment;
-import com.backend.fitchallenge.domain.member.Member;
+import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ public class Answer extends Auditable {
     @Column(name = "ANSWER_ID", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Column(name = "IS_ACCEPTED")

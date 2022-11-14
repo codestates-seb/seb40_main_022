@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface AnswerCommentRepository extends JpaRepository<AnswerComment, Long> {
 
     @Query("select ac.member.id from AnswerComment ac where ac.id = :answerCommentId")
-    Long findMemberIdByAnswerCommentId(Long answerCommentID);
+    Long findMemberIdByAnswerCommentId(Long answerCommentId);
 }
