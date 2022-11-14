@@ -14,7 +14,7 @@ public final class PageRequest {
 	private static final int MAX_SIZE = 2000;
 
 	private int page;
-	private int size = 15;
+	private int size;
 	private Sort.Direction sort = Sort.Direction.DESC;
 	private String filters;
 	private List<Filter> filterEnums;
@@ -41,7 +41,7 @@ public final class PageRequest {
 
 	// getter
 	public org.springframework.data.domain.PageRequest of() {
-		return org.springframework.data.domain.PageRequest.of(page - 1, size);
+		return org.springframework.data.domain.PageRequest.of(page , size);
 	}
 
 	@Getter

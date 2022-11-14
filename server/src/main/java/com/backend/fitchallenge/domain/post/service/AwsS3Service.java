@@ -63,6 +63,43 @@ public class AwsS3Service {
         }
         return imagePathList;
     }
+    public List<String> UpdateFile(List<String> paths,List<MultipartFile> files) {
+
+        validateFileExists(files);
+
+        for (String path : paths) {
+            boolean isExistObject = amazonS3.doesObjectExist(bucketName, path);
+            if (isExistObject == true) {
+                amazonS3.deleteObject(bucketName,path);
+            }
+        }
+
+
+        //반환할 이미지 저장경로 리스트
+        List<String> imagePathList = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String originalName = file.getOriginalFilename(); // 파일 이름
+            String storeName = createStoreFileName(originalName);
+            long size = file.getSize(); // 파일 크기
+
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(file.getContentType());
+            objectMetadata.setContentLength(size);
+
+            //S3에 업로드
+            try (InputStream inputStream = file.getInputStream()) {
+                amazonS3.putObject(new PutObjectRequest(bucketName, storeName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                throw new UploadFailed();
+            }
+            // CloudFront 도메인명 + 저장한 파일명
+            String imagePath = cloudFront + "/" + storeName;
+            imagePathList.add(imagePath);
+        }
+        return imagePathList;
+    }
 
 
     // 파일 유무 체크

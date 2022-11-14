@@ -5,7 +5,9 @@ import lombok.Getter;
 public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
 
-    //Post-Image
+
+    //Post
+    POST_NOT_FOUND(404, "Post Not Found"),
     NO_IMAGE(404, "Image Is Empty"),
     UPLOAD_FAILED(404, "Upload Failed"),
 

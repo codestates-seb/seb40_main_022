@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.domain.picture.challenge;
+package com.backend.fitchallenge.domain.member;
 
 import com.backend.fitchallenge.domain.answer.entity.Answer;
 import com.backend.fitchallenge.domain.post.entity.Post;

@@ -3,12 +3,14 @@ package com.backend.fitchallenge.domain.picture.entity;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Picture {
 
 
@@ -33,7 +35,7 @@ public class Picture {
      * 연관관계 편의 메소드
      * 받아온 파라미터로 Picture 생성후, post에 추가
      */
-    public static void createPicture(String path, Post post) {
+    public static void createPicture( Post post,String path) {
         Picture picture = Picture.builder()
                 .path(path)
                 .post(post)

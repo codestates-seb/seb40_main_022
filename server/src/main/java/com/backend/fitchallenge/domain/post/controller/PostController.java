@@ -2,16 +2,19 @@ package com.backend.fitchallenge.domain.post.controller;
 
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
 import com.backend.fitchallenge.domain.post.dto.PostUpdate;
+import com.backend.fitchallenge.domain.post.dto.PostUpdateVO;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.post.service.PostService;
 import com.backend.fitchallenge.global.dto.request.PageRequest;
+import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import com.backend.fitchallenge.global.dto.response.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,11 +37,11 @@ public class PostController {
     @PostMapping
     public ResponseEntity<?> create(
             //@AuthenticationPrincipal AuthMember authMember,
-            PostCreateVO postCreateVO
+            PostCreateVO postCreate
     ) {
         //S3에 파일업로드 후 저장된경로 리스트 반환
-        List<String> imagePathList = awsS3Service.StoreFile(postCreateVO.getFiles());
-        Long postId = postService.createPost(1L, postCreateVO, imagePathList);
+        List<String> imagePathList = awsS3Service.StoreFile(postCreate.getFiles());
+        Long postId = postService.createPost(1L, postCreate, imagePathList);
 
         return new ResponseEntity<>(new SingleResponse<>(postId), HttpStatus.CREATED);
     }
@@ -50,14 +53,9 @@ public class PostController {
      */
 
     @GetMapping
-    public ResponseEntity<?> getList(@ModelAttribute PageRequest pageRequest) {
-        log.info("pageRequest = {}", pageRequest.getPage());
-        log.info("offset = {}", pageRequest.getOffset());
-        log.info("size = {}", pageRequest.getSize());
+    public ResponseEntity<MultiResponse<?>> getList(Pageable pageable) {
 
-        postService.getPostList();
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(postService.getPostList(pageable), HttpStatus.OK);
     }
 
 
@@ -72,15 +70,12 @@ public class PostController {
     public ResponseEntity<?>  update(
 //            @AuthenticationPrincipal AuthMember authMember,
             @PathVariable Long id,
-            @Valid @RequestBody PostUpdate postUpdate) {
+            @Valid @RequestBody PostUpdateVO postUpdate) {
 
 //        log.info("authMember = {}", authMember);
 //        Long memberId = authMember.getMemberId();
 
-
-
-
-        return new ResponseEntity<>(null);
+        return new ResponseEntity<>(postService.updatePost(id, postUpdate),HttpStatus.OK);
     }
 
     /**
@@ -89,11 +84,11 @@ public class PostController {
      * @param id 삭제할 게시물 postId
      * @return 응답상태코드 OK
      */
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> delete(
-//            //@AuthenticationPrincipal AuthMember authMember,
-//            @PathVariable Long id
-//    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(
+            //@AuthenticationPrincipal AuthMember authMember,
+            @PathVariable Long id
+    )
 
 //    @GetMapping("/search")
 //    public ResponseEntity<MultiResponse<?>> getSearchPostList(PageRequest pageRequest,

@@ -20,11 +20,12 @@ public class Tag extends Auditable {
     @Column(name ="content", nullable = false)
     private String content;
 
+
     public Tag(String content) {
         this.content = content;
     }
 
-    static public Tag of(String name) {
-        return new Tag(name);
+    static public Tag of(String content) {
+        return new Tag(content);
     }
 }

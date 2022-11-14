@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.post.entity;
 
-import com.backend.fitchallenge.domain.picture.challenge.Member;
+import com.backend.fitchallenge.domain.member.Member;
 import com.backend.fitchallenge.domain.picture.entity.Picture;
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
 import com.backend.fitchallenge.domain.tag.domain.Tag;
@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @DynamicUpdate
@@ -38,6 +37,7 @@ public class Post extends Auditable {
     private Long view;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Picture> pictures = new ArrayList<>();
     private List<Picture> pictures = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,13 +57,13 @@ public class Post extends Auditable {
      *   Tag가 없는 post 생성메서드
      *   post 생성후, createPicture 메서드로 각 이미지의 경로와 postId를 가진 Picture 생성
      */
-    public static Post toPost(PostCreateVO postCreateVO, Member member, List<String> imagePathList) {
+    public static Post toPost(PostCreateVO postCreateVO, Member member, List<String> paths) {
         Post post = Post.builder()
                 .member(member)
                 .content(postCreateVO.getContent())
                 .build();
 
-        imagePathList.forEach(path -> Picture.createPicture(path,post));
+        paths.forEach(path -> Picture.createPicture(post,path));
 
         return post;
     }
@@ -73,15 +73,29 @@ public class Post extends Auditable {
      *  post 생성후, addPostTag 메서드로 Tag 객체와 postId를 가진 PostTag 생성
      *  createPicture 메서드로 각 이미지의 경로와 postId를 가진 Picture 생성
      */
-    public static Post toPostWithTag(PostCreateVO postCreateVO, List<Tag> tags, Member member, List<String> imagePathList) {
+    public static Post toPostWithTag(PostCreateVO postCreateVO, List<Tag> tags, Member member, List<String> paths) {
         Post post = Post.builder()
                 .member(member)
                 .content(postCreateVO.getContent())
                 .build();
 
         tags.forEach(tag -> PostTag.addPostTag(post, tag));
-        imagePathList.forEach(path -> Picture.createPicture(path,post));
+        paths.forEach(path -> Picture.createPicture(post,path));
 
         return post;
+    }
+
+    public void  patchWithTag(String content, List<String> paths, List<Tag> tags ) {
+        this.content = content;
+        //기존 태그 지우고
+        this.postTags.clear();
+
+        tags.forEach(tag ->PostTag.addPostTag(this, tag) );
+        paths.forEach(path -> Picture.createPicture(this,path));
+    }
+
+    public void patch(String content, List<String> paths) {
+        this.content = content;
+        paths.forEach(path -> Picture.createPicture(this,path));
     }
 }
