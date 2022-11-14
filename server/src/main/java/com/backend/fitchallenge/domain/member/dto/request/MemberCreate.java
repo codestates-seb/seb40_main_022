@@ -25,7 +25,7 @@ public class MemberCreate {
     private String username;
 
     public Member toMember(PasswordEncoder passwordEncoder){
-        return Member.builder()
+        return Member.createBuilder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .username(username)

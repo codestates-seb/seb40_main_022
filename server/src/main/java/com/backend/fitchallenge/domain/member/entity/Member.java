@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member.entity;
 
+import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -64,7 +65,7 @@ public class Member extends Auditable {
     private MemberActivity memberActivity = new MemberActivity();
 
     //MemberCreate로 부터 받아오기 위함.
-    @Builder
+    @Builder(builderMethodName = "createBuilder")
     public Member(String email, String password, String username) {
         this.email = email;
         this.password = password;

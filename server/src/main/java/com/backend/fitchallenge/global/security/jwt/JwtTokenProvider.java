@@ -130,8 +130,8 @@ public class JwtTokenProvider {
 
 
     // 토큰 검증 후 claim 반환
-    public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+    public Jws<Claims> getClaims(String jws) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
 
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder()

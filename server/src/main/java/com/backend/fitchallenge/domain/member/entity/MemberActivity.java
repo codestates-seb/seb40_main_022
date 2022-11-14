@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.member.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,11 @@ public class MemberActivity {
 
     @Column(name = "COMMUNITY_POINT")
     private Long communityPoint;
+
+    @Builder(builderMethodName = "responseBuilder")
+    public MemberActivity(Integer kilogram, Integer dayCount, Long point) {
+        this.kilogram = kilogram;
+        this.dayCount = dayCount;
+        this.point = point;
+    }
 }
