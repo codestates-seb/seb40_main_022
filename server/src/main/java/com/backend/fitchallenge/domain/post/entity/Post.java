@@ -37,7 +37,6 @@ public class Post extends Auditable {
     private Long view;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Picture> pictures = new ArrayList<>();
     private List<Picture> pictures = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

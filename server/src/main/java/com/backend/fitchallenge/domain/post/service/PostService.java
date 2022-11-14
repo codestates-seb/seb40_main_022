@@ -36,20 +36,21 @@ public class PostService {
     private final AwsS3Service awsS3Service;
 
     /**
-     * toPostWithTag - Tag가 있을경우 tagRepository에 저장후 태그를 포함한 Post,PostTag 생성
-     * toPost - Tag가 없을경우, Tag를 포함하지 않는 Post 생성
+     * toPostWithTag - Tag 있을경우 DB에 저장후 태그를 포함한 Post,PostTag 생성
+     * toPost - Tag 없을경우, Tag 포함하지 않는 Post 생성
      */
     public Long createPost(Long memberId, PostCreateVO postCreate, List<String> imagePathList) {
 
         // 현재 사용자 가져오는 로직으로 수정 필요
         Member member = init();
-        //Tag가 있는 경우
+
+        //Tag 있는 경우
         if (postCreate.getTagDtos() != null) {
             List<Tag> tags = createTag(postCreate.getTagDtos());
             Post postWithTag = Post.toPostWithTag(postCreate, tags, member, imagePathList);
             return postRepository.save(postWithTag).getId();
         }else {
-        //Tag가 없는 경우
+        //Tag 없는 경우
             Post post = Post.toPost(postCreate, member, imagePathList);
             return postRepository.save(post).getId();
         }
@@ -95,7 +96,7 @@ public class PostService {
 
     public PostUpdateResponse updatePost(Long postId, PostUpdateVO postUpdate) {
 
-        Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
+        Post post = findPostById(postId);
 
         List<String> paths = post.getPictures().stream().
                 map(picture -> {
@@ -113,10 +114,30 @@ public class PostService {
         return PostUpdateResponse.toResponse(post);
     }
 
+    public void deletePost(Long postId) {
+
+        Post post = findPostById(postId);
+
+        List<String> paths = post.getPictures().stream().
+                map(picture -> {
+                    int index = picture.getPath().lastIndexOf("/");
+                    return picture.getPath().substring(index);}).collect(toList());
+        //s3에서 포스트에 해당하는 사진 삭제
+        awsS3Service.DeleteFile(paths);
+
+        //db에서 post삭제
+        postRepository.delete(post);
+
+    }
+    private Post findPostById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(PostNotFound::new);
+    }
+
     public Member init() {
        return  new Member(new Random().nextLong(), "abc@gmail.com", "1234", "잉스기", "https://unsplash.com/photos/yMSecCHsIBc",
                 "남", "개발자", "경기도 성남시 판교로", 25L, 180L, 75L, "3분할", "user");
     }
+
 
 
 }

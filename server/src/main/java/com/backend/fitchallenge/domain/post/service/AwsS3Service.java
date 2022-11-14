@@ -101,6 +101,15 @@ public class AwsS3Service {
         return imagePathList;
     }
 
+    public void DeleteFile(List<String> paths) {
+
+        for (String path : paths) {
+            boolean isExistObject = amazonS3.doesObjectExist(bucketName, path);
+            if (isExistObject == true) {
+                amazonS3.deleteObject(bucketName, path);
+            }
+        }
+    }
 
     // 파일 유무 체크
     private void validateFileExists(List<MultipartFile> files) {

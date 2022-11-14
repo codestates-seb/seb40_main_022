@@ -88,7 +88,9 @@ public class PostController {
     public ResponseEntity<?> delete(
             //@AuthenticationPrincipal AuthMember authMember,
             @PathVariable Long id
-    )
+    ) {
+        postService.deletePost(id);
+    }
 
 //    @GetMapping("/search")
 //    public ResponseEntity<MultiResponse<?>> getSearchPostList(PageRequest pageRequest,
