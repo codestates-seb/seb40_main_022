@@ -2,6 +2,7 @@ package com.backend.fitchallenge.global.security.filter;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.global.dto.LoginDto;
+import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
 
     @SneakyThrows
     @Override
@@ -34,6 +37,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(authenticationToken);
     }
 
+    //todo. redis에 refreshToken 저장하기. ---complete---
     @SneakyThrows
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
@@ -45,8 +49,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = jwtTokenProvider.createAccessToken(member);
         String refreshToken = jwtTokenProvider.createRefreshToken(member);
 
-        Member findMember = jwtTokenProvider.findMember(member.getEmail());
-        jwtTokenProvider.saveRefreshToken(findMember.getId(), refreshToken); // 리프레시 토큰 저장
+//        Member findMember = jwtTokenProvider.findMember(member.getEmail());
+        jwtTokenProvider.saveRefreshToken(member.getEmail(), refreshToken); // 리프레시 토큰 저장
+
+//        Long expiration = jwtTokenProvider.getClaims(refreshToken).getBody().getExpiration().getTime();
+        //레디스에 저장.
+        redisService.setValues(member.getEmail(), refreshToken);
 
         //추후 쿠키 이용시 여기서 추가할 것
 

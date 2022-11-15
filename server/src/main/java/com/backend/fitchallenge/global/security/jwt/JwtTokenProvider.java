@@ -157,15 +157,32 @@ public class JwtTokenProvider {
 
 
     // 외부에서 쓸 메서드들
+
+    public String parseEmail(String jws){
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jws);
+            return claimsJws.getBody().getSubject();
+        }
+        catch(JwtException e){
+            throw new TokenNotValid();
+        }
+    }
+
     public Member findMember(String email){
 
         return memberRepository.findByEmail(email).orElseThrow(()->new MemberNotExist());
     }
 
-    public void saveRefreshToken(Long memberId, String refreshToken){
-        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findById(memberId);
-        optionalRefreshToken.ifPresent(refreshTokenRepository::delete);
-        refreshTokenRepository.save(new RefreshToken(memberId, refreshToken));
+    //db에 저장.
+    public void saveRefreshToken(String email, String refreshToken){
+//        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findById(memberId);
+//        optionalRefreshToken.ifPresent(refreshTokenRepository::delete);
+        refreshTokenRepository.save(new RefreshToken(email, refreshToken));
     }
 
     //db에 토큰 존재하는가 (로그인상태확인)

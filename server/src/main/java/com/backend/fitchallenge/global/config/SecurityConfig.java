@@ -3,6 +3,7 @@ package com.backend.fitchallenge.global.config;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.member.service.MemberService;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
+import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.filter.JwtAuthenticationFilter;
 import com.backend.fitchallenge.global.security.filter.JwtVerificationFilter;
 import com.backend.fitchallenge.global.security.handler.Oauth2SuccessHandler;
@@ -38,6 +39,7 @@ public class SecurityConfig {
     private final MemberAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisService redisService;
 
 
     @Bean
@@ -104,10 +106,10 @@ public class SecurityConfig {
                     builder.getSharedObject(AuthenticationManager.class);
 
             JwtAuthenticationFilter jwtAuthenticationFilter =
-                    new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider);
+                    new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, redisService);
 
             JwtVerificationFilter jwtVerificationFilter =
-                    new JwtVerificationFilter(jwtTokenProvider, authorityUtils);
+                    new JwtVerificationFilter(jwtTokenProvider, authorityUtils, redisService);
 
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
 

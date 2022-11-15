@@ -22,11 +22,15 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response){
+
         String refreshToken = request.getHeader("RefreshToken");
-        authService.logoutMember(refreshToken);
+        String accessToken = request.getHeader("Authorization").substring(7);
+
+        authService.logoutMember(refreshToken, accessToken);
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    //todo. redis에서 토큰값 먼저 읽어오기.
     @GetMapping("/reissue")
     public ResponseEntity reIssue(HttpServletRequest request, HttpServletResponse response){
 

@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.global.security.filter;
 
+import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -24,7 +25,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
+    private final RedisService redisService;
 
+    //todo redis에서 먼저 가져와보기 ---complete---
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -33,7 +36,18 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         try {
 //
             String refreshToken = request.getHeader("refreshToken");
-            jwtTokenProvider.verifiedRefreshToken(refreshToken);
+            String email = jwtTokenProvider.parseEmail(refreshToken);
+
+            String accessToken = request.getHeader("Authorization").substring(7);
+            if(redisService.getBlackListValues(email) == accessToken){
+                throw new RuntimeException(); // 추후 코드 바꾸기. accessToken이 만료되거나 로그아웃된 상태라서 (보안을 위해)
+            }
+
+            //redis 확인부터. - redis에 존재하지 않으면 db로간다. 그리고 redis에 다시 저장해준다.
+            if(redisService.getValues(email) == null){
+                jwtTokenProvider.verifiedRefreshToken(refreshToken);
+                redisService.setValues(email, refreshToken);
+            }
 
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
