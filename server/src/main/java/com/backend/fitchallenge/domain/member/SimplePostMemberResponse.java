@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member;
 
+import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 

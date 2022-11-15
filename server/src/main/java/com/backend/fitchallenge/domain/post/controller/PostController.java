@@ -1,11 +1,13 @@
 package com.backend.fitchallenge.domain.post.controller;
 
+import com.backend.fitchallenge.domain.post.dto.MultiResponse;
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
 import com.backend.fitchallenge.domain.post.dto.PostUpdateVO;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.post.service.PostService;
-import com.backend.fitchallenge.global.dto.response.MultiResponse;
+import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.dto.response.SingleResponse;
+import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,53 +29,51 @@ public class PostController {
 
     /**
      * 게시물 작성
-     * AuthenticationPrincipal을 통해 로그인세션 정보를 불러옴
+     * @param memberDetails  로그인세션 정보
      * @param postCreate 게시물 작성 요청 정보
      * @return 생성된 게시물 id, 응답상태코드 - created
      */
     @PostMapping
     public ResponseEntity<?> create(
-            //@AuthenticationPrincipal AuthMember authMember,
+            @AuthMember MemberDetails memberDetails,
             PostCreateVO postCreate
     ) {
         //S3에 파일업로드 후 저장된경로 리스트 반환
         List<String> imagePathList = awsS3Service.StoreFile(postCreate.getFiles());
-        Long postId = postService.createPost(1L, postCreate, imagePathList);
+
+        imagePathList.forEach(path -> log.info("path ={}", path));
+
+        Long postId = postService.createPost(memberDetails.getMemberId(), postCreate, imagePathList);
 
         return new ResponseEntity<>(new SingleResponse<>(postId), HttpStatus.CREATED);
     }
 
     /**
      * 전체 게시물 조회
-     * 무한 스크롤 페이지네이션
-     * @return  최신순으로 페이지네이션된 게시물 목록
+     * @param lastPostId 현재 유저가 보고있는 게시물의 마지막 postId
+     * @param pageable default page = 0, size = 3
+     * @return 최신순으로 페이지네이션된 게시물 목록
      */
     @GetMapping
     public ResponseEntity<MultiResponse<?>> getList(
             @RequestParam Long lastPostId,
             @PageableDefault(size = 3) Pageable pageable) {
-
         return new ResponseEntity<>(postService.getPostList(lastPostId, pageable), HttpStatus.OK);
     }
 
 
     /**
      * 게시물 수정
-     * @AuthenticationPrincipal을 통해 로그인세션 정보를 불러옴
+     * @param memberDetails 로그인세션 정보
      * @param id 수정할 게시물 postId
      * @param postUpdate 게시물 수정 요청 정보
      * @return 수정된 게시물 정보, 응답상태코드 OK
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?>  update(
-//            @AuthenticationPrincipal AuthMember authMember,
-            @PathVariable Long id,
+            @AuthMember MemberDetails memberDetails, @PathVariable Long id,
              PostUpdateVO postUpdate) {
-
-//        log.info("authMember = {}", authMember);
-//        Long memberId = authMember.getMemberId();
-
-        return new ResponseEntity<>(postService.updatePost(id, postUpdate),HttpStatus.OK);
+        return new ResponseEntity<>(postService.updatePost(id,memberDetails.getMemberId(), postUpdate),HttpStatus.OK);
     }
 
     /**
@@ -85,10 +84,10 @@ public class PostController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(
-            //@AuthenticationPrincipal AuthMember authMember,
+            @AuthMember MemberDetails memberDetails,
             @PathVariable Long id
     ) {
-        postService.deletePost(id);
+        postService.deletePost(id, memberDetails.getMemberId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -9,9 +9,7 @@ import java.util.List;
 @Repository
 public interface PostRepositoryCustom {
 
-    List<Tuple> findListWithTag(Long lastPostId, Pageable pageable);
+    List<Tuple> findList(Long lastPostId, Pageable pageable);
 
-    Long pagingCount();
 
-    List<Tuple> findListWithPicture(Long lastPostId,Pageable pageable);
 }

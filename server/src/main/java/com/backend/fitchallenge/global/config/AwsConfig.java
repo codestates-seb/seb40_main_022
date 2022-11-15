@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.global.config;
 
+
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;

@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.backend.fitchallenge.domain.member.QMember.member;
-import static com.backend.fitchallenge.domain.post.entity.QPicture.picture;
+import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -21,12 +20,11 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     /**
-     * post + 작성자 정보 + 댓글, 좋아요, 태그
-     *
-     * @param pageable 기본 사이즈 3, 무한 페이지 스크롤 슬라이스로
-     * @return
+     * post + 댓글수 조회
+     * member(작성자) fetchJoin
+     * @return 마지막 postId보다 작은 Id의 게시물들을 최신순으로 반환
      */
-    public List<Tuple> findListWithTag(Long lastPostId, Pageable pageable) {
+    public List<Tuple> findList(Long lastPostId, Pageable pageable) {
 
        return  jpaQueryFactory
                 .select(post, post.postComments.size())
@@ -45,13 +43,6 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
     }
 
 
-    @Override
-    public Long pagingCount() {
-        return jpaQueryFactory
-                .select(post.id.count())
-                .from(post)
-                .fetchOne();
-    }
 
 
 }

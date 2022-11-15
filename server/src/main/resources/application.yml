@@ -15,17 +15,41 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        default_batch_fetch_size: 1000
+        default_batch_fetch_size: 1000 #
         format_sql: true
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 1001094266609-bsogq6jjv4alf62reqh34b213600gstp.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
+  redis:
+    host: localhost
+    port: 6379
 logging:
   level:
     org:
       springframework:
         orm:
           jpa: DEBUG
+# 관리자 권한 설정을 위한 이메일
+mail:
+  address:
+    admin: admin@gmail.com
+
+#jwt 설정 - secret-key의 경우 추후 변경가능
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 15
+  refresh-token-expiration-minutes: 30
+#aws 설정
 cloud:
   aws:
     s3:

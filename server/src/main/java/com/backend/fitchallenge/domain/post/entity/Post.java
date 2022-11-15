@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.post.entity;
 
-import com.backend.fitchallenge.domain.member.Member;
+
+import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
 import com.backend.fitchallenge.domain.postcomment.entity.PostComment;
 import com.backend.fitchallenge.domain.tag.domain.Tag;

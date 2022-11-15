@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.like.entity;
 
-import com.backend.fitchallenge.domain.member.Member;
+import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
