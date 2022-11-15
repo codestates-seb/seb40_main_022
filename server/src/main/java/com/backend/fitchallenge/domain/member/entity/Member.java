@@ -28,10 +28,10 @@ public class Member extends Auditable {
     @Column(name = "EMAIL", nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "USERNAME", nullable = false)
+    @Column(name = "USERNAME")
     private String username;
 
     @Column(name = "PROFILE_IMAGE")
