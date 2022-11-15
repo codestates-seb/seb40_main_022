@@ -69,6 +69,7 @@ public class AwsS3Service {
 
         for (String path : paths) {
             boolean isExistObject = amazonS3.doesObjectExist(bucketName, path);
+            log.info("S3 isExistObject = {}", isExistObject);
             if (isExistObject == true) {
                 amazonS3.deleteObject(bucketName,path);
             }

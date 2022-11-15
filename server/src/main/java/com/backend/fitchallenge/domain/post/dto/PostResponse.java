@@ -17,6 +17,7 @@ public class PostResponse {
     private SimplePostResponse post;
 
     private List<String>  pictures;
+    
 
     @Builder
     public PostResponse(List<String> tags, SimplePostMemberResponse member, SimplePostResponse post, List<String> pictures) {

@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.post.dto;
 
+import com.backend.fitchallenge.domain.tag.dto.TagDto;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 

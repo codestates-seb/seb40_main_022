@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.tag.service;
 
-import com.backend.fitchallenge.domain.post.dto.TagDto;
+import com.backend.fitchallenge.domain.tag.dto.TagDto;
 import com.backend.fitchallenge.domain.tag.domain.Tag;
 import com.backend.fitchallenge.domain.tag.exception.TagNotFound;
 import com.backend.fitchallenge.domain.tag.repository.TagRepository;

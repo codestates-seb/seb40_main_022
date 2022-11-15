@@ -9,6 +9,7 @@ import com.backend.fitchallenge.global.dto.response.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,9 +50,11 @@ public class PostController {
      * @return  최신순으로 페이지네이션된 게시물 목록
      */
     @GetMapping
-    public ResponseEntity<MultiResponse<?>> getList(Pageable pageable) {
+    public ResponseEntity<MultiResponse<?>> getList(
+            @RequestParam Long lastPostId,
+            @PageableDefault(size = 3) Pageable pageable) {
 
-        return new ResponseEntity<>(postService.getPostList(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getPostList(lastPostId, pageable), HttpStatus.OK);
     }
 
 
@@ -66,7 +69,7 @@ public class PostController {
     public ResponseEntity<?>  update(
 //            @AuthenticationPrincipal AuthMember authMember,
             @PathVariable Long id,
-            @Valid @RequestBody PostUpdateVO postUpdate) {
+             PostUpdateVO postUpdate) {
 
 //        log.info("authMember = {}", authMember);
 //        Long memberId = authMember.getMemberId();
@@ -86,6 +89,7 @@ public class PostController {
             @PathVariable Long id
     ) {
         postService.deletePost(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    @GetMapping("/search")

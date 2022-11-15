@@ -3,6 +3,7 @@ package com.backend.fitchallenge.global.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -12,17 +13,15 @@ public class MultiResponse<T> {
     private PageInfo pageInfo;
 
 
-    private MultiResponse(Page<T> items) {
+    private MultiResponse(Slice<T> items) {
         this.items = items.getContent();
         this.pageInfo = PageInfo.builder()
                 .page(items.getNumber()+1)
                 .size(items.getSize())
-                .totalElements(items.getTotalElements())
-                .totalPages(items.getTotalPages())
                 .build();
     }
 
-    public static MultiResponse<?> of(Page<?> items){
+    public static MultiResponse<?> of(Slice<?> items){
         return new MultiResponse<>(items);
 
     }

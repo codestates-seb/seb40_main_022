@@ -1,6 +1,5 @@
-package com.backend.fitchallenge.domain.picture.entity;
+package com.backend.fitchallenge.domain.post.entity;
 
-import com.backend.fitchallenge.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

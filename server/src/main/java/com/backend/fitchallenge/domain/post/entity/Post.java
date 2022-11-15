@@ -1,7 +1,6 @@
 package com.backend.fitchallenge.domain.post.entity;
 
 import com.backend.fitchallenge.domain.member.Member;
-import com.backend.fitchallenge.domain.picture.entity.Picture;
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
 import com.backend.fitchallenge.domain.postcomment.entity.PostComment;
 import com.backend.fitchallenge.domain.tag.domain.Tag;
@@ -92,6 +91,7 @@ public class Post extends Auditable {
         this.content = content;
         //기존 태그 지우고
         this.postTags.clear();
+        this.pictures.clear();
 
         tags.forEach(tag ->PostTag.addPostTag(this, tag) );
         paths.forEach(path -> Picture.createPicture(this,path));
@@ -99,6 +99,7 @@ public class Post extends Auditable {
 
     public void patch(String content, List<String> paths) {
         this.content = content;
+        this.pictures.clear();
         paths.forEach(path -> Picture.createPicture(this,path));
     }
 }

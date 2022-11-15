@@ -1,18 +1,20 @@
 package com.backend.fitchallenge.domain.post.service;
 
-import com.backend.fitchallenge.domain.member.SimplePostMemberResponse;
 import com.backend.fitchallenge.domain.member.Member;
+import com.backend.fitchallenge.domain.member.SimplePostMemberResponse;
 import com.backend.fitchallenge.domain.post.dto.*;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.backend.fitchallenge.domain.post.exception.PostNotFound;
 import com.backend.fitchallenge.domain.post.repository.PostRepository;
 import com.backend.fitchallenge.domain.tag.domain.Tag;
+import com.backend.fitchallenge.domain.tag.dto.TagDto;
 import com.backend.fitchallenge.domain.tag.service.TagService;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.backend.fitchallenge.domain.picture.entity.QPicture.picture;
+
+import static com.backend.fitchallenge.domain.post.entity.QPicture.picture;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
 import static java.util.stream.Collectors.*;
 
@@ -69,31 +72,45 @@ public class PostService {
      * postId에 해당하는 사진들을 picture 테이블에 저장한 image path로 불러온다.
      */
     @Transactional(readOnly = true)
-    public MultiResponse<?> getPostList(Pageable pageable) {
-
-        Long total = postRepository.pagingCount();
-        Map<Long, List<String>> postPictureMap = postRepository.findListWithPicture(pageable).stream().collect(
-                groupingBy(tuple -> tuple.get(post.id),
-                        mapping(tuple -> tuple.get(picture.path), toList())));
+    public MultiResponse<?> getPostList(Long lastPostId, Pageable pageable) {
 
 
-        PageImpl<PostResponse> postResponses = new PageImpl<>(
-                postRepository.findListWithTag(pageable).stream()
-                        .map(post ->
-                                PostResponse.builder()
-                                        .member(SimplePostMemberResponse.toResponse(post.getMember()))
-                                        .post(SimplePostResponse.toResponse(post))
-                                        .tags(post.getPostTags().stream()
-                                                .map(postTag -> postTag.getTag().getContent()).collect(toList()))
-                                        .pictures(postPictureMap.get(post.getId()))
-                                        .build()
-                        )
-                        .collect(toList()), pageable, total);
+        List<PostResponse> postResponses = postRepository.findListWithTag(lastPostId,pageable).stream()
+                .map(postTuple ->
+                        PostResponse.builder()
+                                .member(SimplePostMemberResponse.toResponse(postTuple.get(post).getMember()))
+                                .post(SimplePostResponse.toResponse(postTuple.get(post), postTuple.get(post.postComments.size())))
+                                .tags(postTuple.get(post).getPostTags().stream()
+                                        .map(postTag -> postTag.getTag().getContent()).collect(toList()))
+                                .pictures(postTuple.get(post).getPictures().stream()
+                                        .map(picture -> picture.getPath()).collect(toList()))
 
-        return MultiResponse.of(postResponses);
+                                .build()
+                ).collect(toList());
 
+        log.info("postResponse size = {}", postResponses.size());
+
+        Slice<PostResponse> result = checkLastPage(postResponses, pageable);
+
+        return MultiResponse.of(result);
     }
 
+    // 무한 스크롤 처리
+    private Slice<PostResponse> checkLastPage(List<PostResponse> postResponses, Pageable pageable ) {
+
+        boolean hasNext = false;
+
+        //조회 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
+        if (postResponses.size() > pageable.getPageSize()) {
+            hasNext = true;
+            // 확인용으로 추가한데이터 remove
+            postResponses.remove(pageable.getPageSize());
+        }
+        
+        log.info("Slice PostResponse size = {}", postResponses.size());
+        
+        return new SliceImpl<>(postResponses, pageable, hasNext);
+    }
     public PostUpdateResponse updatePost(Long postId, PostUpdateVO postUpdate) {
 
         Post post = findPostById(postId);
@@ -101,7 +118,7 @@ public class PostService {
         List<String> paths = post.getPictures().stream().
                 map(picture -> {
                     int index = picture.getPath().lastIndexOf("/");
-                    return picture.getPath().substring(index);
+                    return picture.getPath().substring(index+1);
                 }).collect(toList());
 
         List<String> imagePaths = awsS3Service.UpdateFile(paths, postUpdate.getFiles());
@@ -122,7 +139,7 @@ public class PostService {
         List<String> paths = post.getPictures().stream().
                 map(picture -> {
                     int index = picture.getPath().lastIndexOf("/");
-                    return picture.getPath().substring(index);
+                    return picture.getPath().substring(index+1);
                 }).collect(toList());
         //s3에서 포스트에 해당하는 사진 삭제
         awsS3Service.DeleteFile(paths);
