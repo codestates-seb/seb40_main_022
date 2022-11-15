@@ -7,6 +7,8 @@ import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import Dailypost from './components/dailypost/dailypost';
 import Lank from './pages/Lank/Lank';
+import QnaList from './pages/Qna/QnaList';
+import QnaDetail from './pages/Qna/QnaDetail';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/dailypost" element={<Dailypost />} />
       <Route path="/lank" element={<Lank />} />
+      <Route path="/qna" element={<QnaList />} />
+      <Route path="/qnadetail" element={<QnaDetail />} />
     </Routes>
   );
 }

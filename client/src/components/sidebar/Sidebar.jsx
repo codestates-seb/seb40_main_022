@@ -10,7 +10,9 @@ function Sidebar() {
       <Link to="/lank" className="sidemenu">
         랭킹
       </Link>
-      <span className="sidemenu">Q&A</span>
+      <Link to="/qna" className="sidemenu">
+        Q&A
+      </Link>
       <span className="sidemenu">인플루언서</span>
     </SideDiv>
   );
