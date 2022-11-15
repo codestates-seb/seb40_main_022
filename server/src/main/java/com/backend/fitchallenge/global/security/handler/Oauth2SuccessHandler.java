@@ -2,8 +2,10 @@ package com.backend.fitchallenge.global.security.handler;
 
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.member.service.MemberService;
+import com.backend.fitchallenge.domain.refreshtoken.RefreshToken;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
@@ -20,10 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -31,7 +30,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
-
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -40,7 +39,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         List<String> authorities = authorityUtils.createRoles(email);
 
         saveMember(email);
-        redirect(request, response, email, authorities);
+        loginAndredirect(request, response, email, authorities);
     }
 
     private void saveMember(String email) {
@@ -52,9 +51,17 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         memberRepository.save(member);
     }
 
-    private void redirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
+    private void loginAndredirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(username, authorities);
         String refreshToken = delegateRefreshToken(username);
+
+        Long memberId = findMemberIdByEmail(username);
+        RefreshToken rtk = RefreshToken.builder()
+                .ownerId(memberId)
+                .tokenValue(refreshToken)
+                .build();
+
+        refreshTokenRepository.save(rtk);
 
         String uri = createURI(accessToken, refreshToken).toString();
         getRedirectStrategy().sendRedirect(request, response, uri);
@@ -98,6 +105,13 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .queryParams(queryParams)
                 .build()
                 .toUri();
+    }
+
+    public Long findMemberIdByEmail(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Member member = optionalMember.orElseThrow(()-> new MemberNotExist());
+
+        return member.getId();
     }
 }
 

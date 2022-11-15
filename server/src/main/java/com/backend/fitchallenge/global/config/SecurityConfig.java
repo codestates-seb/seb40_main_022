@@ -2,6 +2,7 @@ package com.backend.fitchallenge.global.config;
 
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.member.service.MemberService;
+import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.global.security.filter.JwtAuthenticationFilter;
 import com.backend.fitchallenge.global.security.filter.JwtVerificationFilter;
 import com.backend.fitchallenge.global.security.handler.Oauth2SuccessHandler;
@@ -36,6 +37,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     @Bean
@@ -66,7 +68,8 @@ public class SecurityConfig {
                 .and()
 
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new Oauth2SuccessHandler(jwtTokenProvider, authorityUtils, memberRepository)));
+                        .successHandler(new Oauth2SuccessHandler(jwtTokenProvider, authorityUtils,
+                                memberRepository, refreshTokenRepository)));
 
 
         return http.build();
