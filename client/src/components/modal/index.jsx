@@ -1,5 +1,5 @@
 import React from 'react';
-import userProfile from '../../images/userprofile.png';
+import userProfile from '../../images/userprofil.png';
 import {
   Wrapper,
   ModalSection,
@@ -26,19 +26,23 @@ function Modal(props) {
             <ModalMain>
               <ModalList>
                 <img src={userProfile} alt="userProfile" />
-                <div>
-                  <h3>대결 신청</h3>
-                  <span>2022.11.11</span>
+                <div className="content">
+                  <div className="fightday">
+                    <h3>대결 신청</h3>
+                    <span>2022.11.10</span>
+                  </div>
+                  <div>헬스남님이 대결을 신청하셨습니다.</div>
                 </div>
-                <div>헬린이님이 대결을 신청하셨습니다.</div>
               </ModalList>
               <ModalList>
                 <img src={userProfile} alt="userProfile" />
-                <div>
-                  <h3>대결 신청</h3>
-                  <span>2022.11.10</span>
+                <div className="content">
+                  <div className="fightday">
+                    <h3>대결 신청</h3>
+                    <span>2022.11.10</span>
+                  </div>
+                  <div>헬스남님이 대결을 신청하셨습니다.</div>
                 </div>
-                <div>헬스남님이 대결을 신청하셨습니다.</div>
               </ModalList>
             </ModalMain>
           </ModalSection>
