@@ -1,7 +1,10 @@
 package com.backend.fitchallenge.global.config;
 
+import com.backend.fitchallenge.domain.member.repository.MemberRepository;
+import com.backend.fitchallenge.domain.member.service.MemberService;
 import com.backend.fitchallenge.global.security.filter.JwtAuthenticationFilter;
 import com.backend.fitchallenge.global.security.filter.JwtVerificationFilter;
+import com.backend.fitchallenge.global.security.handler.Oauth2SuccessHandler;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,6 +35,8 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
+    private final MemberRepository memberRepository;
+
 
     @Bean
     @SneakyThrows
@@ -56,7 +62,12 @@ public class SecurityConfig {
 
                 //추후 권한설정
                 .authorizeHttpRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/**").permitAll()
+                .and()
+
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(new Oauth2SuccessHandler(jwtTokenProvider, authorityUtils, memberRepository)));
+
 
         return http.build();
 
@@ -100,7 +111,9 @@ public class SecurityConfig {
 //            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthSuccessHandler());
 //            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthFailureHandler());
 
-            builder.addFilter(jwtAuthenticationFilter)
+            builder
+//                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
