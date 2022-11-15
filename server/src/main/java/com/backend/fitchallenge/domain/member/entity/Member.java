@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member.entity;
 
+import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
 import com.backend.fitchallenge.global.audit.Auditable;
@@ -65,6 +66,9 @@ public class Member extends Auditable {
 
     @Embedded
     private MemberActivity memberActivity;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 
     //MemberCreate에서 사용하기 위함.
     @Builder(builderMethodName = "createBuilder")
