@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
-import Input from '../../components/Input/Input';
 import Ouaths from '../../components/ouath/Ouaths';
 import SignupAsync from '../../redux/action/SignupAsync';
 import SignMain from './SignMain';
@@ -45,23 +44,28 @@ function SignUp() {
       <Header />
       <SignMain>
         <span className="SignTitle">SIGN UP</span>
-        <Input Intext="EMAIL" value={email} setValue={setEmail} type="text" />
-        <Input
-          Intext="USER NAME"
-          value={username}
-          setValue={setUsername}
+        <input
+          placeholder="EMAIL"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
           type="text"
         />
-        <Input
-          Intext="PASSWORD"
+        <input
+          placeholder="USER NAME"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          type="text"
+        />
+        <input
+          placeholder="PASSWORD"
           value={password}
-          setValue={setPassword}
+          onChange={e => setPassword(e.target.value)}
           type="password"
         />
-        <Input
-          Intext="PASSWORD CHECK"
+        <input
+          placeholder="PASSWORD CHECK"
           value={repassword}
-          setValue={setRepassword}
+          onChange={e => setRepassword(e.target.value)}
           type="password"
         />
         <div className="buttons">

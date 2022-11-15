@@ -8,6 +8,7 @@ const Head = styled.header`
   background-color: var(--backwhite);
   box-shadow: 0 1px 2px 0px var(--headgray);
   position: fixed;
+  z-index: 9;
   .mainHead {
     max-width: 1200px;
     width: 100%;
