@@ -1,133 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
-import QnAImg from '../../images/qnaImg.jpg';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import {
+  Detail,
+  Headerwrap,
+  DetailAnswer,
+  DetailBack,
+  DetailComment,
+  DetailNDB,
+  DetailSubmit,
+  DetailTitle,
+  AnswerNDB,
+} from './QnaDetailStyle';
 
-const Detail = styled.div`
-  width: 100%;
-  height: 100vh;
-`;
-const Headerwrap = styled.main`
-  width: 100%;
-  padding-bottom: 40px;
-`;
-const DetailBack = styled.article`
-  max-width: 1200px;
-  margin: 100px auto;
-  height: auto;
-`;
-const DetailTitle = styled.section`
-  margin: 0 auto;
-  border-bottom: 1px solid #b8b8b8;
-  margin: 40px 0;
-  display: block;
-  > h2 {
-    height: auto;
-    font-size: var(--font-24);
-
-    font-weight: 800;
-  }
-  > h3 {
-    font-size: var(--font-18);
-    margin: 60px 0;
-    line-height: 1.7rem;
-    opacity: 0.7;
-    font-weight: 500;
-  }
-  > div {
-    background-image: url(${QnAImg});
-    background-size: cover;
-    width: 215px;
-    height: 150px;
-    background-repeat: no-repeat;
-    background-position: 50% 55%;
-    margin: 40px 0;
-  }
-`;
-const DetailNDB = styled.span`
-  display: flex;
-  margin-bottom: 50px;
-  > h4 {
-    margin-right: 50px;
-    font-size: var(--font-15);
-    line-height: 2rem;
-    opacity: 0.6;
-  }
-  > button {
-    background-color: var(--tagyellow);
-    border: none;
-    width: 50px;
-    height: 30px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-`;
-
-const DetailAnswer = styled.div`
-  padding-top: 40px;
-  > h2 {
-    font-size: var(--font-20);
-  }
-  > h3 {
-    margin: 40px 0;
-    font-size: var(--font-18);
-    line-height: 1.7rem;
-    opacity: 0.7;
-    font-weight: 500;
-  }
-`;
-
-const AnswerNDB = styled.span`
-  display: flex;
-  margin-bottom: 50px;
-  > h4 {
-    margin-right: 50px;
-    font-size: var(--font-15);
-    line-height: 2rem;
-    opacity: 0.6;
-  }
-  > button {
-    background-color: var(--logored);
-    border: none;
-    border-radius: 30px;
-    color: white;
-    font-weight: bolder;
-    width: 30px;
-    height: 30px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-`;
-
-const DetailComment = styled.section`
-  > h2 {
-    font-size: var(--font-20);
-    font-weight: 600;
-    margin-bottom: 40px;
-  }
-  > input {
-    width: 1200px;
-    height: 150px;
-    border-radius: 22px;
-    border: 1px solid #bababa;
-    font-size: var(--font-18);
-    padding-left: 50px;
-  }
-`;
-
-const DetailSubmit = styled.button`
-  width: 120px;
-  height: 50px;
-  border-radius: 20px;
-  background-color: var(--logored);
-  color: white;
-  font-weight: bold;
-  border: none;
-  margin-top: 25px;
-  float: right;
-  cursor: pointer;
-`;
 function QnaDetail() {
   return (
     <Detail>
@@ -147,8 +32,10 @@ function QnaDetail() {
           </h3>
           <div />
           <DetailNDB>
-            <h4>헬린이</h4>
-            <h4>2022.11.11</h4>
+            <div>
+              <h4>헬린이</h4>
+              <h4>2022.11.11</h4>
+            </div>
             <button>운동</button>
           </DetailNDB>
         </DetailTitle>
@@ -163,8 +50,10 @@ function QnaDetail() {
             경력이 많지 않으면 보통은 전자의 경우가 많습니다.
           </h3>
           <AnswerNDB>
-            <h4>헬린이</h4>
-            <h4>2022.11.11</h4>
+            <div>
+              <h4>헬린이</h4>
+              <h4>2022.11.11</h4>
+            </div>
             <button>V</button>
           </AnswerNDB>
         </DetailAnswer>
