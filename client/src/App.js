@@ -7,7 +7,7 @@ import Detail from './pages/calendar/Detail';
 import QnaAsk from './pages/Qna/QnaAsk';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
-import Dailypost from './components/dailypost/dailypost';
+import Dailypost from './pages/dailypost/dailypost';
 import Lank from './pages/Lank/Lank';
 import QnaList from './pages/Qna/QnaList';
 import QnaDetail from './pages/Qna/QnaDetail';
