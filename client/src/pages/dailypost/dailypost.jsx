@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useRef, useState } from 'react';
-import Footer from '../footer/Footer';
-import Header from '../header/Header';
+import Footer from '../../components/footer/Footer';
+import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 
 const DetailBody = styled.div``;
