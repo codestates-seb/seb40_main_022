@@ -33,7 +33,11 @@ function Header() {
           <Link to="/signup" className="logoutbut">
             SignUp
           </Link>
-          <FontAwesomeIcon icon={faBell} onClick={() => openModal} />
+          <FontAwesomeIcon
+            icon={faBell}
+            onClick={() => openModal()}
+            className="modal"
+          />
           <Modal open={modalOpen} close={closeModal} header="알림" />
           <button onClick={() => setSide(!side)}>
             <img src={sidebar} alt="sidebar" className="sideb" />

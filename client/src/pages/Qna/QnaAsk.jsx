@@ -71,6 +71,7 @@ const PostTag = styled.section`
       background-color: #f6f6f6;
       font-size: var(--font-13);
       font-weight: 500;
+      box-shadow: var(--box-shadow);
       cursor: pointer;
     }
   }
