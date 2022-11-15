@@ -14,9 +14,6 @@ const LankMain = styled.main`
   padding-top: 60px;
   .lankhead {
     display: flex;
-    > h2 {
-      color: var(--backcolor);
-    }
     .lankTab {
       display: flex;
       > li {
@@ -52,7 +49,7 @@ function Lank() {
                   <li key={data.id}>
                     <button
                       onClick={() => {
-                        // console.log(data.id);
+                        console.log(data.id);
                       }}
                     >
                       {data.name}

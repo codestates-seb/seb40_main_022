@@ -9,9 +9,6 @@ const SideDiv = styled.div`
   margin-left: -50px;
   margin-top: 18px;
   background-color: var(--backwhite);
-  @media screen and (max-width: 1400px) {
-    margin-left: -150px;
-  }
   .sidemenu {
     cursor: pointer;
     width: 200px;
