@@ -6,7 +6,7 @@ import Calendar from './pages/calendar/Calendar';
 import Detail from './pages/calendar/Detail';
 import QnaAsk from './pages/qna/QnaAsk';
 import Login from './pages/login/Login';
-import SignUp from './pages/signUp/SignUp';
+import SignUp from './pages/signup/SignUp';
 import Dailypost from './pages/dailypost/dailypost';
 import Lank from './pages/lank/Lank';
 import QnaList from './pages/qna/QnaList';
