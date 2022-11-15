@@ -67,6 +67,7 @@ public class SecurityConfig {
                 .antMatchers("/**").permitAll()
                 .and()
 
+                //oAuth2 로그인. 성공시 핸들러로 넘어간다.
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(new Oauth2SuccessHandler(jwtTokenProvider, authorityUtils,
                                 memberRepository, refreshTokenRepository)));

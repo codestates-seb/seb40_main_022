@@ -4,7 +4,6 @@ import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
-import com.backend.fitchallenge.domain.member.service.MemberService;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshToken;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
@@ -32,16 +31,32 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    /**
+     * [회원가입 및 로그인 진행]
+     * spring security 내부적으로 로그인 완료시 OAuth2User라는 authentication 발급
+     * 이걸 이용해서..
+     * 1. email 뽑아낸다.
+     * 2. db에서 이미 존재하는 이메일이면 로그인 진행
+     *    존재하지 않으면 회원가입, 로그인 진행
+     * todo.1. password를 뽑아올 것인가. -> oAuth멤버 회원정보 수정시 password입력하게되면??
+     * todo.2. OAuth2이메일과 일반 이메일이 같은경우?? - nullable처리해서 하나만 가입하게 해도 되긴 하지만.
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
         List<String> authorities = authorityUtils.createRoles(email);
 
-        saveMember(email);
-        loginAndredirect(request, response, email, authorities);
+        if(!memberAlreadyExist(email)){
+            saveMember(email);
+        }
+
+        loginAndRedirect(request, response, email, authorities);
     }
 
+    /**
+     * 일종의 회원가입 메서드.
+     */
     private void saveMember(String email) {
         MemberCreate memberCreate = MemberCreate.builder()
                         .email(email)
@@ -51,7 +66,10 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         memberRepository.save(member);
     }
 
-    private void loginAndredirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
+    /**
+     * 토큰을 생성하고, 저장하고, 설정한 uri로 응답을 보내는 메서드
+     */
+    private void loginAndRedirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(username, authorities);
         String refreshToken = delegateRefreshToken(username);
 
@@ -92,6 +110,9 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return refreshToken;
     }
 
+    /**
+     * todo. 추후 수정 고려 - 쿠키에담을까 헤더에 담을까에 대하여
+     */
     private URI createURI(String accessToken, String refreshToken) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
@@ -101,7 +122,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .newInstance()
                 .scheme("http")
                 .host("localhost")
-                .path("/receive-token.html")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
@@ -112,6 +132,12 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Member member = optionalMember.orElseThrow(()-> new MemberNotExist());
 
         return member.getId();
+    }
+
+    public boolean memberAlreadyExist(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+
+        return optionalMember.isPresent();
     }
 }
 
