@@ -18,7 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### ignore yml file
-application.yml
+*.yml
 
 ### IntelliJ IDEA ###
 .idea

@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member.entity;
 
+import com.backend.fitchallenge.domain.member.challenge.Challenge;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
@@ -67,10 +68,12 @@ public class Member extends Auditable {
     @Embedded
     private MemberActivity memberActivity;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Challenge challenge;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
-    //MemberCreate에서 사용하기 위함.
     @Builder(builderMethodName = "createBuilder")
     public Member(String email, String password, String username) {
         this.email = email;
@@ -79,7 +82,6 @@ public class Member extends Auditable {
         this.memberActivity = new MemberActivity();
     }
 
-    //멤버 정보를 업데이트 해주는 메서드
     public void update(MemberUpdate memberUpdate, PasswordEncoder passwordEncoder){
 
         this.password = memberUpdate.getPassword() == null ?

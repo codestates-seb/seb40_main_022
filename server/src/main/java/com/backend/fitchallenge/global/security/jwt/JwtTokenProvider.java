@@ -64,6 +64,21 @@ public class JwtTokenProvider {
         return expiration;
     }
 
+    public Long calExpDuration(String jws){
+
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jws)
+                .getBody().getExpiration();
+
+        Long now = new Date().getTime();
+
+        return expiration.getTime() - now;
+    }
+
 
 
 
@@ -171,11 +186,6 @@ public class JwtTokenProvider {
         catch(JwtException e){
             throw new TokenNotValid();
         }
-    }
-
-    public Member findMember(String email){
-
-        return memberRepository.findByEmail(email).orElseThrow(()->new MemberNotExist());
     }
 
     //db에 저장.

@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +41,9 @@ public class RedisService {
         }
     }
 
-    public void setBlackListValues(String key, String data){
+    public void setBlackListValues(String key, String data, Long expiration){
         ValueOperations<String, String> values = redisBlackListTemplate.opsForValue();
-        values.set(key, data);
+        values.set(key, data, expiration, TimeUnit.MILLISECONDS);
     }
 
     public String getBlackListValues(String key){

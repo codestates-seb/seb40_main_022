@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.global.security.filter;
 
 import com.backend.fitchallenge.global.redis.RedisService;
+import com.backend.fitchallenge.global.security.exception.TokenNotValid;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -39,8 +40,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             String email = jwtTokenProvider.parseEmail(refreshToken);
 
             String accessToken = request.getHeader("Authorization").substring(7);
-            if(redisService.getBlackListValues(email) == accessToken){
-                throw new RuntimeException(); // 추후 코드 바꾸기. accessToken이 만료되거나 로그아웃된 상태라서 (보안을 위해)
+
+            if(redisService.getBlackListValues(accessToken) == "BlackList"){
+                throw new TokenNotValid(); // accessToken이 만료되거나 로그아웃된 상태라서 (보안을 위해)
             }
 
             //redis 확인부터. - redis에 존재하지 않으면 db로간다. 그리고 redis에 다시 저장해준다.

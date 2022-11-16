@@ -24,16 +24,20 @@ public class AuthService {
 
     /**
      * [로그아웃]
-     * 1. 토큰정보로 rtk DB 조회
-     * 2. redis에서, db에서 삭제
+     * 설명 : redis와 db의 리프레시토큰 정보를 삭제하고, redis에 블랙리스트로 액세스토큰을 등록한다.
+     * 1. 리프레시 토큰에서 이메일 정보 추출
+     * 2. 액세스 토큰 만료시간 계산 -> redis에 블랙리스트 등록하기 위함(만료시간 후 알아서 사라짐)
+     * 3. redis에서 현재 리프레시 토큰 삭제 - 로그아웃 처리
+     * 4. redis에 현재 액세스 토큰 블랙리스트 등록
+     * 5. DB에서 리프레시 토큰 삭제
      * @param refreshToken : request에서 추출한 것.
-     * todo . rtk - redis에서 삭제, atk - redis에 블랙리스트 등록.
      */
     public void logoutMember(String refreshToken, String accessToken){
         String email = jwtTokenProvider.parseEmail(refreshToken);
+        Long untilExpiration = jwtTokenProvider.calExpDuration(accessToken);
 
         redisService.deleteValues(email);
-        redisService.setBlackListValues(email, accessToken);
+        redisService.setBlackListValues(accessToken, "BlackList", untilExpiration);
 
 //        RefreshToken findToken = findExistToken(refreshToken);
         refreshTokenRepository.deleteRtkByTokenValue(refreshToken);
@@ -41,13 +45,19 @@ public class AuthService {
 
     /**
      * [atk 재발급]
-     * 1. rtk로 소유멤버 정보 찾아오기
-     * 2. 토큰 생성
+     * 설명 : 현재의 access토큰은 더이상 사용 불가하도록 블랙리스트에 등록하고 새로운 액세스토큰을 발급한다.
+     * 1. 리프레시 토큰에서 이메일 정보 추출
+     * 2. 액세스 토큰 만료시간 계산
+     * 3. redis에 현재 액세스 토큰 블랙리스트 등록
+     * 4. 새로운 액세스토큰 생성 후 리턴
      * @param refreshToken : request에서 추출한 것
      * @return 토큰 값
      */
-    public String reissueAccessToken(String refreshToken){
+    public String reissueAccessToken(String refreshToken, String accessToken){
         String email = jwtTokenProvider.parseEmail(refreshToken);
+        Long untilExpiration = jwtTokenProvider.calExpDuration(accessToken);
+
+        redisService.setBlackListValues(accessToken, "BlackList", untilExpiration);
 
         Member tokenOwner = findTokenOwner(email);
         return jwtTokenProvider.createAccessToken(tokenOwner);
@@ -56,19 +66,21 @@ public class AuthService {
 
     /**
      * [rtk 재발급]
-     * 1. 소유주 확인
-     * 2. 토큰 재생성
-     * 3. 토큰 값 업데이트하여 db에 저장
-     * 4. 토큰 반환
-     * //todo : redis에서 정보 바꾸기.
+     * 설명 : 리프레시토큰을 재발급하여 redis와 db의 토큰값을 업데이트 한다.
+     * 1. 리프레시 토큰에서 이메일 정보 추출
+     * 2. email 정보로 소유자의 멤버 정보 불러옴
+     * 3. 토큰 값으로 리프레시 토큰 정보 불러옴
+     * 4. 리프레시 토큰 생성
+     * 5. redis에 기본 정보 삭제, 새로운 정보 등록
+     * 6. DB에 리프레시 토큰 정보 업데이트
      * @param refreshToken : request에서 추출한 것
      * @return 토큰 값
      */
     public String reissueRefreshToken(String refreshToken){
         String email = jwtTokenProvider.parseEmail(refreshToken);
+        Member tokenOwner = findTokenOwner(email);
 
         RefreshToken foundRefreshToken = findExistToken(refreshToken);
-        Member tokenOwner = findTokenOwner(email);
 
         String newRefreshToken = jwtTokenProvider.createRefreshToken(tokenOwner);
 
@@ -81,20 +93,20 @@ public class AuthService {
     }
 
 
-    /**
-     * 여기부턴 기능 메서드
-     */
+    // 기능 메서드들
 
-    // DB에서 refreshToken 조회
+    /**
+     * 토큰 값으로 db에서 리프레시토큰 객체정보 불러오기
+     */
     private RefreshToken findExistToken(String refreshToken){
         return refreshTokenRepository.findByTokenValue(refreshToken)
                 .orElseThrow(() -> new TokenNotExist());
     }
 
-    // email로 토큰 생성을 위한 멤버 정보 찾기.
+    /**
+     * email로 토큰 생성을 위한 멤버 객체정보 불러오기
+     */
     private Member findTokenOwner(String email){
-//        RefreshToken foundRefreshToken = findExistToken(refreshToken);
-
         return memberRepository.findByEmail(email)
                 .orElseThrow(()-> new MemberNotExist());
     }
