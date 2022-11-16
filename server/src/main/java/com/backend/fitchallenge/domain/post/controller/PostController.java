@@ -2,6 +2,7 @@ package com.backend.fitchallenge.domain.post.controller;
 
 import com.backend.fitchallenge.domain.post.dto.MultiResponse;
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
+import com.backend.fitchallenge.domain.post.dto.PostSearch;
 import com.backend.fitchallenge.domain.post.dto.PostUpdateVO;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.post.service.PostService;
@@ -42,6 +43,7 @@ public class PostController {
         List<String> imagePathList = awsS3Service.StoreFile(postCreate.getFiles());
 
         imagePathList.forEach(path -> log.info("path ={}", path));
+        log.info("로그인 유저 Id ={}", memberDetails.getMemberId());
 
         Long postId = postService.createPost(memberDetails.getMemberId(), postCreate, imagePathList);
 
@@ -52,7 +54,7 @@ public class PostController {
      * 전체 게시물 조회
      * @param lastPostId 현재 유저가 보고있는 게시물의 마지막 postId
      * @param pageable default page = 0, size = 3
-     * @return 최신순으로 페이지네이션된 게시물 목록
+     * @return 최신순으로 페이지네이션된 게시물 목록, 응답 상태 코드 OK
      */
     @GetMapping
     public ResponseEntity<MultiResponse<?>> getList(
@@ -91,15 +93,18 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<MultiResponse<?>> getSearchPostList(PageRequest pageRequest,
-//                                                              @ModelAttribute PostSearch postSearch ) {
-//        log.info("pageRequest = {}", pageRequest.getPage());
-//        log.info("offset = {}", pageRequest.getOffset());
-//        log.info("size = {}", pageRequest.getSize());
-//
-//
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<MultiResponse<?>> getSearchList( @PageableDefault Pageable pageable,
+                                                       @ModelAttribute  PostSearch postSearch,
+                                                        @RequestParam Long lastPostId){
+
+        List<String> tagNames = postSearch.queryParsing(postSearch.getTag());
+        tagNames.forEach(tag -> log.info("tag = {}",tag));
+
+        return new ResponseEntity<>(postService.getSearchList(pageable,lastPostId, tagNames),HttpStatus.OK);
+
+
+    }
 
 
 

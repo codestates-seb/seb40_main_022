@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.post.repository;
 
+import com.backend.fitchallenge.domain.tag.domain.QTag;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,6 +12,8 @@ import java.util.List;
 
 import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
+import static com.backend.fitchallenge.domain.post.entity.QPostTag.postTag;
+import static com.backend.fitchallenge.domain.tag.domain.QTag.*;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
@@ -37,12 +40,29 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
 
     }
 
+    public List<Tuple> findSearchList(Pageable pageable, List<String> tagNames) {
+
+        return jpaQueryFactory
+                .select(post, post.postComments.size())
+                .from(post)
+                .leftJoin(post.member, member).fetchJoin()
+                .leftJoin(postTag)
+                .on(post.id.eq(postTag.post.id))
+                .leftJoin(tag)
+                .where(tag.content.in(tagNames))
+                .limit(pageable.getPageSize()+1)
+                .orderBy(post.id.desc())
+                .fetch();
+    }
+
     // no -offset 방식 처리 메서드
     private BooleanExpression ltPostId(Long postId) {
         return isEmpty(postId) ? null : post.id.lt(postId);
     }
 
-
+//    private BooleanExpression inTagNames(List<Long> tagNames) {
+//        return tagNames.size
+//    }
 
 
 }

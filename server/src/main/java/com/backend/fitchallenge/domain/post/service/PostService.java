@@ -12,6 +12,7 @@ import com.backend.fitchallenge.domain.post.exception.PostNotFound;
 import com.backend.fitchallenge.domain.post.repository.PostRepository;
 import com.backend.fitchallenge.domain.tag.domain.Tag;
 import com.backend.fitchallenge.domain.tag.dto.TagDto;
+import com.backend.fitchallenge.domain.tag.repository.QueryTagRepository;
 import com.backend.fitchallenge.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
+import static com.backend.fitchallenge.domain.post.entity.QPostTag.postTag;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -37,11 +39,13 @@ public class PostService {
     private final TagService tagService;
     private final AwsS3Service awsS3Service;
     private final MemberRepository memberRepository;
+    private final QueryTagRepository queryTagRepository;
 
     /**
      * 게시물 작성
-     * @param memberId 로그인 유저 memberId
-     * @param postCreate Post 생성 요청 정보
+     *
+     * @param memberId      로그인 유저 memberId
+     * @param postCreate    Post 생성 요청 정보
      * @param imagePathList S3에 저장후 CloudFront+ 파일명 목록
      * @return DB에 Post와 관련 Tag,Picture 저장후 postId 반환
      */
@@ -55,7 +59,7 @@ public class PostService {
 
             tags.forEach(tag -> log.info("tag = {}", tag.getContent()));
 
-           // Tag 있을경우 DB에 저장후 태그를 포함한 Post,PostTag 생성
+            // Tag 있을경우 DB에 저장후 태그를 포함한 Post,PostTag 생성
             Post postWithTag = Post.toPostWithTag(postCreate, tags, member, imagePathList);
             return postRepository.save(postWithTag).getId();
         } else {
@@ -74,13 +78,14 @@ public class PostService {
      * 2. post와 연관된 PostTag, Tag, Picture 조회 - Batch Size를 설정함으로써 N+1문제 해결
      * 3. PostResponse로 build
      * 4. 무한 스크롤 처리
+     *
      * @return
      */
     @Transactional(readOnly = true)
     public MultiResponse<?> getPostList(Long lastPostId, Pageable pageable) {
 
 
-        List<PostResponse> postResponses = postRepository.findList(lastPostId,pageable).stream()
+        List<PostResponse> postResponses = postRepository.findList(lastPostId, pageable).stream()
                 .map(postTuple ->
                         PostResponse.builder()
                                 .member(SimplePostMemberResponse.toResponse(postTuple.get(post).getMember()))
@@ -106,6 +111,7 @@ public class PostService {
      * 1. 로그인 유저가 게시물 작성자인지 체크
      * 2. DB에 저장된 imagePath를 통해 S3에 있는 이미지 파일 수정
      * 3. Tag 수정
+     *
      * @return 수정된 Post 정보
      */
     public PostUpdateResponse updatePost(Long postId, Long memberId, PostUpdateVO postUpdate) {
@@ -120,7 +126,7 @@ public class PostService {
         List<String> paths = post.getPictures().stream().
                 map(picture -> {
                     int index = picture.getPath().lastIndexOf("/");
-                    return picture.getPath().substring(index+1);
+                    return picture.getPath().substring(index + 1);
                 }).collect(toList());
 
         // S3 이미지파일 수정
@@ -154,7 +160,7 @@ public class PostService {
         List<String> paths = post.getPictures().stream().
                 map(picture -> {
                     int index = picture.getPath().lastIndexOf("/");
-                    return picture.getPath().substring(index+1);
+                    return picture.getPath().substring(index + 1);
                 }).collect(toList());
         //s3에서 포스트에 해당하는 사진 삭제
         awsS3Service.DeleteFile(paths);
@@ -173,7 +179,7 @@ public class PostService {
     }
 
     // 무한 스크롤 처리
-    private Slice<PostResponse> checkLastPage(List<PostResponse> postResponses, Pageable pageable ) {
+    private Slice<PostResponse> checkLastPage(List<PostResponse> postResponses, Pageable pageable) {
 
         boolean hasNext = false;
 
@@ -194,4 +200,38 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(PostNotFound::new);
     }
 
+
+    /**
+     * 게시물 검색 - 태그 기반
+     * 1.DB에서 태그 이름과 일치한 태그의 Id 목록 가져온다.
+     * 2.태그 Id 목록에 해당하는 글들 가져오기 태그목록중 한개만 포함해도 가져온다.
+     * 3.
+     *
+     * @param pageable
+     * @param tagNames
+     * @return
+     */
+    public MultiResponse<?> getSearchList(Pageable pageable, Long lastPostId, List<String> tagNames) {
+
+        List<Long> tagIds = queryTagRepository.findTagsByContent(tagNames);
+        if (tagIds.isEmpty()) {
+            throw new PostNotFound();
+        }
+
+        List<PostResponse> responses = queryTagRepository.findPostByTag(lastPostId, tagIds, pageable).stream()
+                .map(tuple ->
+                        PostResponse.builder()
+                                .member(SimplePostMemberResponse.toResponse(tuple.get(post).getMember()))
+                                .post(SimplePostResponse.toResponse(tuple.get(post), tuple.get(post.postComments.size())))
+                                .tags(tuple.get(post).getPostTags().stream()
+                                        .map(postTag -> postTag.getTag().getContent()).collect(toList()))
+                                .pictures(tuple.get(post).getPictures().stream()
+                                        .map(picture -> picture.getPath()).collect(toList()))
+                                .build()
+                ).collect(toList());
+
+        Slice<PostResponse> result = checkLastPage(responses, pageable);
+
+        return MultiResponse.of(result);
+    }
 }
