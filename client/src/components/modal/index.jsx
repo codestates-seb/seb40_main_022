@@ -1,5 +1,5 @@
 import React from 'react';
-import userProfile from '../../images/userprofil.png';
+import userProfile from '../../images/userprofile.png';
 import {
   Wrapper,
   ModalSection,
