@@ -15,7 +15,7 @@ export const Inside = styled.section`
     position: fixed;
     top: 20px;
     background-color: var(--white);
-    width: 70%;
+    width: 850px;
     z-index: 8;
 
     form {
@@ -40,12 +40,12 @@ export const MainForm = styled.article`
   justify-content: center;
   position: relative;
   /* top: 80px; */
-  width: 70%;
-  height: 1000vh;
+  /* width: 70%; */
   background-color: var(--white);
   border-radius: 5px;
   box-shadow: var(--box-shadow);
   /* background-color: var(--black-025); */
+  padding: 0 2vw;
 `;
 
 export const MainSearch = styled.input`
@@ -65,10 +65,10 @@ export const MainSearch = styled.input`
 `;
 
 export const ContentForm = styled.div`
-  position: absolute;
-  top: 180px;
-  left: 50px;
-  right: 50px;
+  /* position: absolute; */
+  margin-top: 180px;
+  /* left: 50px;
+  right: 50px; */
 `;
 
 export default function MainInside() {
