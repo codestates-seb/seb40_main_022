@@ -59,16 +59,14 @@ public class Member extends Auditable {
     @Column(name = "SPLIT")
     private Integer split;
 
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    private List<String> roles = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private Authority authority = Authority.ROLE_USER;
 
     @Embedded
     private MemberActivity memberActivity;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CHALLENGE_ID")
     private Challenge challenge;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -98,5 +96,11 @@ public class Member extends Auditable {
                 .build();
         this.split = memberUpdate.getSplit() == null ? this.split : memberUpdate.getSplit();
         this.profileImage = memberUpdate.getProfileImage() == null ? this.profileImage : memberUpdate.getProfileImage();
+    }
+
+    //매치 등록.
+    public void matchChallenge(Challenge challenge){
+        this.challenge = challenge;
+        challenge.getMembers().add(this);
     }
 }

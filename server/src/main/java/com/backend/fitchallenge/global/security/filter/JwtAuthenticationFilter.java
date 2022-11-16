@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain, // 의문) 어디서 사용되는가
                                             Authentication authResult) {
-        Member member = (Member) authResult.getPrincipal();
+        Member member = (Member)authResult.getPrincipal();
 
         String accessToken = jwtTokenProvider.createAccessToken(member);
         String refreshToken = jwtTokenProvider.createRefreshToken(member);

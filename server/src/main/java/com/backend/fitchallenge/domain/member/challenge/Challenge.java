@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,10 +20,6 @@ public class Challenge extends Auditable {
     @Column(name = "CHALLENGE_ID")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
-
-    @Column(name = "COUNTERPART_ID")
-    private Long counterPartId;
+    @OneToMany(mappedBy = "challenge")
+    private List<Member> members = new ArrayList<>();
 }

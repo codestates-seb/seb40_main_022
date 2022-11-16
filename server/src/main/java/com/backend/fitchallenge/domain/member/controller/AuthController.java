@@ -27,6 +27,7 @@ public class AuthController {
         String accessToken = request.getHeader("Authorization").substring(7);
 
         authService.logoutMember(refreshToken, accessToken);
+
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -33,6 +33,7 @@ public class AuthService {
      * @param refreshToken : request에서 추출한 것.
      */
     public void logoutMember(String refreshToken, String accessToken){
+
         String email = jwtTokenProvider.parseEmail(refreshToken);
         Long untilExpiration = jwtTokenProvider.calExpDuration(accessToken);
 
@@ -54,6 +55,7 @@ public class AuthService {
      * @return 토큰 값
      */
     public String reissueAccessToken(String refreshToken, String accessToken){
+
         String email = jwtTokenProvider.parseEmail(refreshToken);
         Long untilExpiration = jwtTokenProvider.calExpDuration(accessToken);
 
@@ -77,6 +79,7 @@ public class AuthService {
      * @return 토큰 값
      */
     public String reissueRefreshToken(String refreshToken){
+
         String email = jwtTokenProvider.parseEmail(refreshToken);
         Member tokenOwner = findTokenOwner(email);
 
