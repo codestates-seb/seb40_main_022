@@ -1,8 +1,5 @@
-/*
 package com.backend.fitchallenge.global.dto.request;
 
-import com.fasterxml.jackson.databind.util.ArrayBuilders;
-import com.querydsl.core.BooleanBuilder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -11,20 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.backend.domain.question.domain.QQuestion.*;
-import static com.backend.domain.question.domain.QQuestion.question;
-import static com.backend.fitchallenge.global.dto.request.PageRequest.Filter.NoAcceptedAnswer;
-import static com.backend.fitchallenge.global.dto.request.PageRequest.Filter.NoAnswer;
-import static com.backend.global.dto.request.PageRequest.Filter.*;
-
 @Getter
-@Slf4j
 public final class PageRequest {
 
 	private static final int MAX_SIZE = 2000;
 
 	private int page;
-	private int size = 15;
+	private int size;
 	private Sort.Direction sort = Sort.Direction.DESC;
 	private String filters;
 	private List<Filter> filterEnums;
@@ -51,7 +41,7 @@ public final class PageRequest {
 
 	// getter
 	public org.springframework.data.domain.PageRequest of() {
-		return org.springframework.data.domain.PageRequest.of(page - 1, size);
+		return org.springframework.data.domain.PageRequest.of(page , size);
 	}
 
 	@Getter
@@ -62,4 +52,3 @@ public final class PageRequest {
 
 }
 
-*/

@@ -16,7 +16,20 @@ public enum ExceptionCode {
     NOT_ANSWER_WRITER(400, "Not answer writer"),
 
     COMMENT_NOT_FOUND(404, "Comment not found"),
-    NOT_COMMENT_WRITER(400, "Not comment writer");
+    NOT_COMMENT_WRITER(400, "Not comment writer"),
+
+    //Post
+    POST_NOT_FOUND(404, "Post Not Found"),
+    NO_IMAGE(404, "Image Is Empty"),
+    UPLOAD_FAILED(404, "Upload Failed"),
+    CANNOT_UPDATE_POST(403, "Cannot Update Answer"),
+    CANNOT_DELETE_POST(403, "Cannot Delete Answer"),
+
+    //Comment
+    CANNOT_UPDATE_COMMENT(403, "Cannot Update Comment"),
+    CANNOT_DELETE_COMMENT(403, "Cannot Delete Comment"),
+    //Tag
+    TAG_NOT_FOUND(404, "Tag Not Found");
 
     @Getter
     private final int status;

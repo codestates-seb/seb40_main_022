@@ -1,3 +1,4 @@
+/*
 package com.backend.fitchallenge.domain.question.controller;
 
 import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
@@ -113,4 +114,4 @@ class QuestionControllerTest {
         //then
 
     }
-}
+}*/
