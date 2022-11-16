@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member.entity;
 
+import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
 import com.backend.fitchallenge.global.audit.Auditable;
@@ -27,10 +28,10 @@ public class Member extends Auditable {
     @Column(name = "EMAIL", nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "USERNAME", nullable = false)
+    @Column(name = "USERNAME")
     private String username;
 
     @Column(name = "PROFILE_IMAGE")
@@ -65,6 +66,9 @@ public class Member extends Auditable {
 
     @Embedded
     private MemberActivity memberActivity;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 
     //MemberCreate에서 사용하기 위함.
     @Builder(builderMethodName = "createBuilder")

@@ -22,6 +22,7 @@ export const Content = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   .imgprofile {
     width: 130px;
     height: 130px;
@@ -30,6 +31,7 @@ export const Content = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+
     > img {
       cursor: pointer;
       width: 110px;
