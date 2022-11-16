@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import Header from '../../components/header/Header';
+import Footer from '../../components/footer/Footer';
 
 const QnaPostBack = styled.div`
   width: 100%;
-  height: 100vh;
+  height: auto;
   margin: 0;
   padding: 0;
   background-color: #d6e3e3;
@@ -11,8 +13,8 @@ const QnaPostBack = styled.div`
 `;
 const QnaPost = styled.main`
   width: 680px;
-  height: 45%;
-  margin: auto;
+  height: 600px;
+  margin: 270px auto;
   border: 3px solid white;
   background-color: white;
   margin-top: 300px;
@@ -36,7 +38,6 @@ const PostTitle = styled.section`
 
 const PostContent = styled.section`
   height: 270px;
-  border: 1px solid red;
   display: flex;
   justify-content: center;
   > div {
@@ -70,6 +71,7 @@ const PostTag = styled.section`
       background-color: #f6f6f6;
       font-size: var(--font-13);
       font-weight: 500;
+      box-shadow: var(--box-shadow);
       cursor: pointer;
     }
   }
@@ -105,6 +107,7 @@ const PostSubmit = styled.section`
 function QnaAsk() {
   return (
     <QnaPostBack>
+      <Header />
       <QnaPost>
         <PostTitle>
           <div>
@@ -133,6 +136,7 @@ function QnaAsk() {
           <button>취소</button>
         </PostSubmit>
       </QnaPost>
+      <Footer />
     </QnaPostBack>
   );
 }

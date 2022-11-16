@@ -2,11 +2,15 @@ import './App.css';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Main from './pages/main/Main';
-import QnaAsk from './pages/Qna/QnaAsk';
-import Login from './pages/Login/Login';
-import SignUp from './pages/SignUp/SignUp';
-import Dailypost from './components/dailypost/dailypost';
-import Lank from './pages/Lank/Lank';
+import Calendar from './pages/calendar/Calendar';
+import Detail from './pages/calendar/Detail';
+import Login from './pages/login/Login';
+import SignUp from './pages/signup/SignUp';
+import Dailypost from './pages/dailypost/dailypost';
+import Lank from './pages/lank/Lank';
+import QnaList from './pages/qna/QnaList';
+import QnaDetail from './pages/qna/QnaDetail';
+import QnaAsk from './pages/qna/QnaAsk';
 
 function App() {
   return (
@@ -17,6 +21,10 @@ function App() {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/dailypost" element={<Dailypost />} />
       <Route path="/lank" element={<Lank />} />
+      <Route path="/qna" element={<QnaList />} />
+      <Route path="/record" element={<Calendar />} />
+      <Route path="/detail" element={<Detail />} />
+      <Route path="/qnadetail" element={<QnaDetail />} />
     </Routes>
   );
 }
