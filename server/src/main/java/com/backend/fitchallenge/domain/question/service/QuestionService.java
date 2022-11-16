@@ -11,10 +11,10 @@ import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.dto.response.SimpleQuestionResponse;
 import com.backend.fitchallenge.domain.question.entity.Question;
-import com.backend.fitchallenge.domain.question.exception.QuestionException;
+import com.backend.fitchallenge.domain.question.exception.NotQuestionWriter;
+import com.backend.fitchallenge.domain.question.exception.QuestionNotFound;
 import com.backend.fitchallenge.domain.question.repository.QuestionRepository;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
-import com.backend.fitchallenge.global.error.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +51,7 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public DetailQuestionResponse getQuestion(Long id) {
 
-        Question question = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
+        Question question = findVerifiedQuestion(id);
 
         List<AnswerResponse> answerResponses = question.getAnswers().stream().map(AnswerResponse::of).collect(Collectors.toList());
 
@@ -82,7 +83,7 @@ public class QuestionService {
 
         // 요청 사용자 조회 로직 적용시 수정
         Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
-        Question findQuestion = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
+        Question findQuestion = findVerifiedQuestion(id);
 
         verifyWriter(member.getId(), findQuestion);
 
@@ -98,7 +99,7 @@ public class QuestionService {
 
         // 요청 사용자 조회 로직 적용시 수정
         Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
-        Question findQuestion = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
+        Question findQuestion = findVerifiedQuestion(id);
 
         verifyWriter(member.getId(), findQuestion);
 
@@ -108,12 +109,19 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
+    private Question findVerifiedQuestion(Long id) {
+        Optional<Question> optionalQuestion = questionRepository.findById(id);
+
+        return optionalQuestion.orElseThrow(QuestionNotFound::new);
+    }
+
+    @Transactional(readOnly = true)
     private void verifyWriter(Long memberId, Question findQuestion) {
 
         Long writerId = questionRepository.findMemberIdByQuestionId(findQuestion.getId());
 
         if (!writerId.equals(memberId)) {
-            throw new QuestionException(ExceptionCode.NOT_QUESTION_WRITER);
+            throw new NotQuestionWriter();
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.question.controller;
 
 import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.service.QuestionService;
@@ -38,19 +39,21 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.getQuestionList(PageRequest.of(page - 1, size)));
     }
 
+    @GetMapping("/questions/search")
+    public ResponseEntity<MultiResponse<?>> searchList(@RequestParam int page,
+                                                       @RequestParam int size) {
+        return null;
+    }
+
     @PatchMapping("/questions/{id}")
     public ResponseEntity<Long> update(@PathVariable Long id,
                                        @Valid @RequestBody QuestionUpdate questionUpdate) {
-
-        Long memberId = 1L;
 
         return ResponseEntity.ok(questionService.updateQuestion(id, questionUpdate));
     }
 
     @DeleteMapping("/questions/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
-
-        Long memberId = 1L;
 
         return ResponseEntity.ok(questionService.deleteQuestion(id));
     }

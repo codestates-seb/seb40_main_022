@@ -15,7 +15,10 @@ public enum ExceptionCode {
     NOT_ANSWER_WRITER(400, "Not answer writer"),
 
     COMMENT_NOT_FOUND(404, "Comment not found"),
-    NOT_COMMENT_WRITER(400, "Not comment writer");
+    NOT_COMMENT_WRITER(400, "Not comment writer"),
+
+    RECORD_NOT_FOUND(404, "Record not found"),
+    NOT_RECORD_WRITER(400, "Not record owner");
 
     @Getter
     private final int status;
