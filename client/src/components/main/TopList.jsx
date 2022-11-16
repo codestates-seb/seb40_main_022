@@ -23,20 +23,24 @@ export const Content = styled.div`
   justify-content: center;
   align-items: center;
 
-  .circle {
+  .imgprofile {
     width: 130px;
     height: 130px;
     border: 5px solid var(--logored);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
-  }
-  > img {
-    cursor: pointer;
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    position: absolute;
-    top: 35px;
+
+    > img {
+      cursor: pointer;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      position: absolute;
+      top: 35px;
+    }
   }
 `;
 
@@ -45,27 +49,37 @@ export default function TopList() {
     <Top>
       <Content>
         <div className="circle" />
-        <img src={daily} alt="daily" />
+        <div className="imgprofile">
+          <img src={daily} alt="daily" />
+        </div>
         <span>운동인</span>
       </Content>
       <Content>
         <div className="circle" />
-        <img src={daily} alt="daily" />
+        <div className="imgprofile">
+          <img src={daily} alt="daily" />
+        </div>
         <span>운동인</span>
       </Content>
       <Content>
         <div className="circle" />
-        <img src={daily} alt="daily" />
+        <div className="imgprofile">
+          <img src={daily} alt="daily" />
+        </div>
         <span>운동인</span>
       </Content>
       <Content>
         <div className="circle" />
-        <img src={daily} alt="daily" />
+        <div className="imgprofile">
+          <img src={daily} alt="daily" />
+        </div>
         <span>운동인</span>
       </Content>
       <Content>
         <div className="circle" />
-        <img src={daily} alt="daily" />
+        <div className="imgprofile">
+          <img src={daily} alt="daily" />
+        </div>
         <span>운동인</span>
       </Content>
     </Top>
