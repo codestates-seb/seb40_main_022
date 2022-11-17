@@ -34,7 +34,7 @@ public enum ExceptionCode {
 
     //Record
     RECORD_NOT_FOUND(404, "Record not found"),
-    NOT_RECORD_WRITER(400, "Not record owner");
+    NOT_RECORD_WRITER(400, "Not record writer");
 
     @Getter
     private final int status;

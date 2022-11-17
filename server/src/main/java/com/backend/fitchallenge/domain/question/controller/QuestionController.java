@@ -5,9 +5,11 @@ import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.service.QuestionService;
+import com.backend.fitchallenge.global.annotation.AuthMember;
+import com.backend.fitchallenge.global.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
+import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +22,10 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping("/questions")
-    public ResponseEntity<Long> create(@Valid @RequestBody QuestionCreate questionCreate) {
+    public ResponseEntity<Long> create(@AuthMember MemberDetails memberDetails,
+                                       @Valid @RequestBody QuestionCreate questionCreate) {
 
-
-        return ResponseEntity.ok(questionService.createQuestion(questionCreate));
+        return ResponseEntity.ok(questionService.createQuestion(memberDetails.getMemberId(), questionCreate));
     }
 
     @GetMapping("/questions/{id}")
@@ -33,28 +35,32 @@ public class QuestionController {
     }
 
     @GetMapping("/questions")
-    public ResponseEntity<MultiResponse<?>> list(@RequestParam int page,
-                                                 @RequestParam int size) {
+    public ResponseEntity<MultiResponse<?>> list(@ModelAttribute PageRequest pageable) {
 
-        return ResponseEntity.ok(questionService.getQuestionList(PageRequest.of(page - 1, size)));
+        pageable.setDynamicSort();
+
+        return ResponseEntity.ok(questionService.getQuestionList(pageable));
     }
 
     @GetMapping("/questions/search")
-    public ResponseEntity<MultiResponse<?>> searchList(@RequestParam int page,
-                                                       @RequestParam int size) {
-        return null;
+    public ResponseEntity<MultiResponse<?>> searchList(PageRequest pageable, @RequestParam String keyword) {
+        pageable.setDynamicSort();
+
+        return ResponseEntity.ok(questionService.getQuestionList(pageable, keyword));
     }
 
     @PatchMapping("/questions/{id}")
-    public ResponseEntity<Long> update(@PathVariable Long id,
+    public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
+                                       @PathVariable Long id,
                                        @Valid @RequestBody QuestionUpdate questionUpdate) {
 
-        return ResponseEntity.ok(questionService.updateQuestion(id, questionUpdate));
+        return ResponseEntity.ok(questionService.updateQuestion(memberDetails.getMemberId(), id, questionUpdate));
     }
 
     @DeleteMapping("/questions/{id}")
-    public ResponseEntity<Long> delete(@PathVariable Long id) {
+    public ResponseEntity<Long> delete(@AuthMember MemberDetails memberDetails,
+                                       @PathVariable Long id) {
 
-        return ResponseEntity.ok(questionService.deleteQuestion(id));
+        return ResponseEntity.ok(questionService.deleteQuestion(memberDetails.getMemberId(), id));
     }
 }

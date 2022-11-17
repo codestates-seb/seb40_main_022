@@ -29,24 +29,18 @@ public class AnswerCommentService {
     private final AnswerRepository answerRepository;
     private final MemberRepository memberRepository;
 
-    /**
-     * 요청을 보낸 사용자 조회하는 로직 필요
-     */
-    public Long createAnswerComment(Long answerId, AnswerCommentCreate answerCommentCreate) {
+    public Long createAnswerComment(Long memberId, Long answerId, AnswerCommentCreate answerCommentCreate) {
 
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(AnswerNotFound::new);
 
         return answerCommentRepository.save(AnswerComment.createAnswerComment(answerCommentCreate, answer, member)).getId();
     }
 
-    /**
-     * 요청을 보낸 사용자 조회하는 로직 필요
-     */
-    public Long updateAnswerComment(Long answerCommentId, AnswerCommentUpdate answerCommentUpdate) {
+    public Long updateAnswerComment(Long memberId, Long answerCommentId, AnswerCommentUpdate answerCommentUpdate) {
 
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         AnswerComment findAnswerComment = findVerifiedAnswerComment(answerCommentId);
         verifyWriter(member.getId(), findAnswerComment);
 
@@ -55,12 +49,9 @@ public class AnswerCommentService {
         return answerCommentRepository.save(findAnswerComment).getId();
     }
 
-    /**
-     * 요청을 보낸 사용자 조회하는 로직 필요
-     */
-    public Long deleteAnswerComment(Long answerCommentId) {
+    public Long deleteAnswerComment(Long memberId, Long answerCommentId) {
 
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         AnswerComment findAnswerComment = findVerifiedAnswerComment(answerCommentId);
         verifyWriter(member.getId(), findAnswerComment);
 
