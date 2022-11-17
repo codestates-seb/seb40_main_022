@@ -38,7 +38,31 @@ export const DetailTitle = styled.section`
     background-position: 50% 55%;
     margin: 40px 0;
   }
+  > section {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
+
+export const DetailUpdate = styled.div`
+  > .qnaupdate {
+    width: 120px;
+    height: 50px;
+    border-radius: 20px;
+    background-color: var(--logored);
+    color: white;
+    font-weight: bold;
+    border: none;
+    float: right;
+    cursor: pointer;
+    text-decoration: none;
+    > h3 {
+      text-align: center;
+      margin-top: 14px;
+    }
+  }
+`;
+
 export const DetailNDB = styled.span`
   display: flex;
   margin-bottom: 50px;
@@ -116,7 +140,7 @@ export const DetailComment = styled.section`
     border-radius: 22px;
     border: 1px solid #bababa;
     font-size: var(--font-18);
-    padding-left: 50px;
+    padding: 20px 0px 20px 50px;
   }
 `;
 

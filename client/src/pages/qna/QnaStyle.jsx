@@ -32,10 +32,11 @@ export const QnaTitle = styled.div`
     font-weight: 600;
   }
   > button {
-    font-size: var(--font-18);
+    font-size: var(--font-16);
+    font-weight: 700;
     background-color: var(--logored);
-    width: 150px;
-    height: 60px;
+    width: 120px;
+    height: 50px;
     color: white;
     border: none;
     border-radius: 20px;
@@ -97,7 +98,7 @@ export const QnaContent = styled.section`
         display: block;
         width: 780px;
         .titlename {
-          font-size: var(--font-24);
+          font-size: var(--font-18);
           font-weight: bold;
           text-decoration: none;
           color: black;
@@ -112,7 +113,7 @@ export const QnaContent = styled.section`
       > span {
         display: flex;
         > h3 {
-          font-size: var(--font-15);
+          font-size: var(--font-12);
           font-weight: 600;
           margin-right: 25px;
           margin-top: 5px;

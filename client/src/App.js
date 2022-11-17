@@ -13,6 +13,7 @@ import QnaDetail from './pages/qna/QnaDetail';
 import QnaAsk from './pages/qna/QnaAsk';
 import Mypage from './pages/mypage/Mypage';
 import ProfileEdit from './pages/profileedit/index';
+import QnaUpdate from './pages/qna/QnaUpdate';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path="/record" element={<Calendar />} />
       <Route path="/detail" element={<Detail />} />
       <Route path="/qnadetail" element={<QnaDetail />} />
+      <Route path="/qnaupdate" element={<QnaUpdate />} />
     </Routes>
   );
 }
