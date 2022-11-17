@@ -2,7 +2,13 @@
 import userProfile from '../../images/daily.jpg';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
-import { ModalHeader, ModalMain, VsInfo, User, Buttons } from './Challenge';
+import {
+  ModalHeader,
+  ModalMain,
+  VsInfo,
+  User,
+  Buttons,
+} from './ChallengeStyle';
 
 export default function ChallengeReq(props) {
   const { open, close } = props;
