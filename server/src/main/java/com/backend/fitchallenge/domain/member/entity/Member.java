@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member.entity;
 
+import com.backend.fitchallenge.domain.member.challenge.Challenge;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
@@ -58,19 +59,19 @@ public class Member extends Auditable {
     @Column(name = "SPLIT")
     private Integer split;
 
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    private List<String> roles = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private Authority authority = Authority.ROLE_USER;
 
     @Embedded
     private MemberActivity memberActivity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CHALLENGE_ID")
+    private Challenge challenge;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
-    //MemberCreate에서 사용하기 위함.
     @Builder(builderMethodName = "createBuilder")
     public Member(String email, String password, String username) {
         this.email = email;
@@ -79,7 +80,6 @@ public class Member extends Auditable {
         this.memberActivity = new MemberActivity();
     }
 
-    //멤버 정보를 업데이트 해주는 메서드
     public void update(MemberUpdate memberUpdate, PasswordEncoder passwordEncoder){
 
         this.password = memberUpdate.getPassword() == null ?
@@ -96,5 +96,11 @@ public class Member extends Auditable {
                 .build();
         this.split = memberUpdate.getSplit() == null ? this.split : memberUpdate.getSplit();
         this.profileImage = memberUpdate.getProfileImage() == null ? this.profileImage : memberUpdate.getProfileImage();
+    }
+
+    //매치 등록.
+    public void matchChallenge(Challenge challenge){
+        this.challenge = challenge;
+        challenge.getMembers().add(this);
     }
 }

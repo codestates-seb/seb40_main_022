@@ -16,24 +16,30 @@ public class DetailQuestionResponse {
 
     private String content;
 
+    private String tag;
+
     private Long view;
+
+    private Integer answerCount;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
 
-    private MemberResponse memberResponse;
+    private MemberResponse questionWriter;
 
     private List<AnswerResponse> answers;
 
     @Builder
-    private DetailQuestionResponse(String title, String content, Long view, LocalDateTime createdAt, LocalDateTime modifiedAt, MemberResponse memberResponse, List<AnswerResponse> answers) {
+    private DetailQuestionResponse(String title, String content, String tag, Long view, Integer answerCount, LocalDateTime createdAt, LocalDateTime modifiedAt, MemberResponse memberResponse, List<AnswerResponse> answers) {
         this.title = title;
         this.content = content;
+        this.tag = tag;
         this.view = view;
+        this.answerCount = answerCount;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
-        this.memberResponse = memberResponse;
+        this.questionWriter = memberResponse;
         this.answers = answers;
     }
 
@@ -41,6 +47,7 @@ public class DetailQuestionResponse {
         return DetailQuestionResponse.builder()
                 .title(question.getTitle())
                 .content(question.getContent())
+                .tag(question.getQuestionTag().getValue())
                 .view(question.getView())
                 .createdAt(question.getCreatedAt())
                 .modifiedAt(question.getModifiedAt())
