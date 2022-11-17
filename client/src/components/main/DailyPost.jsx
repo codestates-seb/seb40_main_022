@@ -27,6 +27,7 @@ export const DailyItem = styled.div`
     border-radius: 5px;
     padding: 3%;
     width: 100%;
+    animation: modal-bg-show 0.5s;
 
     .comment {
       display: flex;

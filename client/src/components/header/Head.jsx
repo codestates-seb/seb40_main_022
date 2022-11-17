@@ -54,6 +54,11 @@ const Head = styled.header`
           width: 25px;
         }
       }
+
+      .modal {
+        margin-left: 20px;
+        cursor: pointer;
+      }
     }
   }
 `;

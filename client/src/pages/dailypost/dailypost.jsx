@@ -31,8 +31,13 @@ const DetailMain = styled.main`
       border: none;
       padding: 10px;
       height: 200px;
-      box-shadow: var(--box-shadow);
+      box-shadow: inset var(--box-shadow);
       outline: none;
+      border-radius: 5px;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
     .tagTitle {
       margin-top: 20px;
@@ -40,9 +45,15 @@ const DetailMain = styled.main`
     }
     .taginput {
       padding: 5px;
+      height: 30px;
       border: none;
-      box-shadow: var(--box-shadow);
+      box-shadow: inset var(--box-shadow);
+      border-radius: 5px;
       outline: none;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
     > .buttons {
       display: flex;
@@ -71,9 +82,12 @@ const DetailMain = styled.main`
   }
   .Imgbox {
     display: flex;
+    position: relative;
+    justify-content: center;
     .Imgaddbox {
-      border: 1px solid #959595;
-      width: 100px;
+      border: 3px solid var(--black-200);
+      border-radius: 3px;
+      width: 110px;
       height: 150px;
       display: flex;
       align-items: center;
@@ -91,9 +105,10 @@ const DetailMain = styled.main`
     .boxs {
       position: relative;
       .Imgs {
-        width: 100px;
+        width: 110px;
         height: 150px;
-        margin-right: 10px;
+        margin: 0 10px;
+        border-radius: 3px;
       }
       .Imgdel {
         position: absolute;

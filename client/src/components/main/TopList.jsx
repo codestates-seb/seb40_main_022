@@ -48,7 +48,7 @@ export const Content = styled.div`
   .imgprofile.dailynew {
     > img {
       &:hover {
-        filter: opacity(0.4) drop-shadow(0 0 0 #fc6666);
+        filter: opacity(0.4) drop-shadow(0 0 0 var(--logored));
       }
     }
   }

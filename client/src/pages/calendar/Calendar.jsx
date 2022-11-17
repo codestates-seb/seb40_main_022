@@ -129,7 +129,7 @@ const CalBox = styled.section`
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #fff;
-    width: 300px;
+    width: 350px;
     border-radius: 5px;
     box-shadow: var(--box-shadow);
     z-index: 99;

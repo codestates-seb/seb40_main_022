@@ -30,7 +30,7 @@ export const AddComment = styled.div`
       width: 40px;
       height: 40px;
       &:hover {
-        filter: opacity(0.4) drop-shadow(0 0 0 #fc6666);
+        filter: opacity(0.4) drop-shadow(0 0 0 var(--logored));
       }
     }
   }
