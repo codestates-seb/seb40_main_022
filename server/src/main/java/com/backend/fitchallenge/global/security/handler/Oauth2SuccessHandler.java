@@ -73,9 +73,9 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String accessToken = delegateAccessToken(username, authorities);
         String refreshToken = delegateRefreshToken(username);
 
-        Long memberId = findMemberIdByEmail(username);
+//        Long memberId = findMemberIdByEmail(username); - email로 교체해서 db접근 줄임.
         RefreshToken rtk = RefreshToken.builder()
-                .ownerId(memberId)
+                .email(username)
                 .tokenValue(refreshToken)
                 .build();
 
@@ -100,6 +100,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return accessToken;
     }
 
+    //todo redis에 저장하기.
     private String delegateRefreshToken(String username) {
         String subject = username;
         Date expiration = jwtTokenProvider.getTokenExpiration(jwtTokenProvider.getRefreshTokenExpirationMinutes());

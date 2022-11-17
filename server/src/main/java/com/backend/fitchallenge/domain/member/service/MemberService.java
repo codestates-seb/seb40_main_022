@@ -12,22 +12,26 @@ import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.domain.refreshtoken.exception.TokenNotExist;
+import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisService redisService;
 
     /**
      * [회원가입]
@@ -57,15 +61,10 @@ public class MemberService {
      * 4. 저장한다.
      * 5. 필요 정보만 MemberUpdate에 담아서 리턴한다.
      * todo 비밀번호 변경시 로그아웃 처리를 해야할 것인가.
-     * @param request - 현재 로그인 멤버의 email을 추출하기 위함
-     * @param memberUpdate : DTO
-     * @return MemberUpdate : DTO (request, response 형식이 같아서 그대로 리턴)
      */
-    public MemberUpdate updateMember(HttpServletRequest request, MemberUpdate memberUpdate){
+    public MemberUpdate updateMember(String loginEmail, MemberUpdate memberUpdate){
 
-        String loginMemberEmail = loginMember(request);
-
-        Member findMember = findVerifiedMember(loginMemberEmail);
+        Member findMember = findVerifiedMember(loginEmail);
         findMember.update(memberUpdate, passwordEncoder);
 
         memberRepository.save(findMember);
@@ -78,16 +77,13 @@ public class MemberService {
      * [마이페이지]
      * 1. 로그인 한 멤버의 이메일 추출
      * 2. 이메일로 정보 찾아옴
-     * 3 (todo) 작성 post 목록 불러오기
+     * 3 (todo) 작성 picture 목록 불러오기
      * 4. 필요정보만 MyPageResponse에 담는다.
-     * @param request - 현재 로그인 멤버의 email을 추출하기 위함
-     * @return MyPageResponse
      */
-    public MyPageResponse getMyInfo(HttpServletRequest request){
+    @Transactional(readOnly = true)
+    public MyPageResponse getMyInfo(String loginEmail){
 
-        String loginMemberEmail = loginMember(request);
-
-        Member findMember = findVerifiedMember(loginMemberEmail);
+        Member findMember = findVerifiedMember(loginEmail);
 
         //post연결해야함
         return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()));
@@ -99,6 +95,7 @@ public class MemberService {
      * @param memberId : 조회하고자 하는 유저의 id
      * @return DetailsMemberResponse
      */
+    @Transactional(readOnly = true)
     public DetailsMemberResponse getMember(Long memberId){
 
         Member findMember = findVerifiedMemberById(memberId);
@@ -107,7 +104,7 @@ public class MemberService {
         return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()));
     }
 
-    // todo : 인플루언서 랭킹별로 조회하기.
+    // todo : 인플루언서 랭킹별로 조회하기 - 중요도 하.
     public void getProfessionalList(){
 
     }
@@ -117,19 +114,17 @@ public class MemberService {
      * 1. 현재 로그인 한 회원의 이메일 추출
      * 2. 추출한 이메일로 멤버 정보를 조회
      * 3. DB에서 멤버 삭제
-     * 4. 로그아웃 처리
-     * @param request : 이메일 정보 추출을 위함
-     * @return Long : 삭제한 멤버의 id
+     * 4. 로그아웃 처리 (redis, db에서 토큰정보삭제)
      */
-    public Long deleteMember(HttpServletRequest request){
+    public Long deleteMember(String loginEmail){
 
-        String loginMemberEmail = loginMember(request);
-        Member findMember = findVerifiedMember(loginMemberEmail);
+        Member findMember = findVerifiedMember(loginEmail);
 
         Long deletedMemberId = findMember.getId();
+        String deletedEmail = findMember.getEmail();
 
         memberRepository.delete(findMember);
-
+        redisService.deleteValues(deletedEmail);
         refreshTokenRepository.delete(
                 refreshTokenRepository.findById(deletedMemberId).orElseThrow(()->new TokenNotExist()));
 
