@@ -1,12 +1,27 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import Ouaths from '../../components/ouath/Ouaths';
 import LoginStyle from './LoginStyle';
+import LoginAsync from '../../redux/action/LoginAsync';
 
 function Login() {
   const [Evalue, setEvalue] = useState('');
   const [pwd, setPwd] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleClick = () => {
+    if (Evalue === '') {
+      alert('이메일이 비어있습니다.');
+    } else if (pwd === '') {
+      alert('비밀번호가 비어있습니다.');
+    } else {
+      dispatch(LoginAsync({ Evalue, pwd }));
+      navigate('/');
+    }
+  };
   return (
     <LoginStyle>
       <Header />
@@ -25,7 +40,9 @@ function Login() {
             onChange={e => setPwd(e.target.value)}
           />
           <Ouaths />
-          <button className="LoginButton">Login</button>
+          <button className="LoginButton" onClick={() => handleClick()}>
+            Login
+          </button>
         </section>
       </div>
       <Footer />

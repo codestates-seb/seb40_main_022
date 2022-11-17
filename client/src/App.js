@@ -4,15 +4,16 @@ import { Routes, Route } from 'react-router-dom';
 import Main from './pages/main/Main';
 import Calendar from './pages/calendar/Calendar';
 import Detail from './pages/calendar/Detail';
-import Login from './pages/Login/Login';
-import SignUp from './pages/SignUp/SignUp';
+import Login from './pages/login/Login';
+import SignUp from './pages/signup/SignUp';
 import Dailypost from './pages/dailypost/dailypost';
-import Lank from './pages/Lank/Lank';
-import QnaList from './pages/Qna/QnaList';
-import QnaDetail from './pages/Qna/QnaDetail';
-import QnaAsk from './pages/Qna/QnaAsk';
+import Lank from './pages/lank/Lank';
+import QnaList from './pages/qna/QnaList';
+import QnaDetail from './pages/qna/QnaDetail';
+import QnaAsk from './pages/qna/QnaAsk';
 import Mypage from './pages/mypage/Mypage';
-import QnaUpdate from './pages/Qna/QnaUpdate';
+import ProfileEdit from './pages/profileedit/index';
+import QnaUpdate from './pages/qna/QnaUpdate';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/mypage" element={<Mypage />} />
+      <Route path="/mypage/edit" element={<ProfileEdit />} />
       <Route path="/dailypost" element={<Dailypost />} />
       <Route path="/lank" element={<Lank />} />
       <Route path="/qna" element={<QnaList />} />

@@ -1,49 +1,9 @@
-import styled from 'styled-components';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import LankContent from './LankContent';
 import LankDropdown from './LankDropdown';
-
-const LankBox = styled.div`
-  width: 100%;
-`;
-const LankMain = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  height: auto;
-  padding-top: 60px;
-  margin-bottom: 150px;
-
-  .content-wrapper {
-    section {
-      margin-bottom: -80px;
-    }
-  }
-  .lankhead {
-    display: flex;
-    justify-content: space-between;
-    margin: 60px 0 10px 0;
-    > h2 {
-      font-weight: bold;
-    }
-    .lankTab {
-      display: flex;
-      > li {
-        list-style: none;
-        > button {
-          width: 70px;
-          height: 30px;
-          background-color: #2b2b2b;
-          border: 1px solid #fefefe;
-          color: white;
-          cursor: pointer;
-          margin-right: 4px;
-        }
-      }
-    }
-  }
-`;
+import searchIcon from '../../images/searchIcon.png';
+import { LankBox, LankMain } from './Lankstyle';
 
 function Lank() {
   // const list = [
@@ -61,14 +21,14 @@ function Lank() {
         <div className="lankhead">
           <h2>종합 랭킹</h2>
           <LankDropdown />
+          <label htmlFor="SearchIn">
+            <img src={searchIcon} alt="검색아이콘" className="search" />
+          </label>
         </div>
-        <div className="content-wrapper">
-          <LankContent />
-          <LankContent />
-          <LankContent />
-          <LankContent />
-          <LankContent />
-        </div>
+        <LankContent />
+        <LankContent />
+        <LankContent />
+        <LankContent />
       </LankMain>
       <Footer />
     </LankBox>

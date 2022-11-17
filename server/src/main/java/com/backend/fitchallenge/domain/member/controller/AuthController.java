@@ -22,16 +22,23 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response){
+
         String refreshToken = request.getHeader("RefreshToken");
-        authService.logoutMember(refreshToken);
+        String accessToken = request.getHeader("Authorization").substring(7);
+
+        authService.logoutMember(refreshToken, accessToken);
+
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/reissue")
     public ResponseEntity reIssue(HttpServletRequest request, HttpServletResponse response){
 
-        String reIssueAccessToken = authService.reissueAccessToken(request.getHeader("refreshToken"));
-        String reIssueRefreshToken = authService.reissueRefreshToken(request.getHeader("refreshToken"));
+        String refreshToken = request.getHeader("RefreshToken");
+        String accessToken = request.getHeader("Authorization").substring(7);
+
+        String reIssueAccessToken = authService.reissueAccessToken(refreshToken, accessToken);
+        String reIssueRefreshToken = authService.reissueRefreshToken(refreshToken);
 
         response.setHeader("Authorization", "Bearer " + reIssueAccessToken);
         response.setHeader("RefreshToken", reIssueRefreshToken);

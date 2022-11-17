@@ -74,6 +74,10 @@ public class Question extends Auditable {
         this.questionTag = changedTag == null ? questionTag : QuestionTag.from(changedTag);
     }
 
+    public void addView() {
+        this.view = view + 1;
+    }
+
     public enum QuestionTag {
         WORKOUT("운동"),
         DIET("식단"),

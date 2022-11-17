@@ -3,19 +3,22 @@ package com.backend.fitchallenge.domain.answer.service;
 import com.backend.fitchallenge.domain.answer.dto.request.AnswerCreate;
 import com.backend.fitchallenge.domain.answer.dto.request.AnswerUpdate;
 import com.backend.fitchallenge.domain.answer.entity.Answer;
+import com.backend.fitchallenge.domain.answer.exception.AnswerNotFound;
+import com.backend.fitchallenge.domain.answer.exception.NotAnswerWriter;
 import com.backend.fitchallenge.domain.answer.repository.AnswerRepository;
-import com.backend.fitchallenge.domain.answer.exception.AnswerException;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.question.entity.Question;
-import com.backend.fitchallenge.domain.question.exception.QuestionException;
+import com.backend.fitchallenge.domain.question.exception.NotQuestionWriter;
+import com.backend.fitchallenge.domain.question.exception.QuestionNotFound;
 import com.backend.fitchallenge.domain.question.repository.QuestionRepository;
-import com.backend.fitchallenge.global.error.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,27 +30,19 @@ public class AnswerService {
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
 
-    /**
-     * 요청을 보낸 사용자 조회하는 로직 필요
-     */
-    public Long createAnswer(Long id, AnswerCreate answerCreate) {
+    public Long createAnswer(Long memberId, Long id, AnswerCreate answerCreate) {
 
-        // 요청 사용자 조회 로직 적용시 수정
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
-        Question question = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
+        Question question = questionRepository.findById(id).orElseThrow(QuestionNotFound::new);
 
         return answerRepository.save(Answer.createAnswer(answerCreate, question, member)).getId();
     }
 
-    /**
-     * 요청을 보낸 사용자 조회하는 로직 필요
-     */
-    public Long updateAnswer(Long answerId, AnswerUpdate answerUpdate) {
+    public Long updateAnswer(Long memberId, Long answerId, AnswerUpdate answerUpdate) {
 
         Answer findAnswer = findVerifiedAnswer(answerId);
 
-        // 요청 사용자 조회 로직 적용시 수정
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         verifyWriter(member.getId(), findAnswer);
 
         findAnswer.updateAnswer(answerUpdate);
@@ -55,15 +50,11 @@ public class AnswerService {
         return answerRepository.save(findAnswer).getId();
     }
 
-    /**
-     * 요청을 보낸 사용자 조회하는 로직 필요
-     */
-    public Long deleteAnswer(Long answerId) {
+    public Long deleteAnswer(Long memberId, Long answerId) {
 
         Answer findAnswer = findVerifiedAnswer(answerId);
 
-        // 요청 사용자 조회 로직 적용시 수정
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         verifyWriter(member.getId(), findAnswer);
 
         answerRepository.delete(findAnswer);
@@ -71,17 +62,12 @@ public class AnswerService {
         return answerId;
     }
 
-    /**
-     * 1. 요청을 보낸 사용자 조회하는 로직 필요
-     * 2. Member 클래스에 Community Point 늘리는 메서드 추가되면 반영
-     */
-    public Long accept(Long id, Long answerId) {
+    public Long accept(Long memberId, Long id, Long answerId) {
 
         Answer findAnswer = findVerifiedAnswer(answerId);
 
-        // 요청 사용자 조회 로직 적용시 수정
-        Member member = memberRepository.findById(1L).orElseThrow(MemberNotExist::new);
-        Question question = questionRepository.findById(id).orElseThrow(() -> new QuestionException(ExceptionCode.QUESTION_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
+        Question question = questionRepository.findById(id).orElseThrow(QuestionNotFound::new);
 
         if (member.getId().equals(question.getMember().getId())) {
             findAnswer.accept();
@@ -89,10 +75,17 @@ public class AnswerService {
                 // 채택자의 Community Point가 증가
             }
         } else {
-            throw new QuestionException(ExceptionCode.NOT_QUESTION_WRITER);
+            throw new NotQuestionWriter();
         }
 
         return answerId;
+    }
+
+    @Transactional(readOnly = true)
+    private Answer findVerifiedAnswer(Long answerId) {
+        Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
+
+        return optionalAnswer.orElseThrow(AnswerNotFound::new);
     }
 
     @Transactional(readOnly = true)
@@ -100,14 +93,7 @@ public class AnswerService {
         Long writerId = answerRepository.findMemberIdByAnswerId(findAnswer.getId());
 
         if (!writerId.equals(memberId)) {
-            throw new AnswerException(ExceptionCode.NOT_ANSWER_WRITER);
+            throw new NotAnswerWriter();
         }
-    }
-
-    @Transactional(readOnly = true)
-    private Answer findVerifiedAnswer(Long answerId) {
-
-        return answerRepository.findById(answerId)
-                .orElseThrow(() -> new AnswerException(ExceptionCode.ANSWER_NOT_FOUND));
     }
 }
