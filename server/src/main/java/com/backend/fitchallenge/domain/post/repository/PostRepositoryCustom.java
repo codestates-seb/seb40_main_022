@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface PostRepositoryCustom {
 
-    List<Tuple> findList(Long lastPostId, Pageable pageable);
+    List<Tuple> findList(Long lastPostId,Long memberId, Pageable pageable);
 
 
 }

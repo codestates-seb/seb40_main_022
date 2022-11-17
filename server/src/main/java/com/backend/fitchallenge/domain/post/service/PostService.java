@@ -23,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.backend.fitchallenge.domain.like.entity.QLikes.likes;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
 import static com.backend.fitchallenge.domain.post.entity.QPostTag.postTag;
 import static java.util.stream.Collectors.toList;
@@ -82,19 +84,19 @@ public class PostService {
      * @return
      */
     @Transactional(readOnly = true)
-    public MultiResponse<?> getPostList(Long lastPostId, Pageable pageable) {
+    public MultiResponse<?> getPostList(Long lastPostId, Long memberId, Pageable pageable) {
 
 
-        List<PostResponse> postResponses = postRepository.findList(lastPostId, pageable).stream()
+        List<PostResponse> postResponses = postRepository.findList(lastPostId,memberId, pageable).stream()
                 .map(postTuple ->
                         PostResponse.builder()
                                 .member(SimplePostMemberResponse.toResponse(postTuple.get(post).getMember()))
-                                .post(SimplePostResponse.toResponse(postTuple.get(post), postTuple.get(post.postComments.size())))
+                                .post(SimplePostResponse.toResponse(postTuple.get(post),postTuple.get(post).getLikes().size() ,postTuple.get(post.postComments.size())))
                                 .tags(postTuple.get(post).getPostTags().stream()
                                         .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                                 .pictures(postTuple.get(post).getPictures().stream()
                                         .map(picture -> picture.getPath()).collect(toList()))
-
+                                .likeSate(Optional.ofNullable(postTuple.get(likes.id)).isPresent())
                                 .build()
                 ).collect(toList());
 
@@ -222,7 +224,7 @@ public class PostService {
                 .map(tuple ->
                         PostResponse.builder()
                                 .member(SimplePostMemberResponse.toResponse(tuple.get(post).getMember()))
-                                .post(SimplePostResponse.toResponse(tuple.get(post), tuple.get(post.postComments.size())))
+                                .post(SimplePostResponse.toResponse(tuple.get(post),0 ,tuple.get(post.postComments.size())))
                                 .tags(tuple.get(post).getPostTags().stream()
                                         .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                                 .pictures(tuple.get(post).getPictures().stream()

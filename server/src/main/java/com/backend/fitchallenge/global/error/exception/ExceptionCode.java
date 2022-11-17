@@ -17,6 +17,9 @@ public enum ExceptionCode {
     COMMENT_NOT_FOUND(404, "Comment not found"),
     NOT_COMMENT_WRITER(400, "Not comment writer"),
 
+    CHALLENGE_NOT_FOUND(404, "Challenge not found"),
+    CANNOT_REFUSE_CHALLENGE(403, "Cannot Refuse Challenge"),
+
     //Post
     POST_NOT_FOUND(404, "Post Not Found"),
     NO_IMAGE(404, "Image Is Empty"),

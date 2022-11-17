@@ -59,8 +59,9 @@ public class PostController {
     @GetMapping
     public ResponseEntity<MultiResponse<?>> getList(
             @RequestParam Long lastPostId,
+            @AuthMember MemberDetails memberDetails,
             @PageableDefault(size = 3) Pageable pageable) {
-        return new ResponseEntity<>(postService.getPostList(lastPostId, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getPostList(lastPostId, memberDetails.getMemberId(),pageable), HttpStatus.OK);
     }
 
 
@@ -93,6 +94,7 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     @GetMapping("/search")
     public ResponseEntity<MultiResponse<?>> getSearchList( @PageableDefault Pageable pageable,
                                                        @ModelAttribute  PostSearch postSearch,
@@ -102,7 +104,6 @@ public class PostController {
         tagNames.forEach(tag -> log.info("tag = {}",tag));
 
         return new ResponseEntity<>(postService.getSearchList(pageable,lastPostId, tagNames),HttpStatus.OK);
-
 
     }
 

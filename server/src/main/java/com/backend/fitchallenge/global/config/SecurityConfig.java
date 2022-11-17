@@ -7,6 +7,7 @@ import com.backend.fitchallenge.global.security.filter.JwtAuthenticationFilter;
 import com.backend.fitchallenge.global.security.filter.JwtVerificationFilter;
 import com.backend.fitchallenge.global.security.handler.Oauth2SuccessHandler;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
+import com.backend.fitchallenge.global.security.userdetails.MemberDetailsService;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -38,7 +39,7 @@ public class SecurityConfig {
     private final MemberAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-
+    private final MemberDetailsService memberDetailsService;
 
     @Bean
     @SneakyThrows
@@ -107,7 +108,7 @@ public class SecurityConfig {
                     new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider);
 
             JwtVerificationFilter jwtVerificationFilter =
-                    new JwtVerificationFilter(jwtTokenProvider, authorityUtils);
+                    new JwtVerificationFilter(jwtTokenProvider, authorityUtils,memberDetailsService);
 
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
 

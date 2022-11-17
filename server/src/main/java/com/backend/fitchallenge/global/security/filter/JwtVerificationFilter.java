@@ -1,10 +1,13 @@
 package com.backend.fitchallenge.global.security.filter;
 
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
+import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
+import com.backend.fitchallenge.global.security.userdetails.MemberDetailsService;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +27,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
+    private final MemberDetailsService memberDetailsService;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -68,9 +73,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     // 토큰으로부터 뽑아낸 Authentication 객체를 SecurityContext에 저장
     private void setAuthenticationToContext(Map<String, Object> claims) {
         String username = (String) claims.get("username"); // loginDto에서 설정한 이름
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles")); // security를 위한 권한정보
+            MemberDetails memberDetails = (MemberDetails) memberDetailsService.loadUserByUsername(username);
+//        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles")); // security를 위한 권한정보
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetails, null, memberDetails.getAuthorities());
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
