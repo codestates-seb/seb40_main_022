@@ -14,14 +14,14 @@ public class RefreshToken {
 
     @Id
     @Column(name = "RT_OWNER")
-    private Long ownerId;
+    private String ownerEmail;
 
     @Column(name = "TOKEN_VALUE")
     private String tokenValue;
 
     @Builder
-    public RefreshToken(Long ownerId, String tokenValue) {
-        this.ownerId = ownerId;
+    public RefreshToken(String email, String tokenValue) {
+        this.ownerEmail = email;
         this.tokenValue = tokenValue;
     }
 

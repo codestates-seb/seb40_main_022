@@ -16,7 +16,9 @@ public final class PageRequest {
 	private int page;
 	private int size;
 	private Sort.Direction sort = Sort.Direction.DESC;
+	private String sortBy;
 	private String filters;
+	private Sort dynamicSort;
 	private List<Filter> filterEnums;
 
 	public PageRequest(int page, String filters) {
@@ -28,6 +30,14 @@ public final class PageRequest {
 		return (long)(Math.max(1, page) - 1) * Math.min(size, MAX_SIZE);
 	}
 
+	public void setDynamicSort() {
+		if (sortBy.equals("view")) {
+			this.dynamicSort = Sort.by(sort, "view");
+		} else {
+			this.dynamicSort = Sort.by(sort, "id");
+		}
+	}
+
 	public void filtersToEnum(String filters) {
 		if (filters == null || filters.isEmpty() || filters.isBlank()) {
 			this.filterEnums = null;
@@ -37,7 +47,6 @@ public final class PageRequest {
 				.collect(Collectors.toList());
 		}
 	}
-
 
 	// getter
 	public org.springframework.data.domain.PageRequest of() {

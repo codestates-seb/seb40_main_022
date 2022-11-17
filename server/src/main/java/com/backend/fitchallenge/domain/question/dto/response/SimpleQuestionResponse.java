@@ -23,10 +23,10 @@ public class SimpleQuestionResponse {
 
     private LocalDateTime modifiedAt;
 
-    private MemberResponse memberResponse;
+    private MemberResponse member;
 
     @Builder
-    public SimpleQuestionResponse(Question question, MemberResponse memberResponse, Integer answerCount) {
+    public SimpleQuestionResponse(Question question, MemberResponse member, Integer answerCount) {
         this.questionId = question.getId();
         this.title = question.getTitle();
         this.summary = getSummary(question.getContent());
@@ -34,7 +34,7 @@ public class SimpleQuestionResponse {
         this.answerCount = answerCount;
         this.createdAt = question.getCreatedAt();
         this.modifiedAt = question.getModifiedAt();
-        this.memberResponse = memberResponse;
+        this.member = member;
     }
 
     private String getSummary(String content) {

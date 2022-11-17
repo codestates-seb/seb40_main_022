@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,12 +16,55 @@ import myimage from '../../images/qnaImg.jpg';
 
 const Wrapper = styled.div`
   width: 100%;
-  > div {
+  .delmodal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    z-index: 99;
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .contentbox {
+      height: 100px;
+      font-size: var(--font-16);
+    }
+    .btns {
+      height: 50px;
+      column-gap: 30px;
+      > button {
+        width: 60px;
+        height: 25px;
+        font-size: var(--font-13);
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: var(--box-shadow);
+      }
+      .yes {
+        color: white;
+        background-color: var(--logored);
+      }
+      .no {
+        color: white;
+        background-color: var(--buttongray);
+      }
+    }
+  }
+  .box {
     padding-top: 60px;
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
   }
   .line {
@@ -140,9 +183,10 @@ const PictureBox = styled.div`
       width: 250px;
       height: 250px;
     }
-    > p {
+    > button {
       cursor: pointer;
-      width: 85%;
+      border: none;
+      margin-left: 80%;
       margin-top: 10px;
       display: flex;
       justify-content: end;
@@ -152,10 +196,23 @@ const PictureBox = styled.div`
 
 function Mypage() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [Clicked, setClicked] = useState(false);
+
   return (
     <Wrapper>
       <Header />
-      <div>
+      {Clicked ? (
+        <div className="delmodal">
+          <div className="contentbox">정말 삭제하시겠습니까?</div>
+          <div className="btns">
+            <button className="yes">예</button>
+            <button className="no" onClick={() => setClicked(!Clicked)}>
+              아니요
+            </button>
+          </div>
+        </div>
+      ) : null}
+      <div className="box">
         <ProfileBox>
           <div className="circle">
             <img src={userProfile} alt="userProfile" />
@@ -196,9 +253,9 @@ function Mypage() {
               return (
                 <div key={data}>
                   <img src={myimage} alt="userProfile" />
-                  <p>
+                  <button onClick={() => setClicked(!Clicked)}>
                     <FontAwesomeIcon icon={faTrash} />
-                  </p>
+                  </button>
                 </div>
               );
             })}
