@@ -2,15 +2,15 @@ import React from 'react';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
-  QnaPostBack,
   QnaPost,
-  PostTitle,
+  QnaPostBack,
   PostContent,
-  PostTag,
   PostSubmit,
-} from './QnaAskstyle';
+  PostTag,
+  PostTitle,
+} from './QnaUpdatestyle';
 
-function QnaAsk() {
+function QnaUpdate() {
   return (
     <QnaPostBack>
       <Header />
@@ -49,4 +49,4 @@ function QnaAsk() {
   );
 }
 
-export default QnaAsk;
+export default QnaUpdate;

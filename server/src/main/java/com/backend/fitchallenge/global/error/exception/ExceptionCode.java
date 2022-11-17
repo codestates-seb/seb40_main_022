@@ -27,15 +27,7 @@ public enum ExceptionCode {
 
     //Comment
     COMMENT_NOT_FOUND(404, "Comment not found"),
-    NOT_COMMENT_WRITER(400, "Not comment writer"),
-    CANNOT_UPDATE_COMMENT(403, "Cannot Update Comment"),
-    CANNOT_DELETE_COMMENT(403, "Cannot Delete Comment"),
-    //Tag
-    TAG_NOT_FOUND(404, "Tag Not Found"),
-
-    //Record
-    RECORD_NOT_FOUND(404, "Record not found"),
-    NOT_RECORD_WRITER(400, "Not record writer");
+    NOT_COMMENT_WRITER(400, "Not comment writer");
 
     @Getter
     private final int status;
