@@ -1,5 +1,17 @@
 import styled from 'styled-components';
 
+export const Notice = styled.div`
+  position: absolute;
+  margin-left: -160px;
+  margin-top: 18px;
+  width: 400px;
+  background-color: var(--backwhite);
+  box-shadow: var(--box-shadow);
+  @media screen and (max-width: 1400px) {
+    margin-left: -300px;
+  }
+`;
+
 export const Wrapper = styled.div`
   padding-right: 10px;
   .modal {
@@ -50,8 +62,15 @@ export const ModalSection = styled.section`
   margin: 0 auto;
   border-radius: 0.3rem;
   background-color: #fff;
-  /* 팝업이 열릴때 스르륵 열리는 효과 */
   animation: modal-show 0.3s;
+  overflow: hidden;
+`;
+
+export const NoticeSection = styled.section`
+  max-width: 450px;
+  margin: 0 auto;
+  border-radius: 0.3rem;
+  background-color: #fff;
   overflow: hidden;
 `;
 
@@ -87,11 +106,18 @@ export const ModalMain = styled.main`
 
 export const ModalList = styled.li`
   display: flex;
-  align-items: center;
   list-style: none;
   padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: var(--black-025);
+  border-radius: 5px;
   > img {
     margin-right: 10px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
   }
   .content {
     width: 100%;
