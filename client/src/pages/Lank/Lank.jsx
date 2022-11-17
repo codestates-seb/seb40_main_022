@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import LankContent from './LankContent';
 
 const LankBox = styled.div`
   width: 100%;
@@ -9,13 +10,20 @@ const LankMain = styled.main`
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  height: 1000px;
-  border: 1px solid red;
+  height: auto;
   padding-top: 60px;
+  margin-bottom: 150px;
+  .content-wrapper {
+    section {
+      margin-bottom: -80px;
+    }
+  }
   .lankhead {
     display: flex;
+    justify-content: space-between;
+    margin: 60px 0 10px 0;
     > h2 {
-      color: var(--backcolor);
+      font-weight: bold;
     }
     .lankTab {
       display: flex;
@@ -24,6 +32,11 @@ const LankMain = styled.main`
         > button {
           width: 70px;
           height: 30px;
+          background-color: #2b2b2b;
+          border: 1px solid #fefefe;
+          color: white;
+          cursor: pointer;
+          margin-right: 4px;
         }
       }
     }
@@ -61,6 +74,13 @@ function Lank() {
                 );
               })}
           </ul>
+        </div>
+        <div className="content-wrapper">
+          <LankContent />
+          <LankContent />
+          <LankContent />
+          <LankContent />
+          <LankContent />
         </div>
       </LankMain>
       <Footer />

@@ -4,13 +4,13 @@ import { Routes, Route } from 'react-router-dom';
 import Main from './pages/main/Main';
 import Calendar from './pages/calendar/Calendar';
 import Detail from './pages/calendar/Detail';
-import Login from './pages/login/Login';
-import SignUp from './pages/signup/SignUp';
+import Login from './pages/Login/Login';
+import SignUp from './pages/SignUp/SignUp';
 import Dailypost from './pages/dailypost/dailypost';
-import Lank from './pages/lank/Lank';
-import QnaList from './pages/qna/QnaList';
-import QnaDetail from './pages/qna/QnaDetail';
-import QnaAsk from './pages/qna/QnaAsk';
+import Lank from './pages/Lank/Lank';
+import QnaList from './pages/Qna/QnaList';
+import QnaDetail from './pages/Qna/QnaDetail';
+import QnaAsk from './pages/Qna/QnaAsk';
 
 function App() {
   return (
