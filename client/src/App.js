@@ -11,6 +11,8 @@ import Lank from './pages/Lank/Lank';
 import QnaList from './pages/Qna/QnaList';
 import QnaDetail from './pages/Qna/QnaDetail';
 import QnaAsk from './pages/Qna/QnaAsk';
+import Mypage from './pages/mypage/Mypage';
+import QnaUpdate from './pages/Qna/QnaUpdate';
 
 function App() {
   return (
@@ -19,12 +21,14 @@ function App() {
       <Route path="/qnaask" element={<QnaAsk />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/mypage" element={<Mypage />} />
       <Route path="/dailypost" element={<Dailypost />} />
       <Route path="/lank" element={<Lank />} />
       <Route path="/qna" element={<QnaList />} />
       <Route path="/record" element={<Calendar />} />
       <Route path="/detail" element={<Detail />} />
       <Route path="/qnadetail" element={<QnaDetail />} />
+      <Route path="/qnaupdate" element={<QnaUpdate />} />
     </Routes>
   );
 }
