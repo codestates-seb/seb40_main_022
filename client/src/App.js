@@ -12,6 +12,7 @@ import QnaList from './pages/qna/QnaList';
 import QnaDetail from './pages/qna/QnaDetail';
 import QnaAsk from './pages/qna/QnaAsk';
 import Mypage from './pages/mypage/Mypage';
+import ProfileEdit from './pages/profileedit/index';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/mypage" element={<Mypage />} />
+      <Route path="/mypage/edit" element={<ProfileEdit />} />
       <Route path="/dailypost" element={<Dailypost />} />
       <Route path="/lank" element={<Lank />} />
       <Route path="/qna" element={<QnaList />} />
