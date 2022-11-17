@@ -1,13 +1,9 @@
-import { useState } from 'react';
 import TopList from './TopList';
 import DailyPost from './DailyPost';
 import search from '../../images/search.svg';
-import ChallengeReq from '../modal/ChallengeReq';
 import { Inside, MainForm, MainSearch, ContentForm } from './MainStyle';
 
 export default function MainInside() {
-  const [challengeReq, setChallengeReq] = useState(false);
-
   return (
     <Inside>
       <div className="searchInput">
@@ -18,13 +14,6 @@ export default function MainInside() {
       </div>
       <MainForm>
         <ContentForm>
-          <button onClick={() => setChallengeReq(true)} className="challenge">
-            대결 신청
-          </button>
-          <ChallengeReq
-            open={challengeReq}
-            close={() => setChallengeReq(false)}
-          />
           <TopList />
           <DailyPost />
         </ContentForm>
