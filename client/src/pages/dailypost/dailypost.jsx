@@ -18,9 +18,16 @@ const dailypost = () => {
       setFiles([...files, resultImg.toString()]);
     };
   };
+
   const handelClick = () => {
     photoUp.current.click();
   };
+
+  const deleteFile = index => {
+    const imgArr = files.filter((el, idx) => idx !== index);
+    setFiles([...imgArr]);
+  };
+
   return (
     <DetailBody>
       <Header />
@@ -28,11 +35,16 @@ const dailypost = () => {
         <div className="DetailBox">
           <div className="Imgbox">
             {files &&
-              files.map(data => {
+              files.map((data, index) => {
                 return (
                   <div className="boxs">
                     <img src={data} alt="오완운사진" className="Imgs" />
-                    <button className="Imgdel">x</button>
+                    <button
+                      onClick={() => deleteFile(index)}
+                      className="Imgdel"
+                    >
+                      x
+                    </button>
                   </div>
                 );
               })}
