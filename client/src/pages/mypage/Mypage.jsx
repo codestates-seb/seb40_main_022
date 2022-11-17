@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,14 +15,63 @@ import myimage from '../../images/qnaImg.jpg';
 
 const Wrapper = styled.div`
   width: 100%;
-  > div {
+  .delmodal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    z-index: 99;
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .contentbox {
+      height: 100px;
+      font-size: var(--font-16);
+    }
+    .btns {
+      height: 50px;
+      column-gap: 30px;
+      > button {
+        width: 60px;
+        height: 25px;
+        font-size: var(--font-13);
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: var(--box-shadow);
+      }
+      .yes {
+        color: white;
+        background-color: var(--logored);
+      }
+      .no {
+        color: white;
+        background-color: var(--buttongray);
+      }
+    }
+  }
+  .box {
     padding-top: 60px;
-    height: 1000px;
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
+  }
+  .line {
+    width: 100%;
+    border: 0;
+    background-color: #000;
+    height: 2px;
+    margin-bottom: 40px;
   }
 `;
 
@@ -114,19 +163,52 @@ const RecordBox = styled.div`
 `;
 
 const PictureBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+  display: grid;
+  grid-row-gap: 10px;
+  grid-template-rows: auto;
+  grid-template-columns: auto auto auto auto;
   width: 100%;
-  height: 400px;
+  margin-bottom: 10px;
+  > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    > img {
+      width: 250px;
+      height: 250px;
+    }
+    > button {
+      cursor: pointer;
+      border: none;
+      margin-left: 80%;
+      margin-top: 10px;
+      display: flex;
+      justify-content: end;
+    }
+  }
 `;
 
 function Mypage() {
+  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [Clicked, setClicked] = useState(false);
+
   return (
     <Wrapper>
       <Header />
-      <div>
+      {Clicked ? (
+        <div className="delmodal">
+          <div className="contentbox">정말 삭제하시겠습니까?</div>
+          <div className="btns">
+            <button className="yes">예</button>
+            <button className="no" onClick={() => setClicked(!Clicked)}>
+              아니요
+            </button>
+          </div>
+        </div>
+      ) : null}
+      <div className="box">
         <ProfileBox>
           <div className="circle">
             <img src={userProfile} alt="userProfile" />
@@ -158,17 +240,19 @@ function Mypage() {
           </div>
           <button>운동 기록</button>
         </RecordBox>
-        <hr className="" />
-        <div />
+        <hr className="line" />
         <PictureBox>
-          <div>
-            <img src={myimage} alt="userProfile" />
-            <FontAwesomeIcon icon={faTrash} />
-          </div>
-          <div>
-            <img src={myimage} alt="userProfile" />
-            <FontAwesomeIcon icon={faTrash} />
-          </div>
+          {list &&
+            list.map(data => {
+              return (
+                <div key={data}>
+                  <img src={myimage} alt="userProfile" />
+                  <button onClick={() => setClicked(!Clicked)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+              );
+            })}
         </PictureBox>
       </div>
       <Footer />
