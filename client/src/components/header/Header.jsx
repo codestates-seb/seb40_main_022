@@ -54,7 +54,7 @@ function Header() {
             <FontAwesomeIcon icon={faBell} className="noticeModal" />
             {modalOpen && <Modal className="notice" />}
           </button>
-          <button ref={popRef} onClick={() => setSide(true)}>
+          <button ref={popRef} onClick={() => setSide(!side)}>
             <img src={sidebar} alt="sidebar" className="sideb" />
             {side ? <Sidebar className="sidebar" /> : null}
           </button>

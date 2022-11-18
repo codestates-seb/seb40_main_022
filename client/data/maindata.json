@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "tags": ["가슴", "등"],
+      "member": {
+        "user_id": 1,
+        "profile_image": "https://lh4.googleusercontent.com/-8o1Zs4lQprY/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rebPfyBOjde6DPW0bjTb2M1BSIwCg/mo/photo.jpg?sz=256",
+        "username": "fulvio",
+        "point": "100"
+      },
+      "dailypostId": 53,
+      "comment_count": 2,
+      "votes": 2,
+      "creation_date": 1552344257,
+      "content": "An example post body",
+      "comments": [
+        {
+          "commentId": "1L",
+          "content": " 멋있어요",
+          "memberImg": "https://lh4.googleusercontent.com/-8o1Zs4lQprY/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rebPfyBOjde6DPW0bjTb2M1BSIwCg/mo/photo.jpg?sz=256",
+          "memberId": "1L",
+          "username": "간디"
+        },
+        {
+          "commentId": "2L",
+          "content": " JMT",
+          "memberImg": "https://lh4.googleusercontent.com/-8o1Zs4lQprY/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rebPfyBOjde6DPW0bjTb2M1BSIwCg/mo/photo.jpg?sz=256",
+          "memberId": "2L",
+          "username": "아이언맨"
+        }
+      ]
+    }
+  ]
+}
