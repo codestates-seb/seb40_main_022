@@ -158,6 +158,21 @@ public class JwtTokenProvider {
         }
     }
 
+    public void verifyClaims(String jws) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jws);
+        }
+        catch(JwtException e){
+            throw new TokenNotValid();
+        }
+    }
+
+
 
 
     // 외부에서 쓸 메서드들

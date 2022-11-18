@@ -1,8 +1,10 @@
 package com.backend.fitchallenge.global.security.filter;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.global.dto.LoginDto;
 import com.backend.fitchallenge.global.redis.RedisService;
+import com.backend.fitchallenge.global.security.exception.MemberAlreadyLoggedIn;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ObjectMapper objectMapper = new ObjectMapper();
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
 
+        if(redisService.getValues(loginDto.getUsername()) != null){
+            throw new MemberAlreadyLoggedIn();
+        }
+
         // 여기서 생성되는 authentication 은 인증 전. (UsernamePasswordAuthenticationToken 이 authentication 의 구현체)
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
@@ -67,4 +73,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("RefreshToken", refreshToken);
     }
+
 }
