@@ -20,15 +20,16 @@ function Lank() {
       <LankMain>
         <div className="lankhead">
           <h2>종합 랭킹</h2>
-          <LankDropdown />
-          <label htmlFor="SearchIn">
-            <img src={searchIcon} alt="검색아이콘" className="search" />
-          </label>
+          <div>
+            <LankDropdown />
+            <button>
+              <img src={searchIcon} alt="검색아이콘" className="search" />
+            </button>
+          </div>
         </div>
-        <LankContent />
-        <LankContent />
-        <LankContent />
-        <LankContent />
+        {[...Array(10)].map(() => {
+          return <LankContent />;
+        })}
       </LankMain>
       <Footer />
     </LankBox>

@@ -41,6 +41,9 @@ export const QnaTitle = styled.div`
     border: none;
     border-radius: 20px;
     cursor: pointer;
+    :hover {
+      background-color: #fa8a8a;
+    }
   }
 `;
 
@@ -126,6 +129,7 @@ export const QnaContent = styled.section`
           height: 30px;
           font-weight: 600;
           cursor: pointer;
+          box-shadow: var(--box-shadow);
         }
       }
     }

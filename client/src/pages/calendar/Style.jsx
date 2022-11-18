@@ -52,6 +52,9 @@ export const CalBox = styled.section`
         color: white;
         cursor: pointer;
         font-weight: 700;
+        :hover {
+          background-color: #fa8a8a;
+        }
       }
     }
     .userInfoBox {
@@ -161,10 +164,16 @@ export const CalBox = styled.section`
         .yes {
           color: white;
           background-color: var(--logored);
+          :hover {
+            background-color: #fa8a8a;
+          }
         }
         .no {
           color: white;
           background-color: var(--buttongray);
+          :hover {
+            background-color: #cfcfcf;
+          }
         }
       }
     }

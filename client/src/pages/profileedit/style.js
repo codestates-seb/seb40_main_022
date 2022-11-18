@@ -19,6 +19,7 @@ export const ImageBox = styled.div`
     width: 200px;
     height: 200px;
     object-fit: cover;
+    border-radius: 50%;
   }
 `;
 
@@ -93,7 +94,6 @@ export const ProfileBox = styled.div`
   .dropdownLabel {
     display: flex;
     justify-content: space-between;
-    padding: 12px;
   }
   .content {
     display: none;
@@ -117,7 +117,6 @@ export const ProfileBox = styled.div`
   .content .contents {
     display: flex;
     flex-direction: column;
-    padding: 12px;
     margin: 0.1rem 0;
     > button {
       height: 40px;
@@ -137,14 +136,27 @@ export const ProfileBox = styled.div`
 export const ProfileGrid = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
-  /* border: 1px solid black; */
-  width: 320px;
+  width: 100%;
+  padding: 30px 72px;
   height: 600px;
-  margin-left: 70px;
-  margin-top: 30px;
   .checkbox {
+    width: 100%;
+    .checkLeft {
+      > span {
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        margin-left: 5px;
+      }
+    }
+  }
+  .boxname {
+    width: 100%;
+    margin-left: 10px;
     display: flex;
+    justify-content: start;
   }
 `;
 
