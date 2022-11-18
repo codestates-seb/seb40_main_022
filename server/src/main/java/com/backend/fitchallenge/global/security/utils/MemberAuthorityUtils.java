@@ -37,7 +37,7 @@ public class MemberAuthorityUtils {
         return authorities;
     }
 
-    //추후 프로페셔널 추가예정
+
     public List<String> createRoles(String email){
         if(email.equals(adminMailAddress))
             return ADMIN_ROLES_STRING;
