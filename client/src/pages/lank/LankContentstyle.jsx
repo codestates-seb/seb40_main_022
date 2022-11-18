@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import UserProfile from '../../images/userprofile.png';
 
 export const LankBody = styled.section`
-  margin-top: 100px;
+  margin-top: 10px;
 `;
 export const Lankcontent = styled.section`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #c1c1c1;
   width: 100%;
   height: 100px;
@@ -36,6 +37,10 @@ export const Lankcontent = styled.section`
     margin-top: 7px;
     cursor: pointer;
     font-size: var(--font-18);
+    box-shadow: var(--box-shadow);
+    :hover {
+      background-color: #fa8a8a;
+    }
   }
   > h4 {
     line-height: 70px;

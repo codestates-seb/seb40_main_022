@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGear,
@@ -18,12 +18,13 @@ import {
   RecordBox,
   PictureBox,
 } from './style';
-import userProfile from '../../images/userprofile.png';
+import daily from '../../images/daily.jpg';
 import myimage from '../../images/qnaImg.jpg';
 
 function Mypage() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [Clicked, setClicked] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Wrapper>
@@ -42,7 +43,7 @@ function Mypage() {
       <div className="box">
         <ProfileBox>
           <div className="circle">
-            <img src={userProfile} alt="userProfile" />
+            <img src={daily} alt="userProfile" />
           </div>
         </ProfileBox>
         <NameBox>
@@ -71,7 +72,7 @@ function Mypage() {
               680
             </div>
           </div>
-          <button>운동 기록</button>
+          <button onClick={() => navigate('/record')}>운동 기록</button>
         </RecordBox>
         <hr className="line" />
         <PictureBox>
