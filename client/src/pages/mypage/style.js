@@ -149,6 +149,10 @@ export const RecordBox = styled.div`
     width: 110px;
     font-size: var(--font-20);
     font-weight: 700;
+    box-shadow: var(--box-shadow);
+    :hover {
+      background-color: #fa8a8a;
+    }
   }
 `;
 

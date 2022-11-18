@@ -1,19 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import {
-  Dropdown,
-  Dropdivi,
-  DropHeight,
-  DropWeight,
-  DropCareer,
-  DropPoint,
-} from './LankDropdownStyle';
+import { Dropdown, Dropdivi } from './LankDropdownStyle';
 
 function LankDropdown() {
+  const list = [
+    {
+      DIVISION: ['2분할', '3분할', '4분할', '5분할'],
+    },
+    { HEIGHT: ['181cm이상', '175cm ~ 179cm', '171cm ~ 174cm', '170cm 이하'] },
+    {
+      WEIGHT: [
+        '120kg이상',
+        '101kg ~ 119kg',
+        '81kg ~ 100kg',
+        '60kg ~ 80kg',
+        '40kg ~ 59kg',
+        '39kg이하',
+      ],
+    },
+    {
+      CAREER: [
+        '20년 이상',
+        '15년 ~ 19년',
+        '10년 ~ 14년',
+        '5년 ~ 9년',
+        '4년 이하',
+      ],
+    },
+    {
+      POINT: ['10000p 이상', '8000p ~ 9999p', '6000p ~ 7999p', '4000p ~ 5999p'],
+    },
+  ];
+  const name = [];
+  const [names, setNames] = useState([
+    'DIVISION',
+    'HEIGHT',
+    'WEIGHT',
+    'CAREER',
+    'POINT',
+  ]);
+  useEffect(() => {}, [names]);
   return (
     <Dropdown>
-      <Dropdivi>
+      {list &&
+        list.map((data, idx) => {
+          name.push(Object.keys(data)[0]);
+          return (
+            <Dropdivi>
+              <div className="container">
+                <input
+                  id={`dropdown${idx}`}
+                  type="checkbox"
+                  className="dropdown"
+                />
+                <label className="dropdownLabel" htmlFor={`dropdown${idx}`}>
+                  <div>{names[idx]}</div>
+                  <FontAwesomeIcon icon={faCaretDown} className="caretIcon" />
+                </label>
+                <div className="content">
+                  {data[name[idx]] &&
+                    data[name[idx]].map(listdata => {
+                      return (
+                        <button
+                          onClick={e => {
+                            names[idx] = e.target.innerHTML;
+                            setNames(names);
+                          }}
+                        >
+                          {listdata}
+                        </button>
+                      );
+                    })}
+                </div>
+              </div>
+            </Dropdivi>
+          );
+        })}
+      {/* <Dropdivi>
         <div className="container">
           <input id="dropdown" type="checkbox" />
           <label className="dropdownLabel" htmlFor="dropdown">
@@ -100,7 +164,7 @@ function LankDropdown() {
             </ul>
           </div>
         </div>
-      </DropPoint>
+      </DropPoint> */}
     </Dropdown>
   );
 }
