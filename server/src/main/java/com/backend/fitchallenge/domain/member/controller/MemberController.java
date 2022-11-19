@@ -12,6 +12,8 @@ import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -49,19 +51,21 @@ public class MemberController {
 
     //마이페이지
     @GetMapping("/myPage")
-    public ResponseEntity myInfoDetails(@AuthMember MemberDetails memberDetails){
+    public ResponseEntity myInfoDetails(@AuthMember MemberDetails memberDetails,
+                                        @PageableDefault(size = 3) Pageable pageable){
 
         System.out.println(memberDetails.toString());
-        MyPageResponse myPageResponse = memberService.getMyInfo(memberDetails.getEmail());
+        MyPageResponse myPageResponse = memberService.getMyInfo(memberDetails.getEmail(), pageable);
 
         return new ResponseEntity(myPageResponse, HttpStatus.OK);
     }
 
     //특정 유저 조회
     @GetMapping("/{id}")
-    public ResponseEntity memberDetails(@PathVariable("id") @Positive Long memberId){
+    public ResponseEntity memberDetails(@PathVariable("id") @Positive Long memberId,
+                                        @PageableDefault(size = 3) Pageable pageable){
 
-        DetailsMemberResponse detailsMemberResponse = memberService.getMember(memberId);
+        DetailsMemberResponse detailsMemberResponse = memberService.getMember(memberId, pageable);
 
         return new ResponseEntity(detailsMemberResponse, HttpStatus.OK);
     }

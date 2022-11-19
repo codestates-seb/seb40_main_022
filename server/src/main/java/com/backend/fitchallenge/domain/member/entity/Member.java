@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.member.entity;
 
 import com.backend.fitchallenge.domain.member.challenge.Challenge;
+import com.backend.fitchallenge.domain.post.entity.Post;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
 import com.backend.fitchallenge.global.audit.Auditable;
@@ -34,9 +35,6 @@ public class Member extends Auditable {
     @Column(name = "USERNAME")
     private String username;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ProfileImage profileImage;
-
     @Column(name = "GENDER")
     private String gender;
 
@@ -63,6 +61,12 @@ public class Member extends Auditable {
 
     @Embedded
     private MemberActivity memberActivity;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProfileImage profileImage;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CHALLENGE_ID")

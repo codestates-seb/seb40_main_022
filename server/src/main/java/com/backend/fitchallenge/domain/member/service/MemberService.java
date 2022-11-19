@@ -5,6 +5,7 @@ import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
 import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
 import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
 import com.backend.fitchallenge.domain.member.dto.response.UpdateResponse;
+import com.backend.fitchallenge.domain.member.dto.response.extract.DailyPost;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractActivity;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractMember;
 import com.backend.fitchallenge.domain.member.entity.Member;
@@ -12,17 +13,24 @@ import com.backend.fitchallenge.domain.member.entity.ProfileImage;
 import com.backend.fitchallenge.domain.member.exception.MemberExist;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
+import com.backend.fitchallenge.domain.post.entity.Picture;
+import com.backend.fitchallenge.domain.post.entity.Post;
+import com.backend.fitchallenge.domain.post.repository.PostRepository;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.domain.refreshtoken.exception.TokenNotExist;
 import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +42,7 @@ public class MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RedisService redisService;
     private final MemberAwsS3Service memberAwsS3Service;
+    private final PostRepository postRepository;
 
     /**
      * [회원가입]
@@ -93,13 +102,17 @@ public class MemberService {
      * 4. 필요정보만 MyPageResponse에 담는다.
      */
     @Transactional(readOnly = true)
-    public MyPageResponse getMyInfo(String loginEmail){
+    public MyPageResponse getMyInfo(String loginEmail, Pageable pageable){
 
         Member findMember = findVerifiedMember(loginEmail);
 
-        // todo. post연결
+        // todo. post연결 - checked
+        Page<Post> pages = postRepository.findByMemberId(findMember.getId(), pageable);
+        List<DailyPost> dailyPosts = pages.getContent().stream()
+                .map(post -> DailyPost.of(post.getPictures().get(0)))
+                .collect(Collectors.toList());
 
-        return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()));
+        return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()), dailyPosts);
 
     }
 
@@ -109,13 +122,17 @@ public class MemberService {
      * @return DetailsMemberResponse
      */
     @Transactional(readOnly = true)
-    public DetailsMemberResponse getMember(Long memberId){
+    public DetailsMemberResponse getMember(Long memberId, Pageable pageable){
 
         Member findMember = findVerifiedMemberById(memberId);
 
-        // todo. post연결
+        // todo. post연결 - checked
+        Page<Post> pages = postRepository.findByMemberId(findMember.getId(), pageable);
+        List<DailyPost> dailyPosts = pages.getContent().stream()
+                .map(post -> DailyPost.of(post.getPictures().get(0)))
+                .collect(Collectors.toList());
 
-        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()));
+        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), dailyPosts);
     }
 
     // todo : 인플루언서 랭킹별로 조회하기 - 중요도 하.
