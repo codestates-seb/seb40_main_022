@@ -42,6 +42,9 @@ const SignMain = styled.main`
       height: 60px;
       border: none;
       box-shadow: var(--box-shadow);
+      :hover {
+        background-color: #fa8a8a;
+      }
     }
   }
   .ErrorMsg {

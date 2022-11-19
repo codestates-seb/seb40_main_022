@@ -54,6 +54,9 @@ const LoginStyle = styled.main`
         font-size: var(--font-18);
         padding: 10px;
         margin-top: 30px;
+        :hover {
+          background-color: #cfcfcf;
+        }
       }
     }
   }
