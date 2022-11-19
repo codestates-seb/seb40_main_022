@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -11,6 +12,7 @@ import {
   DetailSubmit,
   DetailTitle,
   AnswerNDB,
+  DetailUpdate,
 } from './QnaDetailStyle';
 
 function QnaDetail() {
@@ -31,13 +33,20 @@ function QnaDetail() {
             이상한건가요? 아니면 아직 팔근육이 없어서 당길 때 힘든 건지요...
           </h3>
           <div />
-          <DetailNDB>
-            <div>
-              <h4>헬린이</h4>
-              <h4>2022.11.11</h4>
-            </div>
-            <button>운동</button>
-          </DetailNDB>
+          <section>
+            <DetailNDB>
+              <div>
+                <h4>헬린이</h4>
+                <h4>2022.11.11</h4>
+              </div>
+              <button>운동</button>
+            </DetailNDB>
+            <DetailUpdate>
+              <Link to="/qnaupdate" className="qnaupdate">
+                <h3>수정</h3>
+              </Link>
+            </DetailUpdate>
+          </section>
         </DetailTitle>
         <DetailAnswer>
           <h2>답변 1</h2>
@@ -59,7 +68,7 @@ function QnaDetail() {
         </DetailAnswer>
         <DetailComment>
           <h2>답변 작성</h2>
-          <input type="text" placeholder="답변을 입력해주세요!" />
+          <textarea type="text" placeholder="답변을 입력해주세요!" />
         </DetailComment>
         <DetailSubmit>등록</DetailSubmit>
       </DetailBack>

@@ -6,7 +6,7 @@ const SideDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-left: -50px;
+  margin-left: -80px;
   margin-top: 18px;
   background-color: var(--backwhite);
   @media screen and (max-width: 1400px) {
