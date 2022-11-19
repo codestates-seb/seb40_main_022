@@ -35,7 +35,12 @@ public enum ExceptionCode {
 
     //Record
     RECORD_NOT_FOUND(404, "Record not found"),
-    NOT_RECORD_WRITER(400, "Not record writer");
+    NOT_RECORD_WRITER(400, "Not record writer"),
+    DUPLICATE_RECORD_CREATION(400, "Duplicate Record Creation"),
+    //Calendar
+    CALENDAR_NOT_FOUND(404, "Calendar not found"),
+    //Sports
+    SPORTS_NOT_FOUND(404, "Sports not found");
 
     @Getter
     private final int status;
