@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.question.dto.response;
 
-import com.backend.fitchallenge.domain.member.dto.response.MemberResponse;
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import lombok.Builder;
 import lombok.Getter;

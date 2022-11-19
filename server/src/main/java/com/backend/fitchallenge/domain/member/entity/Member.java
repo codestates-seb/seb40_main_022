@@ -2,8 +2,7 @@ package com.backend.fitchallenge.domain.member.entity;
 
 import com.backend.fitchallenge.domain.member.challenge.Challenge;
 import com.backend.fitchallenge.domain.question.entity.Question;
-import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
-import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
+import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,8 +34,8 @@ public class Member extends Auditable {
     @Column(name = "USERNAME")
     private String username;
 
-    @Column(name = "PROFILE_IMAGE")
-    private String profileImage;
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProfileImage profileImage;
 
     @Column(name = "GENDER")
     private String gender;
@@ -73,29 +72,29 @@ public class Member extends Auditable {
     private List<Question> questions = new ArrayList<>();
 
     @Builder(builderMethodName = "createBuilder")
-    public Member(String email, String password, String username) {
+    public Member(String email, String password, String username, ProfileImage profileImage) {
         this.email = email;
         this.password = password;
         this.username = username;
+        this.profileImage = profileImage;
         this.memberActivity = new MemberActivity();
     }
 
-    public void update(MemberUpdate memberUpdate, PasswordEncoder passwordEncoder){
+    public void update(MemberUpdateVO memberUpdateVO, PasswordEncoder passwordEncoder){
 
-        this.password = memberUpdate.getPassword() == null ?
-                this.password : passwordEncoder.encode(memberUpdate.getPassword());
-        this.username = memberUpdate.getUsername() == null ? this.username : memberUpdate.getUsername();
-        this.job = memberUpdate.getJob() == null ? this.job : memberUpdate.getJob();
-        this.address = memberUpdate.getAddress() == null ? this.address : memberUpdate.getAddress();
-        this.gender = memberUpdate.getGender() == null ? this.gender : memberUpdate.getGender();
-        this.age = memberUpdate.getAge() == null ? this.age : memberUpdate.getAge();
-        this.height = memberUpdate.getHeight() == null ? this.height : memberUpdate.getHeight();
-        this.weight = memberUpdate.getWeight() == null ? this.weight : memberUpdate.getWeight();
+        this.password = memberUpdateVO.getPassword() == null ?
+                this.password : passwordEncoder.encode(memberUpdateVO.getPassword());
+        this.username = memberUpdateVO.getUsername() == null ? this.username : memberUpdateVO.getUsername();
+        this.job = memberUpdateVO.getJob() == null ? this.job : memberUpdateVO.getJob();
+        this.address = memberUpdateVO.getAddress() == null ? this.address : memberUpdateVO.getAddress();
+        this.gender = memberUpdateVO.getGender() == null ? this.gender : memberUpdateVO.getGender();
+        this.age = memberUpdateVO.getAge() == null ? this.age : memberUpdateVO.getAge();
+        this.height = memberUpdateVO.getHeight() == null ? this.height : memberUpdateVO.getHeight();
+        this.weight = memberUpdateVO.getWeight() == null ? this.weight : memberUpdateVO.getWeight();
         this.memberActivity = MemberActivity.builder().kilogram(
-                memberUpdate.getKilogram() == null ? this.memberActivity.getKilogram() : memberUpdate.getKilogram())
+                memberUpdateVO.getKilogram() == null ? this.memberActivity.getKilogram() : memberUpdateVO.getKilogram())
                 .build();
-        this.split = memberUpdate.getSplit() == null ? this.split : memberUpdate.getSplit();
-        this.profileImage = memberUpdate.getProfileImage() == null ? this.profileImage : memberUpdate.getProfileImage();
+        this.split = memberUpdateVO.getSplit() == null ? this.split : memberUpdateVO.getSplit();
     }
 
     //매치 등록.

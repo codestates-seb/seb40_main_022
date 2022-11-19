@@ -22,7 +22,7 @@ public class SimplePostMemberResponse {
     public static SimplePostMemberResponse toResponse(Member member) {
         return SimplePostMemberResponse.builder()
                 .userId(member.getId())
-                .profileImage(member.getProfileImage())
+                .profileImage(member.getProfileImage().getPath())
                 .username(member.getUsername())
                 .build();
     }
