@@ -20,6 +20,12 @@ public enum ExceptionCode {
     NOT_ANSWER_WRITER(400, "Not answer writer"),
 
 
+    CHALLENGE_NOT_FOUND(404, "Challenge not found"),
+    CANNOT_REFUSE_CHALLENGE(403, "Cannot Refuse Challenge"),
+    CANNOT_SUGGEST_CHALLENGE(404, "Cannot Suggest Challenge"),
+    CANNOT_SUSPEND_CHALLENGE(403, "Cannot Suspend Challenge"),
+    CANNOT_ACCEPT_CHALLENGE(404, "Cannot Accept Challenge "),
+
     //Post
     POST_NOT_FOUND(404, "Post Not Found"),
     NO_IMAGE(404, "Image Is Empty"),

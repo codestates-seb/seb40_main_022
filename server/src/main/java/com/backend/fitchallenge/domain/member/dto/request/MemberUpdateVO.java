@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @NoArgsConstructor
 public class MemberUpdateVO {
@@ -22,12 +24,13 @@ public class MemberUpdateVO {
     private Integer kilogram;
     private Integer split;
     private MultipartFile profileImage;
+    private Integer period;
 
     @Builder
     private MemberUpdateVO(String password, String username, String job,
-                           String address, String gender, Integer age,
-                           Integer height, Integer weight, Integer kilogram,
-                           Integer split, MultipartFile profileImage) {
+                        String address, String gender, Integer age,
+                        Integer height, Integer weight, Integer kilogram,
+                        Integer split, MultipartFile profileImage, Integer period) {
         this.password = password;
         this.username = username;
         this.job = job;
@@ -39,6 +42,7 @@ public class MemberUpdateVO {
         this.kilogram = kilogram;
         this.split = split;
         this.profileImage = profileImage;
+        this.period = period;
     }
 
     public static MemberUpdateVO of(Member member){
@@ -54,6 +58,7 @@ public class MemberUpdateVO {
                 .kilogram(member.getMemberActivity().getKilogram())
                 .split(member.getSplit())
 //                .profileImage(member.getProfileImage())
+                .period(member.getPeriod())
                 .build();
     }
 }

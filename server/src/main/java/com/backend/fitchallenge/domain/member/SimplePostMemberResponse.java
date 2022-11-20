@@ -4,6 +4,7 @@ import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
+//fixme: MemberResponse로 통일
 @Getter
 public class SimplePostMemberResponse {
 

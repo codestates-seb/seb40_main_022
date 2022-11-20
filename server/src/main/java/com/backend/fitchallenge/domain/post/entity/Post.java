@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.post.entity;
 
 
+import com.backend.fitchallenge.domain.like.entity.Likes;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
 import com.backend.fitchallenge.domain.postcomment.entity.PostComment;
@@ -26,7 +27,7 @@ public class Post extends Auditable {
     @Column(name = " post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
     private Member member;
 
@@ -40,8 +41,8 @@ public class Post extends Auditable {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Picture> pictures = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Like> likes = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostTag> postTags = new ArrayList<>();
@@ -55,7 +56,6 @@ public class Post extends Auditable {
         this.content = content;
         this.view = 0L;
     }
-
     /**
      *   Tag가 없는 post 생성메서드
      *   post 생성후, createPicture 메서드로 각 이미지의 경로와 postId를 가진 Picture 생성
@@ -70,7 +70,6 @@ public class Post extends Auditable {
 
         return post;
     }
-
     /**
      *  Tag를 추가한 post 생성메서드
      *  post 생성후, addPostTag 메서드로 Tag 객체와 postId를 가진 PostTag 생성
@@ -90,7 +89,7 @@ public class Post extends Auditable {
 
     public void  patchWithTag(String content, List<String> paths, List<Tag> tags ) {
         this.content = content;
-        //기존 태그 지우고
+        //기존 태그,사진 지운다
         this.postTags.clear();
         this.pictures.clear();
 

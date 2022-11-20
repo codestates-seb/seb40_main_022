@@ -62,6 +62,7 @@ public class CommentService {
         List<CommentResponse> commentResponses = queryCommentRepository.findPostComments(postId, lastCommentId, pageable).stream()
                 .map(postComment -> CommentResponse.toResponse(postComment, postComment.getMember()))
                 .collect(Collectors.toList());
+
         //무한 스크롤 처리
         Slice<CommentResponse> result = checkLastPage(commentResponses, pageable);
 

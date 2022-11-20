@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.member.entity;
 
-import com.backend.fitchallenge.domain.member.challenge.Challenge;
+
+import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
@@ -35,6 +36,7 @@ public class Member extends Auditable {
     @Column(name = "USERNAME")
     private String username;
 
+
     @Column(name = "GENDER")
     private String gender;
 
@@ -55,6 +57,9 @@ public class Member extends Auditable {
 
     @Column(name = "SPLIT")
     private Integer split;
+
+    @Column(name = "PERIOD")
+    private Integer period;
 
     @Enumerated(EnumType.STRING)
     private Authority authority = Authority.ROLE_USER;
@@ -99,11 +104,16 @@ public class Member extends Auditable {
                 memberUpdateVO.getKilogram() == null ? this.memberActivity.getKilogram() : memberUpdateVO.getKilogram())
                 .build();
         this.split = memberUpdateVO.getSplit() == null ? this.split : memberUpdateVO.getSplit();
+        this.profileImage = memberUpdateVO.getProfileImage() == null ? this.profileImage : memberUpdateVO.getProfileImage();
+        this.period = memberUpdateVO.getPeriod() == null ? this.period : memberUpdateVO.getPeriod();
     }
 
-    //매치 등록.
-    public void matchChallenge(Challenge challenge){
+
+    public void addChallenge(Challenge challenge) {
         this.challenge = challenge;
-        challenge.getMembers().add(this);
+    }
+
+    public void suspendChallenge() {
+        this.challenge = null;
     }
 }

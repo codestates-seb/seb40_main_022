@@ -91,7 +91,6 @@ public class AwsS3Service {
             }
         }
 
-
         //반환할 이미지 저장경로 리스트
         List<String> imagePathList = new ArrayList<>();
 
@@ -123,6 +122,7 @@ public class AwsS3Service {
 
         for (String path : paths) {
             boolean isExistObject = amazonS3.doesObjectExist(bucketName, path);
+            log.info("S3 isExistObject = {}", isExistObject);
             if (isExistObject == true) {
                 amazonS3.deleteObject(bucketName, path);
             }
