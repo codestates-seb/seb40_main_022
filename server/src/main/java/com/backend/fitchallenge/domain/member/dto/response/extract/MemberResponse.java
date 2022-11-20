@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.domain.member.dto.response;
+package com.backend.fitchallenge.domain.member.dto.response.extract;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class MemberResponse {
         return MemberResponse.builder()
                 .id(member.getId())
                 .username(member.getUsername())
-                .profileImage(member.getProfileImage())
+                .profileImage(member.getProfileImage().getPath())
                 .build();
     }
 }

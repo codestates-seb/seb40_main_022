@@ -7,6 +7,7 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
     MEMBER_EXISTS(409, "Member exists"),
     MEMBER_ALREADY_LOGGED_IN(403, "Member already logged in"),
+    NO_PROFILE_IMAGE(404, "Image Is Empty"),
 
     TOKEN_NOT_FOUND(404, "Token not found"),
     TOKEN_NOT_VALID(401, "Token not valid"),

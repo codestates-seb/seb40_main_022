@@ -27,15 +27,11 @@ public class DetailsMemberResponse {
     }
 
     //포스트 추가시 사용할
-   public static DetailsMemberResponse of(ExtractMember member, ExtractActivity activity, List<Picture> pictures){
+   public static DetailsMemberResponse of(ExtractMember member, ExtractActivity activity, List<DailyPost> dailyPosts){
         return DetailsMemberResponse.builder()
                 .member(member)
                 .activity(activity)
-                .dailyPosts(pictures.stream()
-                        .map(picture -> DailyPost.builder()
-                                .image(picture.getPath())
-                                .build())
-                        .collect(Collectors.toList()))
+                .dailyPosts(dailyPosts)
                 .build();
     }
 
