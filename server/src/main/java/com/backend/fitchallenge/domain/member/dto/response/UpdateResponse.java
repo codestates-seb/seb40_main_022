@@ -1,13 +1,9 @@
-package com.backend.fitchallenge.domain.member.dto.request;
+package com.backend.fitchallenge.domain.member.dto.response;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-public class MemberUpdate {
+public class UpdateResponse {
 
     private String password;
     private String username;
@@ -20,13 +16,12 @@ public class MemberUpdate {
     private Integer kilogram;
     private Integer split;
     private String profileImage;
-    private Integer period;
 
     @Builder
-    private MemberUpdate(String password, String username, String job,
-                         String address, String gender, Integer age,
-                         Integer height, Integer weight, Integer kilogram,
-                         Integer split, String profileImage, Integer period) {
+    private UpdateResponse(String password, String username, String job,
+                           String address, String gender, Integer age,
+                           Integer height, Integer weight, Integer kilogram,
+                           Integer split, String profileImage) {
         this.password = password;
         this.username = username;
         this.job = job;
@@ -38,11 +33,10 @@ public class MemberUpdate {
         this.kilogram = kilogram;
         this.split = split;
         this.profileImage = profileImage;
-        this.period = period;
     }
 
-    public static MemberUpdate of(Member member){
-        return MemberUpdate.builder()
+    public static UpdateResponse of(Member member){
+        return UpdateResponse.builder()
                 .password(member.getPassword())
                 .username(member.getUsername())
                 .job(member.getJob())
@@ -53,8 +47,7 @@ public class MemberUpdate {
                 .weight(member.getWeight())
                 .kilogram(member.getMemberActivity().getKilogram())
                 .split(member.getSplit())
-                .profileImage(member.getProfileImage())
-                .period(member.getPeriod())
+                .profileImage(member.getProfileImage().getPath())
                 .build();
     }
 }

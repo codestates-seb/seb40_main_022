@@ -1,7 +1,7 @@
 package com.backend.fitchallenge.domain.question.dto.response;
 
 import com.backend.fitchallenge.domain.answer.dto.response.AnswerResponse;
-import com.backend.fitchallenge.domain.member.dto.response.MemberResponse;
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +49,7 @@ public class DetailQuestionResponse {
                 .content(question.getContent())
                 .tag(question.getQuestionTag().getValue())
                 .view(question.getView())
+                .answerCount(answers.size())
                 .createdAt(question.getCreatedAt())
                 .modifiedAt(question.getModifiedAt())
                 .memberResponse(memberResponse)

@@ -1,19 +1,24 @@
 package com.backend.fitchallenge.domain.member.controller;
 
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
-import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
+import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
 import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
 import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
+import com.backend.fitchallenge.domain.member.dto.response.UpdateResponse;
+import com.backend.fitchallenge.domain.member.entity.ProfileImage;
+import com.backend.fitchallenge.domain.member.service.MemberAwsS3Service;
 import com.backend.fitchallenge.domain.member.service.MemberService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -37,28 +42,30 @@ public class MemberController {
     //회원 정보 수정
     @PatchMapping("/myPage")
     public ResponseEntity update(@AuthMember MemberDetails memberDetails,
-                                 @RequestBody @Valid MemberUpdate memberUpdate){
+                                 MemberUpdateVO memberUpdateVO){ //todo. requestbody 때기 - checked
 
-        MemberUpdate updatedMember = memberService.updateMember(memberDetails.getEmail(), memberUpdate);
+        UpdateResponse updateResponse = memberService.updateMember(memberDetails.getEmail(), memberUpdateVO);
 
-        return new ResponseEntity(updatedMember, HttpStatus.OK);
+        return new ResponseEntity(updateResponse, HttpStatus.OK);
     }
 
     //마이페이지
     @GetMapping("/myPage")
-    public ResponseEntity myInfoDetails(@AuthMember MemberDetails memberDetails){
+    public ResponseEntity myInfoDetails(@AuthMember MemberDetails memberDetails,
+                                        @PageableDefault(size = 3) Pageable pageable){
 
         System.out.println(memberDetails.toString());
-        MyPageResponse myPageResponse = memberService.getMyInfo(memberDetails.getEmail());
+        MyPageResponse myPageResponse = memberService.getMyInfo(memberDetails.getEmail(), pageable);
 
         return new ResponseEntity(myPageResponse, HttpStatus.OK);
     }
 
     //특정 유저 조회
     @GetMapping("/{id}")
-    public ResponseEntity memberDetails(@PathVariable("id") @Positive Long memberId){
+    public ResponseEntity memberDetails(@PathVariable("id") @Positive Long memberId,
+                                        @PageableDefault(size = 3) Pageable pageable){
 
-        DetailsMemberResponse detailsMemberResponse = memberService.getMember(memberId);
+        DetailsMemberResponse detailsMemberResponse = memberService.getMember(memberId, pageable);
 
         return new ResponseEntity(detailsMemberResponse, HttpStatus.OK);
     }
