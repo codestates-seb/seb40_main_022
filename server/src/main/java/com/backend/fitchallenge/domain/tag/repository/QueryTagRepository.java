@@ -1,13 +1,11 @@
 package com.backend.fitchallenge.domain.tag.repository;
 
 import com.backend.fitchallenge.domain.post.entity.Post;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 
 import java.util.List;
@@ -33,16 +31,16 @@ public class QueryTagRepository {
                 .fetch();
     }
 
-    public List<Tuple> findPostByTag(Long lasPostId, List<Long> tagIds, Pageable pageable) {
+    public List<Long> findPostByTag( Long lasPostId, List<Long> tagIds, Pageable pageable) {
 
         //distinct 필요할수도
-        return jpaQueryFactory.select(post,post.postComments.size())
+        return jpaQueryFactory.selectDistinct(post.id)
                 .from(postTag)
-                .join(post).fetchJoin()
-                .join(tag).fetchJoin()
-                .where(inTagIds(tagIds),
-                        ltPostId(lasPostId),
-                        postTag.post.id.eq(post.id))
+                .join(post)
+                .on(postTag.post.id.eq(post.id))
+               .where(
+                      inTagIds(tagIds),
+                      ltPostId(lasPostId))
                 .limit(pageable.getPageSize()+1)
                 .orderBy(post.id.desc())
                 .fetch();

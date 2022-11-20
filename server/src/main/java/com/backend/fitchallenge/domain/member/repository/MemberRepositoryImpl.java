@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.member.repository;
 import com.backend.fitchallenge.domain.challenge.dto.QRankingDto;
 import com.backend.fitchallenge.domain.challenge.dto.RankingCondition;
 import com.backend.fitchallenge.domain.challenge.dto.RankingDto;
+import com.backend.fitchallenge.domain.member.entity.Member;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,12 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
 @RequiredArgsConstructor
+//fixme: member테이블에 period 추가
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    @Override
     public List<RankingDto> rankingList(RankingCondition condition) {
        return jpaQueryFactory
                 .select(new QRankingDto(
@@ -29,7 +32,8 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         member.height,
                         member.weight,
                         memberActivity.point,
-                        memberActivity.dayCount
+                        member.period,
+                        member.challenge.id
                 ))
                 .from(member)
                 .where(splitEq(condition.getSplit()),
@@ -39,6 +43,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         weightLt(condition.getWeightLt()),
                         periodGoe(condition.getPeriodGoe()),
                         periodLt(condition.getPeriodLt()))
+                .fetch();
+    }
+
+    @Override
+    public List<Member> findMemberList(List<Long> memberIds) {
+        return jpaQueryFactory.selectFrom(member)
+                .leftJoin(member.challenge).fetchJoin()
+                .where(member.id.in(memberIds))
                 .fetch();
     }
 

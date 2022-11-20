@@ -45,17 +45,15 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
 
     }
 
-    public List<Tuple> findSearchList(Pageable pageable, List<String> tagNames) {
+    public List<Tuple> findSearchList( Long memberId,List<Long> postIds) {
 
         return jpaQueryFactory
-                .select(post, post.postComments.size())
+                .selectDistinct(post, likes.id,post.postComments.size())
                 .from(post)
                 .leftJoin(post.member, member).fetchJoin()
-                .leftJoin(postTag)
-                .on(post.id.eq(postTag.post.id))
-                .leftJoin(tag)
-                .where(tag.content.in(tagNames))
-                .limit(pageable.getPageSize()+1)
+                .leftJoin(post.likes, likes)
+                .on(likes.member.id.eq(memberId))
+                .where(inPostIds(postIds))
                 .orderBy(post.id.desc())
                 .fetch();
     }
@@ -65,10 +63,9 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
         return isEmpty(postId) ? null : post.id.lt(postId);
     }
 
-//    private BooleanExpression
-//    private BooleanExpression inTagNames(List<Long> tagNames) {
-//        return tagNames.size
-//    }
+    private BooleanExpression inPostIds(List<Long> postIds) {
+        return postIds.size() == 0 ? null : post.id.in(postIds);
+    }
 
 
 }

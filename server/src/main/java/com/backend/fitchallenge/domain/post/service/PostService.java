@@ -14,6 +14,7 @@ import com.backend.fitchallenge.domain.tag.domain.Tag;
 import com.backend.fitchallenge.domain.tag.dto.TagDto;
 import com.backend.fitchallenge.domain.tag.repository.QueryTagRepository;
 import com.backend.fitchallenge.domain.tag.service.TagService;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,6 @@ import java.util.Optional;
 
 import static com.backend.fitchallenge.domain.like.entity.QLikes.likes;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
-import static com.backend.fitchallenge.domain.post.entity.QPostTag.postTag;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -51,6 +51,7 @@ public class PostService {
      * @param imagePathList S3에 저장후 CloudFront+ 파일명 목록
      * @return DB에 Post와 관련 Tag,Picture 저장후 postId 반환
      */
+    //Todo: 간접참조(난이도상)
     public Long createPost(Long memberId, PostCreateVO postCreate, List<String> imagePathList) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
@@ -83,15 +84,16 @@ public class PostService {
      *
      * @return
      */
+    // hasNext = false이면 더이상 불러올 post가 없습니다. 알림 띄워주기
     @Transactional(readOnly = true)
     public MultiResponse<?> getPostList(Long lastPostId, Long memberId, Pageable pageable) {
 
 
-        List<PostResponse> postResponses = postRepository.findList(lastPostId,memberId, pageable).stream()
+        List<PostResponse> postResponses = postRepository.findList(lastPostId, memberId, pageable).stream()
                 .map(postTuple ->
                         PostResponse.builder()
                                 .member(SimplePostMemberResponse.toResponse(postTuple.get(post).getMember()))
-                                .post(SimplePostResponse.toResponse(postTuple.get(post),postTuple.get(post).getLikes().size() ,postTuple.get(post.postComments.size())))
+                                .post(SimplePostResponse.toResponse(postTuple.get(post), postTuple.get(post).getLikes().size(), postTuple.get(post.postComments.size())))
                                 .tags(postTuple.get(post).getPostTags().stream()
                                         .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                                 .pictures(postTuple.get(post).getPictures().stream()
@@ -206,31 +208,32 @@ public class PostService {
     /**
      * 게시물 검색 - 태그 기반
      * 1.DB에서 태그 이름과 일치한 태그의 Id 목록 가져온다.
-     * 2.태그 Id 목록에 해당하는 글들 가져오기 태그목록중 한개만 포함해도 가져온다.
-     * 3.
-     *
-     * @param pageable
-     * @param tagNames
+     * 2.태그 Id 목록에 해당하는 post의 id 가져오기 태그목록중 한개만 포함해도 가져온다.
+     * 3. post id에 해당하는 게시물 + 좋아요 상태 + 게시물댓글수 가져오기
+     * 4. 무한스크롤 페이지네이션 처리
      * @return
      */
-    public MultiResponse<?> getSearchList(Pageable pageable, Long lastPostId, List<String> tagNames) {
+    public MultiResponse<?> getSearchList(Long memberId, Pageable pageable, Long lastPostId, List<String> tagNames) {
 
+        // 2. 태그 Id목록에 해당하는 postid 가져오기
         List<Long> tagIds = queryTagRepository.findTagsByContent(tagNames);
         if (tagIds.isEmpty()) {
             throw new PostNotFound();
         }
 
-        List<PostResponse> responses = queryTagRepository.findPostByTag(lastPostId, tagIds, pageable).stream()
-                .map(tuple ->
-                        PostResponse.builder()
-                                .member(SimplePostMemberResponse.toResponse(tuple.get(post).getMember()))
-                                .post(SimplePostResponse.toResponse(tuple.get(post),0 ,tuple.get(post.postComments.size())))
-                                .tags(tuple.get(post).getPostTags().stream()
-                                        .map(postTag -> postTag.getTag().getContent()).collect(toList()))
-                                .pictures(tuple.get(post).getPictures().stream()
-                                        .map(picture -> picture.getPath()).collect(toList()))
-                                .build()
-                ).collect(toList());
+        // 3. post id에 해당하는 게시물 + 좋아요 상태 + 게시물 댓글수 가져와서 response로 반환
+        List<Long> postIds = queryTagRepository.findPostByTag(lastPostId, tagIds, pageable);
+
+        List<PostResponse> responses = postRepository.findSearchList(memberId, postIds).stream()
+                .map(tuple -> PostResponse.builder()
+                        .member(SimplePostMemberResponse.toResponse(tuple.get(post).getMember()))
+                        .post(SimplePostResponse.toResponse(tuple.get(post), tuple.get(post).getLikes().size(), tuple.get(post.postComments.size())))
+                        .tags(tuple.get(post).getPostTags().stream()
+                                .map(postTag -> postTag.getTag().getContent()).collect(toList()))
+                        .pictures(tuple.get(post).getPictures().stream()
+                                .map(picture -> picture.getPath()).collect(toList()))
+                        .likeSate(Optional.ofNullable(tuple.get(likes.id)).isPresent())
+                        .build()).collect(toList());
 
         Slice<PostResponse> result = checkLastPage(responses, pageable);
 

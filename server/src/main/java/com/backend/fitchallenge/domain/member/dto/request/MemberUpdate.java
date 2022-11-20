@@ -1,12 +1,9 @@
 package com.backend.fitchallenge.domain.member.dto.request;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
@@ -23,12 +20,13 @@ public class MemberUpdate {
     private Integer kilogram;
     private Integer split;
     private String profileImage;
+    private Integer period;
 
     @Builder
     private MemberUpdate(String password, String username, String job,
-                        String address, String gender, Integer age,
-                        Integer height, Integer weight, Integer kilogram,
-                        Integer split, String profileImage) {
+                         String address, String gender, Integer age,
+                         Integer height, Integer weight, Integer kilogram,
+                         Integer split, String profileImage, Integer period) {
         this.password = password;
         this.username = username;
         this.job = job;
@@ -40,6 +38,7 @@ public class MemberUpdate {
         this.kilogram = kilogram;
         this.split = split;
         this.profileImage = profileImage;
+        this.period = period;
     }
 
     public static MemberUpdate of(Member member){
@@ -55,6 +54,7 @@ public class MemberUpdate {
                 .kilogram(member.getMemberActivity().getKilogram())
                 .split(member.getSplit())
                 .profileImage(member.getProfileImage())
+                .period(member.getPeriod())
                 .build();
     }
 }

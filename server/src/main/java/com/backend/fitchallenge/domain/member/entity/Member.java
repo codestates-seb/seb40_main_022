@@ -1,8 +1,8 @@
 package com.backend.fitchallenge.domain.member.entity;
 
-import com.backend.fitchallenge.domain.member.challenge.Challenge;
+
+import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.backend.fitchallenge.domain.question.entity.Question;
-import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
@@ -59,6 +59,9 @@ public class Member extends Auditable {
     @Column(name = "SPLIT")
     private Integer split;
 
+    @Column(name = "PERIOD")
+    private Integer period;
+
     @Enumerated(EnumType.STRING)
     private Authority authority = Authority.ROLE_USER;
 
@@ -96,11 +99,15 @@ public class Member extends Auditable {
                 .build();
         this.split = memberUpdate.getSplit() == null ? this.split : memberUpdate.getSplit();
         this.profileImage = memberUpdate.getProfileImage() == null ? this.profileImage : memberUpdate.getProfileImage();
+        this.period = memberUpdate.getPeriod() == null ? this.period : memberUpdate.getPeriod();
     }
 
-    //매치 등록.
-    public void matchChallenge(Challenge challenge){
+
+    public void addChallenge(Challenge challenge) {
         this.challenge = challenge;
-        challenge.getMembers().add(this);
+    }
+
+    public void suspendChallenge() {
+        this.challenge = null;
     }
 }

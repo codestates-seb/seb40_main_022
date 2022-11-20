@@ -13,9 +13,12 @@ import java.util.regex.Pattern;
 public class PostSearch {
 
     private String tag;
+    private Long lastPostId;
 
-    public PostSearch(String tag) {this.tag = tag;}
-
+    public PostSearch(String tag, Long lastPostId) {
+        this.tag = tag;
+        this.lastPostId = lastPostId;
+    }
 
     public List<String> queryParsing(String tag) {
 
@@ -28,6 +31,7 @@ public class PostSearch {
 
         List<String> tagNames = new ArrayList<>();
 
+        // 패턴에 해당하는 그룹에서 tagName 추출
         while (m.find()) {
             tagNames.add(m.group().substring(1));
         }
