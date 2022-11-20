@@ -6,7 +6,10 @@ import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshToken;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
+import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
+import com.backend.fitchallenge.global.security.oauth2.OAuth2UserInfo;
+import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -28,43 +31,29 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
-    private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisService redisService;
 
     /**
      * [회원가입 및 로그인 진행]
      * spring security 내부적으로 로그인 완료시 OAuth2User라는 authentication 발급
      * 이걸 이용해서..
      * 1. email 뽑아낸다.
-     * 2. db에서 이미 존재하는 이메일이면 로그인 진행
-     *    존재하지 않으면 회원가입, 로그인 진행
-     * todo.1. password를 뽑아올 것인가. -> oAuth멤버 회원정보 수정시 password입력하게되면??
-     * todo.2. OAuth2이메일과 일반 이메일이 같은경우?? - nullable처리해서 하나만 가입하게 해도 되긴 하지만.
+     * 2. email로 role을 생성한다.
+     *
+     * todo.1. OAuth2이메일과 일반 이메일이 같은경우?? - 현재는 unique 정책을 유지 중. -> 일반 이메일과 소셜이메일이 같은 경우는 발생 불가
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        var oAuth2User = (OAuth2User)authentication.getPrincipal();
-        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
-        List<String> authorities = authorityUtils.createRoles(email);
 
-        if(!memberAlreadyExist(email)){
-            saveMember(email);
-        }
+        MemberDetails memberDetails = (MemberDetails) authentication.getPrincipal(); // OAuth2DetailsServcie에 의해 authentication이 생성된 상태.
+
+        String email = memberDetails.getEmail();
+        List<String> authorities = authorityUtils.createRoles(email);
 
         loginAndRedirect(request, response, email, authorities);
     }
 
-    /**
-     * 일종의 회원가입 메서드.
-     */
-    private void saveMember(String email) {
-        MemberCreate memberCreate = MemberCreate.builder()
-                        .email(email)
-                                .build();
-        Member member = memberCreate.toMember();
-
-        memberRepository.save(member);
-    }
 
     /**
      * 토큰을 생성하고, 저장하고, 설정한 uri로 응답을 보내는 메서드
@@ -73,7 +62,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String accessToken = delegateAccessToken(username, authorities);
         String refreshToken = delegateRefreshToken(username);
 
-//        Long memberId = findMemberIdByEmail(username); - email로 교체해서 db접근 줄임.
         RefreshToken rtk = RefreshToken.builder()
                 .email(username)
                 .tokenValue(refreshToken)
@@ -86,13 +74,13 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private String delegateAccessToken(String username, List<String> authorities) {
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
         claims.put("roles", authorities);
 
         String subject = username;
         Date expiration = jwtTokenProvider.getTokenExpiration(jwtTokenProvider.getAccessTokenExpirationMinutes());
-
         String base64EncodedSecretKey = jwtTokenProvider.encodeBase64SecretKey(jwtTokenProvider.getSecretKey());
 
         String accessToken = jwtTokenProvider.accessTokenAssembly(claims, subject, expiration, base64EncodedSecretKey);
@@ -100,13 +88,16 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return accessToken;
     }
 
-    //todo redis에 저장하기.
+
     private String delegateRefreshToken(String username) {
+
         String subject = username;
         Date expiration = jwtTokenProvider.getTokenExpiration(jwtTokenProvider.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenProvider.encodeBase64SecretKey(jwtTokenProvider.getSecretKey());
 
         String refreshToken = jwtTokenProvider.refreshTokenAssembly(subject, expiration, base64EncodedSecretKey);
+
+        redisService.setValues(username, refreshToken); // 생성하면서 redis 에 담아주도록 하자.
 
         return refreshToken;
     }
@@ -116,7 +107,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
      */
     private URI createURI(String accessToken, String refreshToken) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("access_token", accessToken);
+        queryParams.add("access_token",  accessToken);
         queryParams.add("refresh_token", refreshToken);
 
         return UriComponentsBuilder
@@ -126,19 +117,6 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .queryParams(queryParams)
                 .build()
                 .toUri();
-    }
-
-    public Long findMemberIdByEmail(String email){
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        Member member = optionalMember.orElseThrow(()-> new MemberNotExist());
-
-        return member.getId();
-    }
-
-    public boolean memberAlreadyExist(String email){
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-
-        return optionalMember.isPresent();
     }
 }
 

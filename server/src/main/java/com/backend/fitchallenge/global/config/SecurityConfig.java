@@ -1,7 +1,6 @@
 package com.backend.fitchallenge.global.config;
 
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
-import com.backend.fitchallenge.domain.member.service.MemberService;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.filter.JwtAuthenticationFilter;
@@ -9,6 +8,7 @@ import com.backend.fitchallenge.global.security.filter.JwtVerificationFilter;
 import com.backend.fitchallenge.global.security.handler.Oauth2SuccessHandler;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetailsService;
+import com.backend.fitchallenge.global.security.userdetails.OAuth2DetailsService;
 import com.backend.fitchallenge.global.security.utils.MemberAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -38,43 +38,57 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthorityUtils authorityUtils;
-    private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RedisService redisService;
     private final MemberDetailsService memberDetailsService;
+    private final OAuth2DetailsService oAuth2DetailsService;
 
 
     @Bean
-    @SneakyThrows
+    @SneakyThrows // <- 해당하는 에러를 찾아서 알아서 던져준다.
     public SecurityFilterChain filterChain(HttpSecurity http){
         http
-                //h2 사용하려면 - h2가 태그기반
+                /**
+                 * h2 사용을 위함. h2가 태그기반이기에.
+                 */
                 .headers().frameOptions().sameOrigin()
                 .and()
 
-                //일반적인 로그인, 폼 로그인, 세션 사용 안함
+                /**
+                 * 토큰 방식이기 때문에 session - stateless
+                 */
                 .httpBasic().disable()
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                //추후 설정 가능한 부분
+                //todo. API연결시 쿠키 사용한다면 수정해야 할 부분.
                 .cors(withDefaults())
                 .csrf().disable()
 
-                //커스텀 필터 적용
+                /**
+                 * 커스텀 필터 적용 : JwtAuthenticationFilter, JwtVerificationFilter
+                 */
                 .apply(new CustomFilterConfigurer())
                 .and()
 
-                //추후 권한설정
+                /**
+                 * uri 별 권한관리의 시작점.  todo. 추후 uri마다의 권한구조 설정하기
+                 */
                 .authorizeHttpRequests()
                 .antMatchers("/**").permitAll()
                 .and()
 
-                //oAuth2 로그인. 성공시 핸들러로 넘어간다.
+                /**
+                1. OAuth서버에서 유저정보를 가지고 왔을때의 지점 -> userInfoEndPoint
+                2. 그 이후에 유저정보로 MemberDetails를 생성, authentication을 생성하는 로직을 커스텀하였음(oAuth2DetailsService)
+                3. atk, rtk를 발행하는 로직 실행 (Oauth2SuccessHandler)
+                 */
                 .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint().userService(oAuth2DetailsService)
+                        .and()
                         .successHandler(new Oauth2SuccessHandler(jwtTokenProvider, authorityUtils,
-                                memberRepository, refreshTokenRepository)));
+                                refreshTokenRepository, redisService)));
 
 
         return http.build();
@@ -86,7 +100,8 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    //추후 설정들이 필요할 시 cors filter에 적용할 예정
+
+    // todo. 추후 사용 가능성 높음. 위 filterchain의 cors설정의 파라미터로 사용할 가능성.
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();  // Cors설정 객체생성(정책 설정)
@@ -101,9 +116,13 @@ public class SecurityConfig {
         return source;
     }
 
+    /**
+     * filter단에 만든 customFilter들의 흐름 설정  todo. 인증 성공, 실패에 따른 핸들러 작성시 여기서 추가하도록 하자.
+     */
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
+
             AuthenticationManager authenticationManager =
                     builder.getSharedObject(AuthenticationManager.class);
 
@@ -115,12 +134,7 @@ public class SecurityConfig {
 
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
 
-            //핸들러 작성 전
-//            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthSuccessHandler());
-//            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthFailureHandler());
-
             builder
-//                    .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }

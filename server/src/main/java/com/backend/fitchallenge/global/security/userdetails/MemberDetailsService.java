@@ -12,6 +12,8 @@ import java.util.Optional;
 
 /**
  * DB에서 유저 정보를 조회하여 MemberDetail을 생성하는 클래스
+ *
+ * 일반 로그인에서 사용된다. JwtAuthenticationFilter의 attempt~~ 가 사용하게 될 userDetailsService
  */
 @Component
 @RequiredArgsConstructor
@@ -23,6 +25,6 @@ public class MemberDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username){
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
         Member findMember = optionalMember.orElseThrow(()-> new MemberNotExist());
-        return new MemberDetails(findMember);
+        return MemberDetails.of(findMember);
     }
 }

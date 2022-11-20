@@ -6,6 +6,7 @@ public enum ExceptionCode {
     //Member
     MEMBER_NOT_FOUND(404, "Member not found"),
     MEMBER_EXISTS(409, "Member exists"),
+    MEMBER_ALREADY_LOGGED_IN(403, "Member already logged in"),
 
     TOKEN_NOT_FOUND(404, "Token not found"),
     TOKEN_NOT_VALID(401, "Token not valid"),
@@ -28,6 +29,7 @@ public enum ExceptionCode {
     //Comment
     COMMENT_NOT_FOUND(404, "Comment not found"),
     NOT_COMMENT_WRITER(400, "Not comment writer"),
+
     CANNOT_UPDATE_COMMENT(403, "Cannot Update Comment"),
     CANNOT_DELETE_COMMENT(403, "Cannot Delete Comment"),
     //Tag
@@ -41,6 +43,7 @@ public enum ExceptionCode {
     CALENDAR_NOT_FOUND(404, "Calendar not found"),
     //Sports
     SPORTS_NOT_FOUND(404, "Sports not found");
+
 
     @Getter
     private final int status;

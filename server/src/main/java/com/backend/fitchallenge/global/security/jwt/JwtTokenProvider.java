@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 
+//todo. '토큰 자체'와 '토큰으로 진행하는 동작'을 나누는 것이 좋아보임. 현재 코드가 너무 길다.
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
@@ -141,9 +142,6 @@ public class JwtTokenProvider {
         return refreshToken;
     }
 
-
-
-
     // 토큰 검증 후 claim 반환
     public Jws<Claims> getClaims(String jws) {
         Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
@@ -160,14 +158,20 @@ public class JwtTokenProvider {
         }
     }
 
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+    public void verifyClaims(String jws) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
 
-        Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jws);
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jws);
+        }
+        catch(JwtException e){
+            throw new TokenNotValid();
+        }
     }
+
 
 
 
