@@ -63,9 +63,7 @@ public class PostService {
             Post post = Post.toPost(postCreate, member, imagePathList);
             return postRepository.save(post).getId();
         }
-
     }
-
 
     /**
      * 전체 게시물 조회
@@ -78,7 +76,6 @@ public class PostService {
      */
     @Transactional(readOnly = true)
     public MultiResponse<?> getPostList(Long lastPostId, Pageable pageable) {
-
 
         List<PostResponse> postResponses = postRepository.findList(lastPostId,pageable).stream()
                 .map(postTuple ->
