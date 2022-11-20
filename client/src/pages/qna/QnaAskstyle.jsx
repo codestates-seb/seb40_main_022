@@ -91,7 +91,11 @@ export const PostSubmit = styled.section`
     font-weight: bold;
     margin-right: 30px;
     border-radius: 20px;
+    box-shadow: var(--box-shadow);
     cursor: pointer;
+    :hover {
+      background-color: #fa8a8a;
+    }
   }
   > :nth-child(2) {
     width: 120px;
@@ -101,6 +105,10 @@ export const PostSubmit = styled.section`
     color: white;
     font-weight: bold;
     border-radius: 20px;
+    box-shadow: var(--box-shadow);
     cursor: pointer;
+    :hover {
+      background-color: #cfcfcf;
+    }
   }
 `;

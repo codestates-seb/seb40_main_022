@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -11,6 +12,7 @@ import {
 } from './QnaUpdatestyle';
 
 function QnaUpdate() {
+  const navigate = useNavigate();
   return (
     <QnaPostBack>
       <Header />
@@ -41,7 +43,7 @@ function QnaUpdate() {
         </PostTag>
         <PostSubmit>
           <button>등록</button>
-          <button>취소</button>
+          <button onClick={() => navigate('/qnadetail')}>취소</button>
         </PostSubmit>
       </QnaPost>
       <Footer />

@@ -49,6 +49,7 @@ public class DetailQuestionResponse {
                 .content(question.getContent())
                 .tag(question.getQuestionTag().getValue())
                 .view(question.getView())
+                .answerCount(answers.size())
                 .createdAt(question.getCreatedAt())
                 .modifiedAt(question.getModifiedAt())
                 .memberResponse(memberResponse)

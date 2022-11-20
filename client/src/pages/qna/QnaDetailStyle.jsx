@@ -56,6 +56,10 @@ export const DetailUpdate = styled.div`
     float: right;
     cursor: pointer;
     text-decoration: none;
+    box-shadow: var(--box-shadow);
+    :hover {
+      background-color: #fa8a8a;
+    }
     > h3 {
       text-align: center;
       margin-top: 14px;
@@ -84,6 +88,7 @@ export const DetailNDB = styled.span`
     height: 30px;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: var(--box-shadow);
   }
 `;
 
@@ -104,6 +109,7 @@ export const DetailAnswer = styled.div`
 export const AnswerNDB = styled.span`
   display: flex;
   margin-bottom: 50px;
+
   > div {
     display: flex;
     margin-right: 10px;
@@ -124,7 +130,6 @@ export const AnswerNDB = styled.span`
     width: 30px;
     height: 30px;
     font-weight: 600;
-    cursor: pointer;
   }
 `;
 
@@ -134,13 +139,15 @@ export const DetailComment = styled.section`
     font-weight: 600;
     margin-bottom: 40px;
   }
-  > input {
+  > textarea {
     width: 1200px;
-    height: 150px;
     border-radius: 22px;
     border: 1px solid #bababa;
     font-size: var(--font-18);
-    padding: 20px 0px 20px 50px;
+    padding: 50px 20px 40px;
+    outline: none;
+    resize: none;
+    overflow-y: hidden;
   }
 `;
 
@@ -154,5 +161,10 @@ export const DetailSubmit = styled.button`
   border: none;
   margin-top: 25px;
   float: right;
+  font-size: var(--font-19);
+  box-shadow: var(--box-shadow);
   cursor: pointer;
+  :hover {
+    background-color: #fa8a8a;
+  }
 `;

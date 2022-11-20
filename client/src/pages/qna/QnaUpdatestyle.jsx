@@ -30,6 +30,7 @@ export const PostTitle = styled.section`
       width: 520px;
       height: 34px;
       padding: 10px;
+      outline: none;
     }
   }
 `;
@@ -47,6 +48,7 @@ export const PostContent = styled.section`
       height: 220px;
       padding: 10px;
       resize: none;
+      outline: none;
     }
   }
 `;
@@ -92,6 +94,10 @@ export const PostSubmit = styled.section`
     margin-right: 30px;
     border-radius: 20px;
     cursor: pointer;
+    box-shadow: var(--box-shadow);
+    :hover {
+      background-color: #fa8a8a;
+    }
   }
   > :nth-child(2) {
     width: 120px;
@@ -102,5 +108,9 @@ export const PostSubmit = styled.section`
     font-weight: bold;
     border-radius: 20px;
     cursor: pointer;
+    box-shadow: var(--box-shadow);
+    :hover {
+      background-color: #cfcfcf;
+    }
   }
 `;

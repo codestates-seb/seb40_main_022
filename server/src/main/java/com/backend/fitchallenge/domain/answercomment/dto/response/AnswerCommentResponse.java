@@ -16,20 +16,20 @@ public class AnswerCommentResponse {
 
     private LocalDateTime modifiedAt;
 
-    private MemberResponse memberResponse;
+    private MemberResponse commentWriter;
 
     @Builder
-    private AnswerCommentResponse(AnswerComment answerComment, MemberResponse memberResponse) {
+    private AnswerCommentResponse(AnswerComment answerComment, MemberResponse commentWriter) {
         this.content = answerComment.getContent();
         this.createdAt = answerComment.getCreatedAt();
         this.modifiedAt = answerComment.getModifiedAt();
-        this.memberResponse = memberResponse;
+        this.commentWriter = commentWriter;
     }
 
-    public static AnswerCommentResponse of(AnswerComment answerComment, MemberResponse memberResponse) {
+    public static AnswerCommentResponse of(AnswerComment answerComment) {
         return AnswerCommentResponse.builder()
                 .answerComment(answerComment)
-                .memberResponse(memberResponse)
+                .commentWriter(MemberResponse.of(answerComment.getMember()))
                 .build();
     }
 }

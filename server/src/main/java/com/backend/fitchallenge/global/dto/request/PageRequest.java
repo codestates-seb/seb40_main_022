@@ -14,7 +14,7 @@ public final class PageRequest {
 	private static final int MAX_SIZE = 2000;
 
 	private int page;
-	private int size;
+	private int size = 10;
 	private Sort.Direction sort = Sort.Direction.DESC;
 	private String sortBy;
 	private String filters;
@@ -31,10 +31,10 @@ public final class PageRequest {
 	}
 
 	public void setDynamicSort() {
-		if (sortBy.equals("view")) {
-			this.dynamicSort = Sort.by(sort, "view");
-		} else {
+		if (sortBy == null || sortBy.isBlank()) {
 			this.dynamicSort = Sort.by(sort, "id");
+		} else {
+			this.dynamicSort = Sort.by(sort, "view");
 		}
 	}
 

@@ -68,7 +68,7 @@ function QnaDetail() {
         </DetailAnswer>
         <DetailComment>
           <h2>답변 작성</h2>
-          <input type="text" placeholder="답변을 입력해주세요!" />
+          <textarea type="text" placeholder="답변을 입력해주세요!" />
         </DetailComment>
         <DetailSubmit>등록</DetailSubmit>
       </DetailBack>
