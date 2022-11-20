@@ -52,7 +52,16 @@ const Head = styled.header`
           cursor: pointer;
           margin-left: 10px;
           width: 25px;
+          position: relative;
         }
+      }
+
+      .noticeModal {
+        margin: 0 20px;
+        cursor: pointer;
+        position: relative;
+        width: 20px;
+        height: 20px;
       }
     }
   }

@@ -1,110 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import {
+  QnaPostBack,
+  QnaPost,
+  PostTitle,
+  PostContent,
+  PostTag,
+  PostSubmit,
+} from './QnaAskstyle';
 
-const QnaPostBack = styled.div`
-  width: 100%;
-  height: auto;
-  margin: 0;
-  padding: 0;
-  background-color: #d6e3e3;
-  border: 1px solid #d6e3e3;
-`;
-const QnaPost = styled.main`
-  width: 680px;
-  height: 600px;
-  margin: 270px auto;
-  border: 3px solid white;
-  background-color: white;
-  margin-top: 300px;
-`;
-
-const PostTitle = styled.section`
-  height: 90px;
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
-  > div {
-    > h2 {
-      font-size: var(--font-16);
-    }
-    > input {
-      width: 520px;
-      height: 34px;
-    }
-  }
-`;
-
-const PostContent = styled.section`
-  height: 270px;
-  display: flex;
-  justify-content: center;
-  > div {
-    > h2 {
-      font-size: var(--font-16);
-    }
-    > input {
-      width: 520px;
-      height: 220px;
-    }
-  }
-`;
-const PostTag = styled.section`
-  display: flex;
-  width: 65%;
-  height: 100px;
-  justify-content: center;
-  > div {
-    > h2 {
-      font-size: var(--font-16);
-    }
-    .oneButton {
-      background-color: var(--tagyellow);
-    }
-    > button {
-      margin-top: 20px;
-      margin-right: 5px;
-      width: 50px;
-      height: 30px;
-      border: none;
-      background-color: #f6f6f6;
-      font-size: var(--font-13);
-      font-weight: 500;
-      box-shadow: var(--box-shadow);
-      cursor: pointer;
-    }
-  }
-`;
-
-const PostSubmit = styled.section`
-  display: flex;
-  height: 100px;
-  justify-content: center;
-  margin-top: 30px;
-  > :nth-child(1) {
-    width: 120px;
-    height: 50px;
-    background-color: var(--logored);
-    border: none;
-    color: white;
-    font-weight: bold;
-    margin-right: 30px;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  > :nth-child(2) {
-    width: 120px;
-    height: 50px;
-    background-color: #aeaeae;
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-`;
 function QnaAsk() {
+  const navigate = useNavigate();
   return (
     <QnaPostBack>
       <Header />
@@ -118,7 +26,9 @@ function QnaAsk() {
         <PostContent>
           <div>
             <h2>내용</h2>
-            <input />
+            <textarea
+              className={`block whitespace-pre-wrap w-full bg-white text-gray-700 border border-black py-2 px-2 mb-3 leading-tight focus:border focus:border-pz-pt-1 `}
+            />
           </div>
         </PostContent>
         <PostTag>
@@ -133,7 +43,7 @@ function QnaAsk() {
         </PostTag>
         <PostSubmit>
           <button>등록</button>
-          <button>취소</button>
+          <button onClick={() => navigate('/qna')}>취소</button>
         </PostSubmit>
       </QnaPost>
       <Footer />

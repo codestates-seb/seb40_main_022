@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -6,18 +6,35 @@ import logo from '../../images/logo.png';
 import sidebar from '../../images/sidebar.png';
 import Sidebar from '../sidebar/Sidebar';
 import Head from './Head';
-import Modal from '../modal';
+import Modal from '../modal/noticeModal';
 
 function Header() {
   const [side, setSide] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const popRef = useRef(null);
+  const noticeRef = useRef(null);
 
-  const openModal = () => {
-    setModalOpen(true);
+  const closeHandler = ({ target }) => {
+    if (side && !popRef.current.contains(target)) setSide(false);
   };
-  const closeModal = () => {
-    setModalOpen(false);
+
+  const noticeCloseHandler = ({ target }) => {
+    if (modalOpen && !noticeRef.current.contains(target)) setModalOpen(false);
   };
+
+  useEffect(() => {
+    window.addEventListener('click', closeHandler);
+    return () => {
+      window.removeEventListener('click', closeHandler);
+    };
+  });
+
+  useEffect(() => {
+    window.addEventListener('click', noticeCloseHandler);
+    return () => {
+      window.removeEventListener('click', closeHandler);
+    };
+  });
 
   return (
     <Head>
@@ -33,13 +50,11 @@ function Header() {
           <Link to="/signup" className="logoutbut">
             SignUp
           </Link>
-          <FontAwesomeIcon
-            icon={faBell}
-            onClick={() => openModal()}
-            className="modal"
-          />
-          <Modal open={modalOpen} close={closeModal} header="알림" />
-          <button onClick={() => setSide(!side)}>
+          <button ref={noticeRef} onClick={() => setModalOpen(true)}>
+            <FontAwesomeIcon icon={faBell} className="noticeModal" />
+            {modalOpen && <Modal className="notice" />}
+          </button>
+          <button ref={popRef} onClick={() => setSide(true)}>
             <img src={sidebar} alt="sidebar" className="sideb" />
             {side ? <Sidebar className="sidebar" /> : null}
           </button>
