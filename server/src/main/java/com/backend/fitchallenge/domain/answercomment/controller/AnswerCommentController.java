@@ -20,7 +20,7 @@ public class AnswerCommentController {
 
     private final AnswerCommentService answerCommentService;
 
-    @PostMapping("/answer-comments")
+    @PostMapping("/comments")
     public ResponseEntity<Long> create(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("answer-id") Long answerId,
                                        @Valid @RequestBody AnswerCommentCreate answerCommentCreate) {
@@ -28,7 +28,7 @@ public class AnswerCommentController {
         return ResponseEntity.ok(answerCommentService.createAnswerComment(memberDetails.getMemberId(), answerId, answerCommentCreate));
     }
 
-    @PatchMapping("/answer-comments/{answer-comment-id}")
+    @PatchMapping("/comments/{answer-comment-id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("answer-comment-id") Long answerCommentId,
                                        @Valid @RequestBody AnswerCommentUpdate answerCommentUpdate) {
@@ -36,7 +36,7 @@ public class AnswerCommentController {
         return ResponseEntity.ok(answerCommentService.updateAnswerComment(memberDetails.getMemberId(), answerCommentId, answerCommentUpdate));
     }
 
-    @DeleteMapping("/answer-comments/{answer-comment-id}")
+    @DeleteMapping("/comments/{answer-comment-id}")
     public ResponseEntity<Long> delete(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("answer-comment-id") Long answerCommentId) {
 
