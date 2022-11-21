@@ -24,4 +24,9 @@ public class DailyPost {
                 .image(post.getPictures().get(0).getPath())
                 .build();
     }
+
+    public static DailyPost of(){
+        return DailyPost.builder()
+                .build();
+    }
 }
