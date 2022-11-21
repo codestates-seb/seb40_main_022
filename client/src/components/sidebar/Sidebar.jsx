@@ -4,14 +4,11 @@ import SideDiv from './SideStyle';
 function Sidebar() {
   return (
     <SideDiv>
-      <Link to="/record" className="sidemenu">
-        운동 기록
+      <Link to="/login" className="sidemenu">
+        Login
       </Link>
-      <Link to="/lank" className="sidemenu">
-        랭킹
-      </Link>
-      <Link to="/qna" className="sidemenu">
-        Q&A
+      <Link to="/signup" className="sidemenu">
+        SignUp
       </Link>
     </SideDiv>
   );

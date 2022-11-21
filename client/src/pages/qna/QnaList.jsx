@@ -65,7 +65,7 @@ function QnaList() {
               navigate('/qnaask');
             }}
           >
-            Ask Question
+            질문
           </button>
         </QnaTitle>
         <QnaSearch>

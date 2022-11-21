@@ -44,17 +44,17 @@ function Header() {
           <span className="logoname">Fit Challenge</span>
         </Link>
         <div className="Rightheader">
-          <Link to="/login" className="loginbut">
-            Login
+          <Link to="/lank" className="logoutbut">
+            랭킹
           </Link>
-          <Link to="/signup" className="logoutbut">
-            SignUp
+          <Link to="/qna" className="logoutbut">
+            Q&A
           </Link>
           <button ref={noticeRef} onClick={() => setModalOpen(true)}>
             <FontAwesomeIcon icon={faBell} className="noticeModal" />
             {modalOpen && <Modal className="notice" />}
           </button>
-          <button ref={popRef} onClick={() => setSide(true)}>
+          <button ref={popRef} onClick={() => setSide(!side)}>
             <img src={sidebar} alt="sidebar" className="sideb" />
             {side ? <Sidebar className="sidebar" /> : null}
           </button>

@@ -10,11 +10,11 @@ const SideDiv = styled.div`
   margin-top: 18px;
   background-color: var(--backwhite);
   @media screen and (max-width: 1400px) {
-    margin-left: -150px;
+    margin-left: -100px;
   }
   .sidemenu {
     cursor: pointer;
-    width: 200px;
+    width: 150px;
     padding-top: 10%;
     padding-bottom: 10%;
     display: flex;

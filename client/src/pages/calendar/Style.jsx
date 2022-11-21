@@ -41,19 +41,29 @@ export const CalBox = styled.section`
       display: flex;
       justify-content: end;
       margin-top: 10px;
-      > button {
+      .healthaddbutton,
+      .canclebutton {
         width: 110px;
         height: 50px;
         border: none;
         box-shadow: var(--box-shadow);
         font-size: var(--font-14);
         border-radius: 10px;
-        background-color: var(--logored);
         color: white;
         cursor: pointer;
         font-weight: 700;
+      }
+      .healthaddbutton {
+        background-color: var(--logored);
+        margin-right: 10px;
         :hover {
           background-color: #fa8a8a;
+        }
+      }
+      .canclebutton {
+        background-color: var(--buttongray);
+        :hover {
+          background-color: #cfcfcf;
         }
       }
     }
@@ -70,13 +80,19 @@ export const CalBox = styled.section`
       .box1,
       .box2 {
         .name1 {
+          display: flex;
+          flex-direction: column;
           text-align: center;
           margin-bottom: 10px;
           font-weight: 700;
+          > img {
+            margin: 0 auto;
+            width: 30px;
+          }
         }
         .name2 {
           text-align: center;
-          margin-top: 10px;
+          margin-top: 25px;
           margin-bottom: 15px;
           font-weight: 700;
         }
@@ -287,7 +303,7 @@ export const DetailMain = styled.main`
       }
       > button {
         width: 120px;
-        padding: 10px;
+        height: 30px;
         font-size: var(--font-16);
         border: none;
         background-color: var(--logored);
@@ -351,6 +367,9 @@ export const DetailMain = styled.main`
       font-weight: 600;
       border-radius: 20px;
       box-shadow: var(--box-shadow);
+      :hover {
+        background-color: #fa8a8a;
+      }
     }
     .submit {
       margin-right: 10px;
