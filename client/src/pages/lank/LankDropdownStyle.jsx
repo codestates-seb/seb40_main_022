@@ -16,12 +16,21 @@ export const Dropdivi = styled.div`
       position: absolute;
     }
     .dropdownLabel {
+      width: 100%;
       display: flex;
-      padding: 15px;
       cursor: pointer;
       > div {
         font-weight: 500;
+        width: 100px;
+        padding: 15px;
         font-size: var(--font-16);
+        position: relative;
+        text-align: center;
+      }
+      .caretIcon {
+        position: absolute;
+        top: 15px;
+        right: 5px;
       }
     }
     .content {

@@ -46,7 +46,7 @@ function Calendar() {
               locale="ko"
               events={[
                 {
-                  title: '1:40:30',
+                  title: '1:40:30 999kg',
                   start: '2022-11-14',
                   backgroundColor: '#82cbc4',
                 },

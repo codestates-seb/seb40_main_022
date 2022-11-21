@@ -19,6 +19,7 @@ export const LankMain = styled.main`
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-right: 100px;
       > button {
         border: none;
         background-color: #fff;

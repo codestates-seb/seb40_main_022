@@ -188,66 +188,115 @@ export const DetailMain = styled.main`
   max-width: 500px;
   width: 100%;
   margin: 0 auto;
+  .Times {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    .startbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      .timelabel {
+        padding: 10px;
+        font-size: var(--font-18);
+      }
+      .endtimelabel {
+        margin-left: 18px;
+        margin-right: 10px;
+        font-size: var(--font-18);
+      }
+      #starttime {
+        width: 250px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        border: none;
+        box-shadow: var(--box-shadow);
+        outline: none;
+      }
+      .Timebutton {
+        margin-left: 10px;
+        border: none;
+        background-color: #fff;
+        cursor: pointer;
+        > img:hover {
+          filter: opacity(0.4) drop-shadow(0 0 0 var(--logored));
+        }
+      }
+      .imgadd {
+        display: none;
+      }
+    }
+  }
+  .Imgs {
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    .imgboxs {
+      position: relative;
+      .TimeImgs {
+        width: 150px;
+        height: 100px;
+      }
+      .deletebtn {
+        position: absolute;
+        right: 0px;
+        border: none;
+        opacity: 0.8;
+        font-size: var(--font-16);
+        cursor: pointer;
+      }
+    }
+  }
   .InputBox {
     width: 100%;
-    height: 200px;
+    padding: 20px 0px;
     margin-top: 20px;
     background-color: #f6f6f6;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    .InBoxs {
-      width: 100%;
-      height: 30px;
-      margin: 5px 0px;
+    .boxfooter,
+    .boxhead {
       display: flex;
       align-items: center;
-      .title {
-        width: 70px;
-        margin-left: 20px;
-      }
-      > input {
-        width: 75%;
-        padding: 5px 5px 5px 10px;
-        border: none;
-        outline: none;
-        border-radius: 20px;
-        box-shadow: var(--box-shadow);
-      }
-    }
-    .boxsfooter {
-      width: 100%;
-      height: 30px;
-      margin: 5px 0px;
-      display: flex;
       justify-content: space-between;
-      align-items: center;
+      padding: 10px 30px;
+      .Inselect {
+        .title {
+          font-size: var(--font-16);
+          margin-right: 20px;
+        }
+        .title2 {
+          font-size: var(--font-16);
+          margin-right: 6px;
+        }
+        > select,
+        input {
+          width: 150px;
+          border: none;
+          box-shadow: var(--box-shadow);
+          border-radius: 20px;
+          outline: none;
+          padding: 8px;
+        }
+      }
       > button {
-        cursor: pointer;
         width: 120px;
-        height: 30px;
-        color: white;
+        padding: 10px;
+        font-size: var(--font-16);
+        border: none;
         background-color: var(--logored);
         border-radius: 20px;
-        border: none;
         box-shadow: var(--box-shadow);
-        margin-right: 35px;
-      }
-      .Inselect {
-        width: 200px;
-        .title {
-          width: 70px;
-          margin-left: 20px;
-          margin-right: 42px;
-        }
-        > select {
-          width: 80px;
-          padding: 5px;
-          border: none;
-          outline: none;
-          border-radius: 20px;
-          box-shadow: var(--box-shadow);
+        color: #fff;
+        cursor: pointer;
+        :hover {
+          background-color: #fa8a8a;
         }
       }
     }
@@ -283,21 +332,6 @@ export const DetailMain = styled.main`
       background-color: var(--logored);
       color: white;
       font-weight: 600;
-    }
-  }
-  .buttons {
-    width: 100%;
-    height: 40px;
-    > button {
-      width: 50px;
-      height: 30px;
-      margin: 6px;
-      border: none;
-      cursor: pointer;
-      box-shadow: var(--box-shadow);
-      :active {
-        background-color: #fcddb0;
-      }
     }
   }
   .subcan {
