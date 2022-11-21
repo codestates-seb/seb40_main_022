@@ -1,8 +1,6 @@
 package com.backend.fitchallenge.domain.post.controller;
 
-import com.backend.fitchallenge.domain.post.dto.MultiResponse;
-import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
-import com.backend.fitchallenge.domain.post.dto.PostUpdateVO;
+import com.backend.fitchallenge.domain.post.dto.*;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.post.service.PostService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//fixme: 카멜케이스 적용
 @RestController
 @RequestMapping("/dailyposts")
 @RequiredArgsConstructor
@@ -42,6 +41,7 @@ public class PostController {
         List<String> imagePathList = awsS3Service.StoreFile(postCreate.getFiles());
 
         imagePathList.forEach(path -> log.info("path ={}", path));
+        log.info("로그인 유저 Id ={}", memberDetails.getMemberId());
 
         Long postId = postService.createPost(memberDetails.getMemberId(), postCreate, imagePathList);
 
@@ -50,15 +50,19 @@ public class PostController {
 
     /**
      * 전체 게시물 조회
-     * @param lastPostId 현재 유저가 보고있는 게시물의 마지막 postId
+     * @param postGet 현재 유저가 보고있는 게시물의 마지막 postId를 담고있는 객체
      * @param pageable default page = 0, size = 3
-     * @return 최신순으로 페이지네이션된 게시물 목록
+     * @return 최신순으로 페이지네이션된 게시물 목록, 응답 상태 코드 OK
      */
     @GetMapping
     public ResponseEntity<MultiResponse<?>> getList(
-            @RequestParam Long lastPostId,
+            @ModelAttribute PostGet postGet,
+            @AuthMember MemberDetails memberDetails,
             @PageableDefault(size = 3) Pageable pageable) {
-        return new ResponseEntity<>(postService.getPostList(lastPostId, pageable), HttpStatus.OK);
+
+        log.info("lastPostId = {}", postGet.getLastPostId());
+
+        return new ResponseEntity<>(postService.getPostList(postGet.getLastPostId(), memberDetails.getMemberId(),pageable), HttpStatus.OK);
     }
 
 
@@ -91,15 +95,28 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<MultiResponse<?>> getSearchPostList(PageRequest pageRequest,
-//                                                              @ModelAttribute PostSearch postSearch ) {
-//        log.info("pageRequest = {}", pageRequest.getPage());
-//        log.info("offset = {}", pageRequest.getOffset());
-//        log.info("size = {}", pageRequest.getSize());
-//
-//
-//    }
+    /**
+     * 게시물 검색
+     * #~~ 형식의 tag 검색어 parsing 해서 tagNames List에 추가
+     * @param pageable size default 3
+     * @param postSearch tag + lastPostId(마지막게시물 포스트 Id)
+     * @return
+     */
+
+    @GetMapping("/search")
+    public ResponseEntity<MultiResponse<?>> getSearchList( @PageableDefault(size = 3) Pageable pageable,
+                                                       @ModelAttribute  PostSearch postSearch,
+                                                       @AuthMember MemberDetails memberDetails
+                                                      ){
+
+        List<String> tagNames = postSearch.queryParsing(postSearch.getTag());
+        tagNames.forEach(tag -> log.info("tag ={}",tag));
+
+        log.info("lastPostId = {}", postSearch.getLastPostId());
+
+        return new ResponseEntity<>(postService.getSearchList(memberDetails.getMemberId(),pageable,postSearch.getLastPostId(), tagNames),HttpStatus.OK);
+
+    }
 
 
 

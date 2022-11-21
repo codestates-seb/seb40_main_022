@@ -26,15 +26,11 @@ public class MyPageResponse {
     }
 
     //포스트 추가시 사용할 것
-    public static MyPageResponse of(String userName, ExtractActivity activity, List<Picture> pictures){
+    public static MyPageResponse of(String userName, ExtractActivity activity, List<DailyPost> dailyPosts){
         return MyPageResponse.builder()
                 .userName(userName)
                 .activity(activity)
-                .dailyPosts(pictures.stream()
-                        .map(picture -> DailyPost.builder()
-                                .image(picture.getPath())
-                                .build())
-                        .collect(Collectors.toList()))
+                .dailyPosts(dailyPosts)
                 .build();
     }
 

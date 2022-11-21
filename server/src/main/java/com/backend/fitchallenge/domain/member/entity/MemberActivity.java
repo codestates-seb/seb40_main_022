@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.member.entity;
 
-import com.backend.fitchallenge.domain.member.dto.request.MemberUpdate;
+import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +33,9 @@ public class MemberActivity {
         this.dayCount = dayCount;
         this.point = point;
     }
-    public static MemberActivity of(MemberUpdate memberUpdate){
+    public static MemberActivity of(MemberUpdateVO memberUpdateVO){
         return MemberActivity.builder()
-                .kilogram(memberUpdate.getKilogram())
+                .kilogram(memberUpdateVO.getKilogram())
                 .build();
     }
 }

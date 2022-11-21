@@ -38,15 +38,14 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     }
 
     @Override
-    public List<Question> findQuestionAndAnswersWithWriters(Long id) {
-        return jpaQueryFactory
+    public Optional<Question> findQuestionWithWriter(Long id) {
+        return Optional.ofNullable(
+                jpaQueryFactory
                 .select(question)
                 .from(question)
                 .leftJoin(question.member).fetchJoin()
-                .leftJoin(question.answers, answer).fetchJoin()
-                .leftJoin(answer.member).fetchJoin()
                 .where(question.id.eq(id))
-                .fetch();
+                .fetchOne());
     }
 
     @Override
@@ -54,8 +53,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         return jpaQueryFactory
                 .select(question, question.answers.size())
                 .from(question)
-                .leftJoin(question.answers)
-                .fetchJoin()
+                .leftJoin(question.member).fetchJoin()
                 .limit(pageable.getSize())
                 .offset(pageable.getOffset())
                 .orderBy(getOrderSpecifier(pageable))
@@ -67,8 +65,6 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         return jpaQueryFactory
                 .select(question, question.answers.size())
                 .from(question)
-                .leftJoin(question.answers)
-                .fetchJoin()
                 .where(question.title.contains(keyword).or(question.content.contains(keyword)))
                 .where(question.questionTag.stringValue().eq(pageable.getFilters()))
                 .limit(pageable.getSize())

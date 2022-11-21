@@ -34,7 +34,6 @@ public class PostComment extends Auditable {
     private Member member;
 
     @Builder
-
     public PostComment(String content, Post post, Member member) {
         this.content = content;
         this.post = post;

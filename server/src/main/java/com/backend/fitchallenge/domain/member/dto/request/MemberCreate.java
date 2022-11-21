@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.member.dto.request;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.member.entity.ProfileImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,11 +32,12 @@ public class MemberCreate {
         this.username = username;
     }
 
-    public Member toMember(PasswordEncoder passwordEncoder){
+    public Member toMember(PasswordEncoder passwordEncoder, ProfileImage profileImage){
         return Member.createBuilder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .username(username)
+                .profileImage(profileImage)
                 .build();
     }
 

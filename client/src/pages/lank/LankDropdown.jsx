@@ -55,7 +55,7 @@ function LankDropdown() {
                   className="dropdown"
                 />
                 <label className="dropdownLabel" htmlFor={`dropdown${idx}`}>
-                  <div>{names[idx]}</div>
+                  <div className={`boxname${idx}`}>{names[idx]}</div>
                   <FontAwesomeIcon icon={faCaretDown} className="caretIcon" />
                 </label>
                 <div className="content">
