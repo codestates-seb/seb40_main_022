@@ -5,15 +5,13 @@ const MainSlice = createSlice({
   name: 'content',
   initialState: {
     data: [],
-    comments: [],
+    comment: [],
   },
-  reducers: {
-    detail() {},
-  },
+  reducers: {},
   extraReducers: {
     [asyncPost.fulfilled]: (state, action) => {
       state.data = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
     },
     [asyncPostCmt.fulfilled]: (state, action) => {
       state.comment = action.payload;

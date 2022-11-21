@@ -4,14 +4,14 @@
       "tags": ["헬창", "헬린이"],
       "member": {
         "userId": 2,
-        "profileImage": "기본이미지",
+        "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
         "username": "프랭크"
       },
       "post": {
         "postId": 3,
         "createdAt": "2022-11-20T19:51:22.23748",
 
-        "content": "챌린저스 파이팅! ",
+        "content": "챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! 챌린저스 파이팅! ",
         "commentCount": 0,
         "likeCount": 0
       },
@@ -25,7 +25,7 @@
       "tags": ["강남", "강북"],
       "member": {
         "userId": 2,
-        "profileImage": "기본이미지",
+        "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
         "username": "프랭크"
       },
       "post": {
@@ -46,7 +46,7 @@
       "tags": ["파"],
       "member": {
         "userId": 2,
-        "profileImage": "기본이미지",
+        "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
         "username": "프랭크"
       },
       "post": {
@@ -60,9 +60,34 @@
       },
       "pictures": [
         "https://d2j84io2oze31w.cloudfront.net/7eb6ce7a-5a5b-4eb0-9848-2f9d7be52dee.jpg",
+        "https://d2j84io2oze31w.cloudfront.net/d48da9f6-b9cf-4265-8720-f8a926f5dfd7.jpg",
+        "https://d2j84io2oze31w.cloudfront.net/7eb6ce7a-5a5b-4eb0-9848-2f9d7be52dee.jpg",
         "https://d2j84io2oze31w.cloudfront.net/d48da9f6-b9cf-4265-8720-f8a926f5dfd7.jpg"
       ],
       "likeState": false
+    }
+  ],
+  "comment": [
+    {
+      "commentId": 3,
+      "content": "운동 잘하시네요 나머지 시간도 화이팅!",
+      "memberId": 3,
+      "userName": "프랭크",
+      "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg"
+    },
+    {
+      "commentId": 2,
+      "content": "운동 잘하시네요 나머지 시간도 화이팅!",
+      "memberId": 3,
+      "userName": "프랭크",
+      "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg"
+    },
+    {
+      "commentId": 1,
+      "content": "운동 잘하시네요 나머지 시간도 화이팅!",
+      "memberId": 3,
+      "userName": "프랭크",
+      "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg"
     }
   ]
 }

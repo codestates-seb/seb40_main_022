@@ -37,7 +37,7 @@ export const MainForm = styled.article`
   justify-content: center;
   position: relative;
   /* top: 80px; */
-  /* width: 70%; */
+  width: 850px;
   background-color: var(--white);
   border-radius: 5px;
   box-shadow: var(--box-shadow);
@@ -131,7 +131,7 @@ export const DailyItem = styled.div`
   background-color: var(--black-050);
   border-radius: 5px;
   padding: 2%;
-  margin: 5% 0;
+  margin: 5% 20px;
 
   .commentdiv {
     display: flex;
@@ -167,12 +167,15 @@ export const DailyItem = styled.div`
   }
 
   .Img {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
     position: relative;
   }
 
   .dailyImg {
-    width: 800px;
+    width: 100%;
   }
 
   .favorite {
