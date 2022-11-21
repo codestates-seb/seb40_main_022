@@ -6,7 +6,7 @@ import com.backend.fitchallenge.domain.calendar.exception.CalendarNotFound;
 import com.backend.fitchallenge.domain.calendar.exception.DuplicateRecordCreation;
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
 import com.backend.fitchallenge.domain.member.SimplePostMemberResponse;
-import com.backend.fitchallenge.domain.member.dto.response.MemberResponse;
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;

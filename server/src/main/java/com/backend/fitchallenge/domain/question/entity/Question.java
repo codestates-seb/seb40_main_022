@@ -2,6 +2,7 @@ package com.backend.fitchallenge.domain.question.entity;
 
 import com.backend.fitchallenge.domain.answer.entity.Answer;
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.post.entity.Picture;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
 import com.backend.fitchallenge.global.audit.Auditable;
@@ -43,6 +44,9 @@ public class Question extends Auditable {
     private Member member;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionPicture> questionPictures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Answer> answers = new ArrayList<>();
 
     @Builder
@@ -54,14 +58,18 @@ public class Question extends Auditable {
         this.member = member;
     }
 
-    public static Question createQuestion(QuestionCreate questionCreate, Member member) {
-        return Question.builder()
+    public static Question createQuestion(QuestionCreate questionCreate, Member member, List<String> paths) {
+        Question question = Question.builder()
                 .title(questionCreate.getTitle())
                 .content(questionCreate.getContent())
                 .questionTag(QuestionTag.from(questionCreate.getTag()))
                 .view(0L)
                 .member(member)
                 .build();
+
+        paths.forEach(path -> QuestionPicture.createPicture(path, question));
+
+        return question;
     }
 
     public void updateQuestion(QuestionUpdate questionUpdate) {

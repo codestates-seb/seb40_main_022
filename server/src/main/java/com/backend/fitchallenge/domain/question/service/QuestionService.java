@@ -2,15 +2,14 @@ package com.backend.fitchallenge.domain.question.service;
 
 import com.backend.fitchallenge.domain.answer.dto.response.AnswerResponse;
 
-import com.backend.fitchallenge.domain.answer.entity.Answer;
-import com.backend.fitchallenge.domain.answer.repository.AnswerRepository;
 import com.backend.fitchallenge.domain.answer.repository.QueryAnswerRepository;
 import com.backend.fitchallenge.domain.answercomment.dto.response.AnswerCommentResponse;
-import com.backend.fitchallenge.domain.member.dto.response.MemberResponse;
 
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
+import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
@@ -44,6 +43,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
     private final QueryAnswerRepository queryAnswerRepository;
+    private final AwsS3Service awsS3Service;
 
     // fixme : 등록, 수정, 삭제 메서드에 간접참조 반영 고려
     /**
@@ -51,10 +51,10 @@ public class QuestionService {
      * 1. 요청을 보낸 회원이 존재하는지 확인합니다.
      * 2. 질문을 생성한 후 id를 반환합니다.
      */
-    public Long createQuestion(Long memberId, QuestionCreate questionCreate) {
+    public Long createQuestion(Long memberId, QuestionCreate questionCreate, List<String> imagePathList) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
-        Question question = Question.createQuestion(questionCreate, member);
+        Question question = Question.createQuestion(questionCreate, member, imagePathList);
 
         return questionRepository.save(question).getId();
     }
@@ -92,6 +92,8 @@ public class QuestionService {
         Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable).stream()
                 .map(questionTuple -> SimpleQuestionResponse.builder()
                         .question(Objects.requireNonNull(questionTuple.get(question)))
+                        //전체 질문 목록 조회시 첫 번째 사진 한 장만 띄우게 설정
+                        .picture(questionTuple.get(question).getQuestionPictures().get(0).getPath())
                         .member(MemberResponse.of(questionTuple.get(question).getMember()))
                         .answerCount(questionTuple.get(question.answers.size()))
                         .build()).collect(Collectors.toList()), pageable.of(), total);
@@ -126,10 +128,19 @@ public class QuestionService {
      */
     public Long updateQuestion(Long memberId, Long id, QuestionUpdate questionUpdate) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Question findQuestion = findVerifiedQuestion(id);
 
-        verifyWriter(member.getId(), findQuestion);
+        verifyWriter(memberId, findQuestion);
+
+        // 이미지 경로를 불러옴
+        List<String> paths = findQuestion.getQuestionPictures().stream()
+                        .map(questionPicture -> {
+                            int index = questionPicture.getPath().lastIndexOf("/");
+                            return questionPicture.getPath().substring(index + 1);
+                        }).collect(Collectors.toList());
+
+        // S3 이미지파일 수정
+        List<String> imagePaths = awsS3Service.UpdateFile(paths, questionUpdate.getFiles());
 
         findQuestion.updateQuestion(questionUpdate);
 
@@ -144,10 +155,18 @@ public class QuestionService {
      */
     public Long deleteQuestion(Long memberId, Long id) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Question findQuestion = findVerifiedQuestion(id);
 
-        verifyWriter(member.getId(), findQuestion);
+        verifyWriter(memberId, findQuestion);
+
+        List<String> paths = findQuestion.getQuestionPictures().stream()
+                        .map(questionPicture -> {
+                            int index = questionPicture.getPath().lastIndexOf("/");
+                            return questionPicture.getPath().substring(index + 1);
+                        }).collect(Collectors.toList());
+
+        //s3에서 질문에 해당하는 사진 삭제
+        awsS3Service.DeleteFile(paths);
 
         questionRepository.delete(findQuestion);
 
