@@ -1,4 +1,4 @@
-import { useRef, useState, useParams, useSelector } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/footer/Footer';
@@ -10,13 +10,10 @@ import { asyncPostUp } from '../../redux/action/MainAsync';
 function DailyEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const id = useParams();
-  const idData = useSelector(state => state.content.data);
-  const list = idData.filter(data => data.id === +id.id);
   const photoUp = useRef();
-  const [files, setFiles] = useState(list[0].files);
-  const [content, setContent] = useState(list[0].content);
-  const [tag, setTag] = useState(list[0].tag);
+  const [files, setFiles] = useState([]);
+  const [content, setContent] = useState('');
+  const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState([]);
 
   const reader = new FileReader();
@@ -53,7 +50,7 @@ function DailyEdit() {
   };
 
   const handleSubmit = () => {
-    dispatch(asyncPostUp({ files, content, tag, id }));
+    dispatch(asyncPostUp({ files, content, tag }));
     navigate('/');
   };
 
