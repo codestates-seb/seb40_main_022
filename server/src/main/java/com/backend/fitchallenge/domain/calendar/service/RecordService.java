@@ -5,8 +5,9 @@ import com.backend.fitchallenge.domain.calendar.dto.response.SimpleSportsRespons
 import com.backend.fitchallenge.domain.calendar.exception.CalendarNotFound;
 import com.backend.fitchallenge.domain.calendar.exception.DuplicateRecordCreation;
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
-import com.backend.fitchallenge.domain.member.SimplePostMemberResponse;
-import com.backend.fitchallenge.domain.member.dto.response.MemberResponse;
+
+
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
@@ -19,8 +20,7 @@ import com.backend.fitchallenge.domain.calendar.exception.NotRecordWriter;
 import com.backend.fitchallenge.domain.calendar.exception.RecordNotFound;
 import com.backend.fitchallenge.domain.calendar.repository.CalendarRepository;
 import com.backend.fitchallenge.domain.calendar.repository.RecordRepository;
-import com.backend.fitchallenge.domain.post.dto.PostResponse;
-import com.backend.fitchallenge.domain.post.dto.SimplePostResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

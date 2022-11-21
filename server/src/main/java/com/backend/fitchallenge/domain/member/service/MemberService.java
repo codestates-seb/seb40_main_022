@@ -58,7 +58,7 @@ public class MemberService {
         checkAlreadyExist(memberCreate.getEmail());
 
         // todo. 기본 이미지 path를 가진 profileImage생성 후 member에 넣어주기. - checked
-        ProfileImage profileImage = ProfileImage.createWithPath("기본이미지"); //todo. 기본이미지 경로 바꿔주기.
+        ProfileImage profileImage = ProfileImage.createWithPath("\"https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png%22)%7B");
         Member member = memberCreate.toMember(passwordEncoder, profileImage);
         profileImage.setMember(member);
 
@@ -109,7 +109,7 @@ public class MemberService {
         // todo. post연결 - checked
         Page<Post> pages = postRepository.findByMemberId(findMember.getId(), pageable);
         List<DailyPost> dailyPosts = pages.getContent().stream()
-                .map(post -> DailyPost.of(post.getPictures().get(0)))
+                .map(post -> DailyPost.of(post))
                 .collect(Collectors.toList());
 
         return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()), dailyPosts);
@@ -129,7 +129,7 @@ public class MemberService {
         // todo. post연결 - checked
         Page<Post> pages = postRepository.findByMemberId(findMember.getId(), pageable);
         List<DailyPost> dailyPosts = pages.getContent().stream()
-                .map(post -> DailyPost.of(post.getPictures().get(0)))
+                .map(post -> DailyPost.of(post))
                 .collect(Collectors.toList());
 
         return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), dailyPosts);
