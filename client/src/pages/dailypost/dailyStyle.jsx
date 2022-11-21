@@ -6,7 +6,7 @@ export const DetailMain = styled.main`
   background-color: var(--backcolor);
   padding-top: 60px;
   width: 100%;
-  height: 800px;
+  height: 900px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +14,7 @@ export const DetailMain = styled.main`
     border-radius: 10px;
     margin-top: 50px;
     width: 600px;
-    height: 650px;
+    height: 680px;
     padding: 50px 50px 0px;
     background-color: #fff;
     display: flex;
@@ -22,6 +22,7 @@ export const DetailMain = styled.main`
     .contentTitle {
       margin-top: 30px;
       margin-bottom: 5px;
+      font-weight: bold;
     }
     .contentinput {
       border: none;
@@ -35,13 +36,44 @@ export const DetailMain = styled.main`
         font-weight: bold;
       }
     }
+
+    .limit {
+      text-align: right;
+      font-weight: bold;
+      color: var(--black-600);
+    }
+
     .tagTitle {
       margin-top: 20px;
       margin-bottom: 5px;
+      font-weight: bold;
     }
-    .taginput {
+    .tagbox {
       padding: 5px;
-      height: 30px;
+      border: none;
+      outline: none;
+    }
+
+    .tags {
+      display: inline-flex;
+      align-items: center;
+
+      > button {
+        margin-left: 5px;
+        border: none;
+        margin: 4px;
+        padding: 4px;
+        font-size: 12px;
+        color: rgb(57, 115, 157);
+        background-color: rgb(225, 236, 244);
+        cursor: pointer;
+      }
+    }
+
+    .taginput {
+      display: flex;
+      padding: 5px;
+      height: 40px;
       border: none;
       box-shadow: inset var(--box-shadow);
       border-radius: 5px;

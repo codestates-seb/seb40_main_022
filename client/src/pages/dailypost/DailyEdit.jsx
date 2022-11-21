@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useParams, useSelector } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/footer/Footer';
@@ -7,14 +7,16 @@ import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
 import { asyncPostUp } from '../../redux/action/MainAsync';
 
-const dailypost = () => {
+function DailyEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const id = useParams();
+  const idData = useSelector(state => state.content.data);
+  const list = idData.filter(data => data.id === +id.id);
   const photoUp = useRef();
-  const [files, setFiles] = useState([]);
-  const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
+  const [files, setFiles] = useState(list[0].files);
+  const [content, setContent] = useState(list[0].content);
+  const [tag, setTag] = useState(list[0].tag);
   const [tagList, setTagList] = useState([]);
 
   const reader = new FileReader();
@@ -22,9 +24,9 @@ const dailypost = () => {
   const handleTag = e => {
     if (e.key === 'Enter' && e.target.value !== '') {
       const updateTagList = [...tagList];
-      updateTagList.push(tags);
+      updateTagList.push(tag);
       setTagList(updateTagList);
-      setTags('');
+      setTag('');
     }
   };
 
@@ -51,7 +53,7 @@ const dailypost = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(asyncPostUp({ files, content, tags }));
+    dispatch(asyncPostUp({ files, content, tag, id }));
     navigate('/');
   };
 
@@ -113,9 +115,9 @@ const dailypost = () => {
             {tagList.length <= 3 ? (
               <input
                 className="tagbox"
-                value={tags}
+                value={tag}
                 onChange={e => {
-                  setTags(e.target.value);
+                  setTag(e.target.value);
                 }}
                 onKeyUp={e => handleTag(e)}
               />
@@ -144,6 +146,6 @@ const dailypost = () => {
       <Footer />
     </DetailBody>
   );
-};
+}
 
-export default dailypost;
+export default DailyEdit;

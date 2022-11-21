@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect, useSelector } from 'react';
+import { useDispatch } from 'react-redux';
 import daily from '../../images/daily.jpg';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import DailyCmtInput from './DailyCmtInput';
 import { DailyForm, DailyItem } from './MainStyle';
+import { asyncPost } from '../../redux/action/MainAsync';
 
 export default function DailyPost() {
+  const data = useSelector(state => state);
+  console.log(data);
+  const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
   const [isComment, setIsComment] = useState(false);
+
+  useEffect(() => {
+    dispatch(asyncPost());
+  }, [dispatch]);
+
   return (
     <DailyForm>
       {[...Array(5)].map(() => {
