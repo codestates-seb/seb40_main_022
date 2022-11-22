@@ -13,7 +13,7 @@ public interface QuestionRepositoryCustom {
 
     Long pagingCount();
 
-    List<Question> findQuestionAndAnswersWithWriters(Long id);
+    Optional<Question> findQuestionWithWriter(Long id);
 
     List<Tuple> findList(PageRequest pageable);
 

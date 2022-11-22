@@ -26,7 +26,7 @@ public class ExtractMember{
         return ExtractMember.builder()
                 .memberId(member.getId())
                 .userName(member.getUsername())
-                .profileImage(member.getProfileImage())
+                .profileImage(member.getProfileImage().getPath())
                 .height(member.getHeight())
                 .weight(member.getWeight())
                 .build();

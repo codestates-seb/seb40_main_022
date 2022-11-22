@@ -1,23 +1,29 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { SET_TOKEN } from '../reducer/tokenSlice';
-import { setRefreshToken } from '../storage/cookie';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const LoginAsync = ({ email, pwd }) => {
-  const dispatch = useDispatch();
-
-  axios
-    .post('', JSON.stringify({ email, pwd }), {
-      headers: {
-        'Content-Type': 'application/json;',
+export const LoginAsync = createAsyncThunk('login', data => {
+  return axios
+    .post(
+      '/members/login',
+      JSON.stringify({ username: data[0], password: data[1] }),
+      {
+        headers: {
+          'Content-Type': 'application/json;',
+        },
       },
-    })
+    )
     .then(res => {
-      return (
-        setRefreshToken(res.json.refresh_token),
-        dispatch(SET_TOKEN(res.json.access_token))
-      );
+      axios.defaults.headers.common.token = res.headers.authorization;
+      const auth = [res.headers.authorization, res.headers.refreshtoken];
+      return auth;
     });
-};
+});
 
-export default LoginAsync;
+export const LogoutAsync = createAsyncThunk('logout', data => {
+  return axios.delete('/member/logout', {
+    headers: {
+      Authorization: data[0],
+      RefreshToken: data[1],
+    },
+  });
+});

@@ -21,8 +21,9 @@ public class QuestionCreate {
     private String tag;
 
     @Builder
-    public QuestionCreate(String title, String content) {
+    public QuestionCreate(String title, String content, String tag) {
         this.title = title;
         this.content = content;
+        this.tag = tag;
     }
 }

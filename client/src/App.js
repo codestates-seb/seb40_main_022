@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Main from './pages/main/Main';
+import MainEdit from './pages/dailypost/DailyEdit';
 import Calendar from './pages/calendar/Calendar';
 import Detail from './pages/calendar/Detail';
 import Login from './pages/login/Login';
@@ -19,6 +20,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
+      <Route path="/dailypost/edit" element={<MainEdit />} />
       <Route path="/qnaask" element={<QnaAsk />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />

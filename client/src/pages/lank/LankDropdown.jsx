@@ -65,6 +65,7 @@ function LankDropdown() {
                             names[idx] = e.target.innerText;
                             setNames(names);
                             console.log(names);
+                            dispatch(SET_LANK(names));
                           }}
                           className={
                             names[idx] === listdata ? 'backblack' : 'btns'

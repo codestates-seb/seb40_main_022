@@ -15,26 +15,27 @@ public class SimplePostResponse {
     private LocalDateTime modifiedAt;
     private String content;
     private Integer commentCount ;
-    private Long likeCount;
+    private Integer likeCount;
 
     @Builder
-    public SimplePostResponse(Long postId, Long viewCount, LocalDateTime createdAt, LocalDateTime modifiedAt, String content, Integer commentCount) {
+    public SimplePostResponse(Long postId, Long viewCount, LocalDateTime createdAt, LocalDateTime modifiedAt, String content, Integer commentCount,Integer likeCount) {
         this.postId = postId;
         this.viewCount = viewCount;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.content = content;
         this.commentCount = commentCount;
-        this.likeCount = 0L;
+        this.likeCount = likeCount;
     }
 
-    public static SimplePostResponse toResponse(Post post, Integer commentSize) {
+    public static SimplePostResponse toResponse(Post post, Integer likeSize, Integer commentSize) {
         return SimplePostResponse.builder()
                 .postId(post.getId())
                 .viewCount(post.getView())
                 .createdAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
                 .content(post.getContent())
+                .likeCount(likeSize)
                 .commentCount(commentSize)
                 .build();
     }
