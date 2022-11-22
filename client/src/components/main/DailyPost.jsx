@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import daily from '../../images/daily.jpg';
 import ImageSlider, { Slide } from 'react-auto-image-slider';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';

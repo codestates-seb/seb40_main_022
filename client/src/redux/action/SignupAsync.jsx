@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const SignupAsync = createAsyncThunk(
+const SignupAsync = createAsyncThunk(
   '/signup',
   async ({ username, email, password }) => {
     await axios.post(
-      'http://localhost:3000/signup',
+      '/members/signup',
       JSON.stringify({ username, email, password }),
       {
         headers: {
@@ -16,16 +16,4 @@ export const SignupAsync = createAsyncThunk(
   },
 );
 
-export const SignConAsync = createAsyncThunk('/signcon', async () => {
-  const data = await axios
-    .get('http://localhost:3000/signup', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(res => {
-      return res.data;
-    });
-
-  return data;
-});
+export default SignupAsync;

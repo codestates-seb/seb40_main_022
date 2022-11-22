@@ -10,13 +10,12 @@ import { asyncPostUp } from '../../redux/action/MainAsync';
 const dailypost = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const photoUp = useRef();
   const [files, setFiles] = useState([]);
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
   const [tagList, setTagList] = useState([]);
-
+  console.log(tagList);
   const reader = new FileReader();
 
   const handleTag = e => {
@@ -51,7 +50,7 @@ const dailypost = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(asyncPostUp({ files, content, tags }));
+    dispatch(asyncPostUp({ files, content, tagList }));
     navigate('/');
   };
 

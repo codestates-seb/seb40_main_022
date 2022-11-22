@@ -3,11 +3,16 @@ import axios from 'axios';
 
 export const asyncPostUp = createAsyncThunk(
   'post/up',
-  ({ files, content, tags }) => {
-    if (files.length !== 0 && content.length !== 0 && tags.length !== 0) {
+  ({ files, content, tagList }) => {
+    console.log(files, content, tagList);
+    if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
       axios.post(
-        'http://localhost:3000/dailypost',
-        JSON.stringify({ picture: files, content, tags }),
+        '/dailyPosts',
+        JSON.stringify({
+          pictures: files,
+          post: { content },
+          tags: tagList,
+        }),
         {
           headers: {
             'Content-Type': 'application/json',
@@ -20,7 +25,7 @@ export const asyncPostUp = createAsyncThunk(
 
 export const asyncPost = createAsyncThunk('post', async () => {
   const data = await axios
-    .get('http://localhost:3000/dailypost', {
+    .get('/dailyPosts', {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -32,8 +37,35 @@ export const asyncPost = createAsyncThunk('post', async () => {
   return data;
 });
 
+export const asyncLike = createAsyncThunk('post/up', ({ likeStates, id }) => {
+  axios.post(
+    `http://localhost:3001/dailyPost/${id}/like`,
+    JSON.stringify({ likeStates }),
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+});
+
+export const asyncLikeundo = createAsyncThunk(
+  'post/up',
+  ({ likeStates, id }) => {
+    axios.post(
+      `http://localhost:3001/dailyPost/${id}/like/undo`,
+      JSON.stringify({ likeStates }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+  },
+);
+
 export const asyncPostDel = createAsyncThunk('post/del', ({ id }) => {
-  axios.delete(`http://localhost:3000/dailypost/${id}`);
+  axios.delete(`/dailyPosts/${id}`);
 });
 
 export const asyncPostUpdate = createAsyncThunk(
@@ -41,7 +73,7 @@ export const asyncPostUpdate = createAsyncThunk(
   ({ files, content, tags, id }) => {
     if (files.length !== 0 && content.length !== 0 && tags.length !== 0) {
       axios.put(
-        `http://localhost:3000/dailypost/${Number(id.id)}`,
+        `/dailyPosts/${id}`,
         JSON.stringify({ picture: files, content, tags }),
         {
           headers: {
@@ -53,10 +85,9 @@ export const asyncPostUpdate = createAsyncThunk(
   },
 );
 
-// 몰루
-export const asyncPostCmt = createAsyncThunk('comment', () => {
+export const asyncPostCmt = createAsyncThunk('comment', id => {
   const data = axios
-    .get('http://localhost:3000/comment', {
+    .get(`/dailyPosts/${id}/comments`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -68,10 +99,9 @@ export const asyncPostCmt = createAsyncThunk('comment', () => {
   return data;
 });
 
-// 몰루
-export const asyncPostCmtUp = createAsyncThunk('post/up', data => {
+export const asyncPostCmtUp = createAsyncThunk('post/up', (id, data) => {
   axios.post(
-    'http://localhost:3000/comment',
+    `/dailyPosts/${id}/comments`,
     JSON.stringify({
       contentId: data[0],
       contentImg: data[1],
@@ -87,7 +117,6 @@ export const asyncPostCmtUp = createAsyncThunk('post/up', data => {
   );
 });
 
-// 몰루
-export const asyncPostCmtDel = createAsyncThunk('post/del', id => {
-  axios.delete(`http://localhost:3000/comment/${id}`);
+export const asyncPostCmtDel = createAsyncThunk('post/del', (id, commentId) => {
+  axios.delete(`/dailyPosts/${id}/comments${commentId}`);
 });
