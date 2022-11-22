@@ -21,6 +21,8 @@ export const LankMain = styled.main`
       justify-content: center;
       margin-right: 100px;
       > button {
+        display: flex;
+        align-items: center;
         border: none;
         background-color: #fff;
         .search {

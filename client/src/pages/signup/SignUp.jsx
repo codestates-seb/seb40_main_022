@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import Ouaths from '../../components/ouath/Ouaths';
-import { SignupAsync, SignConAsync } from '../../redux/action/SignupAsync';
+import SignupAsync from '../../redux/action/SignupAsync';
 import SignMain from './SignMain';
 
 const SignContainer = styled.div`
@@ -16,22 +16,13 @@ function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [repassword, setRepassword] = useState('');
-  const emailcheck = [];
   const PWDTest = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
   const EMTest = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const datalist = useSelector(state => state.signup.data);
 
   const handleClick = () => {
-    dispatch(SignConAsync());
-    datalist.map(data => {
-      return emailcheck.push(data.email);
-    });
-
-    if (emailcheck.indexOf(email) !== -1) {
-      alert('이메일이 존재합니다.');
-    } else if (!EMTest.test(email)) {
+    if (!EMTest.test(email)) {
       alert('이메일 형식이 잘 못 되었습니다.');
     } else if (username.length === 0) {
       alert('유저이름은 한 글자 이상을 적어주세요!');

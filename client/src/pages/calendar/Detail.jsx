@@ -9,23 +9,49 @@ import DetailCamera from '../../images/DetailCamera.png';
 
 function Detail() {
   const list = [
-    { title: '랫풀다운', time: 20, set: '20회/5세트' },
-    { title: '랫풀다운', time: 20, set: '20회/5세트' },
-    { title: '랫풀다운', time: 20, set: '20회/5세트' },
-    { title: '랫풀다운', time: 20, set: '20회/5세트' },
-    { title: '랫풀다운', time: 20, set: '20회/5세트' },
-    { title: '랫풀다운', time: 20, set: '20회/5세트' },
-    { title: '랫풀다운', time: 20, set: '20회/5세트' },
+    { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
+    { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
+    { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
+    { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
+    { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
+    { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
   ];
   const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
-  // const taghealth = [
-  //   {
-  //     등: ['폴업', '바벨 로우', '덤벨 로우', '펜들레이 로우'],
-  //   },
-  // ];
+  const taghealth = [
+    {
+      등: [
+        '폴업',
+        '바벨 로우',
+        '덤벨 로우',
+        '펜들레이 로우',
+        '머신 로우',
+        '랫풀다운',
+        '친업',
+        '백 익스텐션',
+        '굿모닝 엑서사이즈',
+        '시티드 케이블 로우',
+      ],
+      가슴: [
+        '벤치 프레스',
+        '덤벨 벤치 프레스',
+        '인클라인 벤치 프레스',
+        '디클라인 벤치 프레스',
+        '디클라인 덤벨 벤치 프레스',
+        '딥스',
+        '덤벨 풀오버',
+        '버터 플라이 머신',
+        '케이블 크로스 오버',
+      ],
+    },
+  ];
   const navigate = useNavigate();
-  const [clicked, setClicked] = useState(false);
   const photoUp = useRef();
+  const [health, setHealth] = useState('');
+  const [tags, setTags] = useState('');
+  const [set, setSet] = useState('');
+  const [num, setNum] = useState('');
+  const [weight, setWeight] = useState('');
+  const [clicked, setClicked] = useState(false);
   const [files, setFiles] = useState([]);
   const reader = new FileReader();
 
@@ -101,7 +127,7 @@ function Detail() {
             <div className="boxhead">
               <div className="Inselect">
                 <span className="title">부위</span>
-                <select>
+                <select onChange={e => setTags(e.target.value)}>
                   {btns &&
                     btns.map(data => {
                       return <option>{data}</option>;
@@ -111,9 +137,9 @@ function Detail() {
               <div>
                 <div className="Inselect">
                   <span className="title">운동</span>
-                  <select>
-                    {btns &&
-                      btns.map(data => {
+                  <select onChange={e => setHealth(e.target.value)}>
+                    {taghealth[0][tags] &&
+                      taghealth[0][tags].map(data => {
                         return <option>{data}</option>;
                       })}
                   </select>
@@ -125,9 +151,47 @@ function Detail() {
                 <label htmlFor="set" className="title2">
                   세트수
                 </label>
-                <input id="set" placeholder="ex) 20회/5세트" />
+                <input
+                  id="set"
+                  placeholder="숫자만 적어주세요."
+                  onChange={e => setSet(e.target.value)}
+                />
               </div>
-              <button>등록</button>
+              <div className="Inselect">
+                <label htmlFor="set" className="title">
+                  횟수
+                </label>
+                <input
+                  id="set"
+                  placeholder="숫자만 적어주세요."
+                  onChange={e => setNum(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="boxfooter">
+              <div className="Inselect">
+                <label htmlFor="set" className="title">
+                  중량
+                </label>
+                <input
+                  id="set"
+                  placeholder="숫자만 적어주세요."
+                  onChange={e => setWeight(e.target.value)}
+                />
+              </div>
+              <button
+                onClick={() => {
+                  list.push({
+                    title: health,
+                    tag: tags,
+                    set,
+                    num,
+                    weight,
+                  });
+                }}
+              >
+                등록
+              </button>
             </div>
           </section>
         ) : null}
@@ -150,8 +214,10 @@ function Detail() {
               return (
                 <div>
                   <span>{data.title}</span>
-                  <span>{data.time}</span>
-                  <span>{data.set}</span>
+                  <span>{data.tag}</span>
+                  <span>{data.set}회</span>
+                  <span>{data.num}번</span>
+                  <span>{data.weight}kg</span>
                 </div>
               );
             })}

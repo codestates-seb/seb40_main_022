@@ -10,7 +10,6 @@ import { asyncPostUp } from '../../redux/action/MainAsync';
 const dailypost = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const photoUp = useRef();
   const [files, setFiles] = useState([]);
   const [content, setContent] = useState('');

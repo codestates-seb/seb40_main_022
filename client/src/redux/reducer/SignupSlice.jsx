@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SignConAsync } from '../action/SignupAsync';
 
 const SignupSlice = createSlice({
   name: 'signup',
@@ -7,11 +6,7 @@ const SignupSlice = createSlice({
     data: [],
   },
   reducers: {},
-  extraReducers: {
-    [SignConAsync.fulfilled]: (state, action) => {
-      state.data = action.payload;
-    },
-  },
+  extraReducers: {},
 });
 
 export const signupActions = SignupSlice.actions;

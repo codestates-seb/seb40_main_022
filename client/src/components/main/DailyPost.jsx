@@ -1,5 +1,5 @@
-import { useState, useEffect, useSelector } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import daily from '../../images/daily.jpg';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
@@ -8,7 +8,7 @@ import { DailyForm, DailyItem } from './MainStyle';
 import { asyncPost } from '../../redux/action/MainAsync';
 
 export default function DailyPost() {
-  const data = useSelector(state => state);
+  const data = useSelector(state => state.dailypost.data);
   console.log(data);
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
