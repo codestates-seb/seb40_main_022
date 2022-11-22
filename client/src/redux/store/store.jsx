@@ -3,12 +3,17 @@ import LankSlice from '../reducer/LankSlice';
 import SignupSlice from '../reducer/SignupSlice';
 import tokenReducer from '../reducer/tokenSlice';
 import MainSlice from '../reducer/MainSlice';
+import MypageSlice from '../reducer/MypageSlice';
+import MypageEditSlice from '../reducer/MypageEditSlice';
+
 // Slice Append Here
 const reducer = {
   signup: SignupSlice,
   authToken: tokenReducer,
   dailypost: MainSlice,
   lank: LankSlice,
+  mypage: MypageSlice,
+  mypageedit: MypageEditSlice,
 };
 
 const store = configureStore({
