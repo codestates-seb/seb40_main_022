@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import daily from '../../images/daily.jpg';
+import ImageSlider, { Slide } from 'react-auto-image-slider';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import DailyCmtInput from './DailyCmtInput';
@@ -10,7 +11,6 @@ import { asyncPost, asyncPostCmt } from '../../redux/action/MainAsync';
 export default function DailyPost() {
   const data = useSelector(state => state.dailypost.data);
   const cmtData = useSelector(state => state.dailypost.comment);
-  console.log(cmtData);
   const dispatch = useDispatch();
   // const [fav, setFav] = useState(false);
   const [isComment, setIsComment] = useState(false);
@@ -27,10 +27,16 @@ export default function DailyPost() {
           return (
             <DailyItem>
               <article className="Img">
-                {list.pictures &&
-                  list.pictures.map(img => {
-                    return <img className="dailyImg" src={img} alt="daily" />;
-                  })}
+                <ImageSlider effectDelay={500} autoPlayDelay={3000}>
+                  {list.pictures &&
+                    list.pictures.map(img => {
+                      return (
+                        <Slide>
+                          <img className="dailyImg" src={img} alt="daily" />
+                        </Slide>
+                      );
+                    })}
+                </ImageSlider>
               </article>
               <article className="DailyInfo">
                 <div className="Info">
@@ -41,9 +47,9 @@ export default function DailyPost() {
                       })}
                   </div>
                   <div className="DailyMemo">
-                    <span className="memo">{list.post.content}</span>
+                    <div className="memo">{list.post.content}</div>
                     {/* advanced */}
-                    <span className="more">더보기</span>
+                    {/* <span className="more">더보기</span> */}
                   </div>
                   <div className="act">
                     <span className="date">{list.post.createdAt}</span>
