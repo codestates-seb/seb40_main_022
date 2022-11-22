@@ -127,7 +127,11 @@ function Detail() {
             <div className="boxhead">
               <div className="Inselect">
                 <span className="title">부위</span>
-                <select onChange={e => setTags(e.target.value)}>
+                <select
+                  onChange={e => {
+                    setTags(e.target.value);
+                  }}
+                >
                   {btns &&
                     btns.map(data => {
                       return <option>{data}</option>;

@@ -90,17 +90,10 @@ export const NameBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 40px;
   margin-top: 10px;
   .username {
     font-size: var(--font-20);
     font-weight: 600;
-  }
-  .setting {
-    margin-left: 20px;
-  }
-  .profEdit {
-    color: inherit;
   }
 `;
 
@@ -137,8 +130,8 @@ export const RecordBox = styled.div`
       font-weight: 600;
     }
   }
-  > button {
-    right: 10px;
+  .editBtn {
+    right: 140px;
     position: absolute;
     color: white;
     background-color: #fc6666;
@@ -152,6 +145,24 @@ export const RecordBox = styled.div`
     box-shadow: var(--box-shadow);
     :hover {
       background-color: #fa8a8a;
+    }
+  }
+  button {
+    right: 10px;
+    position: absolute;
+    color: white;
+    background-color: #aeaeae;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    height: 45px;
+    width: 110px;
+    font-size: var(--font-20);
+    font-weight: 700;
+    box-shadow: var(--box-shadow);
+    :hover {
+      background-color: #eaeaea;
+      color: gray;
     }
   }
 `;
