@@ -1,23 +1,51 @@
 import { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ImageSlider, { Slide } from 'react-auto-image-slider';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import DailyCmtInput from './DailyCmtInput';
 import { DailyForm, DailyItem } from './MainStyle';
-import { asyncPost, asyncPostCmt } from '../../redux/action/MainAsync';
+import {
+  asyncPost,
+  asyncPostDel,
+  asyncPostCmt,
+  asyncPostCmtDel,
+  // asyncPostCmtEdit,
+} from '../../redux/action/MainAsync';
 
 export default function DailyPost() {
   const data = useSelector(state => state.dailypost.data);
-  const cmtData = useSelector(state => state.dailypost.comment);
+  // const cmtData = useSelector(state => state.dailypost.comment);
   const dispatch = useDispatch();
   // const [fav, setFav] = useState(false);
   const [isComment, setIsComment] = useState(false);
+  const id = useParams();
+
+  const filteredCmt = useSelector(state =>
+    state.dailypost.comment.filter(el => {
+      return el.commentId === +id.id;
+    }),
+  );
+
+  const handleansbol = () => {
+    console.log(filteredCmt);
+    // setBol(false);
+  };
+
+  const handleCmtDel = commentId => {
+    dispatch(asyncPostCmtDel(commentId));
+  };
 
   useEffect(() => {
     dispatch(asyncPost());
     dispatch(asyncPostCmt());
-  }, [dispatch]);
+  }, [dispatch, filteredCmt]);
+
+  const handleDelPost = postId => {
+    dispatch(asyncPostDel({ postId }));
+    window.location.reload();
+  };
 
   return (
     <DailyForm>
@@ -37,6 +65,18 @@ export default function DailyPost() {
                     })}
                 </ImageSlider>
               </article>
+              <div>
+                <Link to={`/dailypost/edit/${list.id}`} className="buttons">
+                  수정
+                </Link>
+                <button
+                  onClick={() => {
+                    handleDelPost(list.id);
+                  }}
+                >
+                  삭제
+                </button>
+              </div>
               <article className="DailyInfo">
                 <div className="Info">
                   <div className="DailyTags">
@@ -83,8 +123,8 @@ export default function DailyPost() {
               </article>
               {isComment ? (
                 <div className="commentdiv">
-                  {cmtData &&
-                    cmtData.map(comment => {
+                  {filteredCmt &&
+                    filteredCmt.map(comment => {
                       return (
                         <div className="comment">
                           <span className="cmtUserImg">
@@ -100,6 +140,18 @@ export default function DailyPost() {
                             </div>
                             <div>{comment.content}</div>
                           </div>
+                          <button
+                            onClick={() => {
+                              handleansbol();
+                            }}
+                          >
+                            수정
+                          </button>
+                          <button
+                            onClick={() => handleCmtDel(comment.commentId)}
+                          >
+                            삭제
+                          </button>
                         </div>
                       );
                     })}

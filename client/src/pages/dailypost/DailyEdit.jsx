@@ -1,20 +1,26 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
-import { asyncPostUp } from '../../redux/action/MainAsync';
+import { asyncPostUpdate } from '../../redux/action/MainAsync';
 
 function DailyEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const photoUp = useRef();
-  const [files, setFiles] = useState([]);
-  const [content, setContent] = useState('');
-  const [tag, setTag] = useState('');
-  const [tagList, setTagList] = useState([]);
+  const id = useParams();
+  const data = useSelector(state => state.dailypost.data);
+  const list = data.filter(postdata => postdata.id === +id.id);
+
+  const [files, setFiles] = useState(list[0].files);
+  const [content, setContent] = useState(list[0].content);
+  const [tag, setTag] = useState(list[0].tag);
+  const [tagList, setTagList] = useState(list[0].tagList);
+  const ac = useSelector(state => state.authToken.accessToken);
+  const re = useSelector(state => state.authToken.token);
 
   const reader = new FileReader();
 
@@ -28,7 +34,7 @@ function DailyEdit() {
   };
 
   const handleTagDelete = tagfil => {
-    const filtertag = tagList.filter(data => data !== tagfil);
+    const filtertag = tagList.filter(el => el !== tagfil);
     setTagList(filtertag);
   };
 
@@ -50,8 +56,10 @@ function DailyEdit() {
   };
 
   const handleSubmit = () => {
-    dispatch(asyncPostUp({ files, content, tag }));
-    navigate('/');
+    if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
+      dispatch(asyncPostUpdate({ files, content, tagList, id, ac, re }));
+      navigate('/');
+    }
   };
 
   return (
@@ -61,10 +69,10 @@ function DailyEdit() {
         <div className="DetailBox">
           <div className="Imgbox">
             {files &&
-              files.map((data, index) => {
+              files.map((el, index) => {
                 return (
                   <div className="boxs">
-                    <img src={data} alt="오완운사진" className="Imgs" />
+                    <img src={el} alt="오완운사진" className="Imgs" />
                     <button
                       onClick={() => deleteFile(index)}
                       className="Imgdel"
@@ -100,11 +108,11 @@ function DailyEdit() {
           <div className="limit">{content.length}/200</div>
           <span className="tagTitle">태그</span>
           <div className="taginput">
-            {tagList.map(data => {
+            {tagList.map(el => {
               return (
                 <div className="tags">
-                  <button onClick={() => handleTagDelete(data)}>
-                    <p>{`#${data}`}</p>
+                  <button onClick={() => handleTagDelete(el)}>
+                    <p>{`#${el}`}</p>
                   </button>
                 </div>
               );
