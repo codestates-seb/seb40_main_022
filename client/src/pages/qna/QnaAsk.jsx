@@ -39,6 +39,7 @@ function QnaAsk() {
             <button>영양소</button>
             <button>헬스</button>
             <button>습관</button>
+            <button>신고</button>
           </div>
         </PostTag>
         <PostSubmit>
