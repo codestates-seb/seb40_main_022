@@ -9,7 +9,7 @@ const MypageEditSlice = createSlice({
   reducers: {},
   extraReducers: {
     [MypageEditGet.fulfilled]: (state, action) => {
-      state.comment = action.payload;
+      state.data = action.payload;
     },
     [MypagePatch.fulfilled]: (state, action) => {
       state.comment = action.payload;

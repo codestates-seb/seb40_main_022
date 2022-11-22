@@ -18,33 +18,38 @@ import {
 function ProfileEdit() {
   const [select, setSelect] = useState('');
   const navigate = useNavigate();
-  const data = useSelector(state => state.content.data);
+  const ac = useSelector(state => state.authToken.accessToken);
+  const re = useSelector(state => state.authToken.token);
+  const data = [ac, re];
   const photoUp = useRef();
-  const [username, setUsername] = useState(data.username);
-  const [password, setPassword] = useState(data.password);
-  const [job, setJob] = useState(data.job);
-  const [address, setAddress] = useState(data.address);
-  const [sex, setSex] = useState(data.sex);
-  const [split, setSplit] = useState(data.split);
-  const [age, setAge] = useState(data.age);
-  const [height, setHeight] = useState(data.height);
-  const [weight, setWeight] = useState(data.weight);
-  const [kilogram, setKilogram] = useState(data.kilogram);
-  const [period, setPeriod] = useState(data.period);
-  const [profileImage, setProfileImage] = useState(data.profileImage);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [job, setJob] = useState('');
+  const [address, setAddress] = useState('');
+  const [sex, setSex] = useState('man');
+  const [age, setAge] = useState('');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [kilogram, setKilogram] = useState('');
+  const [period, setPeriod] = useState('');
+  const [profileImage, setProfileImage] = useState('');
+  // const list = useSelector(state => state.mypageedit.data);
+  // console.log(list);
+  console.log(profileImage);
 
   const reader = new FileReader();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(MypageEditGet());
-  }, [dispatch]);
+    dispatch(MypageEditGet(data));
+  }, [data]);
 
   const handleprofileImage = e => {
-    reader.readAsDataURL(e.target.profileImage[0]);
+    console.log(e.target.files[0]);
+    reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
-      setProfileImage([...profileImage, resultImg.toString()]);
+      setProfileImage(resultImg.toString());
     };
   };
 
@@ -52,9 +57,8 @@ function ProfileEdit() {
     photoUp.current.click();
   };
 
-  const deleteFile = index => {
-    const imgArr = profileImage.filter((el, idx) => idx !== index);
-    setProfileImage([...imgArr]);
+  const deleteFile = () => {
+    setProfileImage('');
   };
 
   const handleSubmit = () => {
@@ -65,13 +69,14 @@ function ProfileEdit() {
         job,
         address,
         sex,
-        split,
+        select,
         age,
         height,
         weight,
         kilogram,
         period,
         profileImage,
+        data,
       }),
     );
     navigate('/member/mypage');
@@ -176,7 +181,6 @@ function ProfileEdit() {
                       <button
                         onClick={e => {
                           setSelect(e.target.innerHTML);
-                          setSplit(e.target.value);
                         }}
                       >
                         2분할
@@ -184,7 +188,6 @@ function ProfileEdit() {
                       <button
                         onClick={e => {
                           setSelect(e.target.innerHTML);
-                          setSplit(e.target.value);
                         }}
                       >
                         3분할
@@ -192,7 +195,6 @@ function ProfileEdit() {
                       <button
                         onClick={e => {
                           setSelect(e.target.innerHTML);
-                          setSplit(e.target.value);
                         }}
                       >
                         4분할
@@ -200,7 +202,6 @@ function ProfileEdit() {
                       <button
                         onClick={e => {
                           setSelect(e.target.innerHTML);
-                          setSplit(e.target.value);
                         }}
                       >
                         5분할
