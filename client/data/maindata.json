@@ -1,0 +1,68 @@
+{
+  "dailypost": [
+    {
+      "tags": ["헬창", "헬린이"],
+      "member": {
+        "userId": 2,
+        "profileImage": "기본이미지",
+        "username": "프랭크"
+      },
+      "post": {
+        "postId": 3,
+        "createdAt": "2022-11-20T19:51:22.23748",
+
+        "content": "챌린저스 파이팅! ",
+        "commentCount": 0,
+        "likeCount": 0
+      },
+      "pictures": [
+        "https://d2j84io2oze31w.cloudfront.net/2da820b9-9534-4287-a008-b74cd5d5fe43.png",
+        "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg"
+      ],
+      "likeState": false
+    },
+    {
+      "tags": ["강남", "강북"],
+      "member": {
+        "userId": 2,
+        "profileImage": "기본이미지",
+        "username": "프랭크"
+      },
+      "post": {
+        "postId": 2,
+
+        "createdAt": "2022-11-20T19:50:41.866035",
+
+        "content": "헬린이 바디프로필 D-100 ",
+        "commentCount": 0,
+        "likeCount": 1
+      },
+      "pictures": [
+        "https://d2j84io2oze31w.cloudfront.net/d42ec1a2-6af6-4d86-8f72-001d6a211404.jpg"
+      ],
+      "likeState": true
+    },
+    {
+      "tags": ["파"],
+      "member": {
+        "userId": 2,
+        "profileImage": "기본이미지",
+        "username": "프랭크"
+      },
+      "post": {
+        "postId": 1,
+
+        "createdAt": "2022-11-20T19:43:55.640659",
+
+        "content": "헬창 3대 500 달",
+        "commentCount": 0,
+        "likeCount": 0
+      },
+      "pictures": [
+        "https://d2j84io2oze31w.cloudfront.net/7eb6ce7a-5a5b-4eb0-9848-2f9d7be52dee.jpg",
+        "https://d2j84io2oze31w.cloudfront.net/d48da9f6-b9cf-4265-8720-f8a926f5dfd7.jpg"
+      ],
+      "likeState": false
+    }
+  ]
+}
