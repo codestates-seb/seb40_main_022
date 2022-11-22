@@ -168,13 +168,11 @@ export const ProfileInput = styled.input`
   border-left: none;
   outline: none;
   padding-left: 10px;
-  margin-bottom: 10px;
 `;
 
 export const BtnBox = styled.div`
   width: 400px;
   margin: 25px;
-  /* border: 1px solid black; */
   display: flex;
   justify-content: space-around;
 
