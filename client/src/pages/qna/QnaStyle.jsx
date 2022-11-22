@@ -35,7 +35,7 @@ export const QnaTitle = styled.div`
     font-size: var(--font-16);
     font-weight: 700;
     background-color: var(--logored);
-    width: 120px;
+    width: 100px;
     height: 50px;
     color: white;
     border: none;

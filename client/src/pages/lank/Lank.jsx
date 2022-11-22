@@ -6,14 +6,6 @@ import searchIcon from '../../images/searchIcon.png';
 import { LankBox, LankMain } from './Lankstyle';
 
 function Lank() {
-  // const list = [
-  //   { id: 1, name: '분할' },
-  //   { id: 2, name: '키' },
-  //   { id: 3, name: '몸무게' },
-  //   { id: 4, name: '경력' },
-  //   { id: 5, name: '포인트' },
-  // ];
-  // const Devision = [2, 3, 4, 5];
   return (
     <LankBox>
       <Header />

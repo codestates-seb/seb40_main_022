@@ -158,9 +158,9 @@ export const RecordBox = styled.div`
 
 export const PictureBox = styled.div`
   display: grid;
-  grid-row-gap: 10px;
+  grid-row-gap: 30px;
   grid-template-rows: auto;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto;
   width: 100%;
   margin-bottom: 10px;
   > div {
@@ -170,13 +170,13 @@ export const PictureBox = styled.div`
     justify-content: center;
     flex-direction: column;
     > img {
-      width: 250px;
-      height: 250px;
+      width: 300px;
+      height: 300px;
     }
     > button {
       cursor: pointer;
       border: none;
-      margin-left: 80%;
+      margin-left: 72%;
       margin-top: 10px;
       display: flex;
       justify-content: end;

@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 const Ouathbutton = styled.div`
   .goolobutton,
-  .githubbutton,
-  .fabookbutton {
+  .kakaobutton {
     cursor: pointer;
     border-radius: 5px;
     display: flex;
@@ -22,13 +21,9 @@ const Ouathbutton = styled.div`
     color: #3b4045;
     margin-top: 30px;
   }
-  .githubbutton {
-    background-color: #2f3337;
-    color: #fff;
-  }
-  .fabookbutton {
-    background-color: #385499;
-    color: #fff;
+  .kakaobutton {
+    background-color: #fee500;
+    color: #000;
   }
 `;
 

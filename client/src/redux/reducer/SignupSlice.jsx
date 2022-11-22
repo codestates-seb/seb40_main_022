@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const SignupSlice = createSlice({
   name: 'signup',
-  initialState: {},
+  initialState: {
+    data: [],
+  },
   reducers: {},
   extraReducers: {},
 });
