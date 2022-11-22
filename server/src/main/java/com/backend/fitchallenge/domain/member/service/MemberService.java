@@ -58,7 +58,7 @@ public class MemberService {
         checkAlreadyExist(memberCreate.getEmail());
 
         // todo. 기본 이미지 path를 가진 profileImage생성 후 member에 넣어주기. - checked
-        ProfileImage profileImage = ProfileImage.createWithPath("기본이미지"); //todo. 기본이미지 경로 바꿔주기.
+        ProfileImage profileImage = ProfileImage.createWithPath("https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png");
         Member member = memberCreate.toMember(passwordEncoder, profileImage);
         profileImage.setMember(member);
 
@@ -83,13 +83,15 @@ public class MemberService {
 
         // todo. 저장, 새로운 path획득, member의 profileImage의 path 수정, 저장. - checked
         String oldImagePath = findMember.getProfileImage().getPath(); // 수정할 주소를 가져온다.
+
+
         String newImagePath = memberAwsS3Service.updateFile(memberUpdateVO.getProfileImage(), oldImagePath); // s3 사진 교체, path
         findMember.getProfileImage().updatePath(newImagePath);
 
         // db에서 변환
         findMember.update(memberUpdateVO, passwordEncoder);
 
-        memberRepository.save(findMember);
+//        memberRepository.save(findMember);
 
         return UpdateResponse.of(findMember);
     }

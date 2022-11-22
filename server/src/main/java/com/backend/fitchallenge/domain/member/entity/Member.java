@@ -104,7 +104,6 @@ public class Member extends Auditable {
                 memberUpdateVO.getKilogram() == null ? this.memberActivity.getKilogram() : memberUpdateVO.getKilogram())
                 .build();
         this.split = memberUpdateVO.getSplit() == null ? this.split : memberUpdateVO.getSplit();
-        this.profileImage = memberUpdateVO.getProfileImage() == null ? this.profileImage : memberUpdateVO.getProfileImage();
         this.period = memberUpdateVO.getPeriod() == null ? this.period : memberUpdateVO.getPeriod();
     }
 

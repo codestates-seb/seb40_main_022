@@ -11,6 +11,7 @@ import com.backend.fitchallenge.domain.member.service.MemberService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -26,6 +27,7 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -44,6 +46,7 @@ public class MemberController {
     public ResponseEntity update(@AuthMember MemberDetails memberDetails,
                                  MemberUpdateVO memberUpdateVO){ //todo. requestbody 때기 - checked
 
+        log.info("file= {}", memberUpdateVO.getProfileImage().getOriginalFilename());
         UpdateResponse updateResponse = memberService.updateMember(memberDetails.getEmail(), memberUpdateVO);
 
         return new ResponseEntity(updateResponse, HttpStatus.OK);

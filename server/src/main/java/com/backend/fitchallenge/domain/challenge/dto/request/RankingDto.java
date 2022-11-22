@@ -1,8 +1,9 @@
-package com.backend.fitchallenge.domain.challenge.dto;
+package com.backend.fitchallenge.domain.challenge.dto.request;
 
-import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+
+import java.time.LocalDate;
 
 //54p 참조
 // QueryDsl 조회용 Projection 생성

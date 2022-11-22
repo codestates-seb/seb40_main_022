@@ -28,8 +28,9 @@ public class PostController {
 
     /**
      * 게시물 작성
-     * @param memberDetails  로그인세션 정보
-     * @param postCreate 게시물 작성 요청 정보
+     *
+     * @param memberDetails 로그인세션 정보
+     * @param postCreate    게시물 작성 요청 정보
      * @return 생성된 게시물 id, 응답상태코드 - created
      */
     @PostMapping
@@ -50,7 +51,8 @@ public class PostController {
 
     /**
      * 전체 게시물 조회
-     * @param postGet 현재 유저가 보고있는 게시물의 마지막 postId를 담고있는 객체
+     *
+     * @param postGet  현재 유저가 보고있는 게시물의 마지막 postId를 담고있는 객체
      * @param pageable default page = 0, size = 3
      * @return 최신순으로 페이지네이션된 게시물 목록, 응답 상태 코드 OK
      */
@@ -62,29 +64,58 @@ public class PostController {
 
         log.info("lastPostId = {}", postGet.getLastPostId());
 
-        return new ResponseEntity<>(postService.getPostList(postGet.getLastPostId(), memberDetails.getMemberId(),pageable), HttpStatus.OK);
-    }
+        if (memberDetails == null) {
+            return new ResponseEntity<>(postService.getPostListWithoutLogin(postGet.getLastPostId(), pageable), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(postService.getPostList(postGet.getLastPostId(), memberDetails.getMemberId(), pageable), HttpStatus.OK);
+        }
 
+    }
+    /**
+     * 게시물 검색
+     * #~~ 형식의 tag 검색어 parsing 해서 tagNames List에 추가
+     * @param pageable   size default 3
+     * @param postSearch tag + lastPostId(마지막게시물 포스트 Id)
+     * @return
+     */
+    @GetMapping("/search")
+    public ResponseEntity<MultiResponse<?>> getSearchList(@PageableDefault(size = 3) Pageable pageable,
+                                                          @ModelAttribute PostSearch postSearch,
+                                                          @AuthMember MemberDetails memberDetails) {
+
+        List<String> tagNames = postSearch.queryParsing(postSearch.getTag());
+        tagNames.forEach(tag -> log.info("tag ={}", tag));
+
+        log.info("lastPostId = {}", postSearch.getLastPostId());
+
+        if (memberDetails == null) {
+            return new ResponseEntity<>(postService.getSearchListWithoutLogin(pageable, postSearch.getLastPostId(), tagNames), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(postService.getSearchList(memberDetails.getMemberId(), pageable, postSearch.getLastPostId(), tagNames), HttpStatus.OK);
+        }
+    }
 
     /**
      * 게시물 수정
+     *
      * @param memberDetails 로그인세션 정보
-     * @param id 수정할 게시물 postId
-     * @param postUpdate 게시물 수정 요청 정보
+     * @param id            수정할 게시물 postId
+     * @param postUpdate    게시물 수정 요청 정보
      * @return 수정된 게시물 정보, 응답상태코드 OK
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<?>  update(
+    public ResponseEntity<?> update(
             @AuthMember MemberDetails memberDetails, @PathVariable Long id,
-             PostUpdateVO postUpdate) {
-        return new ResponseEntity<>(postService.updatePost(id,memberDetails.getMemberId(), postUpdate),HttpStatus.OK);
+            PostUpdateVO postUpdate) {
+        return new ResponseEntity<>(postService.updatePost(id, memberDetails.getMemberId(), postUpdate), HttpStatus.OK);
     }
 
     /**
      * 게시물 삭제
-     * @AuthenticationPrincipal을 통해 로그인세션 정보를 불러옴
+     *
      * @param id 삭제할 게시물 postId
      * @return 응답상태코드 OK
+     * @AuthenticationPrincipal을 통해 로그인세션 정보를 불러옴
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(
@@ -94,30 +125,6 @@ public class PostController {
         postService.deletePost(id, memberDetails.getMemberId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    /**
-     * 게시물 검색
-     * #~~ 형식의 tag 검색어 parsing 해서 tagNames List에 추가
-     * @param pageable size default 3
-     * @param postSearch tag + lastPostId(마지막게시물 포스트 Id)
-     * @return
-     */
-
-    @GetMapping("/search")
-    public ResponseEntity<MultiResponse<?>> getSearchList( @PageableDefault(size = 3) Pageable pageable,
-                                                       @ModelAttribute  PostSearch postSearch,
-                                                       @AuthMember MemberDetails memberDetails
-                                                      ){
-
-        List<String> tagNames = postSearch.queryParsing(postSearch.getTag());
-        tagNames.forEach(tag -> log.info("tag ={}",tag));
-
-        log.info("lastPostId = {}", postSearch.getLastPostId());
-
-        return new ResponseEntity<>(postService.getSearchList(memberDetails.getMemberId(),pageable,postSearch.getLastPostId(), tagNames),HttpStatus.OK);
-
-    }
-
 
 
 }
