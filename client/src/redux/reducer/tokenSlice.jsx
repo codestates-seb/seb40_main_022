@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LoginAsync, LogoutAsync } from '../action/LoginAsync';
+import { LoginAsync, LogoutAsync, ReLodingLogin } from '../action/LoginAsync';
 
 export const TOKEN_TIME_OUT = 600 * 1000;
 
@@ -27,11 +27,28 @@ export const tokenSlice = createSlice({
       state.accessToken = null;
     },
     [LogoutAsync.fulfilled]: state => {
-      console.log(state);
       state.authenticated = false;
       state.isLogin = false;
       state.accessToken = null;
       state.token = null;
+      localStorage.removeItem('Authorization');
+      localStorage.removeItem('RefreshToken');
+      // window.localStorage.clear();
+    },
+    [ReLodingLogin.fulfilled]: (state, action) => {
+      const accessToken = action.payload[0];
+      const refresh = action.payload[1];
+      if (
+        accessToken !== undefined &&
+        refresh !== undefined &&
+        accessToken !== null &&
+        refresh !== null
+      ) {
+        state.authenticated = true;
+        state.isLogin = true;
+        state.accessToken = accessToken;
+        state.token = refresh;
+      }
     },
   },
 });
