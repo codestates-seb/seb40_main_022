@@ -1,6 +1,7 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Main from './pages/main/Main';
 import MainEdit from './pages/dailypost/DailyEdit';
 import Calendar from './pages/calendar/Calendar';
@@ -15,8 +16,14 @@ import QnaAsk from './pages/qna/QnaAsk';
 import Mypage from './pages/mypage/Mypage';
 import ProfileEdit from './pages/profileedit/index';
 import QnaUpdate from './pages/qna/QnaUpdate';
+import { ReLodingLogin } from './redux/action/LoginAsync';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(ReLodingLogin());
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Main />} />
