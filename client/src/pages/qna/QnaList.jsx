@@ -1,4 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import Header from '../../components/header/Header';
 import searchIcon from '../../images/searchIcon.png';
 import Footer from '../../components/footer/Footer';
@@ -11,9 +13,16 @@ import {
   QnaContent,
   QnaRadio,
 } from './QnaStyle';
+import { QnaAsynclist } from '../../redux/action/QnaAsync';
 
 function QnaList() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(QnaAsynclist());
+  }, [dispatch]);
+
   const list = [
     {
       title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',

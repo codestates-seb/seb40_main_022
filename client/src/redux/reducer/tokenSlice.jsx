@@ -27,7 +27,6 @@ export const tokenSlice = createSlice({
       state.accessToken = null;
     },
     [LogoutAsync.fulfilled]: state => {
-      console.log(state);
       state.authenticated = false;
       state.isLogin = false;
       state.accessToken = null;
