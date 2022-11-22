@@ -8,7 +8,7 @@ import {
   faPersonRunning,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { MypageGet, MyPostDelete } from '../../redux/action/MypageEditAsync';
+import { MypageGet } from '../../redux/action/MypageAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import {
@@ -26,6 +26,16 @@ function Mypage() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [Clicked, setClicked] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const ac = useSelector(state => state.authToken.accessToken);
+  const re = useSelector(state => state.authToken.token);
+  const data = [ac, re];
+  const ld = useSelector(state => state);
+  console.log(ld);
+
+  useEffect(() => {
+    dispatch(MypageGet(data));
+  }, [data]);
 
   return (
     <Wrapper>
@@ -77,9 +87,9 @@ function Mypage() {
         <hr className="line" />
         <PictureBox>
           {list &&
-            list.map(data => {
+            list.map(listdata => {
               return (
-                <div key={data}>
+                <div key={listdata}>
                   <img src={myimage} alt="userProfile" />
                   <button onClick={() => setClicked(!Clicked)}>
                     <FontAwesomeIcon icon={faTrash} />

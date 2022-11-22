@@ -1,20 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const MypageGet = createAsyncThunk('member/mypage', () => {
-  const data = axios
-    .get('http://localhost:3000/member/myPage', {
+export const MypageGet = createAsyncThunk('member/mypage', data => {
+  console.log(data);
+  const list = axios
+    .get('/members/myPage', {
       headers: {
-        'Content-Type': 'application/json',
-        // Authorization: data[0],
-        // RefreshToken: data[1],
+        Authorization: data[0],
+        RefreshToken: data[1],
       },
     })
     .then(res => {
+      console.log(res);
       return res.data;
     });
 
-  return data;
+  return list;
 });
 
 export const MyPostDelete = createAsyncThunk('/member/mypage', ({ id }) => {

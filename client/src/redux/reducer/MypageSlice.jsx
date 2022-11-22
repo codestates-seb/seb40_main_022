@@ -9,7 +9,7 @@ const MypageSlice = createSlice({
   reducers: {},
   extraReducers: {
     [MypageGet.fulfilled]: (state, action) => {
-      // console.log(state, action);
+      console.log(state, action);
       state.data = action.payload;
     },
     [MyPostDelete.fulfilled]: (state, action) => {

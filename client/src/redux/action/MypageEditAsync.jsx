@@ -1,20 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const MypageEditGet = createAsyncThunk('/mypage/edit', () => {
-  const data = axios
-    .get('http://localhost:3000/member/myPage', {
+export const MypageEditGet = createAsyncThunk('/mypage/edit', data => {
+  const Mylist = axios
+    .get('/members/myPage', {
       headers: {
         'Content-Type': 'application/json',
-        // Authorization: data[0],
-        // RefreshToken: data[1],
+        Authorization: data[0],
+        RefreshToken: data[1],
       },
     })
     .then(res => {
       return res.data;
     });
 
-  return data;
+  return Mylist;
 });
 
 export const MypagePatch = createAsyncThunk(
@@ -25,24 +25,25 @@ export const MypagePatch = createAsyncThunk(
     job,
     address,
     sex,
-    split,
+    select,
     age,
     height,
     weight,
     kilogram,
     period,
     profileImage,
+    data,
   }) => {
-    if (username.length !== 0 && sex.length !== 0 && split.length !== 0) {
+    if (username.length !== 0 && sex.length !== 0 && select.length !== 0) {
       axios.patch(
-        'http://localhost:3000/member/myPage',
+        '/members/myPage',
         JSON.stringify({
           username,
           password,
           job,
           address,
           sex,
-          split,
+          split: select,
           age,
           height,
           weight,
@@ -53,8 +54,8 @@ export const MypagePatch = createAsyncThunk(
         {
           headers: {
             'Content-Type': 'application/json',
-            // Authorization: data[0],
-            // RefreshToken: data[1],
+            Authorization: data[0],
+            RefreshToken: data[1],
           },
         },
       );
