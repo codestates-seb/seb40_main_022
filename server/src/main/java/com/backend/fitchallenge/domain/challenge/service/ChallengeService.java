@@ -1,7 +1,8 @@
 package com.backend.fitchallenge.domain.challenge.service;
 
-import com.backend.fitchallenge.domain.challenge.dto.RankingCondition;
-import com.backend.fitchallenge.domain.challenge.dto.RankingDto;
+import com.backend.fitchallenge.domain.challenge.dto.request.RankingCondition;
+import com.backend.fitchallenge.domain.challenge.dto.response.MultiRankingResponse;
+import com.backend.fitchallenge.domain.challenge.dto.response.RankingResponse;
 import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.backend.fitchallenge.domain.challenge.exception.CannotAcceptChallenge;
 import com.backend.fitchallenge.domain.challenge.exception.CannotRefuseChallenge;
@@ -13,11 +14,15 @@ import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -46,11 +51,55 @@ public class ChallengeService {
 
     /**
      * 랭킹 목록 조회
+     * 상대방이 챌린지가 진행중이라면 종료날짜 표시
+     * 내가 챌린지 진행중인지 boolean값 전달
      */
-    public List<RankingDto> search(RankingCondition condition) {
-        return memberRepository.rankingList(condition);
+    public MultiRankingResponse search(Long memberId, RankingCondition condition, Pageable pageable) {
+
+
+        Member member = memberService.findVerifiedMemberById(memberId);
+
+        boolean myChallengeStatus = Optional.ofNullable(member.getChallenge()).isPresent();
+
+        Long total = memberRepository.pagingCount(condition, pageable);
+
+        List<RankingResponse> responses = memberRepository.rankingList(condition, pageable).stream()
+                .map(rankingDto -> {
+                    boolean challengeStatus = Optional.ofNullable(rankingDto.getChallengeId()).isPresent();
+                    if (challengeStatus) {
+                        return RankingResponse.toResponse(rankingDto, findChallenge(rankingDto.getChallengeId()).getChallengeEnd());
+                    } else {
+                        return RankingResponse.toResponse(rankingDto);
+                    }
+                }).collect(Collectors.toList());
+
+
+
+        return MultiRankingResponse.of(new PageImpl<>(responses,pageable,total),myChallengeStatus);
     }
 
+
+    /**
+     * @param condition
+     * @param pageable
+     * @return
+     */
+    public MultiRankingResponse<?> searchWithoutLogin(RankingCondition condition, Pageable pageable) {
+
+        Long total = memberRepository.pagingCount(condition, pageable);
+
+        PageImpl<RankingResponse> responses = new PageImpl<>(memberRepository.rankingList(condition, pageable).stream()
+                .map(rankingDto -> {
+                    boolean challengeStatus = Optional.ofNullable(rankingDto.getChallengeId()).isPresent();
+                    if (challengeStatus) {
+                        return RankingResponse.toResponse(rankingDto, findChallenge(rankingDto.getChallengeId()).getChallengeEnd());
+                    } else {
+                        return RankingResponse.toResponse(rankingDto);
+                    }
+                }).collect(Collectors.toList()),pageable,total);
+
+        return MultiRankingResponse.withoutLogin(responses);
+    }
 
     /**
      * 챌린지 수락
@@ -146,6 +195,7 @@ public class ChallengeService {
     private Challenge findChallenge(Long challengeId) {
         return challengeRepository.findById(challengeId).orElseThrow(ChallengeNotFound::new);
     }
+
 
 
 }

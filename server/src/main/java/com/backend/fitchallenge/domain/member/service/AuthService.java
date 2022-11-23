@@ -88,7 +88,7 @@ public class AuthService {
         String newRefreshToken = jwtTokenProvider.createRefreshToken(tokenOwner);
 
         redisService.deleteValues(email);
-        redisService.setValues(email,newRefreshToken);
+        redisService.setValues(email,newRefreshToken, jwtTokenProvider.calExpDuration(refreshToken));
 
         refreshTokenRepository.save(foundRefreshToken.updateTokenValue(newRefreshToken));
 

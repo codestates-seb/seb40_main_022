@@ -2,7 +2,9 @@ package com.backend.fitchallenge.domain.member.dto.response;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class UpdateResponse {
 
     private String password;

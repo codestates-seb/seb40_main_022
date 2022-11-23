@@ -22,7 +22,7 @@ public class RedisService {
 
     public void setValues(String key, String data, Long expiration) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(key, data, expiration);
+        values.set(key, data, expiration, TimeUnit.MILLISECONDS);
     }
 
     public String getValues(String key) {
