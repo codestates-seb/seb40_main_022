@@ -5,6 +5,7 @@ import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.post.service.PostService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.dto.response.SingleResponse;
+import com.backend.fitchallenge.global.dto.response.SliceMultiResponse;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +56,7 @@ public class PostController {
      * @return 최신순으로 페이지네이션된 게시물 목록, 응답 상태 코드 OK
      */
     @GetMapping
-    public ResponseEntity<MultiResponse<?>> getList(
+    public ResponseEntity<SliceMultiResponse<?>> getList(
             @ModelAttribute PostGet postGet,
             @AuthMember MemberDetails memberDetails,
             @PageableDefault(size = 3) Pageable pageable) {
@@ -104,9 +105,9 @@ public class PostController {
      */
 
     @GetMapping("/search")
-    public ResponseEntity<MultiResponse<?>> getSearchList( @PageableDefault(size = 3) Pageable pageable,
-                                                       @ModelAttribute  PostSearch postSearch,
-                                                       @AuthMember MemberDetails memberDetails
+    public ResponseEntity<SliceMultiResponse<?>> getSearchList(@PageableDefault(size = 3) Pageable pageable,
+                                                               @ModelAttribute  PostSearch postSearch,
+                                                               @AuthMember MemberDetails memberDetails
                                                       ){
 
         List<String> tagNames = postSearch.queryParsing(postSearch.getTag());

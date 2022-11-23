@@ -14,7 +14,7 @@ import com.backend.fitchallenge.domain.tag.domain.Tag;
 import com.backend.fitchallenge.domain.tag.dto.TagDto;
 import com.backend.fitchallenge.domain.tag.repository.QueryTagRepository;
 import com.backend.fitchallenge.domain.tag.service.TagService;
-import com.querydsl.core.Tuple;
+import com.backend.fitchallenge.global.dto.response.SliceMultiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -86,7 +86,7 @@ public class PostService {
      */
     // hasNext = false이면 더이상 불러올 post가 없습니다. 알림 띄워주기
     @Transactional(readOnly = true)
-    public MultiResponse<?> getPostList(Long lastPostId, Long memberId, Pageable pageable) {
+    public SliceMultiResponse<?> getPostList(Long lastPostId, Long memberId, Pageable pageable) {
 
 
         List<PostResponse> postResponses = postRepository.findList(lastPostId, memberId, pageable).stream()
@@ -107,7 +107,7 @@ public class PostService {
         //무한 스크롤 처리
         Slice<PostResponse> result = checkLastPage(postResponses, pageable);
 
-        return MultiResponse.of(result);
+        return SliceMultiResponse.of(result);
     }
 
     /**
@@ -213,7 +213,7 @@ public class PostService {
      * 4. 무한스크롤 페이지네이션 처리
      * @return
      */
-    public MultiResponse<?> getSearchList(Long memberId, Pageable pageable, Long lastPostId, List<String> tagNames) {
+    public SliceMultiResponse<?> getSearchList(Long memberId, Pageable pageable, Long lastPostId, List<String> tagNames) {
 
         // 2. 태그 Id목록에 해당하는 postid 가져오기
         List<Long> tagIds = queryTagRepository.findTagsByContent(tagNames);
@@ -237,6 +237,6 @@ public class PostService {
 
         Slice<PostResponse> result = checkLastPage(responses, pageable);
 
-        return MultiResponse.of(result);
+        return SliceMultiResponse.of(result);
     }
 }
