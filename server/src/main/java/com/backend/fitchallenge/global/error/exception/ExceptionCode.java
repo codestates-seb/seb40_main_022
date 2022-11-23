@@ -49,7 +49,10 @@ public enum ExceptionCode {
     //Calendar
     CALENDAR_NOT_FOUND(404, "Calendar not found"),
     //Sports
-    SPORTS_NOT_FOUND(404, "Sports not found");
+    SPORTS_NOT_FOUND(404, "Sports not found"),
+    //TimePicture
+    PICTURE_DATE_MISMATCH(400, "Picture Date Mismatch"),
+    NOT_IMAGE_FILE(400, "Not Image File");
 
 
     @Getter
