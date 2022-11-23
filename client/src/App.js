@@ -27,7 +27,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
-      <Route path="/dailypost/edit" element={<MainEdit />} />
+      <Route path="/dailypost/edit/:id" element={<MainEdit />} />
       <Route path="/qnaask" element={<QnaAsk />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />

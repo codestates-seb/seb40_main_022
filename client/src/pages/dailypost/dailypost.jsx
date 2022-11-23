@@ -53,7 +53,7 @@ const dailypost = () => {
 
   const handleSubmit = () => {
     dispatch(asyncPostUp({ files, content, tagList, ac, re }));
-    // navigate('/');
+    navigate('/');
   };
 
   return (

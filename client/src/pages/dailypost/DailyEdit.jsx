@@ -10,15 +10,24 @@ import { asyncPostUpdate } from '../../redux/action/MainAsync';
 function DailyEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const photoUp = useRef();
   const id = useParams();
-  const data = useSelector(state => state.dailypost.data);
-  const list = data.filter(postdata => postdata.id === +id.id);
+  const photoUp = useRef();
 
-  const [files, setFiles] = useState(list[0].files);
-  const [content, setContent] = useState(list[0].content);
-  const [tag, setTag] = useState(list[0].tag);
-  const [tagList, setTagList] = useState(list[0].tagList);
+  const selectdata = useSelector(state => state.dailypost.data);
+
+  // const listdata = [];
+  // for (let i = 0; i < selectdata.length; i += 1) {
+  //   if (selectdata[i].id === Number(id.id)) {
+  //     listdata.push(selectdata[i]);
+  //   }
+  // }
+
+  const list = selectdata.filter(postdata => postdata.id === +id.id);
+
+  const [files, setFiles] = useState(list[0].pictures);
+  const [content, setContent] = useState(list[0].post.content);
+  const [tag, setTag] = useState('');
+  const [tagList, setTagList] = useState(list[0].tags);
   const ac = useSelector(state => state.authToken.accessToken);
   const re = useSelector(state => state.authToken.token);
 
