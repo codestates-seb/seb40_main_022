@@ -119,11 +119,11 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }  
     // 경력 이상
     private BooleanExpression periodGoe(Integer periodGoe) {
-        return isEmpty(periodGoe) ? null : member.weight.goe(periodGoe);
+        return isEmpty(periodGoe) ? null : member.period.goe(periodGoe);
     }
     // 경력 미만
     private BooleanExpression periodLt(Integer periodLt) {
-        return isEmpty(periodLt) ? null : member.weight.lt(periodLt);
+        return isEmpty(periodLt) ? null : member.period.lt(periodLt);
     }
 
     private BooleanExpression ltPostId(Long postId) {

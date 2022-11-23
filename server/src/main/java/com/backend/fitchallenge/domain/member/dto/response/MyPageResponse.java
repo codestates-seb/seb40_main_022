@@ -1,16 +1,11 @@
 package com.backend.fitchallenge.domain.member.dto.response;
 
-import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractActivity;
 import com.backend.fitchallenge.domain.member.dto.response.extract.DailyPost;
-import com.backend.fitchallenge.domain.post.entity.Picture;
+import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractActivity;
 import com.backend.fitchallenge.global.dto.response.SliceMultiResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Slice;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 // 특정 유저정보를 조회하기위한 responseDto
 @Getter
