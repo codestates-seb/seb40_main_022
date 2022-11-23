@@ -1,6 +1,5 @@
 package com.backend.fitchallenge.domain.calendar.dto.response;
 
-
 import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import lombok.Builder;
 import lombok.Getter;

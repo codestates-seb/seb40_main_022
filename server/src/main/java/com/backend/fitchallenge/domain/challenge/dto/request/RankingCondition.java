@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.domain.challenge.dto;
+package com.backend.fitchallenge.domain.challenge.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package com.backend.fitchallenge.domain.member.repository;
 
-import com.backend.fitchallenge.domain.challenge.dto.QRankingDto;
-import com.backend.fitchallenge.domain.challenge.dto.RankingCondition;
-import com.backend.fitchallenge.domain.challenge.dto.RankingDto;
+import com.backend.fitchallenge.domain.challenge.dto.request.QRankingDto;
+import com.backend.fitchallenge.domain.challenge.dto.request.RankingCondition;
+import com.backend.fitchallenge.domain.challenge.dto.request.RankingDto;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.querydsl.core.Tuple;
@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.backend.fitchallenge.domain.member.entity.QMember.member;
@@ -41,7 +43,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public List<RankingDto> rankingList(RankingCondition condition) {
+    public List<RankingDto> rankingList(RankingCondition condition, Pageable pageable) {
        return jpaQueryFactory
                 .select(new QRankingDto(
                         member.id,
@@ -61,7 +63,10 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         weightLt(condition.getWeightLt()),
                         periodGoe(condition.getPeriodGoe()),
                         periodLt(condition.getPeriodLt()))
-                .fetch();
+               .offset(pageable.getOffset())
+               .limit(pageable.getPageSize())
+               .orderBy(memberActivity.point.desc())
+               .fetch();
     }
 
     @Override
@@ -71,6 +76,23 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .where(member.id.in(memberIds))
                 .fetch();
     }
+
+    @Override
+    public Long pagingCount(RankingCondition condition, Pageable pageable) {
+        return jpaQueryFactory
+                .select(member.id.count())
+                .from(member)
+                .where(splitEq(condition.getSplit()),
+                        heightGoe(condition.getHeightGoe()),
+                        heightLt(condition.getHeightLt()),
+                        weightGoe(condition.getWeightGoe()),
+                        weightLt(condition.getWeightLt()),
+                        periodGoe(condition.getPeriodGoe()),
+                        periodLt(condition.getPeriodLt()))
+                .fetchOne();
+    }
+
+
 
 
     /* 검색조건 */
@@ -97,11 +119,11 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }  
     // 경력 이상
     private BooleanExpression periodGoe(Integer periodGoe) {
-        return isEmpty(periodGoe) ? null : member.weight.goe(periodGoe);
+        return isEmpty(periodGoe) ? null : member.period.goe(periodGoe);
     }
     // 경력 미만
     private BooleanExpression periodLt(Integer periodLt) {
-        return isEmpty(periodLt) ? null : member.weight.lt(periodLt);
+        return isEmpty(periodLt) ? null : member.period.lt(periodLt);
     }
 
     private BooleanExpression ltPostId(Long postId) {
