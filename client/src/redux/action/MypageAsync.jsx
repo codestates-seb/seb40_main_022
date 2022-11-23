@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const MypageGet = createAsyncThunk('/mypage', data => {
-  const list = axios
+export const MypageGet = createAsyncThunk('/mypage', async data => {
+  const list = await axios
     .get('/members/myPage', {
       headers: {
         Authorization: data[0],
@@ -12,7 +12,7 @@ export const MypageGet = createAsyncThunk('/mypage', data => {
     .then(res => {
       return res.data;
     });
-  console.log(list);
+
   return list;
 });
 

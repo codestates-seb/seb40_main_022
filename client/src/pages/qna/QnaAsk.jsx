@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from '../../components/header/Header';
@@ -16,14 +16,16 @@ import { QnaAsynclistPost } from '../../redux/action/QnaAsync';
 function QnaAsk() {
   const taglist = ['식단', '영양소', '헬스', '습관', '신고'];
   const navigate = useNavigate();
-  const [tag, setTag] = useState([]);
+  const [tag, setTag] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const dispatch = useDispatch();
+  const ac = useSelector(state => state.authToken.accessToken);
+  const re = useSelector(state => state.authToken.token);
+  const tokendata = [ac, re, title, content, tag];
 
   const handleSubmit = () => {
-    dispatch(QnaAsynclistPost({ title, content, tag }));
-    console.log(title);
+    dispatch(QnaAsynclistPost(tokendata));
     navigate('/qna');
   };
 
@@ -65,8 +67,8 @@ function QnaAsk() {
                 return (
                   <button
                     className="tags"
-                    onClick={() => {
-                      setTag([...tag, data]);
+                    onClick={e => {
+                      setTag(e.target.textContent);
                     }}
                   >
                     {data}
@@ -74,29 +76,21 @@ function QnaAsk() {
                 );
               })}
           </div>
-          <ul className="taglist">
-            {tag.length
-              ? tag.map(data => {
-                  return (
-                    <li className="taglist-container">
-                      <div className="tagname">{data}</div>
-                      <button
-                        className="tagdelete"
-                        onClick={() => {
-                          setTag([
-                            ...tag.filter(list => {
-                              return list !== data;
-                            }),
-                          ]);
-                        }}
-                      >
-                        x
-                      </button>
-                    </li>
-                  );
-                })
-              : null}
-          </ul>
+          {tag ? (
+            <ul className="taglist">
+              <li className="taglist-container">
+                <div className="tagname">{tag}</div>
+                <button
+                  className="tagdelete"
+                  onClick={() => {
+                    setTag('');
+                  }}
+                >
+                  x
+                </button>
+              </li>
+            </ul>
+          ) : null}
         </PostTag>
         <PostSubmit>
           <button

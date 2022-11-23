@@ -147,7 +147,7 @@ export const AnswerNDB = styled.span`
     }
   }
 
-  > button {
+  .accepted {
     background-color: var(--logored);
     border: none;
     border-radius: 30px;
@@ -156,6 +156,9 @@ export const AnswerNDB = styled.span`
     width: 30px;
     height: 30px;
     font-weight: 600;
+  }
+  .noaccepted {
+    display: none;
   }
 `;
 

@@ -13,7 +13,7 @@ const reducer = {
   authToken: tokenReducer,
   dailypost: MainSlice,
   lank: LankSlice,
-  list: QnaSlice,
+  qnalist: QnaSlice,
   mypage: MypageSlice,
   mypageedit: MypageEditSlice,
 };
