@@ -5,7 +5,7 @@ const SignupAsync = createAsyncThunk(
   '/signup',
   async ({ username, email, password }) => {
     await axios.post(
-      'http://localhost:3000/signup',
+      '/members/signup',
       JSON.stringify({ username, email, password }),
       {
         headers: {

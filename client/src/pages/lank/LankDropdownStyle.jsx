@@ -2,11 +2,10 @@ import styled from 'styled-components';
 
 export const Dropdown = styled.main`
   display: flex;
+  margin-right: 20px;
 `;
 export const Dropdivi = styled.div`
   .container {
-    max-width: 100px;
-    width: 100%;
     box-shadow: 0 4px 5px 0 #00000026;
     position: relative;
     margin-right: 10px;
@@ -17,11 +16,22 @@ export const Dropdivi = styled.div`
     }
     .dropdownLabel {
       display: flex;
-      padding: 15px;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       > div {
+        text-align: center;
+        width: 100px;
         font-weight: 500;
+        padding: 15px;
         font-size: var(--font-16);
+        margin: 0 auto;
+        position: relative;
+      }
+      .caretIcon {
+        position: absolute;
+        top: 15px;
+        right: 10px;
       }
     }
     .content {
@@ -31,9 +41,9 @@ export const Dropdivi = styled.div`
       left: 0;
       background: white;
       box-shadow: 0 4px 5px 0 #00000026;
-      > button {
+      .btns {
         width: 100%;
-        padding: 5px;
+        padding: 10px 0px;
         border: none;
         background-color: #fff;
         cursor: pointer;
@@ -41,6 +51,10 @@ export const Dropdivi = styled.div`
           background-color: black;
           color: #fff;
         }
+      }
+      .backblack {
+        background-color: black;
+        color: #fff;
       }
     }
     .dropdown:checked + label + div {

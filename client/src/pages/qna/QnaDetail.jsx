@@ -13,6 +13,8 @@ import {
   DetailTitle,
   AnswerNDB,
   DetailUpdate,
+  DetailDelete,
+  DetailButton,
 } from './QnaDetailStyle';
 
 function QnaDetail() {
@@ -41,11 +43,18 @@ function QnaDetail() {
               </div>
               <button>운동</button>
             </DetailNDB>
-            <DetailUpdate>
-              <Link to="/qnaupdate" className="qnaupdate">
-                <h3>수정</h3>
-              </Link>
-            </DetailUpdate>
+            <DetailButton>
+              <DetailUpdate>
+                <Link to="/qnaupdate" className="qnaupdate">
+                  <h3>수정</h3>
+                </Link>
+              </DetailUpdate>
+              <DetailDelete>
+                <Link to="/qnaupdate" className="qnadelete">
+                  <h3>삭제</h3>
+                </Link>
+              </DetailDelete>
+            </DetailButton>
           </section>
         </DetailTitle>
         <DetailAnswer>

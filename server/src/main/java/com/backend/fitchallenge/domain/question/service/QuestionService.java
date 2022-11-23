@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 
 import static com.backend.fitchallenge.domain.question.entity.QQuestion.question;
 
-
 @Service
 @RequiredArgsConstructor
 @Transactional

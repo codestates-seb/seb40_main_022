@@ -1,4 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/header/Header';
 import searchIcon from '../../images/searchIcon.png';
 import Footer from '../../components/footer/Footer';
@@ -11,47 +13,18 @@ import {
   QnaContent,
   QnaRadio,
 } from './QnaStyle';
+import { QnaAsynclist } from '../../redux/action/QnaAsync';
 
 function QnaList() {
   const navigate = useNavigate();
-  const list = [
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-  ];
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(QnaAsynclist());
+  }, []);
+
+  const list = useSelector(state => state);
+  console.log(list);
 
   return (
     <QnABack>
@@ -65,7 +38,7 @@ function QnaList() {
               navigate('/qnaask');
             }}
           >
-            Ask Question
+            질문
           </button>
         </QnaTitle>
         <QnaSearch>

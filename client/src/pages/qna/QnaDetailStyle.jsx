@@ -66,7 +66,33 @@ export const DetailUpdate = styled.div`
     }
   }
 `;
+export const DetailDelete = styled.div`
+  > .qnadelete {
+    width: 120px;
+    height: 50px;
+    border-radius: 20px;
+    background-color: var(--buttongray);
+    color: white;
+    font-weight: bold;
+    border: none;
+    float: right;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--box-shadow);
+    margin-left: 30px;
+    :hover {
+      background-color: #cfcfcf;
+    }
+    > h3 {
+      text-align: center;
+      margin-top: 14px;
+    }
+  }
+`;
 
+export const DetailButton = styled.section`
+  display: flex;
+`;
 export const DetailNDB = styled.span`
   display: flex;
   margin-bottom: 50px;

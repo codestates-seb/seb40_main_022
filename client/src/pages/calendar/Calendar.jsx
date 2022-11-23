@@ -46,7 +46,7 @@ function Calendar() {
               locale="ko"
               events={[
                 {
-                  title: '1:40:30',
+                  title: '1:40:30 999kg',
                   start: '2022-11-14',
                   backgroundColor: '#82cbc4',
                 },
@@ -65,13 +65,24 @@ function Calendar() {
           </div>
           <article className="userbox">
             <div className="deletebtn">
-              <button onClick={() => setClicked(!Clicked)}>대결 중단</button>
+              <button
+                onClick={() => navigate('/detail')}
+                className="healthaddbutton"
+              >
+                운동 기록
+              </button>
+              <button
+                onClick={() => setClicked(!Clicked)}
+                className="canclebutton"
+              >
+                대결 중단
+              </button>
             </div>
             <div className="userInfoBox">
               <div className="box2">
                 <div className="name1">
-                  헬창남
                   <img src={crown} alt="승자이미지" />
+                  헬창남
                 </div>
                 <button
                   className="userdata1"

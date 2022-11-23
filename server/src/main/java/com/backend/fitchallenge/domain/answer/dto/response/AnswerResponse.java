@@ -4,7 +4,6 @@ import com.backend.fitchallenge.domain.answer.entity.Answer;
 
 import com.backend.fitchallenge.domain.answercomment.dto.response.AnswerCommentResponse;
 import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
-import com.backend.fitchallenge.domain.postcomment.dto.CommentResponse;
 
 import lombok.Builder;
 import lombok.Getter;

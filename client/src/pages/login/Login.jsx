@@ -5,23 +5,26 @@ import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import Ouaths from '../../components/ouath/Ouaths';
 import LoginStyle from './LoginStyle';
-import LoginAsync from '../../redux/action/LoginAsync';
+import { LoginAsync } from '../../redux/action/LoginAsync';
 
 function Login() {
   const [Evalue, setEvalue] = useState('');
   const [pwd, setPwd] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleClick = () => {
+    const data = [Evalue, pwd];
     if (Evalue === '') {
       alert('이메일이 비어있습니다.');
     } else if (pwd === '') {
       alert('비밀번호가 비어있습니다.');
     } else {
-      dispatch(LoginAsync({ Evalue, pwd }));
+      dispatch(LoginAsync(data));
       navigate('/');
     }
   };
+
   return (
     <LoginStyle>
       <Header />

@@ -1,15 +1,36 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
+import { asyncPostUp } from '../../redux/action/MainAsync';
 
 const dailypost = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const photoUp = useRef();
   const [files, setFiles] = useState([]);
+  const [content, setContent] = useState('');
+  const [tags, setTags] = useState('');
+  const [tagList, setTagList] = useState([]);
+
   const reader = new FileReader();
+
+  const handleTag = e => {
+    if (e.key === 'Enter' && e.target.value !== '') {
+      const updateTagList = [...tagList];
+      updateTagList.push(tags);
+      setTagList(updateTagList);
+      setTags('');
+    }
+  };
+
+  const handleTagDelete = tagfil => {
+    const filtertag = tagList.filter(data => data !== tagfil);
+    setTagList(filtertag);
+  };
 
   const handleFile = e => {
     reader.readAsDataURL(e.target.files[0]);
@@ -26,6 +47,11 @@ const dailypost = () => {
   const deleteFile = index => {
     const imgArr = files.filter((el, idx) => idx !== index);
     setFiles([...imgArr]);
+  };
+
+  const handleSubmit = () => {
+    dispatch(asyncPostUp({ files, content, tags }));
+    navigate('/');
   };
 
   return (
@@ -65,13 +91,44 @@ const dailypost = () => {
           <span className="contentTitle">내용</span>
           <textarea
             maxLength="200"
-            placeholder="내용"
             className="contentinput"
+            value={content}
+            onChange={e => {
+              setContent(e.target.value);
+            }}
           />
+          <div className="limit">{content.length}/200</div>
           <span className="tagTitle">태그</span>
-          <input placeholder="태그" className="taginput" />
+          <div className="taginput">
+            {tagList.map(data => {
+              return (
+                <div className="tags">
+                  <button onClick={() => handleTagDelete(data)}>
+                    <p>{`#${data}`}</p>
+                  </button>
+                </div>
+              );
+            })}
+            {tagList.length <= 3 ? (
+              <input
+                className="tagbox"
+                value={tags}
+                onChange={e => {
+                  setTags(e.target.value);
+                }}
+                onKeyUp={e => handleTag(e)}
+              />
+            ) : null}
+          </div>
           <div className="buttons">
-            <button className="submitbutton">등록</button>
+            <button
+              className="submitbutton"
+              onClick={() => {
+                handleSubmit();
+              }}
+            >
+              등록
+            </button>
             <button
               className="canclebutton"
               onClick={() => {
