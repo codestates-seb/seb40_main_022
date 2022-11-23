@@ -25,13 +25,14 @@ import myimage from '../../images/qnaImg.jpg';
 function Mypage() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [Clicked, setClicked] = useState(false);
+  const [btnClick, setBtnClick] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const ac = useSelector(state => state.authToken.accessToken);
   const re = useSelector(state => state.authToken.token);
   const data = [ac, re];
-  const ld = useSelector(state => state);
-  console.log(ld);
+  // const ld = useSelector(state => state);
 
   useEffect(() => {
     dispatch(MypageGet(data));
@@ -46,6 +47,17 @@ function Mypage() {
           <div className="btns">
             <button className="yes">예</button>
             <button className="no" onClick={() => setClicked(!Clicked)}>
+              아니요
+            </button>
+          </div>
+        </div>
+      ) : null}
+      {btnClick ? (
+        <div className="delmodal">
+          <div className="contentbox">정말 탈퇴하시겠습니까?</div>
+          <div className="btns">
+            <button className="yes">예</button>
+            <button className="no" onClick={() => setBtnClick(!btnClick)}>
               아니요
             </button>
           </div>
@@ -82,7 +94,7 @@ function Mypage() {
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
             정보 수정
           </button>
-          <button onClick={() => navigate('/record')}>회원 탈퇴</button>
+          <button onClick={() => setBtnClick(!btnClick)}>회원 탈퇴</button>
         </RecordBox>
         <hr className="line" />
         <PictureBox>

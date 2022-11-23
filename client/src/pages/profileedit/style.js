@@ -21,6 +21,46 @@ export const ImageBox = styled.div`
     object-fit: cover;
     border-radius: 50%;
   }
+  .Imgbox {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    .Imgaddbox {
+      border: 3px solid var(--black-200);
+      border-radius: 3px;
+      width: 110px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .ImgInput {
+        display: none;
+      }
+      .ImgButton {
+        cursor: pointer;
+        padding: 50px 25px;
+        border: none;
+        background-color: transparent;
+      }
+    }
+    .boxs {
+      position: relative;
+      .Imgs {
+        width: 110px;
+        height: 150px;
+        margin: 0 10px;
+        border-radius: 3px;
+      }
+      .Imgdel {
+        position: absolute;
+        opacity: 0.8;
+        border: none;
+        font-size: var(--font-18);
+        right: 10px;
+        cursor: pointer;
+      }
+    }
+  }
 `;
 
 export const ProfileBox = styled.div`
