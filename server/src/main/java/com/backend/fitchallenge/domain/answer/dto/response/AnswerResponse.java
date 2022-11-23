@@ -8,6 +8,7 @@ import com.backend.fitchallenge.domain.member.dto.response.extract.MemberRespons
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -17,15 +18,26 @@ public class AnswerResponse {
 
     private boolean isAccepted;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
     private MemberResponse answerWriter;
 
     private List<AnswerCommentResponse> comments;
 
     @Builder
-    private AnswerResponse(String content, boolean isAccepted, MemberResponse memberResponse, List<AnswerCommentResponse> comments) {
+    private AnswerResponse(String content,
+                           boolean isAccepted,
+                           LocalDateTime createdAt,
+                           LocalDateTime modifiedAt,
+                           MemberResponse answerWriter,
+                           List<AnswerCommentResponse> comments) {
         this.content = content;
         this.isAccepted = isAccepted;
-        this.answerWriter = memberResponse;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.answerWriter = answerWriter;
         this.comments = comments;
     }
 
@@ -33,8 +45,11 @@ public class AnswerResponse {
         return AnswerResponse.builder()
                 .content(answer.getContent())
                 .isAccepted(answer.isAccepted())
-                .memberResponse(MemberResponse.of(answer.getMember()))
+                .createdAt(answer.getCreatedAt())
+                .modifiedAt(answer.getModifiedAt())
+                .answerWriter(MemberResponse.of(answer.getMember()))
                 .comments(comments)
                 .build();
     }
+
 }
