@@ -2,9 +2,8 @@ package com.backend.fitchallenge.domain.question.entity;
 
 import com.backend.fitchallenge.domain.answer.entity.Answer;
 import com.backend.fitchallenge.domain.member.entity.Member;
-import com.backend.fitchallenge.domain.post.entity.Picture;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionCreateVO;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
 import com.backend.fitchallenge.global.audit.Auditable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -58,11 +57,11 @@ public class Question extends Auditable {
         this.member = member;
     }
 
-    public static Question createQuestion(QuestionCreate questionCreate, Member member, List<String> paths) {
+    public static Question createQuestion(QuestionCreateVO questionCreateVO, Member member, List<String> paths) {
         Question question = Question.builder()
-                .title(questionCreate.getTitle())
-                .content(questionCreate.getContent())
-                .questionTag(QuestionTag.from(questionCreate.getTag()))
+                .title(questionCreateVO.getTitle())
+                .content(questionCreateVO.getContent())
+                .questionTag(QuestionTag.from(questionCreateVO.getTag()))
                 .view(0L)
                 .member(member)
                 .build();
@@ -72,10 +71,10 @@ public class Question extends Auditable {
         return question;
     }
 
-    public void updateQuestion(QuestionUpdate questionUpdate) {
-        String changedTitle = questionUpdate.getTitle();
-        String changedContent = questionUpdate.getContent();
-        String changedTag = questionUpdate.getTag();
+    public void updateQuestion(QuestionUpdateVO questionUpdateVO) {
+        String changedTitle = questionUpdateVO.getTitle();
+        String changedContent = questionUpdateVO.getContent();
+        String changedTag = questionUpdateVO.getTag();
 
         this.title = changedTitle == null ? title : changedTitle;
         this.content = changedContent == null ? content : changedContent;
@@ -91,7 +90,8 @@ public class Question extends Auditable {
         DIET("식단"),
         POSTURE("자세"),
         HEALTH("헬스"),
-        HABIT("습관");
+        HABIT("습관"),
+        REPORT("신고");
 
         private final String value;
 

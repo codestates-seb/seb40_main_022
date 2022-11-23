@@ -10,8 +10,9 @@ import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionCreateVO;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.dto.response.SimpleQuestionResponse;
 import com.backend.fitchallenge.domain.question.entity.Question;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 import static com.backend.fitchallenge.domain.question.entity.QQuestion.question;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -51,10 +53,12 @@ public class QuestionService {
      * 1. 요청을 보낸 회원이 존재하는지 확인합니다.
      * 2. 질문을 생성한 후 id를 반환합니다.
      */
-    public Long createQuestion(Long memberId, QuestionCreate questionCreate, List<String> imagePathList) {
+    public Long createQuestion(Long memberId, QuestionCreateVO questionCreateVO, List<String> imagePathList) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
-        Question question = Question.createQuestion(questionCreate, member, imagePathList);
+        log.info("[createQuestion] member findById");
+        Question question = Question.createQuestion(questionCreateVO, member, imagePathList);
+        log.info("[createQuestion] question createQuestion");
 
         return questionRepository.save(question).getId();
     }
@@ -106,11 +110,11 @@ public class QuestionService {
      */
     // todo : "태그" '#' 붙여서 구분 고려
     @Transactional(readOnly = true)
-    public MultiResponse<?> getQuestionList(PageRequest pageable, String keyword) {
+    public MultiResponse<?> getQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
 
         Long total = questionRepository.pagingCount();
 
-        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, keyword).stream()
+        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, questionSearch).stream()
                 .map(questionTuple -> SimpleQuestionResponse.builder()
                         .question(Objects.requireNonNull(questionTuple.get(question)))
                         .member(MemberResponse.of(questionTuple.get(question).getMember()))
@@ -126,7 +130,7 @@ public class QuestionService {
      * 2. 회원이 질문의 작성자인지 확인합니다.
      * 3. 맞다면, 질문을 수정하고 id를 반환합니다.
      */
-    public Long updateQuestion(Long memberId, Long id, QuestionUpdate questionUpdate) {
+    public Long updateQuestion(Long memberId, Long id, QuestionUpdateVO questionUpdateVO) {
 
         Question findQuestion = findVerifiedQuestion(id);
 
@@ -140,9 +144,9 @@ public class QuestionService {
                         }).collect(Collectors.toList());
 
         // S3 이미지파일 수정
-        List<String> imagePaths = awsS3Service.UpdateFile(paths, questionUpdate.getFiles());
+        List<String> imagePaths = awsS3Service.UpdateFile(paths, questionUpdateVO.getFiles());
 
-        findQuestion.updateQuestion(questionUpdate);
+        findQuestion.updateQuestion(questionUpdateVO);
 
         return questionRepository.save(findQuestion).getId();
     }

@@ -1,16 +1,14 @@
 package com.backend.fitchallenge.domain.question.repository;
 
-import com.backend.fitchallenge.domain.question.entity.QQuestion;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.global.dto.request.PageRequest;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
@@ -18,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.backend.fitchallenge.domain.answer.entity.QAnswer.answer;
 import static com.backend.fitchallenge.domain.question.entity.QQuestion.question;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -61,12 +59,13 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     }
 
     @Override
-    public List<Tuple> findList(PageRequest pageable, String keyword) {
+    public List<Tuple> findList(PageRequest pageable, QuestionSearch questionSearch) {
         return jpaQueryFactory
                 .select(question, question.answers.size())
                 .from(question)
-                .where(question.title.contains(keyword).or(question.content.contains(keyword)))
-                .where(question.questionTag.stringValue().eq(pageable.getFilters()))
+                .where(question.title.contains(questionSearch.getQuery())
+                        .or(question.content.contains(questionSearch.getQuery())))
+                .where(question.questionTag.stringValue().eq(questionSearch.getTag().get(0)))
                 .limit(pageable.getSize())
                 .offset(pageable.getOffset())
                 .orderBy(getOrderSpecifier(pageable))
@@ -79,9 +78,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
             Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
 
             switch (order.getProperty()) {
-                case "id" :
+                case "recent" :
                     return new OrderSpecifier<>(direction, question.id);
-                case "view" :
+                case "hot" :
                     return new OrderSpecifier<>(direction, question.view);
             }
         }

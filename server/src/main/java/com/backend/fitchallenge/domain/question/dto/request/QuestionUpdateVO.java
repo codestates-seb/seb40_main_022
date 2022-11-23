@@ -7,27 +7,30 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionCreate {
+public class QuestionUpdateVO {
 
-    @NotBlank(message = "제목을 입력해주세요.")
+    private Long id;
+
+    @NotBlank
     private String title;
 
-    @NotBlank(message = "내용을 입력해주세요.")
+    @NotBlank
     private String content;
 
     private String tag;
 
-    private List<MultipartFile> files;
+    private List<MultipartFile> files = new ArrayList<>();
 
     @Builder
-    public QuestionCreate(String title, String content, String tag) {
+    public QuestionUpdateVO(String title, String content, String tag, List<MultipartFile> files) {
         this.title = title;
         this.content = content;
         this.tag = tag;
+        this.files = files;
     }
 }

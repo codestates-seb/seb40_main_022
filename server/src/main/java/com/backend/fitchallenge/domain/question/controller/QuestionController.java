@@ -1,9 +1,10 @@
 package com.backend.fitchallenge.domain.question.controller;
 
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionCreate;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionCreateVO;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdate;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionSearchQuery;
+import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.service.QuestionService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
@@ -11,6 +12,7 @@ import com.backend.fitchallenge.global.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -26,11 +29,12 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public ResponseEntity<Long> create(@AuthMember MemberDetails memberDetails,
-                                       @Valid @RequestBody QuestionCreate questionCreate) {
+                                       @Valid @RequestBody QuestionCreateVO questionCreateVO) {
 
-        List<String> imagePathList = awsS3Service.StoreFile(questionCreate.getFiles());
+        List<String> imagePathList = awsS3Service.StoreFile(questionCreateVO.getFiles());
+        log.info("AwsS3Service StoreFile 동작");
 
-        return ResponseEntity.ok(questionService.createQuestion(memberDetails.getMemberId(), questionCreate, imagePathList));
+        return ResponseEntity.ok(questionService.createQuestion(memberDetails.getMemberId(), questionCreateVO, imagePathList));
     }
 
     @GetMapping("/questions/{id}")
@@ -40,7 +44,7 @@ public class QuestionController {
     }
 
     @GetMapping("/questions")
-    public ResponseEntity<MultiResponse<?>> list(@ModelAttribute PageRequest pageable) {
+    public ResponseEntity<MultiResponse<?>> list(PageRequest pageable) {
 
         pageable.setDynamicSort();
 
@@ -48,18 +52,21 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/search")
-    public ResponseEntity<MultiResponse<?>> searchList(@ModelAttribute PageRequest pageable, @RequestParam String keyword) {
+    public ResponseEntity<MultiResponse<?>> searchList(PageRequest pageable,
+                                                       @ModelAttribute QuestionSearchQuery questionSearchQuery) {
         pageable.setDynamicSort();
 
-        return ResponseEntity.ok(questionService.getQuestionList(pageable, keyword));
+        QuestionSearch questionSearch = questionSearchQuery.queryParsing();
+
+        return ResponseEntity.ok(questionService.getQuestionList(pageable, questionSearch));
     }
 
     @PatchMapping("/questions/{id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable Long id,
-                                       @Valid @RequestBody QuestionUpdate questionUpdate) {
+                                       @Valid @RequestBody QuestionUpdateVO questionUpdateVO) {
 
-        return ResponseEntity.ok(questionService.updateQuestion(memberDetails.getMemberId(), id, questionUpdate));
+        return ResponseEntity.ok(questionService.updateQuestion(memberDetails.getMemberId(), id, questionUpdateVO));
     }
 
     @DeleteMapping("/questions/{id}")
