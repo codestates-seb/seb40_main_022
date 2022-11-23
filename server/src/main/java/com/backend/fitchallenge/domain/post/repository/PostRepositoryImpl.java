@@ -45,6 +45,18 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
 
     }
 
+    @Override
+    public List<Tuple> findListWithoutLogin(Long lastPostId, Pageable pageable) {
+        return  jpaQueryFactory
+                .select(post,post.postComments.size())
+                .from(post)
+                .leftJoin(post.member, member).fetchJoin()
+                .where(ltPostId(lastPostId)) //no -offset 페이징 처리
+                .limit(pageable.getPageSize()+1) //마지막 페이지인지 여부 확인하기위해 +1 해서 조회
+                .orderBy(post.id.desc()) // 최신순
+                .fetch();
+    }
+
     public List<Tuple> findSearchList( Long memberId,List<Long> postIds) {
 
         return jpaQueryFactory
@@ -53,6 +65,17 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
                 .leftJoin(post.member, member).fetchJoin()
                 .leftJoin(post.likes, likes)
                 .on(likes.member.id.eq(memberId))
+                .where(inPostIds(postIds))
+                .orderBy(post.id.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Tuple> findSearchListWithoutLogin(List<Long> postIds) {
+        return jpaQueryFactory
+                .selectDistinct(post, post.postComments.size())
+                .from(post)
+                .leftJoin(post.member, member).fetchJoin()
                 .where(inPostIds(postIds))
                 .orderBy(post.id.desc())
                 .fetch();
