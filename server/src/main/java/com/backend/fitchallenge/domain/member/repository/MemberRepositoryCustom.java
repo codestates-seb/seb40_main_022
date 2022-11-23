@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member.repository;
 
+import com.backend.fitchallenge.domain.calendar.entity.Record;
 import com.backend.fitchallenge.domain.challenge.dto.RankingCondition;
 import com.backend.fitchallenge.domain.challenge.dto.RankingDto;
 import com.backend.fitchallenge.domain.member.entity.Member;
@@ -15,4 +16,6 @@ public interface MemberRepositoryCustom {
     List<RankingDto> rankingList(RankingCondition condition);
 
     List<Member> findMemberList(List<Long> memberIds);
+
+    Member findOpponent(Long memberId);
 }

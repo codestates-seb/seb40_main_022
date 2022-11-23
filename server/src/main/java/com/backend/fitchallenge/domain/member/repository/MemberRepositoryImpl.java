@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.member.repository;
 
+import com.backend.fitchallenge.domain.calendar.entity.Record;
 import com.backend.fitchallenge.domain.challenge.dto.QRankingDto;
 import com.backend.fitchallenge.domain.challenge.dto.RankingCondition;
 import com.backend.fitchallenge.domain.challenge.dto.RankingDto;
@@ -9,10 +10,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import static com.backend.fitchallenge.domain.challenge.entity.QChallenge.challenge;
 import static com.backend.fitchallenge.domain.member.entity.QMember.member;
-import static com.backend.fitchallenge.domain.member.entity.QMemberActivity.*;
+import static com.backend.fitchallenge.domain.member.entity.QMemberActivity.memberActivity;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
@@ -54,6 +57,19 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public Member findOpponent(Long memberId) {
+        //주석처리한 로직들은 '달력에 표시하기 위해 지난 챌린지에 대해서도 기록을 남겨놓는다면' 사용할 것들입니다.
+//        LocalDate recordDate = LocalDate.of(record.getYear(), record.getMonth(), record.getDay());
+
+        return jpaQueryFactory.selectFrom(member)
+                .leftJoin(member.challenge, challenge).fetchJoin()
+                .where(challengeMemberIdEq(memberId)
+//                        , challengeStartLoe(recordDate)
+//                        , challengeEndGoe(recordDate)
+                )
+                .fetchOne();
+    }
 
     /* 검색조건 */
 
@@ -79,15 +95,27 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }  
     // 경력 이상
     private BooleanExpression periodGoe(Integer periodGoe) {
-        return isEmpty(periodGoe) ? null : member.weight.goe(periodGoe);
+        return isEmpty(periodGoe) ? null : member.period.goe(periodGoe);
     }
     // 경력 미만
     private BooleanExpression periodLt(Integer periodLt) {
-        return isEmpty(periodLt) ? null : member.weight.lt(periodLt);
+        return isEmpty(periodLt) ? null : member.period.lt(periodLt);
     }
-    
-    
 
+    // 챌린지 상대와 일치
+    private BooleanExpression challengeMemberIdEq(Long memberId) {
+        return isEmpty(memberId) ? null : (
+                member.id.eq(challenge.applicantId).and(challenge.counterpartId.eq(memberId))
+                .or(member.id.eq(challenge.counterpartId).and(challenge.applicantId.eq(memberId))));
+    }
 
+    // 챌린지 시작 날짜 이후
+    private BooleanExpression challengeStartLoe(LocalDate localDateLoe) {
+        return isEmpty(localDateLoe) ? null : challenge.challengeStart.loe(localDateLoe);
+    }
 
+    // 챌린지 종료 날짜 이전전
+   private BooleanExpression challengeEndGoe(LocalDate localDateGoe) {
+        return isEmpty(localDateGoe) ? null : challenge.challengeEnd.goe(localDateGoe);
+    }
 }
