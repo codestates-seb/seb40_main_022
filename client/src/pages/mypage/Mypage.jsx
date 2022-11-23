@@ -32,11 +32,12 @@ function Mypage() {
   const ac = useSelector(state => state.authToken.accessToken);
   const re = useSelector(state => state.authToken.token);
   const data = [ac, re];
-  // const ld = useSelector(state => state);
+  const listdata1 = useSelector(state => state.mypage.data);
+  console.log(listdata1);
 
   useEffect(() => {
     dispatch(MypageGet(data));
-  }, [data]);
+  }, []);
 
   return (
     <Wrapper>
@@ -70,17 +71,17 @@ function Mypage() {
           </div>
         </ProfileBox>
         <NameBox>
-          <div className="username">유저 이름</div>
+          <div className="username">{listdata1.userName}</div>
         </NameBox>
         <FollowBox>
-          <div>게시물 22</div>
-          <div>포인트 120</div>
+          <div>게시물 {listdata1.dailyPosts.items.length}</div>
+          <div>포인트 {listdata1.activity.point}</div>
         </FollowBox>
         <RecordBox>
           <div className="boxs">
             <div className="box">
               <FontAwesomeIcon icon={faDumbbell} />
-              450kg
+              {listdata1.activity.kilogram}kg
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
@@ -88,7 +89,7 @@ function Mypage() {
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faPersonRunning} />
-              30일
+              {listdata1.activity.dayCount}일
             </div>
           </div>
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>

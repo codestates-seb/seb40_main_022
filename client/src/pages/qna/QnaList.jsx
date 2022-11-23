@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import Header from '../../components/header/Header';
 import searchIcon from '../../images/searchIcon.png';
 import Footer from '../../components/footer/Footer';
@@ -18,13 +18,11 @@ import { QnaAsynclist } from '../../redux/action/QnaAsync';
 function QnaList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const list = useSelector(state => state.qnalist.list);
+  console.log(list);
   useEffect(() => {
     dispatch(QnaAsynclist());
   }, []);
-
-  const list = useSelector(state => state);
-  console.log(list);
 
   return (
     <QnABack>
@@ -59,20 +57,20 @@ function QnaList() {
         </QnaRadio>
         <QnaContent>
           {list &&
-            list.map(data => {
+            list.map((data, idx) => {
               return (
                 <div className="qnabox">
                   <article>
                     <div>
-                      <Link to="/qnadetail" className="titlename">
+                      <Link to={`/qnadetail/${idx}`} className="titlename">
                         {data.title}
                       </Link>
-                      <h3>{data.content}</h3>
+                      <h3>{data.summary}</h3>
                     </div>
                     <span>
-                      <h3 className="answerfont">{data.Totalans}</h3>
-                      <h3>{data.username}</h3>
-                      <h3>{data.today}</h3>
+                      <h3 className="answerfont">답변 : {data.answerCount}</h3>
+                      <h3>{data.member.username}</h3>
+                      <h3>{data.createdAt}</h3>
                       <button>{data.tag}</button>
                     </span>
                   </article>

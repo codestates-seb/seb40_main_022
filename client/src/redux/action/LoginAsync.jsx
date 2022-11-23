@@ -36,6 +36,5 @@ export const ReLodingLogin = createAsyncThunk('relogin', () => {
   const ac = localStorage.getItem('Authorization');
   const re = localStorage.getItem('RefreshToken');
   const auth = [ac, re];
-  console.log(auth);
   return auth;
 });
