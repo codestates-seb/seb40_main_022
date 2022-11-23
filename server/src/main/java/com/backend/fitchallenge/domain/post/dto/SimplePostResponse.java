@@ -10,33 +10,33 @@ import java.time.LocalDateTime;
 public class SimplePostResponse {
 
     private Long postId;
-    private Long viewCount;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
     private String content;
     private Integer commentCount ;
     private Integer likeCount;
+    private Boolean more;
+    private Boolean commentMore;
 
     @Builder
-    public SimplePostResponse(Long postId, Long viewCount, LocalDateTime createdAt, LocalDateTime modifiedAt, String content, Integer commentCount,Integer likeCount) {
+    public SimplePostResponse(Long postId, LocalDateTime createdAt, String content, Integer commentCount, Integer likeCount, Boolean more, Boolean commentMore) {
         this.postId = postId;
-        this.viewCount = viewCount;
         this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
         this.content = content;
         this.commentCount = commentCount;
         this.likeCount = likeCount;
+        this.more = more;
+        this.commentMore = commentMore;
     }
 
     public static SimplePostResponse toResponse(Post post, Integer likeSize, Integer commentSize) {
         return SimplePostResponse.builder()
                 .postId(post.getId())
-                .viewCount(post.getView())
                 .createdAt(post.getCreatedAt())
-                .modifiedAt(post.getModifiedAt())
                 .content(post.getContent())
                 .likeCount(likeSize)
                 .commentCount(commentSize)
+                .more(false)
+                .commentMore(false)
                 .build();
     }
 

@@ -8,9 +8,11 @@ import com.backend.fitchallenge.domain.member.dto.response.UpdateResponse;
 import com.backend.fitchallenge.domain.member.entity.ProfileImage;
 import com.backend.fitchallenge.domain.member.service.MemberAwsS3Service;
 import com.backend.fitchallenge.domain.member.service.MemberService;
+import com.backend.fitchallenge.domain.post.dto.PostGet;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -26,6 +28,7 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -44,6 +47,7 @@ public class MemberController {
     public ResponseEntity update(@AuthMember MemberDetails memberDetails,
                                  MemberUpdateVO memberUpdateVO){ //todo. requestbody 때기 - checked
 
+        log.info("file= {}", memberUpdateVO.getProfileImage().getOriginalFilename());
         UpdateResponse updateResponse = memberService.updateMember(memberDetails.getEmail(), memberUpdateVO);
 
         return new ResponseEntity(updateResponse, HttpStatus.OK);
@@ -52,10 +56,11 @@ public class MemberController {
     //마이페이지
     @GetMapping("/myPage")
     public ResponseEntity myInfoDetails(@AuthMember MemberDetails memberDetails,
+                                        @ModelAttribute PostGet postGet,
                                         @PageableDefault(size = 3) Pageable pageable){
 
         System.out.println(memberDetails.toString());
-        MyPageResponse myPageResponse = memberService.getMyInfo(memberDetails.getEmail(), pageable);
+        MyPageResponse myPageResponse = memberService.getMyInfo(postGet.getLastPostId(), memberDetails.getEmail(), pageable);
 
         return new ResponseEntity(myPageResponse, HttpStatus.OK);
     }
@@ -63,9 +68,10 @@ public class MemberController {
     //특정 유저 조회
     @GetMapping("/{id}")
     public ResponseEntity memberDetails(@PathVariable("id") @Positive Long memberId,
+                                        @ModelAttribute PostGet postGet,
                                         @PageableDefault(size = 3) Pageable pageable){
 
-        DetailsMemberResponse detailsMemberResponse = memberService.getMember(memberId, pageable);
+        DetailsMemberResponse detailsMemberResponse = memberService.getMember(postGet.getLastPostId(), memberId, pageable);
 
         return new ResponseEntity(detailsMemberResponse, HttpStatus.OK);
     }

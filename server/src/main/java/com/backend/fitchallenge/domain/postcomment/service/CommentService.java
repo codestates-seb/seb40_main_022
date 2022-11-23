@@ -3,7 +3,7 @@ package com.backend.fitchallenge.domain.postcomment.service;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
-import com.backend.fitchallenge.domain.post.dto.MultiResponse;
+import com.backend.fitchallenge.global.dto.response.SliceMultiResponse;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.backend.fitchallenge.domain.post.service.PostService;
 import com.backend.fitchallenge.domain.postcomment.dto.CommentCreate;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +55,7 @@ public class CommentService {
      * 2. 무한 스크롤 처리
      * @return 댓글목록 Slice
      */
-    public MultiResponse<?> getCommentList(Long postId, Long lastCommentId,  Pageable pageable) {
+    public SliceMultiResponse<?> getCommentList(Long postId, Long lastCommentId, Pageable pageable) {
 
         // postComment 목록 조회
         List<CommentResponse> commentResponses = queryCommentRepository.findPostComments(postId, lastCommentId, pageable).stream()
@@ -66,7 +65,7 @@ public class CommentService {
         //무한 스크롤 처리
         Slice<CommentResponse> result = checkLastPage(commentResponses, pageable);
 
-        return MultiResponse.of(result);
+        return SliceMultiResponse.of(result);
     }
 
     /**

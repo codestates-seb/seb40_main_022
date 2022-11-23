@@ -56,7 +56,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             //redis 확인부터 : Cache Aside 정책. -> redis 먼저 조회하기에, 정보가 존재하면 RDB 접근 하지 않아도 됨.
             if(redisService.getValues(email) == null){
                 jwtTokenProvider.verifiedRefreshToken(refreshToken);
-                redisService.setValues(email, refreshToken);
+                redisService.setValues(email, refreshToken, jwtTokenProvider.calExpDuration(refreshToken));
             }
 
             //todo. 인증, 리프레시 토큰 리이슈 관련한 자리로 옮기는 것 염두하기. why? 모든 요청시마다 db를 들르고 시작하기 때문
