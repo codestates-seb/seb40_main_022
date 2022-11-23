@@ -6,21 +6,24 @@ export const asyncPostUp = createAsyncThunk(
   ({ files, content, tagList, ac, re }) => {
     console.log(files, content, tagList);
     if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
-      axios.post(
-        '/dailyPosts',
-        JSON.stringify({
-          pictures: files,
-          post: { content },
-          tags: tagList,
-        }),
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: ac,
-            RefreshToken: re,
+      axios
+        .post(
+          '/dailyposts',
+          // 'http://localhost:3001/dailypost',
+          JSON.stringify({
+            pictures: files,
+            post: { content },
+            tags: tagList,
+          }),
+          {
+            headers: {
+              // 'Content-Type': 'multipart/form-data',
+              Authorization: ac,
+              RefreshToken: re,
+            },
           },
-        },
-      );
+        )
+        .then(response => console.log(response));
     }
   },
 );
@@ -30,7 +33,8 @@ export const asyncPostUpdate = createAsyncThunk(
   ({ files, content, tagList, id, ac, re }) => {
     if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
       axios.patch(
-        `/dailyPosts/${id}`,
+        `/dailyposts/${id}`,
+        // `http://localhost:3001/dailypost/${id}`,
         JSON.stringify({ pictures: files, post: { content }, tags: tagList }),
         {
           headers: {
@@ -46,14 +50,19 @@ export const asyncPostUpdate = createAsyncThunk(
 
 export const asyncPost = createAsyncThunk('post', async (ac, re) => {
   const data = await axios
-    .get('/dailyPosts', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: ac,
-        RefreshToken: re,
+    .get(
+      '/dailyposts',
+      // 'http://localhost:3001/dailypost',
+      {
+        headers: {
+          // 'Content-Type': 'application/json',
+          Authorization: ac,
+          RefreshToken: re,
+        },
       },
-    })
+    )
     .then(res => {
+      console.log(res);
       return res.data;
     });
 
@@ -64,7 +73,7 @@ export const asyncLike = createAsyncThunk(
   'post/up',
   ({ likeStates, id, ac, re }) => {
     axios.post(
-      `http://localhost:3001/dailyPost/${id}/like`,
+      `http://localhost:3001/dailypost/${id}/like`,
       JSON.stringify({ likeStates }),
       {
         headers: {
@@ -81,7 +90,7 @@ export const asyncLikeundo = createAsyncThunk(
   'post/up',
   ({ likeStates, id, ac, re }) => {
     axios.post(
-      `http://localhost:3001/dailyPost/${id}/like/undo`,
+      `http://localhost:3001/dailypost/${id}/like/undo`,
       JSON.stringify({ likeStates }),
       {
         headers: {
@@ -95,18 +104,25 @@ export const asyncLikeundo = createAsyncThunk(
 );
 
 export const asyncPostDel = createAsyncThunk('post/del', ({ id }) => {
-  axios.delete(`/dailyPosts/${id}`);
+  axios.delete(
+    `/dailyposts/${id}`,
+    // `http://localhost:3001/dailypost/${id}`,
+  );
 });
 
 export const asyncPostCmt = createAsyncThunk('comment', (id, ac, re) => {
   const data = axios
-    .get(`/dailyPosts/${id}/comments`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: ac,
-        RefreshToken: re,
+    .get(
+      `/dailyposts/${id}/comments`,
+      // `http://localhost:3001/dailypost/${id}/comments`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: ac,
+          RefreshToken: re,
+        },
       },
-    })
+    )
     .then(res => {
       return res.data;
     });
@@ -118,7 +134,7 @@ export const asyncPostCmtUp = createAsyncThunk(
   'post/up',
   (id, data, ac, re) => {
     axios.post(
-      `/dailyPosts/${id}/comments`,
+      `http://localhost:3001/dailypost/${id}/comments`,
       JSON.stringify({
         contentId: data[0],
         content: data[1],
@@ -139,14 +155,14 @@ export const asyncPostCmtUp = createAsyncThunk(
 );
 
 export const asyncPostCmtDel = createAsyncThunk('post/del', (id, commentId) => {
-  axios.delete(`/dailyPosts/${id}/comments${commentId}`);
+  axios.delete(`http://localhost:3001/dailypost/${id}/comments/${commentId}`);
 });
 
 export const asyncPostCmtEdit = createAsyncThunk(
   'post/up',
   (id, data, ac, re) => {
     axios.patch(
-      `/dailyPosts/${id}/comments`,
+      `http://localhost:3001/dailypost/${id}/comments`,
       JSON.stringify({
         contentId: data[0],
         content: data[1],

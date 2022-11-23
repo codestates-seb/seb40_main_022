@@ -16,22 +16,25 @@ import {
 
 export default function DailyPost() {
   const data = useSelector(state => state.dailypost.data);
-  // const cmtData = useSelector(state => state.dailypost.comment);
+  console.log(data);
+  const cmtData = useSelector(state => state.dailypost.comment);
+  console.log(cmtData);
   const dispatch = useDispatch();
   // const [fav, setFav] = useState(false);
   const [isComment, setIsComment] = useState(false);
+  // const [bol, setBol] = useState(true);
   const id = useParams();
 
-  const filteredCmt = useSelector(state =>
-    state.dailypost.comment.filter(el => {
-      return el.commentId === +id.id;
-    }),
-  );
+  // const filteredCmt = useSelector(state =>
+  //   state.dailypost.comment.filter(el => {
+  //     return el.commentId === +id.id;
+  //   }),
+  // );
 
-  const handleansbol = () => {
-    console.log(filteredCmt);
-    // setBol(false);
-  };
+  // const handleansbol = () => {
+  //   console.log(filteredCmt);
+  //   setBol(false);
+  // };
 
   const handleCmtDel = commentId => {
     dispatch(asyncPostCmtDel(commentId));
@@ -40,10 +43,10 @@ export default function DailyPost() {
   useEffect(() => {
     dispatch(asyncPost());
     dispatch(asyncPostCmt());
-  }, [dispatch, filteredCmt]);
+  }, [dispatch]);
 
-  const handleDelPost = postId => {
-    dispatch(asyncPostDel({ postId }));
+  const handleDelPost = () => {
+    dispatch(asyncPostDel({ id }));
     window.location.reload();
   };
 
@@ -123,8 +126,8 @@ export default function DailyPost() {
               </article>
               {isComment ? (
                 <div className="commentdiv">
-                  {filteredCmt &&
-                    filteredCmt.map(comment => {
+                  {cmtData &&
+                    cmtData.map(comment => {
                       return (
                         <div className="comment">
                           <span className="cmtUserImg">
@@ -141,9 +144,9 @@ export default function DailyPost() {
                             <div>{comment.content}</div>
                           </div>
                           <button
-                            onClick={() => {
-                              handleansbol();
-                            }}
+                          // onClick={() => {
+                          //   handleansbol();
+                          // }}
                           >
                             수정
                           </button>
