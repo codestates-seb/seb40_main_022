@@ -79,7 +79,7 @@ function ProfileEdit() {
         data,
       }),
     );
-    navigate('/member/mypage');
+    navigate('/mypage');
   };
 
   return (
@@ -261,7 +261,7 @@ function ProfileEdit() {
             >
               완료
             </button>
-            <button onClick={() => navigate('/member/mypage')}>취소</button>
+            <button onClick={() => navigate('/mypage')}>취소</button>
           </BtnBox>
         </ProfileBox>
       </div>

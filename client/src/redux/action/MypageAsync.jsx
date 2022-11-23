@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const MypageGet = createAsyncThunk('member/mypage', data => {
-  console.log(data);
+export const MypageGet = createAsyncThunk('/mypage', data => {
   const list = axios
     .get('/members/myPage', {
       headers: {
@@ -11,10 +10,9 @@ export const MypageGet = createAsyncThunk('member/mypage', data => {
       },
     })
     .then(res => {
-      console.log(res);
       return res.data;
     });
-
+  console.log(list);
   return list;
 });
 
