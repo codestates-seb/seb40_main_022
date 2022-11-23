@@ -2,8 +2,8 @@ package com.backend.fitchallenge.domain.member.service;
 
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
-import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
 import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
+import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
 import com.backend.fitchallenge.domain.member.dto.response.UpdateResponse;
 import com.backend.fitchallenge.domain.member.dto.response.extract.DailyPost;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractActivity;
@@ -13,21 +13,20 @@ import com.backend.fitchallenge.domain.member.entity.ProfileImage;
 import com.backend.fitchallenge.domain.member.exception.MemberExist;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
-import com.backend.fitchallenge.domain.post.entity.Picture;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.backend.fitchallenge.domain.post.repository.PostRepository;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.domain.refreshtoken.exception.TokenNotExist;
+import com.backend.fitchallenge.global.dto.response.SliceMultiResponse;
 import com.backend.fitchallenge.global.redis.RedisService;
-import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,7 +57,7 @@ public class MemberService {
         checkAlreadyExist(memberCreate.getEmail());
 
         // todo. 기본 이미지 path를 가진 profileImage생성 후 member에 넣어주기. - checked
-        ProfileImage profileImage = ProfileImage.createWithPath("기본이미지"); //todo. 기본이미지 경로 바꿔주기.
+        ProfileImage profileImage = ProfileImage.createWithPath("\"https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png%22)%7B");
         Member member = memberCreate.toMember(passwordEncoder, profileImage);
         profileImage.setMember(member);
 
@@ -102,17 +101,21 @@ public class MemberService {
      * 4. 필요정보만 MyPageResponse에 담는다.
      */
     @Transactional(readOnly = true)
-    public MyPageResponse getMyInfo(String loginEmail, Pageable pageable){
+    public MyPageResponse getMyInfo(Long lastPostId, String loginEmail, Pageable pageable){
 
         Member findMember = findVerifiedMember(loginEmail);
 
         // todo. post연결 - checked
-        Page<Post> pages = postRepository.findByMemberId(findMember.getId(), pageable);
-        List<DailyPost> dailyPosts = pages.getContent().stream()
-                .map(post -> DailyPost.of(post.getPictures().get(0)))
+        List<Post> pages = memberRepository.findList(lastPostId, findMember.getId(), pageable);
+
+        List<DailyPost> dailyPosts = pages.stream()
+                .map(post -> post == null ? DailyPost.of() : DailyPost.of(post))
                 .collect(Collectors.toList());
 
-        return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()), dailyPosts);
+        Slice<DailyPost> result = checkLastPage(dailyPosts, pageable);
+        SliceMultiResponse<DailyPost> sliceResult = SliceMultiResponse.createSliceDailyPost(result);
+
+        return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()), sliceResult);
 
     }
 
@@ -122,17 +125,20 @@ public class MemberService {
      * @return DetailsMemberResponse
      */
     @Transactional(readOnly = true)
-    public DetailsMemberResponse getMember(Long memberId, Pageable pageable){
+    public DetailsMemberResponse getMember(Long lastPostId, Long memberId, Pageable pageable){
 
         Member findMember = findVerifiedMemberById(memberId);
 
         // todo. post연결 - checked
-        Page<Post> pages = postRepository.findByMemberId(findMember.getId(), pageable);
-        List<DailyPost> dailyPosts = pages.getContent().stream()
-                .map(post -> DailyPost.of(post.getPictures().get(0)))
+        List<Post> pages = memberRepository.findList(lastPostId, findMember.getId(), pageable);
+        List<DailyPost> dailyPosts = pages.stream()
+                .map(post -> post == null ? DailyPost.of() : DailyPost.of(post))
                 .collect(Collectors.toList());
 
-        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), dailyPosts);
+        Slice<DailyPost> result = checkLastPage(dailyPosts, pageable);
+        SliceMultiResponse<DailyPost> sliceResult = SliceMultiResponse.createSliceDailyPost(result);
+
+        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), sliceResult);
     }
 
     // todo : 인플루언서 랭킹별로 조회하기 - 중요도 하.
@@ -182,5 +188,20 @@ public class MemberService {
     public Member findVerifiedMemberById(Long memberId){
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() -> new MemberNotExist());
+    }
+
+    // 무한 스크롤 처리
+    private Slice<DailyPost> checkLastPage(List<DailyPost> postResponses, Pageable pageable) {
+
+        boolean hasNext = false;
+
+        //조회 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
+        if (postResponses.size() > pageable.getPageSize()) {
+            hasNext = true;
+            // 확인용으로 추가한데이터 remove(findList에서 limit에 +1해서 조회한 데이터)
+            postResponses.remove(pageable.getPageSize());
+        }
+
+        return new SliceImpl<>(postResponses, pageable, hasNext);
     }
 }
