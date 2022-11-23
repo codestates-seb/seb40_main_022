@@ -15,6 +15,7 @@ public enum ExceptionCode {
     //Question
     QUESTION_NOT_FOUND(404, "Question not found"),
     NOT_QUESTION_WRITER(400, "Not question writer"),
+    QUESTION_TAG_NOT_VALID(400, "Question Tag Not Valid"),
     //Answer
     ANSWER_NOT_FOUND(404, "Answer not found"),
     NOT_ANSWER_WRITER(400, "Not answer writer"),

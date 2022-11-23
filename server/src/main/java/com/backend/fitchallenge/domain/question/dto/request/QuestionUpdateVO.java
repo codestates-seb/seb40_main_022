@@ -24,13 +24,13 @@ public class QuestionUpdateVO {
 
     private String tag;
 
-    private List<MultipartFile> files = new ArrayList<>();
+    private List<MultipartFile> files;
 
     @Builder
     public QuestionUpdateVO(String title, String content, String tag, List<MultipartFile> files) {
         this.title = title;
         this.content = content;
         this.tag = tag;
-        this.files = files;
+        this.files = files != null ? files : List.of();
     }
 }

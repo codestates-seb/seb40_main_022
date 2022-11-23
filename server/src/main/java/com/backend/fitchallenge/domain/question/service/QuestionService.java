@@ -16,6 +16,7 @@ import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.dto.response.SimpleQuestionResponse;
 import com.backend.fitchallenge.domain.question.entity.Question;
+import com.backend.fitchallenge.domain.question.entity.QuestionPicture;
 import com.backend.fitchallenge.domain.question.exception.NotQuestionWriter;
 import com.backend.fitchallenge.domain.question.exception.QuestionNotFound;
 import com.backend.fitchallenge.domain.question.repository.QuestionRepository;
@@ -96,7 +97,8 @@ public class QuestionService {
                 .map(questionTuple -> SimpleQuestionResponse.builder()
                         .question(Objects.requireNonNull(questionTuple.get(question)))
                         //전체 질문 목록 조회시 첫 번째 사진 한 장만 띄우게 설정
-                        .picture(questionTuple.get(question).getQuestionPictures().get(0).getPath())
+                        .picture(questionTuple.get(question).getQuestionPictures().stream().findFirst()
+                                .orElse(QuestionPicture.withEmptyPath()).getPath())
                         .member(MemberResponse.of(questionTuple.get(question).getMember()))
                         .answerCount(questionTuple.get(question.answers.size()))
                         .build()).collect(Collectors.toList()), pageable.of(), total);
@@ -110,7 +112,7 @@ public class QuestionService {
     // todo : "태그" '#' 붙여서 구분 고려
     @Transactional(readOnly = true)
     public MultiResponse<?> getQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
-
+        log.info("repository query: {}", questionSearch.getQuery());
         Long total = questionRepository.pagingCount();
 
         Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, questionSearch).stream()
@@ -127,6 +129,7 @@ public class QuestionService {
      * [질문 수정]
      * 1. 요청을 보낸 회원과 질문이 존재하는지 확인합니다.
      * 2. 회원이 질문의 작성자인지 확인합니다.
+     * 3. 수정 요청에 사진이 포함되어 있다면
      * 3. 맞다면, 질문을 수정하고 id를 반환합니다.
      */
     public Long updateQuestion(Long memberId, Long id, QuestionUpdateVO questionUpdateVO) {
@@ -135,15 +138,17 @@ public class QuestionService {
 
         verifyWriter(memberId, findQuestion);
 
-        // 이미지 경로를 불러옴
-        List<String> paths = findQuestion.getQuestionPictures().stream()
-                        .map(questionPicture -> {
-                            int index = questionPicture.getPath().lastIndexOf("/");
-                            return questionPicture.getPath().substring(index + 1);
-                        }).collect(Collectors.toList());
+        if (!questionUpdateVO.getFiles().isEmpty()) {
+            // 이미지 경로를 불러옴
+            List<String> paths = findQuestion.getQuestionPictures().stream()
+                    .map(questionPicture -> {
+                        int index = questionPicture.getPath().lastIndexOf("/");
+                        return questionPicture.getPath().substring(index + 1);
+                    }).collect(Collectors.toList());
 
-        // S3 이미지파일 수정
-        List<String> imagePaths = awsS3Service.UpdateFile(paths, questionUpdateVO.getFiles());
+            // S3 이미지파일 수정
+            List<String> imagePaths = awsS3Service.UpdateFile(paths, questionUpdateVO.getFiles());
+        }
 
         findQuestion.updateQuestion(questionUpdateVO);
 
@@ -169,7 +174,9 @@ public class QuestionService {
                         }).collect(Collectors.toList());
 
         //s3에서 질문에 해당하는 사진 삭제
-        awsS3Service.DeleteFile(paths);
+        if (!paths.isEmpty()) {
+            awsS3Service.DeleteFile(paths);
+        }
 
         questionRepository.delete(findQuestion);
 

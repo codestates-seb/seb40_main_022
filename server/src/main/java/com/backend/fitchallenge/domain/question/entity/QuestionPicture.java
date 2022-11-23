@@ -39,4 +39,8 @@ public class QuestionPicture {
 
         question.getQuestionPictures().add(picture);
     }
+
+    public static QuestionPicture withEmptyPath() {
+        return QuestionPicture.builder().path("").build();
+    }
 }

@@ -23,13 +23,13 @@ public class QuestionCreateVO {
     @NotBlank(message = "태그를 입력해주세요.")
     private String tag;
 
-    private List<MultipartFile> files = new ArrayList<>();
+    private List<MultipartFile> files;
 
     @Builder
     public QuestionCreateVO(String title, String content, String tag, List<MultipartFile> files) {
         this.title = title;
         this.content = content;
         this.tag = tag;
-        this.files = files;
+        this.files = files != null ? files : List.of();
     }
 }

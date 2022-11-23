@@ -1,5 +1,7 @@
 package com.backend.fitchallenge.domain.question.dto.request;
 
+import com.backend.fitchallenge.domain.question.entity.Question;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,19 +17,19 @@ public class QuestionSearchQuery {
 
     public QuestionSearch queryParsing() {
 
-        Pattern p = Pattern.compile("\\#([ㄱ-ㅎ가-핳a-zA-Z\\d]+)");
+        Pattern p = Pattern.compile("\\#([ㄱ-ㅎ가-힣]*)");
 
         // 검색할 문자열 패턴 : 숫자
         Matcher m = p.matcher(q);// 문자열 설정
 
-        List<String> tag = new ArrayList<>();
+        String tagName = "";
 
         while (m.find()) {
-            tag.add(m.group().substring(1));
+            tagName = m.group().substring(1);
         }
 
         String noTagOneSpaceString = m.replaceAll("").replaceAll("\\s+", " ");
 
-        return QuestionSearch.of(noTagOneSpaceString, tag);
+        return QuestionSearch.of(noTagOneSpaceString, Question.QuestionTag.fromQuery(tagName));
     }
 }

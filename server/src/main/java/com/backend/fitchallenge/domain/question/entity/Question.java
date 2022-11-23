@@ -4,6 +4,7 @@ import com.backend.fitchallenge.domain.answer.entity.Answer;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionCreateVO;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
+import com.backend.fitchallenge.domain.question.exception.QuestionTagNotValid;
 import com.backend.fitchallenge.global.audit.Auditable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -108,7 +109,15 @@ public class Question extends Auditable {
                 if (tag.getValue().equals(value))
                     return tag;
             }
-            return null;
+            throw new QuestionTagNotValid();
+        }
+
+        public static String fromQuery(String value) {
+            for (QuestionTag tag : QuestionTag.values()) {
+                if (tag.getValue().equals(value))
+                    return tag.toString();
+            }
+            return "";
         }
 
         /**

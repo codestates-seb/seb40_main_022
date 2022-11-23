@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,10 +30,13 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public ResponseEntity<Long> create(@AuthMember MemberDetails memberDetails,
-                                       @Valid @RequestBody QuestionCreateVO questionCreateVO) {
+                                       QuestionCreateVO questionCreateVO) {
 
-        List<String> imagePathList = awsS3Service.StoreFile(questionCreateVO.getFiles());
-        log.info("AwsS3Service StoreFile 동작");
+        List<String> imagePathList = new ArrayList<>();
+        if (!questionCreateVO.getFiles().isEmpty()) {
+            imagePathList = awsS3Service.StoreFile(questionCreateVO.getFiles());
+            log.info("AwsS3Service StoreFile 동작");
+        }
 
         return ResponseEntity.ok(questionService.createQuestion(memberDetails.getMemberId(), questionCreateVO, imagePathList));
     }
@@ -47,6 +51,8 @@ public class QuestionController {
     public ResponseEntity<MultiResponse<?>> list(PageRequest pageable) {
 
         pageable.setDynamicSort();
+        log.info("sortBy: {}", pageable.getSortBy());
+        log.info("sort: {}", pageable.getSortBy());
 
         return ResponseEntity.ok(questionService.getQuestionList(pageable));
     }
@@ -57,6 +63,8 @@ public class QuestionController {
         pageable.setDynamicSort();
 
         QuestionSearch questionSearch = questionSearchQuery.queryParsing();
+        log.info("query: {}", questionSearch.getQuery());
+        log.info("tag: {}", questionSearch.getTag());
 
         return ResponseEntity.ok(questionService.getQuestionList(pageable, questionSearch));
     }
@@ -64,7 +72,7 @@ public class QuestionController {
     @PatchMapping("/questions/{id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable Long id,
-                                       @Valid @RequestBody QuestionUpdateVO questionUpdateVO) {
+                                       QuestionUpdateVO questionUpdateVO) {
 
         return ResponseEntity.ok(questionService.updateQuestion(memberDetails.getMemberId(), id, questionUpdateVO));
     }

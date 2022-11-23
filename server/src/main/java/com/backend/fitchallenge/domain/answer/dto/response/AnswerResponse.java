@@ -16,7 +16,7 @@ public class AnswerResponse {
 
     private String content;
 
-    private boolean isAccepted;
+    private Boolean accepted;
 
     private LocalDateTime createdAt;
 
@@ -34,7 +34,7 @@ public class AnswerResponse {
                            MemberResponse answerWriter,
                            List<AnswerCommentResponse> comments) {
         this.content = content;
-        this.isAccepted = isAccepted;
+        this.accepted = isAccepted;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.answerWriter = answerWriter;
