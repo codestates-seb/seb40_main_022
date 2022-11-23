@@ -1,0 +1,55 @@
+{
+  "data": [
+    {
+      "questionId": 3,
+      "title": "근육량 키우는 좋은 습관 있을까요?",
+      "summary": "제곧내",
+      "tag": "식단",
+      "view": 0,
+      "answerCount": 0,
+      "createdAt": "2022-11-19T18:27:57.836433",
+      "modifiedAt": "2022-11-19T18:27:57.836433",
+      "member": {
+        "id": 4,
+        "username": "그런말하지말왕",
+        "profileImage": null
+      }
+    },
+    {
+      "questionId": 2,
+      "title": "사이드 레터럴 레이즈 자세좀 봐주세요",
+      "summary": "유튜브 보고 따라했는데 이게 맞나요?",
+      "tag": "자세",
+      "view": 0,
+      "answerCount": 0,
+      "createdAt": "2022-11-19T18:27:56.754445",
+      "modifiedAt": "2022-11-19T18:27:56.754445",
+      "member": {
+        "id": 13,
+        "username": "뇌도근육인남자",
+        "profileImage": null
+      }
+    },
+    {
+      "questionId": 1,
+      "title": "헬린이 린매스용 식단추천 부탁드려요.",
+      "summary": "운동 시작한지 한달된 판교 개발잔데 식단 추천부탁드립니다.",
+      "tag": "식단",
+      "view": 1,
+      "answerCount": 1,
+      "createdAt": "2022-11-19T18:27:53.570782",
+      "modifiedAt": "2022-11-19T18:28:20.40058",
+      "member": {
+        "id": 1,
+        "username": "프로틴",
+        "profileImage": null
+      }
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 3,
+    "totalPages": 2
+  }
+}

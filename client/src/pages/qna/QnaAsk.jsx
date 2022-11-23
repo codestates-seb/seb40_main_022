@@ -23,6 +23,7 @@ function QnaAsk() {
 
   const handleSubmit = () => {
     dispatch(QnaAsynclistPost({ title, content, tag }));
+    console.log(title);
     navigate('/qna');
   };
 

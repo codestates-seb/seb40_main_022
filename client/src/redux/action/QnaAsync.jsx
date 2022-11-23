@@ -18,9 +18,9 @@ export const QnaAsynclistPost = createAsyncThunk(
   },
 );
 
-export const QnaAsynclist = createAsyncThunk('list', () => {
-  const data = axios
-    .get('http://localhost:3000/qna', {
+export const QnaAsynclist = createAsyncThunk('list', async () => {
+  const data = await axios
+    .get('http://localhost:3000/data', {
       headers: {
         'Content-Type': 'application/json',
       },
