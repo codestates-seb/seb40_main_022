@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         jwtTokenProvider.saveRefreshToken(member.getEmail(), refreshToken); // 리프레시 토큰 저장
 
-        redisService.setValues(member.getEmail(), refreshToken); // 레디스에 저장.
+        redisService.setValues(member.getEmail(), refreshToken, jwtTokenProvider.calExpDuration(refreshToken)); // 레디스에 저장.
 
         //todo. 쿠키 이용시 여기서 작성하면 됨. (필요성 중하)
 

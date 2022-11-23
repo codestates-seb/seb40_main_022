@@ -2,8 +2,7 @@ package com.backend.fitchallenge.domain.question.service;
 
 import com.backend.fitchallenge.domain.answer.dto.response.AnswerResponse;
 
-import com.backend.fitchallenge.domain.answer.entity.Answer;
-import com.backend.fitchallenge.domain.answer.repository.AnswerRepository;
+
 import com.backend.fitchallenge.domain.answer.repository.QueryAnswerRepository;
 import com.backend.fitchallenge.domain.answercomment.dto.response.AnswerCommentResponse;
 

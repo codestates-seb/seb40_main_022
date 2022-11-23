@@ -143,7 +143,7 @@ public class RecordService {
 
     // record를 조회하고, 존재하면 해당 객체를 반환합니다.
     @Transactional(readOnly = true)
-    private Record findVerifiedRecord(Long recordId) {
+    public Record findVerifiedRecord(Long recordId) {
         Optional<Record> optionalRecord = recordRepository.findById(recordId);
 
         return optionalRecord.orElseThrow(RecordNotFound::new);
@@ -155,7 +155,7 @@ public class RecordService {
 
     // 어떤 member가 record의 writer인지 확인합니다.
     @Transactional(readOnly = true)
-    private void verifyWriter(Long memberId, Record findRecord) {
+    public void verifyWriter(Long memberId, Record findRecord) {
 
         Long writerId = recordRepository.findMemberIdByRecordId(findRecord.getId());
 

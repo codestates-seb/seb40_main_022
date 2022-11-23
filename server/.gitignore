@@ -19,7 +19,6 @@ bin/
 
 ### ignore yml file
 *.yml
-application.yml
 
 ### IntelliJ IDEA ###
 .idea

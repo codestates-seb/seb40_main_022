@@ -14,7 +14,6 @@ import com.backend.fitchallenge.domain.tag.domain.Tag;
 import com.backend.fitchallenge.domain.tag.dto.TagDto;
 import com.backend.fitchallenge.domain.tag.repository.QueryTagRepository;
 import com.backend.fitchallenge.domain.tag.service.TagService;
-import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -45,7 +44,6 @@ public class PostService {
 
     /**
      * 게시물 작성
-     *
      * @param memberId      로그인 유저 memberId
      * @param postCreate    Post 생성 요청 정보
      * @param imagePathList S3에 저장후 CloudFront+ 파일명 목록
@@ -302,7 +300,5 @@ public class PostService {
     public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(PostNotFound::new);
     }
-
-
 
 }

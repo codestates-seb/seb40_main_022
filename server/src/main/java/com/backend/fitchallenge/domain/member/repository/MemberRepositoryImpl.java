@@ -4,9 +4,13 @@ import com.backend.fitchallenge.domain.challenge.dto.request.QRankingDto;
 import com.backend.fitchallenge.domain.challenge.dto.request.RankingCondition;
 import com.backend.fitchallenge.domain.challenge.dto.request.RankingDto;
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.post.entity.Post;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 
@@ -15,6 +19,7 @@ import java.util.List;
 
 import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 import static com.backend.fitchallenge.domain.member.entity.QMemberActivity.*;
+import static com.backend.fitchallenge.domain.post.entity.QPost.post;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
@@ -23,6 +28,19 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    public List<Post> findList(Long lastPostId, Long memberId , Pageable pageable){
+
+        return jpaQueryFactory
+                .select(post)
+                .from(member)
+                .leftJoin(member.posts, post)
+                 .on(post.member.id.eq(memberId))
+                .where(ltPostId(lastPostId))
+                .limit(pageable.getPageSize()+1)
+                .orderBy(post.id.desc())
+                .fetch();
+    }
 
     @Override
     public List<RankingDto> rankingList(RankingCondition condition, Pageable pageable) {
@@ -107,8 +125,17 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     private BooleanExpression periodLt(Integer periodLt) {
         return isEmpty(periodLt) ? null : member.weight.lt(periodLt);
     }
-    
-    
+
+    private BooleanExpression ltPostId(Long postId) {
+        return isEmpty(postId) ? null : post.id.lt(postId);
+    }
+
+    private BooleanExpression inPostIds(List<Long> postIds) {
+        return postIds.size() == 0 ? null : post.id.in(postIds);
+    }
+
+
+
 
 
 
