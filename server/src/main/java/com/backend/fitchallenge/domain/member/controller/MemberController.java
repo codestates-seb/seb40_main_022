@@ -2,16 +2,14 @@ package com.backend.fitchallenge.domain.member.controller;
 
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
-import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
 import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
 import com.backend.fitchallenge.domain.member.dto.response.UpdateResponse;
-import com.backend.fitchallenge.domain.member.entity.ProfileImage;
-import com.backend.fitchallenge.domain.member.service.MemberAwsS3Service;
 import com.backend.fitchallenge.domain.member.service.MemberService;
+import com.backend.fitchallenge.domain.post.dto.PostGet;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -26,6 +25,7 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -44,6 +44,7 @@ public class MemberController {
     public ResponseEntity update(@AuthMember MemberDetails memberDetails,
                                  MemberUpdateVO memberUpdateVO){ //todo. requestbody 때기 - checked
 
+        log.info("file= {}", memberUpdateVO.getProfileImage().getOriginalFilename());
         UpdateResponse updateResponse = memberService.updateMember(memberDetails.getEmail(), memberUpdateVO);
 
         return new ResponseEntity(updateResponse, HttpStatus.OK);
@@ -52,10 +53,10 @@ public class MemberController {
     //마이페이지
     @GetMapping("/myPage")
     public ResponseEntity myInfoDetails(@AuthMember MemberDetails memberDetails,
+                                        @ModelAttribute PostGet postGet,
                                         @PageableDefault(size = 3) Pageable pageable){
 
-        System.out.println(memberDetails.toString());
-        MyPageResponse myPageResponse = memberService.getMyInfo(memberDetails.getEmail(), pageable);
+        DetailsMemberResponse myPageResponse = memberService.getMyInfo(postGet.getLastPostId(), memberDetails.getEmail(), pageable);
 
         return new ResponseEntity(myPageResponse, HttpStatus.OK);
     }
@@ -63,24 +64,21 @@ public class MemberController {
     //특정 유저 조회
     @GetMapping("/{id}")
     public ResponseEntity memberDetails(@PathVariable("id") @Positive Long memberId,
+                                        @ModelAttribute PostGet postGet,
                                         @PageableDefault(size = 3) Pageable pageable){
 
-        DetailsMemberResponse detailsMemberResponse = memberService.getMember(memberId, pageable);
+        DetailsMemberResponse detailsMemberResponse = memberService.getMember(postGet.getLastPostId(), memberId, pageable);
 
         return new ResponseEntity(detailsMemberResponse, HttpStatus.OK);
     }
 
-    //인플루언서 목록
-    @GetMapping("/profession")
-    public ResponseEntity professionalList(){
-
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
     @DeleteMapping("/myPage/delete")
-    public ResponseEntity delete(@AuthMember MemberDetails memberDetails){
+    public ResponseEntity delete(HttpServletRequest request,
+                                 @AuthMember MemberDetails memberDetails){
 
-        Long deletedMemberId = memberService.deleteMember(memberDetails.getEmail());
+        String accessToken = request.getHeader("Authorization").substring(7);
+
+        Long deletedMemberId = memberService.deleteMember(accessToken, memberDetails.getEmail());
 
         return new ResponseEntity(deletedMemberId, HttpStatus.OK);
     }

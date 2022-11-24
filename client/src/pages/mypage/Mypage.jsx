@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faGear,
   faDumbbell,
-  faHeart,
-  faLightbulb,
+  faTrophy,
+  faPersonRunning,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
+import { MypageGet, MyPostDelete } from '../../redux/action/MypageAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import {
@@ -22,9 +23,20 @@ import daily from '../../images/daily.jpg';
 import myimage from '../../images/qnaImg.jpg';
 
 function Mypage() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const ac = useSelector(state => state.authToken.accessToken);
+  const re = useSelector(state => state.authToken.token);
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [Clicked, setClicked] = useState(false);
-  const navigate = useNavigate();
+  const data = [ac, re];
+
+  useEffect(() => {
+    dispatch(MypageGet(data));
+  }, []);
+
+  const listdata1 = useSelector(state => state.mypage.data);
+  console.log(listdata1);
 
   return (
     <Wrapper>
@@ -47,39 +59,45 @@ function Mypage() {
           </div>
         </ProfileBox>
         <NameBox>
-          <div className="username">유저 이름</div>
-          <Link to="/mypage/edit" className="profEdit">
-            <FontAwesomeIcon icon={faGear} className="setting" />
-          </Link>
+          <div className="username">{listdata1.userName}</div>
         </NameBox>
         <FollowBox>
-          <div>게시물 22</div>
-          <div>팔로워 11</div>
-          <div>팔로우 133</div>
+          <div>게시물 1</div>
+          <div>포인트 {listdata1.activity.point}</div>
         </FollowBox>
         <RecordBox>
           <div className="boxs">
             <div className="box">
               <FontAwesomeIcon icon={faDumbbell} />
-              450kg
+              {listdata1.activity.kilogram}kg
             </div>
             <div className="box">
-              <FontAwesomeIcon icon={faHeart} />
-              132
+              <FontAwesomeIcon icon={faTrophy} />
+              132위
             </div>
             <div className="box">
-              <FontAwesomeIcon icon={faLightbulb} />
-              680
+              <FontAwesomeIcon icon={faPersonRunning} />
+              1일
             </div>
           </div>
-          <button onClick={() => navigate('/record')}>운동 기록</button>
+          <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
+            정보 수정
+          </button>
+          <button
+            onClick={() => {
+              dispatch(MyPostDelete(data));
+              navigate('/');
+            }}
+          >
+            회원 탈퇴
+          </button>
         </RecordBox>
         <hr className="line" />
         <PictureBox>
           {list &&
-            list.map(data => {
+            list.map(listdata => {
               return (
-                <div key={data}>
+                <div key={listdata}>
                   <img src={myimage} alt="userProfile" />
                   <button onClick={() => setClicked(!Clicked)}>
                     <FontAwesomeIcon icon={faTrash} />

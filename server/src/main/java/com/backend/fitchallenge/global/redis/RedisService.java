@@ -22,7 +22,7 @@ public class RedisService {
 
     public void setValues(String key, String data, Long expiration) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(key, data, expiration);
+        values.set(key, data, expiration, TimeUnit.MILLISECONDS);
     }
 
     public String getValues(String key) {
@@ -49,5 +49,8 @@ public class RedisService {
     public String getBlackListValues(String key){
         ValueOperations<String, String> values = redisBlackListTemplate.opsForValue();
         return values.get(key);
+    }
+    public boolean hasKeyBlackList(String key) {
+        return redisBlackListTemplate.hasKey(key);
     }
 }

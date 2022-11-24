@@ -39,6 +39,7 @@ function SignUp() {
         });
     }
   };
+
   return (
     <SignContainer>
       <Header />

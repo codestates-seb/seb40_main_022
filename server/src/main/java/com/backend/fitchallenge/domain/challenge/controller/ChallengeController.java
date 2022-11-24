@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.challenge.controller;
 
-import com.backend.fitchallenge.domain.challenge.dto.RankingCondition;
+import com.backend.fitchallenge.domain.challenge.dto.request.PageRequest;
+import com.backend.fitchallenge.domain.challenge.dto.request.RankingCondition;
 import com.backend.fitchallenge.domain.challenge.service.ChallengeService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 
@@ -39,16 +40,21 @@ public class ChallengeController {
 
     /**
      * 랭킹 페이지
-     * @param pageable  페이지네이션 프론트와 추후논의 필요
+     * @param pageRequest  페이지네이션 프론트와 추후논의 필요
      * @param condition 검색 필터 조건 - 분할, 키, 몸무게, 경력
      */
     @GetMapping
     public ResponseEntity<?> getList(
-            @PageableDefault(size =10)Pageable pageable, RankingCondition condition) {
+            @AuthMember MemberDetails memberDetails,
+            PageRequest pageRequest, RankingCondition condition) {
 
         log.info("Condition.split = {}", condition.getSplit());
 
-        return new ResponseEntity<>(challengeService.search(condition), HttpStatus.OK);
+        if(memberDetails == null){
+            return new ResponseEntity<>(challengeService.searchWithoutLogin(condition,pageRequest.of()), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(challengeService.search(memberDetails.getMemberId(), condition,pageRequest.of()), HttpStatus.OK);
+        }
     }
 
     /**

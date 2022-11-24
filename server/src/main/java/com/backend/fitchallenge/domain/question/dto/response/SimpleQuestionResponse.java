@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class SimpleQuestionResponse {
@@ -14,6 +15,10 @@ public class SimpleQuestionResponse {
     private String title;
 
     private String summary;
+
+    private String tag;
+
+    private String picture;
 
     private Long view;
 
@@ -26,14 +31,16 @@ public class SimpleQuestionResponse {
     private MemberResponse member;
 
     @Builder
-    public SimpleQuestionResponse(Question question, MemberResponse member, Integer answerCount) {
+    public SimpleQuestionResponse(Question question, MemberResponse member, Integer answerCount, String picture) {
         this.questionId = question.getId();
         this.title = question.getTitle();
         this.summary = getSummary(question.getContent());
+        this.tag = question.getQuestionTag().getValue();
         this.view = question.getView();
         this.answerCount = answerCount;
         this.createdAt = question.getCreatedAt();
         this.modifiedAt = question.getModifiedAt();
+        this.picture = picture;
         this.member = member;
     }
 

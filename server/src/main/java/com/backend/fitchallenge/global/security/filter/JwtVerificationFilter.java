@@ -42,21 +42,23 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         try {
             // http message의 header에서 토큰값 가져오기
-            String refreshToken = request.getHeader("refreshToken");
+            String refreshToken = request.getHeader("RefreshToken");
             String accessToken = request.getHeader("Authorization").substring(7);
 
             // refreshToken에서 email 가져오기.
             String email = jwtTokenProvider.parseEmail(refreshToken);
 
+
             // accessToken의 보안성 강화. -> refreshToken은 이미 로그아웃되어서 사라지고, accessToken의 만료시간이 남은 경우 대비.
-            if(redisService.getBlackListValues(accessToken) == "BlackList"){
+
+            if(redisService.hasKeyBlackList(accessToken)){
                 throw new TokenNotValid(); //
             }
 
             //redis 확인부터 : Cache Aside 정책. -> redis 먼저 조회하기에, 정보가 존재하면 RDB 접근 하지 않아도 됨.
             if(redisService.getValues(email) == null){
                 jwtTokenProvider.verifiedRefreshToken(refreshToken);
-                redisService.setValues(email, refreshToken);
+                redisService.setValues(email, refreshToken, jwtTokenProvider.calExpDuration(refreshToken));
             }
 
             //todo. 인증, 리프레시 토큰 리이슈 관련한 자리로 옮기는 것 염두하기. why? 모든 요청시마다 db를 들르고 시작하기 때문

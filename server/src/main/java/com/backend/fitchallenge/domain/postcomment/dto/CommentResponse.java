@@ -30,6 +30,7 @@ public class CommentResponse {
                 .content(postComment.getContent())
                 .memberId(member.getId())
                 .userName(member.getUsername())
+                .profileImage(member.getProfileImage().getPath())
                 .build();
     }
 

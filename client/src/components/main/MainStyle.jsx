@@ -37,7 +37,7 @@ export const MainForm = styled.article`
   justify-content: center;
   position: relative;
   /* top: 80px; */
-  /* width: 70%; */
+  width: 850px;
   background-color: var(--white);
   border-radius: 5px;
   box-shadow: var(--box-shadow);
@@ -71,20 +71,12 @@ export const ContentForm = styled.div`
 export const Top = styled.div`
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: stretch;
   height: 200px;
   outline: none;
-  overflow-y: hidden;
-  overflow-x: hidden;
-
-  /* @media screen and (max-width: 1310px) {
-  display: none;
-} */
 `;
 
 export const Content = styled.div`
-  margin: 20px;
+  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -131,7 +123,7 @@ export const DailyItem = styled.div`
   background-color: var(--black-050);
   border-radius: 5px;
   padding: 2%;
-  margin: 5% 0;
+  margin: 5% 10px;
 
   .commentdiv {
     display: flex;
@@ -167,12 +159,20 @@ export const DailyItem = styled.div`
   }
 
   .Img {
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    width: 700px;
+    height: 550px;
     position: relative;
+
+    .iUXjrE {
+      height: 550px;
+    }
   }
 
   .dailyImg {
-    width: 800px;
+    width: 100%;
+    height: 550px;
   }
 
   .favorite {
@@ -208,6 +208,7 @@ export const DailyItem = styled.div`
     .memo {
       font-weight: bold;
       cursor: text;
+      width: 500px;
     }
 
     .date {

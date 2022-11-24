@@ -6,6 +6,7 @@ import com.backend.fitchallenge.domain.calendar.exception.*;
 import com.backend.fitchallenge.domain.calendar.repository.QueryRecordSportsRepository;
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
 import com.backend.fitchallenge.domain.challenge.repository.ChallengeRepository;
+
 import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
@@ -28,12 +29,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.backend.fitchallenge.domain.calendar.entity.QRecordSports.recordSports;
 import static com.backend.fitchallenge.domain.calendar.entity.QSports.sports;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
+
+
 import static java.util.stream.Collectors.toList;
 
 @Service

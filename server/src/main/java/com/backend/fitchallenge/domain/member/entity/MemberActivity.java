@@ -27,11 +27,14 @@ public class MemberActivity {
     @Column(name = "COMMUNITY_POINT")
     private Long communityPoint = 0L;
 
+    private Integer rank = 0;
+
     @Builder
-    private MemberActivity(Integer kilogram, Integer dayCount, Long point) {
+    private MemberActivity(Integer kilogram, Integer dayCount, Long point, Integer rank) {
         this.kilogram = kilogram;
         this.dayCount = dayCount;
         this.point = point;
+        this.rank = rank;
     }
     public static MemberActivity of(MemberUpdateVO memberUpdateVO){
         return MemberActivity.builder()

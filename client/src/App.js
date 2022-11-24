@@ -1,7 +1,9 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Main from './pages/main/Main';
+import MainEdit from './pages/dailypost/DailyEdit';
 import Calendar from './pages/calendar/Calendar';
 import Detail from './pages/calendar/Detail';
 import Login from './pages/login/Login';
@@ -14,11 +16,18 @@ import QnaAsk from './pages/qna/QnaAsk';
 import Mypage from './pages/mypage/Mypage';
 import ProfileEdit from './pages/profileedit/index';
 import QnaUpdate from './pages/qna/QnaUpdate';
+import { ReLodingLogin } from './redux/action/LoginAsync';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(ReLodingLogin());
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Main />} />
+      <Route path="/dailypost/edit" element={<MainEdit />} />
       <Route path="/qnaask" element={<QnaAsk />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
@@ -29,8 +38,8 @@ function App() {
       <Route path="/qna" element={<QnaList />} />
       <Route path="/record" element={<Calendar />} />
       <Route path="/detail" element={<Detail />} />
-      <Route path="/qnadetail" element={<QnaDetail />} />
-      <Route path="/qnaupdate" element={<QnaUpdate />} />
+      <Route path="/qnadetail/:id" element={<QnaDetail />} />
+      <Route path="/qnaupdate/:id" element={<QnaUpdate />} />
     </Routes>
   );
 }
