@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/header/Header';
@@ -17,15 +17,27 @@ import {
   DetailDelete,
   DetailButton,
 } from './QnaDetailStyle';
-import { QnaAsynclist, QnaDetaillistdelete } from '../../redux/action/QnaAsync';
+import {
+  QnaAsynclist,
+  QnaDetaillistdelete,
+  QnaDetailCommentAsync,
+} from '../../redux/action/QnaAsync';
 
 function QnaDetail() {
+  const [content, setContent] = useState('');
   const list = useSelector(state => state.qnalist.list);
   const ac = useSelector(state => state.authToken.accessToken);
   const re = useSelector(state => state.authToken.token);
   const Id = useParams();
   const data = [list[+Id.id].questionId, ac, re];
   const dispatch = useDispatch();
+
+  const answerdata = [ac, re, content];
+
+  const handleAnswer = () => {
+    dispatch(QnaDetailCommentAsync(answerdata));
+    console.log(answerdata);
+  };
 
   useEffect(() => {
     dispatch(QnaAsynclist());
@@ -90,9 +102,22 @@ function QnaDetail() {
         </DetailAnswer>
         <DetailComment>
           <h2>답변 작성</h2>
-          <textarea type="text" placeholder="답변을 입력해주세요!" />
+          <textarea
+            type="text"
+            placeholder="답변을 입력해주세요!"
+            value={content}
+            onChange={e => {
+              setContent(e.target.value);
+            }}
+          />
         </DetailComment>
-        <DetailSubmit>등록</DetailSubmit>
+        <DetailSubmit
+          onClick={() => {
+            handleAnswer();
+          }}
+        >
+          등록
+        </DetailSubmit>
       </DetailBack>
       <Footer />
     </Detail>
