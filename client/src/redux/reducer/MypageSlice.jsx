@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { MypageGet, MyPostDelete } from '../action/MypageAsync';
+import { MypageGet } from '../action/MypageAsync';
 
 const MypageSlice = createSlice({
   name: 'mypage',
   initialState: {
-    data: [],
+    userName: '',
+    dailyPosts: [],
+    activity: [],
   },
   reducers: {},
   extraReducers: {
     [MypageGet.fulfilled]: (state, action) => {
       console.log(state, action);
-      state.data = action.payload;
-    },
-    [MyPostDelete.fulfilled]: (state, action) => {
-      state.comment = action.payload;
+      state.dailyPosts = action.payload.dailyPosts;
+      state.activity = action.payload.activity;
+      state.userName = action.payload.userName;
     },
   },
 });
