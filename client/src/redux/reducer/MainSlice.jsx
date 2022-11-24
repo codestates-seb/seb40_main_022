@@ -5,7 +5,7 @@ const MainSlice = createSlice({
   name: 'content',
   initialState: {
     data: [],
-    comments: [],
+    comment: [],
   },
   reducers: {},
   extraReducers: {

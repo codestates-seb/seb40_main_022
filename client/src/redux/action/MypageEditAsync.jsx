@@ -5,7 +5,6 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', data => {
   const Mylist = axios
     .get('/members/myPage', {
       headers: {
-        'Content-Type': 'application/json',
         Authorization: data[0],
         RefreshToken: data[1],
       },
@@ -34,12 +33,12 @@ export const MypagePatch = createAsyncThunk(
     profileImage,
     data,
   }) => {
-    if (username.length !== 0 && sex.length !== 0 && select.length !== 0) {
-      axios.patch(
+    axios
+      .patch(
         '/members/myPage',
         JSON.stringify({
-          username,
           password,
+          username,
           job,
           address,
           sex,
@@ -58,7 +57,7 @@ export const MypagePatch = createAsyncThunk(
             RefreshToken: data[1],
           },
         },
-      );
-    }
+      )
+      .then(res => console.log(res));
   },
 );

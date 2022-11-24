@@ -64,7 +64,6 @@ function LankDropdown() {
                           onClick={e => {
                             names[idx] = e.target.innerText;
                             setNames(names);
-                            console.log(names);
                             dispatch(SET_LANK(names));
                           }}
                           className={
