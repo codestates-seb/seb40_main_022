@@ -16,6 +16,7 @@ import com.backend.fitchallenge.domain.calendar.entity.Sports;
 import com.backend.fitchallenge.domain.calendar.repository.CalendarRepository;
 import com.backend.fitchallenge.domain.calendar.repository.RecordRepository;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.backend.fitchallenge.domain.calendar.entity.QRecordSports.recordSports;
+import static com.backend.fitchallenge.domain.calendar.entity.QSports.sports;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
 import static java.util.stream.Collectors.toList;
 
@@ -40,7 +46,6 @@ public class RecordService {
     private final CalendarRepository calendarRepository;
     private final MemberRepository memberRepository;
     private final QueryRecordSportsRepository recordSportsRepository;
-    private final ChallengeRepository challengeRepository;
     private final SportsService sportsService;
     private final AwsS3Service awsS3Service;
 
@@ -69,6 +74,13 @@ public class RecordService {
         //2에 해당하는 부분
         if (recordRepository.exist(memberId, recordCreate.getStart()))
             throw new DuplicateRecordCreation();
+
+        //시작시간과 종료시간의 선후관계를 확인하는 부분
+        if (recordCreate.getStartTime().isAfter(recordCreate.getEndTime())) {
+            throw new InvalidTimeInput();
+        }
+
+
 
         List<Sports> sports = sportsService.getSports(recordCreate.getSports());
 
@@ -102,10 +114,11 @@ public class RecordService {
 
 
         List<RecordSportsResponse> sportsResponses = recordSportsRepository.findRecordSportsResponses(recordId);
+        log.info("sportsResponses: {}", sportsResponses.toString());
 
         //챌린지 상대가 없는 경우
         if (opponent == null) {
-            log.info("opponent id: {}", opponent.getId());
+
             return DetailRecordResponse.containingOnly(
                     PersonalDetailRecordResponse.of(MemberResponse.of(findMember), findRecord, sportsResponses));
         }
@@ -142,16 +155,8 @@ public class RecordService {
         Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Member opponent = memberRepository.findOpponent(memberId);
 
-        List<PersonalSimpleRecordResponse> recordResponses = recordRepository.findByMemberIdAndMonth(memberId, month).stream()
-                .map(record -> PersonalSimpleRecordResponse.builder()
-                        .recordId(record.getId())
-                        .timeRecord(Duration.between(record.getStartTime(), record.getEndTime()))
-                        .date(LocalDate.of(record.getYear(), record.getMonth(), record.getDay()))
-                        .volume(record.getVolume())
-                        .result(record.getResult().toString())
-                        .build()
-                ).collect(toList());
-
+        List<PersonalSimpleRecordResponse> recordResponses = recordRepository.findByMemberIdAndMonth(memberId, month);
+        log.info("recordResponses: {}", recordResponses.toString());
         //챌린지 상대가 없는 경우
         if (opponent == null) {
 
@@ -161,16 +166,7 @@ public class RecordService {
         //챌린지 상대가 있는 경우
         else {
             List<PersonalSimpleRecordResponse> opRecordResponses =
-                    recordRepository.findByMemberIdAndOpponentId(findMember.getId(), opponent.getId())
-                            .stream()
-                            .map(record -> PersonalSimpleRecordResponse.builder()
-                                    .recordId(record.getId())
-                                    .timeRecord(Duration.between(record.getStartTime(), record.getEndTime()))
-                                    .date(LocalDate.of(record.getYear(), record.getMonth(), record.getDay()))
-                                    .volume(record.getVolume())
-                                    .result(record.getResult().toString())
-                                    .build()
-                            ).collect(toList());
+                    recordRepository.findByMemberIdAndOpponentId(findMember.getId(), opponent.getId());
 
             return SimpleRecordResponse.containingBoth(recordResponses, opRecordResponses);
         }
@@ -237,6 +233,12 @@ public class RecordService {
         if (!writerId.equals(memberId)) {
             throw new NotRecordWriter();
         }
+    }
+
+    private Stream<Tuple> nullSafeStream(Collection<Tuple> collection) {
+        return collection == null
+                ? Stream.empty()
+                :collection.stream();
     }
 
     //기존 DB에서 하나하나 조회하는 방식이 아니라 운동 ID의 범주에 속하는지를 확인하여

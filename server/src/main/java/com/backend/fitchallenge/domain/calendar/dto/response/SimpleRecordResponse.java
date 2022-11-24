@@ -1,9 +1,11 @@
 package com.backend.fitchallenge.domain.calendar.dto.response;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class SimpleRecordResponse {
     List<PersonalSimpleRecordResponse> member;
     List<PersonalSimpleRecordResponse> opponent;

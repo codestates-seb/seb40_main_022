@@ -1,8 +1,10 @@
 package com.backend.fitchallenge.domain.calendar.repository;
 
 import com.backend.fitchallenge.domain.calendar.dto.response.PersonalSimpleRecordResponse;
+import com.backend.fitchallenge.domain.calendar.dto.response.RecordSportsResponse;
 import com.backend.fitchallenge.domain.calendar.entity.Record;
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.querydsl.core.Tuple;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -18,9 +20,9 @@ public interface RecordRepositoryCustom {
 
     Optional<Record> findDailyRecordByMemberIdAndDate(Long memberId, Integer year, Integer month, Integer day);
 
-    List<Record> findByMemberIdAndMonth(Long memberId, int month);
+    List<PersonalSimpleRecordResponse> findByMemberIdAndMonth(Long memberId, int month);
 
     Boolean exist(Long memberId, LocalDate date);
 
-    List<Record> findByMemberIdAndOpponentId(Long memberId, Long opponentId);
+    List<PersonalSimpleRecordResponse> findByMemberIdAndOpponentId(Long memberId, Long opponentId);
 }

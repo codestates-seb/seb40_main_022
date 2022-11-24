@@ -49,6 +49,7 @@ public class RecordSports {
         log.info(sports.toString());
         RecordSports recordSports = RecordSports.builder()
                 .record(record)
+                .sports(sports)
                 .set(sportsRequest.getSet())
                 .count(sportsRequest.getCount())
                 .weight(sportsRequest.getWeight())

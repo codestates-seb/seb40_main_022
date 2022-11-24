@@ -1,8 +1,12 @@
 package com.backend.fitchallenge.domain.calendar.repository;
 
+import com.backend.fitchallenge.domain.calendar.dto.response.PersonalSimpleRecordResponse;
+import com.backend.fitchallenge.domain.calendar.dto.response.QPersonalSimpleRecordResponse;
+import com.backend.fitchallenge.domain.calendar.dto.response.RecordSportsResponse;
 import com.backend.fitchallenge.domain.calendar.entity.Record;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.entity.QMember;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.backend.fitchallenge.domain.calendar.entity.QRecord.record;
+import static com.backend.fitchallenge.domain.calendar.entity.QRecordSports.recordSports;
+import static com.backend.fitchallenge.domain.calendar.entity.QSports.sports;
 import static com.backend.fitchallenge.domain.challenge.entity.QChallenge.challenge;
 import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -62,20 +68,38 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
     }
 
     @Override
-    public List<Record> findByMemberIdAndMonth(Long memberId, int month) {
+    public List<PersonalSimpleRecordResponse> findByMemberIdAndMonth(Long memberId, int month) {
 
-        return jpaQueryFactory
-                .selectFrom(record)
+        return jpaQueryFactory.select(
+                new QPersonalSimpleRecordResponse(
+                        record.id,
+                        record.year,
+                        record.month,
+                        record.day,
+                        record.startTime,
+                        record.endTime,
+                        record.volume,
+                        record.result
+                )
+                ).from(record)
                 .leftJoin(member).on(record.memberId.eq(member.id))
-                .leftJoin(member.challenge, challenge)
                 .where(record.memberId.eq(memberId).and(record.month.eq(month)))
                 .fetch();
     }
 
     @Override
-    public List<Record> findByMemberIdAndOpponentId(Long memberId, Long opponentId) {
-        return jpaQueryFactory
-                .selectFrom(record)
+    public List<PersonalSimpleRecordResponse> findByMemberIdAndOpponentId(Long memberId, Long opponentId) {
+        return jpaQueryFactory.select(
+                new QPersonalSimpleRecordResponse(
+                        record.id,
+                        record.year,
+                        record.month,
+                        record.day,
+                        record.startTime,
+                        record.endTime,
+                        record.volume,
+                        record.result
+                ))
                 .leftJoin(member).on(record.memberId.eq(member.id))
                 .leftJoin(member.challenge, challenge)
                 .where(challengeMemberIdEq(memberId, opponentId),

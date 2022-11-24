@@ -56,9 +56,19 @@ public class Record {
     private List<RecordSports> recordSports = new ArrayList<>();
 
     public enum Result {
-        NO_RESULT,
-        WIN,
-        LOSE;
+        NO_RESULT("결과 없음"),
+        WIN("승리"),
+        LOSE("패배");
+
+        private final String value;
+
+        Result(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 
     public static Record createRecord(RecordCreate recordCreate, Long memberId, List<Sports> sports) {

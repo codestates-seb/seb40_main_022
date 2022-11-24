@@ -51,6 +51,8 @@ dependencies {
 
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	implementation 'com.drewnoakes:metadata-extractor:2.12.0'
 }
 
 tasks.named('test') {
