@@ -29,10 +29,10 @@ public class TimePicture {
         this.endPicPath = endPicPath;
     }
 
-    public static TimePicture of(List<String> pictures) {
+    public static TimePicture of(String startPicPath, String endPicPath) {
         return TimePicture.builder()
-                .startPicPath(pictures.get(0))
-                .endPicPath(pictures.get(1))
+                .startPicPath(startPicPath)
+                .endPicPath(endPicPath)
                 .build();
     }
 

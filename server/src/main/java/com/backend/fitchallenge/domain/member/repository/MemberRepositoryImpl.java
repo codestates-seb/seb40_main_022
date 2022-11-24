@@ -31,7 +31,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .select(new QRankingDto(
                         member.id,
                         member.username,
-                        member.profileImage,
+                        member.profileImage.path,
                         member.height,
                         member.weight,
                         memberActivity.point,

@@ -21,7 +21,9 @@ public class RecordUpdate {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
     LocalTime endTime;
 
-    private List<String> imagePathList;
+    private String startImagePath;
+
+    private String endImagePath;
 
     private List<SportsRequest> sports;
 }

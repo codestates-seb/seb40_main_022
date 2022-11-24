@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,9 +29,12 @@ public class RecordCreate {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
     private LocalTime endTime;
 
-    @Valid
-    private List<String> imagePathList;
+    @NotBlank(message = "운동 시작 인증사진의 경로를 입력해주세요.")
+    private String startImagePath;
 
-    @NotNull @Valid
+    @NotBlank(message = "운동 종료 인증사진의 경로를 입력해주세요.")
+    private String endImagePath;
+
+    @Valid
     private List<SportsRequest> sports;
 }

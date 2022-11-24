@@ -11,6 +11,7 @@ import com.backend.fitchallenge.domain.calendar.util.Month;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
+import com.drew.imaging.ImageProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,7 +79,7 @@ public class RecordController {
     //     -> 가능하다면 저장할 필요 없이 시간 값만 보내주면 됨
     @PostMapping("/records/pictures")
     public ResponseEntity<?> createPicture(@AuthMember MemberDetails memberDetails,
-                                           TimePictureVO timePictureVO) throws IOException {
+                                           TimePictureVO timePictureVO) throws IOException, ImageProcessingException {
 
         //사진의 날짜가 입력받은 값이 맞는지 검증하고 시간 정보를 추출합니다.
         LocalTime time = pictureService.getTimeInfo(timePictureVO);
@@ -91,7 +92,7 @@ public class RecordController {
     }
 
     @PatchMapping("/records/pictures")
-    public ResponseEntity<?> updatePicture(TimePictureUpdateVO timePictureUpdateVO) throws IOException {
+    public ResponseEntity<?> updatePicture(TimePictureUpdateVO timePictureUpdateVO) throws IOException, ImageProcessingException {
 
         //새로운 사진의 시간 정보를 추출합니다.
         LocalTime time = pictureService.getTimeInfo(timePictureUpdateVO);

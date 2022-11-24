@@ -81,7 +81,9 @@ public class Record {
                         .mapToInt(volume -> volume)
                         .sum())
                 .result(Result.NO_RESULT)
-                .timePicture(TimePicture.of(recordCreate.getImagePathList()))
+                .timePicture(TimePicture.of(
+                        recordCreate.getStartImagePath(),
+                        recordCreate.getEndImagePath()))
                 .build();
 
         //recordSports를 생성하기 위해서는, sportsRequest의 세트, 횟수, 무게에 대한 정보가 필요합니다.
@@ -98,13 +100,14 @@ public class Record {
     public void updateRecord(RecordUpdate recordUpdate, List<Sports> sports) {
         LocalTime changedStartTime = recordUpdate.getStartTime();
         LocalTime changedEndTime = recordUpdate.getEndTime();
-        List<String> changedImagePathList = recordUpdate.getImagePathList();
+        String changedStartImagePath = recordUpdate.getStartImagePath();
+        String changedEndImagePath = recordUpdate.getEndImagePath();
         List<SportsRequest> changedSportsList = recordUpdate.getSports();
 
         this.startTime = changedStartTime != null ? changedStartTime : this.startTime;
         this.endTime = changedEndTime != null ? changedEndTime : this.endTime;
-        this.timePicture = changedImagePathList != null ?
-                TimePicture.of(changedImagePathList) : this.timePicture;
+        this.timePicture = (changedStartImagePath != null && changedEndImagePath != null) ?
+                TimePicture.of(changedStartImagePath, changedEndImagePath) : this.timePicture;
         this.volume = changedSportsList != null ?
                 changedSportsList.stream()
                         .map(sportsRequest ->

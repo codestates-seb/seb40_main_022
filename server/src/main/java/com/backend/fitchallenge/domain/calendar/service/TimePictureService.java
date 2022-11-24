@@ -4,6 +4,12 @@ import com.backend.fitchallenge.domain.calendar.dto.request.TimePictureVO;
 import com.backend.fitchallenge.domain.calendar.exception.NotImageFile;
 import com.backend.fitchallenge.domain.calendar.exception.PictureDateMismatch;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +24,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +37,9 @@ public class TimePictureService {
     private final AwsS3Service awsS3Service;
 
 
-    public LocalTime getTimeInfo(TimePictureVO timePictureVO) throws IOException {
+    public LocalTime getTimeInfo(TimePictureVO timePictureVO) throws IOException, ImageProcessingException {
 
-        //MultipartFile을 readMetadata의 매개변수 타입인 File로 변환합니다.
+        //MultipartFile을 readAttributes의 매개변수 타입인 File로 변환합니다.
         MultipartFile mFile = timePictureVO.getFile();
 
         File file = new File(Objects.requireNonNull(mFile.getOriginalFilename()));
@@ -41,7 +49,31 @@ public class TimePictureService {
         fos.close();
         log.info("file: {}", file);
 
-        verifyIfFileIsImage(file);
+        //오픈소스 api를 사용한 코드입니다. 추후 활용할 수 있을 것 같아 기록해두었습니다.
+//        Metadata metadata = ImageMetadataReader.readMetadata(mFile.getInputStream());
+//
+//        for (Directory directory : metadata.getDirectories()) {
+//            for (Tag tag : directory.getTags()) {
+//                System.out.format("[%s] - %s = %s",
+//                        directory.getName(), tag.getTagName(), tag.getDescription());
+//            }
+//            if (directory.hasErrors()) {
+//                for (String error : directory.getErrors()) {
+//                    System.err.format("ERROR: %s", error);
+//                }
+//            }
+//        }
+//
+//        ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+//
+//        Date date = directory.getDateOriginal(TimeZone.getTimeZone("Asia/Seoul"));
+//        verifyIfFileIsImage(file);
+//
+//        LocalDateTime localDateTime = date.toInstant()
+//                .atZone(ZoneId.of("Asia/Tokyo"))
+//                .toLocalDateTime();
+
+
 
         ZonedDateTime time = null;
         try {
@@ -51,7 +83,8 @@ public class TimePictureService {
             e.printStackTrace();
             throw e;
         }
-        LocalDateTime localDateTime = time.toLocalDateTime();
+       LocalDateTime localDateTime = time.toLocalDateTime();
+
         log.info("localDateTime: {}", localDateTime);
 
         //LocalDateTime에서 추출하고자 하는 날짜 정보의 형식을 지정합니다.

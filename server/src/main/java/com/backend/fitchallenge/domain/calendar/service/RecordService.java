@@ -6,6 +6,7 @@ import com.backend.fitchallenge.domain.calendar.exception.*;
 import com.backend.fitchallenge.domain.calendar.repository.QueryRecordSportsRepository;
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
 import com.backend.fitchallenge.domain.challenge.repository.ChallengeRepository;
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
@@ -74,6 +75,59 @@ public class RecordService {
         Record record = Record.createRecord(recordCreate, memberId, sports);
 
         return recordRepository.save(record).getId();
+    }
+
+    /**
+     * [특정 유저의 일일 운동 기록 조회]
+     * 1. 입력받은 recordId에 해당하는 record가 존재하는지 확인합니다.
+     * 2. 요청을 보낸 회원이 record의 작성자인지 확인합니다.
+     *      2-1. 챌린지 상대가 있는지 확인하고, 있다면 해당 회원 정보도 조회합니다.
+     * 3. record에 해당하는 운동 정보들을 조회합니다.
+     * 4. 유저의 일일 운동 기록을 반환합니다.
+     *  4-1. 챌린지 상대가 있다면 상대의 record와 그 운동 정보들을 조회하고
+     *  상대의 일일 운동 기록을 같이 반환합니다.
+     */
+    // fixme : Record와 Member 연관관계 직접참조로 수정하면 변경
+    public DetailRecordResponse getDailyRecord(Long memberId, Long recordId) {
+        Record findRecord = recordRepository.findDailyRecord(recordId).orElseThrow(RecordNotFound::new);
+
+        if (memberId != findRecord.getMemberId()) {
+            throw new NotRecordWriter();
+        }
+
+        Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
+        log.info("findMember id: {}", findMember.getId());
+        //챌린지가 진행중일 때에만 상대방 기록이 뜬다?
+        Member opponent = memberRepository.findOpponent(memberId);
+
+
+        List<RecordSportsResponse> sportsResponses = recordSportsRepository.findRecordSportsResponses(recordId);
+
+        //챌린지 상대가 없는 경우
+        if (opponent == null) {
+            log.info("opponent id: {}", opponent.getId());
+            return DetailRecordResponse.containingOnly(
+                    PersonalDetailRecordResponse.of(MemberResponse.of(findMember), findRecord, sportsResponses));
+        }
+
+        //챌린지 상대가 있는 경우
+        else {
+            //상대의 운동 기록을 조회
+            Record opRecord = recordRepository.findDailyRecordByMemberIdAndDate(
+                    opponent.getId(),
+                    findRecord.getYear(),
+                    findRecord.getMonth(),
+                    findRecord.getDay()).orElseThrow(RecordNotFound::new);
+            log.info("opRecord: {}", opRecord.toString());
+            //상대 기록의 운동 정보들을 조회
+            List<RecordSportsResponse> opSportsResponses = recordSportsRepository.findRecordSportsResponses(opRecord.getId());
+            log.info("opSportsResponse: {}", opSportsResponses.toString());
+
+            return DetailRecordResponse.containingBoth(
+                    PersonalDetailRecordResponse.of(MemberResponse.of(findMember), findRecord, sportsResponses),
+                    PersonalDetailRecordResponse.of(MemberResponse.of(opponent), opRecord, opSportsResponses)
+            );
+        }
     }
 
     /**

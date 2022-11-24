@@ -6,8 +6,8 @@ import com.backend.fitchallenge.domain.answer.entity.Answer;
 import com.backend.fitchallenge.domain.answer.repository.AnswerRepository;
 import com.backend.fitchallenge.domain.answer.repository.QueryAnswerRepository;
 import com.backend.fitchallenge.domain.answercomment.dto.response.AnswerCommentResponse;
-import com.backend.fitchallenge.domain.member.dto.response.MemberResponse;
 
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
