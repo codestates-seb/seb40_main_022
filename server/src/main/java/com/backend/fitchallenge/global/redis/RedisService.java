@@ -50,4 +50,7 @@ public class RedisService {
         ValueOperations<String, String> values = redisBlackListTemplate.opsForValue();
         return values.get(key);
     }
+    public boolean hasKeyBlackList(String key) {
+        return redisBlackListTemplate.hasKey(key);
+    }
 }
