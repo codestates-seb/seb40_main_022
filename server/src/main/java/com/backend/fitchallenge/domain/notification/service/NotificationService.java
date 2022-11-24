@@ -57,7 +57,6 @@ public class NotificationService {
         }
         return emitter;
     }
-
     /**
      * 알림 송신
      * 1. 알림생성 & 저장
