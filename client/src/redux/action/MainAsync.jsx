@@ -4,27 +4,24 @@ import axios from 'axios';
 export const asyncPostUp = createAsyncThunk(
   'post/up',
   ({ files, content, tagList, ac, re }) => {
-    // console.log(files, content, tagList);
     if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
-      axios
-        .post(
-          // '/dailyposts',
-          'http://localhost:3001/dailypost',
-          JSON.stringify({
-            pictures: files,
-            post: { content },
-            tags: tagList,
-          }),
-          {
-            headers: {
-              // 'Content-Type': 'multipart/form-data',
-              'Content-Type': 'application/json',
-              Authorization: ac,
-              RefreshToken: re,
-            },
+      axios.post(
+        // '/dailyposts',
+        'http://localhost:3001/dailypost',
+        JSON.stringify({
+          pictures: files,
+          post: { content },
+          tags: tagList,
+        }),
+        {
+          headers: {
+            // 'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
+            Authorization: ac,
+            RefreshToken: re,
           },
-        )
-        .then(response => console.log(response));
+        },
+      );
     }
   },
 );
@@ -32,7 +29,6 @@ export const asyncPostUp = createAsyncThunk(
 export const asyncPostUpdate = createAsyncThunk(
   'list/update',
   ({ files, content, tagList, id, ac, re }) => {
-    console.log(files, content, tagList, id, ac, re);
     if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
       axios.patch(
         // `/dailyposts/${id}`,
@@ -65,7 +61,6 @@ export const asyncPost = createAsyncThunk('post', (ac, re) => {
       },
     )
     .then(res => {
-      console.log(res);
       return res.data;
     });
 

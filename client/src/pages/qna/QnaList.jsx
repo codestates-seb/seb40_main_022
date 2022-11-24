@@ -1,4 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import Header from '../../components/header/Header';
 import searchIcon from '../../images/searchIcon.png';
 import Footer from '../../components/footer/Footer';
@@ -11,47 +13,16 @@ import {
   QnaContent,
   QnaRadio,
 } from './QnaStyle';
+import { QnaAsynclist } from '../../redux/action/QnaAsync';
 
 function QnaList() {
   const navigate = useNavigate();
-  const list = [
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-    {
-      title: '오늘 렛풀다운을 했는데 잘 먹지 않네요....',
-      content:
-        '바벨을 자기 어깨너비보다 약간 넓게 잡고, 살짝 데드리프트 식으로 약간의 가동 범위만 주었다가 바로 양쪽 겹갑골을 조인다는 느낌으로 등 상부를 강하게 ....',
-      Totalans: '답변 2',
-      username: '헬린이',
-      today: '2022.11.11',
-      tag: '운동',
-    },
-  ];
+  const dispatch = useDispatch();
+  const list = useSelector(state => state.qnalist.list);
+  console.log(list);
+  useEffect(() => {
+    dispatch(QnaAsynclist());
+  }, []);
 
   return (
     <QnABack>
@@ -86,20 +57,20 @@ function QnaList() {
         </QnaRadio>
         <QnaContent>
           {list &&
-            list.map(data => {
+            list.map((data, idx) => {
               return (
                 <div className="qnabox">
                   <article>
                     <div>
-                      <Link to="/qnadetail" className="titlename">
+                      <Link to={`/qnadetail/${idx}`} className="titlename">
                         {data.title}
                       </Link>
-                      <h3>{data.content}</h3>
+                      <h3>{data.summary}</h3>
                     </div>
                     <span>
-                      <h3 className="answerfont">{data.Totalans}</h3>
-                      <h3>{data.username}</h3>
-                      <h3>{data.today}</h3>
+                      <h3 className="answerfont">답변 : {data.answerCount}</h3>
+                      <h3>{data.member.username}</h3>
+                      <h3>{data.createdAt}</h3>
                       <button>{data.tag}</button>
                     </span>
                   </article>

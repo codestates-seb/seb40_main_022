@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import daily from '../../images/daily.jpg';
 import dailyAdd from '../../images/daily_add.svg';
 import { AddComment, CommentInput } from './MainStyle';
 import {
-  asyncPostCmtUp,
+  // asyncPostCmtUp,
   asyncPostCmt,
   asyncPostCmtDel,
 } from '../../redux/action/MainAsync';
@@ -13,24 +12,20 @@ import {
 export default function DailyCmt() {
   const dispatch = useDispatch();
   const [answervalue, setAnswervalue] = useState('');
-  const id = useParams();
-  const postdata = useSelector(state => {
-    state.dailypost.data.filter(el => el.id === +id.id);
+
+  const postdata = useSelector(state => state.dailypost.data);
+  const cmtData = useSelector(state => state.dailypost.comment);
+  const dataA = [];
+
+  postdata.forEach(el => {
+    dataA.push(
+      cmtData.filter(ele => {
+        return ele.contentId === el.id;
+      }),
+    );
   });
 
-  const postCmt = useSelector(state =>
-    state.dailypost.comment.filter(el => {
-      return el.commentId === +id.id;
-    }),
-  );
-
-  // const cmtData = useSelector(state => state.dailypost.comment);
-
-  const handleanswer = (commentId, content) => {
-    const answerdata = [commentId, content];
-    dispatch(asyncPostCmtUp(answerdata));
-    setAnswervalue('');
-  };
+  console.log(dataA);
 
   const handleCmtDel = commentId => {
     dispatch(asyncPostCmtDel(commentId));
@@ -42,7 +37,7 @@ export default function DailyCmt() {
 
   useEffect(() => {
     return () => dispatch(asyncPostCmt());
-  }, [dispatch, postCmt]);
+  }, []);
 
   return (
     <div className="commentdiv">
@@ -56,47 +51,50 @@ export default function DailyCmt() {
           onChange={e => handleans(e)}
         />
         <button
-          onClick={() => {
-            handleanswer(postdata[0].id, answervalue);
-          }}
+        // onClick={() => {
+        //   handleanswer(postdata[0].id, answervalue);
+        // }}
         >
           <img className="add" src={dailyAdd} alt="dailyAdd" />
         </button>
       </AddComment>
-      {postCmt &&
-        postCmt
+      {dataA &&
+        dataA
           .slice(0)
           .reverse()
           .map(comment => {
             return (
-              <div className="comment" key={comment.id}>
-                <span className="cmtUserImg">
-                  <img
-                    className="user"
-                    src={
-                      // comment.profileImage
-                      //   ? comment.profileImage
-                      //   : null
-                      daily
-                    }
-                    alt="daily"
-                  />
-                </span>
-                <div className="cmtContent">
-                  <div className="cmtUserName">
-                    {/* {comment.userName ? comment.userName : null} */}
-                    운동인
-                  </div>
-                  <div>{comment.content}</div>
-                </div>
-                <button
-                // onClick={() => {
-                //   handleansbol();
-                // }}
-                >
-                  수정
-                </button>
-                <button onClick={() => handleCmtDel(comment.id)}>삭제</button>
+              <div>
+                {comment &&
+                  comment.map(data => {
+                    return (
+                      <div className="comment">
+                        <span className="cmtUserImg">
+                          <img
+                            className="user"
+                            src={
+                              // comment.profileImage
+                              //   ? comment.profileImage
+                              //   : null
+                              daily
+                            }
+                            alt="daily"
+                          />
+                        </span>
+                        <div className="cmtContent">
+                          <div className="cmtUserName">
+                            {/* {comment.userName ? comment.userName : null} */}
+                            운동인
+                          </div>
+                          {data.content}
+                        </div>
+                        <button>수정</button>
+                        <button onClick={() => handleCmtDel(data.id)}>
+                          삭제
+                        </button>
+                      </div>
+                    );
+                  })}
               </div>
             );
           })}

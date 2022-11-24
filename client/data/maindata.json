@@ -2,10 +2,7 @@
   "dailypost": [
     {
       "id": 3,
-      "tags": [
-        "헬창",
-        "헬린이"
-      ],
+      "tags": ["헬창", "헬린이"],
       "member": {
         "userId": 2,
         "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
@@ -28,10 +25,7 @@
     },
     {
       "id": 2,
-      "tags": [
-        "강남",
-        "강북"
-      ],
+      "tags": ["강남", "강북"],
       "member": {
         "userId": 2,
         "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
@@ -53,9 +47,7 @@
     },
     {
       "id": 1,
-      "tags": [
-        "파"
-      ],
+      "tags": ["파"],
       "member": {
         "userId": 2,
         "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
@@ -85,32 +77,33 @@
       "post": {
         "content": "test1"
       },
-      "tags": [
-        "test1"
-      ],
+      "tags": ["test1", "test222"],
       "id": 4
     }
   ],
   "comment": [
     {
-      "commentId": 4,
-      "content": "운동 잘하시네요3333 나머지 시간도 화이팅!",
+      "contentId": 4,
+      "content": "운동 잘하시네요333 나머지 시간도 화이팅!",
+      "commentId": 3,
       "memberId": 3,
       "userName": "프랭크",
       "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
       "id": 3
     },
     {
-      "commentId": 4,
-      "content": "운동 잘하시네요2222 나머지 시간도 화이팅!",
-      "memberId": 3,
+      "contentId": 4,
+      "content": "운동 잘하시네요222 나머지 시간도 화이팅!",
+      "commentId": 2,
+      "memberId": 2,
       "userName": "프랭크",
       "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",
       "id": 2
     },
     {
-      "commentId": 3,
+      "contentId": 3,
       "content": "운동 잘하시네요1111 나머지 시간도 화이팅!",
+      "commentId": 1,
       "memberId": 3,
       "userName": "프랭크",
       "profileImage": "https://d2j84io2oze31w.cloudfront.net/4fd58fa0-3884-4e20-80c4-41f867d805a4.jpg",

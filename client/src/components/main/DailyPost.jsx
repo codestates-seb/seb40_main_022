@@ -28,7 +28,7 @@ export default function DailyPost() {
 
   useEffect(() => {
     dispatch(asyncPost());
-  }, [dispatch]);
+  }, []);
 
   const handleDelPost = postId => {
     dispatch(asyncPostDel(postId));
