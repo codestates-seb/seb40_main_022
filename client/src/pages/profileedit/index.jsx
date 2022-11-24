@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faGear } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { MypageEditGet, MypagePatch } from '../../redux/action/MypageEditAsync';
+import { MypagePatch } from '../../redux/action/MypageEditAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import {
@@ -35,17 +35,16 @@ function ProfileEdit() {
   const [profileImage, setProfileImage] = useState('');
   // const list = useSelector(state => state.mypageedit.data);
   // console.log(list);
-  console.log(profileImage);
+  // console.log(profileImage);
 
   const reader = new FileReader();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(MypageEditGet(data));
-  }, [data]);
+  // useEffect(() => {
+  //   dispatch(MypageEditGet(data));
+  // }, [data]);
 
   const handleprofileImage = e => {
-    console.log(e.target.files[0]);
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
@@ -79,7 +78,7 @@ function ProfileEdit() {
         data,
       }),
     );
-    navigate('/mypage');
+    // navigate('/mypage');
   };
 
   return (
