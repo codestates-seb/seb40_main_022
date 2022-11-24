@@ -38,8 +38,8 @@ function App() {
       <Route path="/qna" element={<QnaList />} />
       <Route path="/record" element={<Calendar />} />
       <Route path="/detail" element={<Detail />} />
-      <Route path="/qnadetail" element={<QnaDetail />} />
-      <Route path="/qnaupdate" element={<QnaUpdate />} />
+      <Route path="/qnadetail/:id" element={<QnaDetail />} />
+      <Route path="/qnaupdate/:id" element={<QnaUpdate />} />
     </Routes>
   );
 }

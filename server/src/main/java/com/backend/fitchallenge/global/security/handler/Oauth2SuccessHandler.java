@@ -97,7 +97,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String refreshToken = jwtTokenProvider.refreshTokenAssembly(subject, expiration, base64EncodedSecretKey);
 
-        redisService.setValues(username, refreshToken); // 생성하면서 redis 에 담아주도록 하자.
+        redisService.setValues(username, refreshToken, jwtTokenProvider.calExpDuration(refreshToken)); // 생성하면서 redis 에 담아주도록 하자.
 
         return refreshToken;
     }

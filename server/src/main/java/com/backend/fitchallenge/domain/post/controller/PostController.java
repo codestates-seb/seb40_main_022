@@ -18,7 +18,7 @@ import java.util.List;
 
 //fixme: 카멜케이스 적용
 @RestController
-@RequestMapping("/dailyposts")
+@RequestMapping("/dailyPosts")
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
@@ -125,6 +125,5 @@ public class PostController {
         postService.deletePost(id, memberDetails.getMemberId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 }

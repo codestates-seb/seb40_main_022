@@ -1,6 +1,26 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+export const ReTokenLogin = createAsyncThunk('reToken', () => {
+  console.log(
+    localStorage.getItem('Authorization'),
+    localStorage.getItem('RefreshToken'),
+  );
+  axios
+    .get('/member/reissue', {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => {
+      // console.log(res);
+      axios.defaults.headers.common.token = res.headers.authorization;
+      localStorage.setItem('Authorization', res.headers.authorization);
+      localStorage.setItem('RefreshToken', res.headers.refreshtoken);
+      setTimeout(ReTokenLogin, 30000);
+    });
+});
 export const LoginAsync = createAsyncThunk('login', data => {
   // console.log(data);
   return axios
@@ -14,7 +34,7 @@ export const LoginAsync = createAsyncThunk('login', data => {
       },
     )
     .then(res => {
-      // console.log(res);
+      console.log(res);
       axios.defaults.headers.common.token = res.headers.authorization;
       localStorage.setItem('Authorization', res.headers.authorization);
       localStorage.setItem('RefreshToken', res.headers.refreshtoken);
@@ -36,6 +56,5 @@ export const ReLodingLogin = createAsyncThunk('relogin', () => {
   const ac = localStorage.getItem('Authorization');
   const re = localStorage.getItem('RefreshToken');
   const auth = [ac, re];
-  console.log(auth);
   return auth;
 });

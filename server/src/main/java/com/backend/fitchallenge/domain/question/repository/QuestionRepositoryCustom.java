@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.question.repository;
 
+import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.global.dto.request.PageRequest;
 import com.querydsl.core.Tuple;
@@ -17,5 +18,5 @@ public interface QuestionRepositoryCustom {
 
     List<Tuple> findList(PageRequest pageable);
 
-    List<Tuple> findList(PageRequest pageable, String keyword);
+    List<Tuple> findList(PageRequest pageable, QuestionSearch questionSearch);
 }

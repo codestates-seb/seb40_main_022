@@ -73,14 +73,13 @@ public class MemberAwsS3Service {
     // S3에서 이미지 파일 삭제
     public void deleteFile(String imagePath) {
 
-        if(imagePath !="https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png"){
+        if(imagePath !="https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png%22)%7B"){
             boolean isExistObject = amazonS3.doesObjectExist(bucketName, imagePath);
 
             if (isExistObject == true) {
                 amazonS3.deleteObject(bucketName, imagePath);
             }
         }
-
     }
 
     // 파일 유무 체크

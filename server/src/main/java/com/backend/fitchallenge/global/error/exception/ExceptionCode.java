@@ -16,6 +16,7 @@ public enum ExceptionCode {
     //Question
     QUESTION_NOT_FOUND(404, "Question not found"),
     NOT_QUESTION_WRITER(400, "Not question writer"),
+    QUESTION_TAG_NOT_VALID(400, "Question Tag Not Valid"),
     //Answer
     ANSWER_NOT_FOUND(404, "Answer not found"),
     NOT_ANSWER_WRITER(400, "Not answer writer"),
@@ -50,10 +51,14 @@ public enum ExceptionCode {
     RECORD_NOT_FOUND(404, "Record not found"),
     NOT_RECORD_WRITER(400, "Not record writer"),
     DUPLICATE_RECORD_CREATION(400, "Duplicate Record Creation"),
+    INVALID_TIME_INPUT(404, "Invalid Time Input"),
     //Calendar
     CALENDAR_NOT_FOUND(404, "Calendar not found"),
     //Sports
-    SPORTS_NOT_FOUND(404, "Sports not found");
+    SPORTS_NOT_FOUND(404, "Sports not found"),
+    //TimePicture
+    PICTURE_DATE_MISMATCH(400, "Picture Date Mismatch"),
+    NOT_IMAGE_FILE(400, "Not Image File");
 
 
     @Getter

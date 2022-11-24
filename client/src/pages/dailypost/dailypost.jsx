@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
@@ -11,11 +11,13 @@ const dailypost = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const photoUp = useRef();
+
   const [files, setFiles] = useState([]);
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
   const [tagList, setTagList] = useState([]);
-
+  const ac = useSelector(state => state.authToken.accessToken);
+  const re = useSelector(state => state.authToken.token);
   const reader = new FileReader();
 
   const handleTag = e => {
@@ -50,7 +52,7 @@ const dailypost = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(asyncPostUp({ files, content, tags }));
+    dispatch(asyncPostUp({ files, content, tagList, ac, re }));
     navigate('/');
   };
 
@@ -88,6 +90,7 @@ const dailypost = () => {
               </div>
             ) : null}
           </div>
+          {/* {files ? null : <p>이미지를 업로드해주세요</p>} */}
           <span className="contentTitle">내용</span>
           <textarea
             maxLength="200"

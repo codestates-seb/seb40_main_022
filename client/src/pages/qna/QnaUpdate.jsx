@@ -1,5 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -10,8 +11,19 @@ import {
   PostTag,
   PostTitle,
 } from './QnaUpdatestyle';
+import { QnaAsynclistPatch } from '../../redux/action/QnaAsync';
 
 function QnaUpdate() {
+  const taglist = ['운동', '식단', '영양소', '헬스', '습관', '신고'];
+  const list = useSelector(state => state.qnalist.list);
+  const Id = useParams();
+  const dispatch = useDispatch();
+  const [title, setTitle] = useState(list[+Id.id].title);
+  const [content, setContent] = useState(list[+Id.id].summary);
+  const [tag, setTag] = useState(list[+Id.id].tag);
+  const ac = useSelector(state => state.authToken.accessToken);
+  const re = useSelector(state => state.authToken.token);
+  const dataUp = [ac, re, title, content, tag, list[+Id.id].questionId];
   const navigate = useNavigate();
   return (
     <QnaPostBack>
@@ -20,7 +32,7 @@ function QnaUpdate() {
         <PostTitle>
           <div>
             <h2>제목</h2>
-            <input />
+            <input value={title} onChange={e => setTitle(e.target.value)} />
           </div>
         </PostTitle>
         <PostContent>
@@ -28,22 +40,41 @@ function QnaUpdate() {
             <h2>내용</h2>
             <textarea
               className={`block whitespace-pre-wrap w-full bg-white text-gray-700 border border-black py-2 px-2 mb-3 leading-tight focus:border focus:border-pz-pt-1 `}
+              value={content}
+              onChange={e => {
+                setContent(e.target.value);
+              }}
             />
           </div>
         </PostContent>
         <PostTag>
           <div>
             <h2>태그</h2>
-            <button className="oneButton">운동</button>
-            <button>식단</button>
-            <button>영양소</button>
-            <button>헬스</button>
-            <button>습관</button>
+            {taglist &&
+              taglist.map(data => {
+                return (
+                  <button
+                    className={tag === data ? 'oneButton' : null}
+                    onClick={e => {
+                      setTag(e.target.innerText);
+                    }}
+                  >
+                    {data}
+                  </button>
+                );
+              })}
           </div>
         </PostTag>
         <PostSubmit>
-          <button>등록</button>
-          <button onClick={() => navigate('/qnadetail')}>취소</button>
+          <button
+            onClick={() => {
+              dispatch(QnaAsynclistPatch(dataUp));
+              navigate('/qna');
+            }}
+          >
+            등록
+          </button>
+          <button onClick={() => navigate('/qna')}>취소</button>
         </PostSubmit>
       </QnaPost>
       <Footer />

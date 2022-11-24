@@ -33,7 +33,7 @@ export const tokenSlice = createSlice({
       state.token = null;
       localStorage.removeItem('Authorization');
       localStorage.removeItem('RefreshToken');
-      // window.localStorage.clear();
+      window.localStorage.clear();
     },
     [ReLodingLogin.fulfilled]: (state, action) => {
       const accessToken = action.payload[0];
