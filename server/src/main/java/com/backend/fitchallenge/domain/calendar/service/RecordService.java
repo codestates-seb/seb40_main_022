@@ -1,23 +1,23 @@
 package com.backend.fitchallenge.domain.calendar.service;
 
 import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreate;
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdate;
-import com.backend.fitchallenge.domain.calendar.dto.response.RecordResponse;
-import com.backend.fitchallenge.domain.calendar.dto.response.SimpleRecordResponse;
 import com.backend.fitchallenge.domain.calendar.dto.response.SimpleSportsResponse;
-import com.backend.fitchallenge.domain.calendar.entity.Record;
-import com.backend.fitchallenge.domain.calendar.entity.Sports;
 import com.backend.fitchallenge.domain.calendar.exception.CalendarNotFound;
 import com.backend.fitchallenge.domain.calendar.exception.DuplicateRecordCreation;
-import com.backend.fitchallenge.domain.calendar.exception.NotRecordWriter;
-import com.backend.fitchallenge.domain.calendar.exception.RecordNotFound;
-import com.backend.fitchallenge.domain.calendar.repository.CalendarRepository;
-import com.backend.fitchallenge.domain.calendar.repository.RecordRepository;
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
 import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
+import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdate;
+import com.backend.fitchallenge.domain.calendar.dto.response.RecordResponse;
+import com.backend.fitchallenge.domain.calendar.dto.response.SimpleRecordResponse;
+import com.backend.fitchallenge.domain.calendar.entity.Record;
+import com.backend.fitchallenge.domain.calendar.entity.Sports;
+import com.backend.fitchallenge.domain.calendar.exception.NotRecordWriter;
+import com.backend.fitchallenge.domain.calendar.exception.RecordNotFound;
+import com.backend.fitchallenge.domain.calendar.repository.CalendarRepository;
+import com.backend.fitchallenge.domain.calendar.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -143,7 +143,7 @@ public class RecordService {
 
     // record를 조회하고, 존재하면 해당 객체를 반환합니다.
     @Transactional(readOnly = true)
-    public Record findVerifiedRecord(Long recordId) {
+    private Record findVerifiedRecord(Long recordId) {
         Optional<Record> optionalRecord = recordRepository.findById(recordId);
 
         return optionalRecord.orElseThrow(RecordNotFound::new);
@@ -155,7 +155,7 @@ public class RecordService {
 
     // 어떤 member가 record의 writer인지 확인합니다.
     @Transactional(readOnly = true)
-    public void verifyWriter(Long memberId, Record findRecord) {
+    private void verifyWriter(Long memberId, Record findRecord) {
 
         Long writerId = recordRepository.findMemberIdByRecordId(findRecord.getId());
 

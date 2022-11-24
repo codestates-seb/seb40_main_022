@@ -11,6 +11,7 @@ import java.util.List;
 import static com.backend.fitchallenge.domain.answer.entity.QAnswer.answer;
 import static com.backend.fitchallenge.domain.answercomment.entity.QAnswerComment.answerComment;
 
+
 @Repository
 @RequiredArgsConstructor
 public class QueryAnswerRepository {
