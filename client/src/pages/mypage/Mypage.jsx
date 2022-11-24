@@ -8,7 +8,7 @@ import {
   faPersonRunning,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { MypageGet } from '../../redux/action/MypageAsync';
+import { MypageGet, MyPostDelete } from '../../redux/action/MypageAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import {
@@ -23,19 +23,20 @@ import daily from '../../images/daily.jpg';
 import myimage from '../../images/qnaImg.jpg';
 
 function Mypage() {
-  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const [Clicked, setClicked] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const ac = useSelector(state => state.authToken.accessToken);
   const re = useSelector(state => state.authToken.token);
+  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [Clicked, setClicked] = useState(false);
   const data = [ac, re];
-  const listdata1 = useSelector(state => state.mypage.data);
-  console.log(listdata1);
 
   useEffect(() => {
     dispatch(MypageGet(data));
   }, []);
+
+  const listdata1 = useSelector(state => state.mypage.data);
+  console.log(listdata1);
 
   return (
     <Wrapper>
@@ -61,7 +62,7 @@ function Mypage() {
           <div className="username">{listdata1.userName}</div>
         </NameBox>
         <FollowBox>
-          <div>게시물 {listdata1.dailyPosts.items.length}</div>
+          <div>게시물 1</div>
           <div>포인트 {listdata1.activity.point}</div>
         </FollowBox>
         <RecordBox>
@@ -76,13 +77,20 @@ function Mypage() {
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faPersonRunning} />
-              {listdata1.activity.dayCount}일
+              1일
             </div>
           </div>
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
             정보 수정
           </button>
-          <button onClick={() => navigate('/record')}>회원 탈퇴</button>
+          <button
+            onClick={() => {
+              dispatch(MyPostDelete(data));
+              navigate('/');
+            }}
+          >
+            회원 탈퇴
+          </button>
         </RecordBox>
         <hr className="line" />
         <PictureBox>
