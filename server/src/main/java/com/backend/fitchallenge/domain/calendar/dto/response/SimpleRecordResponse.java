@@ -1,31 +1,33 @@
 package com.backend.fitchallenge.domain.calendar.dto.response;
 
-import com.backend.fitchallenge.domain.calendar.entity.Record;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class SimpleRecordResponse {
-
-    private LocalDate date;
-
-    private LocalTime startTime;
-
-    private LocalTime endTime;
-
-    private List<SimpleSportsResponse> sports;
+    List<PersonalSimpleRecordResponse> member;
+    List<PersonalSimpleRecordResponse> opponent;
 
     @Builder
-    public SimpleRecordResponse(LocalDate date, LocalTime startTime, LocalTime endTime, List<SimpleSportsResponse> sports) {
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.sports = sports;
+    private SimpleRecordResponse(List<PersonalSimpleRecordResponse> member,
+                                 List<PersonalSimpleRecordResponse> opponent) {
+        this.member = member;
+        this.opponent = opponent;
+    }
+
+    public static SimpleRecordResponse containingOnly(List<PersonalSimpleRecordResponse> member) {
+        return SimpleRecordResponse.builder()
+                .member(member)
+                .build();
+    }
+
+    public static SimpleRecordResponse containingBoth(List<PersonalSimpleRecordResponse> member,
+                                                      List<PersonalSimpleRecordResponse> opponent) {
+        return SimpleRecordResponse.builder()
+                .member(member)
+                .opponent(opponent)
+                .build();
     }
 }

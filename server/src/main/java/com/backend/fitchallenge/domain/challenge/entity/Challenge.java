@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.challenge.entity;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.notification.entity.Notification;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +38,6 @@ public class Challenge extends Auditable {
 
     @Column(name = "challenge_end")
     private LocalDate challengeEnd;
-
 
     public enum ChallengeStatus {
         SUGGESTED("제안됨"),
