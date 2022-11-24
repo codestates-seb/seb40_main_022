@@ -4,9 +4,14 @@ import com.backend.fitchallenge.domain.member.dto.response.extract.DailyPost;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractActivity;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractMember;
 import com.backend.fitchallenge.global.dto.response.SliceMultiResponse;
+
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 
 // 마이페이지 response dto
 @Getter
