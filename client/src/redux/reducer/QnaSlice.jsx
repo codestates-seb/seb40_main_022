@@ -5,6 +5,7 @@ const QnaSlice = createSlice({
   name: 'qna',
   initialState: {
     list: [],
+    answers: [],
   },
   reducers: {},
   extraReducers: {

@@ -27,6 +27,7 @@ function QnaAsk() {
   const handleSubmit = () => {
     dispatch(QnaAsynclistPost(tokendata));
     navigate('/qna');
+    console.log(tokendata);
   };
 
   return (
