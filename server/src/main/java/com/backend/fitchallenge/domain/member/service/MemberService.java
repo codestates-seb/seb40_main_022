@@ -3,7 +3,6 @@ package com.backend.fitchallenge.domain.member.service;
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
 import com.backend.fitchallenge.domain.member.dto.response.DetailsMemberResponse;
-import com.backend.fitchallenge.domain.member.dto.response.MyPageResponse;
 import com.backend.fitchallenge.domain.member.dto.response.UpdateResponse;
 import com.backend.fitchallenge.domain.member.dto.response.extract.DailyPost;
 import com.backend.fitchallenge.domain.member.dto.response.extract.ExtractActivity;
@@ -19,6 +18,7 @@ import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.domain.refreshtoken.exception.TokenNotExist;
 import com.backend.fitchallenge.global.dto.response.SliceMultiResponse;
 import com.backend.fitchallenge.global.redis.RedisService;
+import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -42,6 +42,7 @@ public class MemberService {
     private final RedisService redisService;
     private final MemberAwsS3Service memberAwsS3Service;
     private final PostRepository postRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * [회원가입]
@@ -101,13 +102,12 @@ public class MemberService {
      * 4. 필요정보만 MyPageResponse에 담는다.
      */
     @Transactional(readOnly = true)
-    public MyPageResponse getMyInfo(Long lastPostId, String loginEmail, Pageable pageable){
+    public DetailsMemberResponse getMyInfo(Long lastPostId, String loginEmail, Pageable pageable){
 
         Member findMember = findVerifiedMember(loginEmail);
 
         // todo. post연결 - checked
         List<Post> pages = memberRepository.findList(lastPostId, findMember.getId(), pageable);
-
         List<DailyPost> dailyPosts = pages.stream()
                 .map(post -> post == null ? DailyPost.of() : DailyPost.of(post))
                 .collect(Collectors.toList());
@@ -115,7 +115,10 @@ public class MemberService {
         Slice<DailyPost> result = checkLastPage(dailyPosts, pageable);
         SliceMultiResponse<DailyPost> sliceResult = SliceMultiResponse.createSliceDailyPost(result);
 
-        return MyPageResponse.of(findMember.getUsername(), ExtractActivity.of(findMember.getMemberActivity()), sliceResult);
+        List<Post> posts = postRepository.findByMemberId(findMember.getId());
+        Integer postCounts = posts.size();
+
+        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), sliceResult, postCounts);
 
     }
 
@@ -138,13 +141,12 @@ public class MemberService {
         Slice<DailyPost> result = checkLastPage(dailyPosts, pageable);
         SliceMultiResponse<DailyPost> sliceResult = SliceMultiResponse.createSliceDailyPost(result);
 
-        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), sliceResult);
-    }
+        List<Post> posts = postRepository.findByMemberId(memberId);
+        Integer postCounts = posts.size();
 
-    // todo : 인플루언서 랭킹별로 조회하기 - 중요도 하.
-    public void getProfessionalList(){
-
+        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), sliceResult, postCounts);
     }
+    
 
     /**
      * [회원 정보 삭제]
@@ -153,15 +155,17 @@ public class MemberService {
      * 3. DB에서 멤버 삭제
      * 4. 로그아웃 처리 (redis, db에서 토큰정보삭제)
      */
-    public Long deleteMember(String loginEmail){
+    public Long deleteMember(String accessToken, String loginEmail){
 
         Member findMember = findVerifiedMember(loginEmail);
 
         Long deletedMemberId = findMember.getId();
         String deletedEmail = findMember.getEmail();
+        Long untilExpiration = jwtTokenProvider.calExpDuration(accessToken);
 
         memberRepository.delete(findMember);
         redisService.deleteValues(deletedEmail);
+        redisService.setBlackListValues(accessToken, "BlackList", untilExpiration);
         refreshTokenRepository.delete(refreshTokenRepository.findByOwnerEmail(deletedEmail)
                 .orElseThrow(()->new TokenNotExist()));
 
