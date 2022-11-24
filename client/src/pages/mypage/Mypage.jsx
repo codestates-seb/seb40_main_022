@@ -63,13 +63,13 @@ function Mypage() {
         </NameBox>
         <FollowBox>
           <div>게시물 1</div>
-          <div>포인트 {listdata1.activity.point}</div>
+          <div>포인트 </div>
         </FollowBox>
         <RecordBox>
           <div className="boxs">
             <div className="box">
               <FontAwesomeIcon icon={faDumbbell} />
-              {listdata1.activity.kilogram}kg
+              kg
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />

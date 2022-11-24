@@ -23,8 +23,11 @@ const dailypost = () => {
   const handleTag = e => {
     if (e.key === 'Enter' && e.target.value !== '') {
       const updateTagList = [...tagList];
-      updateTagList.push(tags);
-      setTagList(updateTagList);
+      updateTagList.push(tags.split('#').join(''));
+      const filteredTagList = updateTagList.filter(
+        (el, idx) => updateTagList.indexOf(el) === idx,
+      );
+      setTagList(filteredTagList);
       setTags('');
     }
   };
@@ -52,8 +55,23 @@ const dailypost = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(asyncPostUp({ files, content, tagList, ac, re }));
-    navigate('/');
+    const formData = new FormData();
+    Array.from(files).forEach(el => {
+      formData.append('pictures', el);
+    });
+    formData.append('content', JSON.stringify(content));
+    formData.append('tagDtos', JSON.stringify(tagList));
+
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    }
+
+    if (files.length !== 0 && content.length >= 10 && tagList.length !== 0) {
+      dispatch(asyncPostUp({ formData, ac, re }));
+      navigate('/');
+    } else if (files.length === 0) alert('이미지를 업로드해주세요');
+    else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
+    else if (tagList.length === 0) alert('태그를 입력해주세요');
   };
 
   return (
@@ -90,7 +108,9 @@ const dailypost = () => {
               </div>
             ) : null}
           </div>
-          {/* {files ? null : <p>이미지를 업로드해주세요</p>} */}
+          <div className="errorMsg">
+            {files.length < 1 ? <p>이미지를 업로드해주세요</p> : null}
+          </div>
           <span className="contentTitle">내용</span>
           <textarea
             maxLength="200"
@@ -101,6 +121,9 @@ const dailypost = () => {
             }}
           />
           <div className="limit">{content.length}/200</div>
+          <div className="errorMsg">
+            {content.length < 10 ? <p>10자 이상 입력해주세요</p> : null}
+          </div>
           <span className="tagTitle">태그</span>
           <div className="taginput">
             {tagList.map(data => {
@@ -122,6 +145,9 @@ const dailypost = () => {
                 onKeyUp={e => handleTag(e)}
               />
             ) : null}
+          </div>
+          <div className="errorMsg">
+            {tagList.length < 1 ? <p>태그를 입력해주세요</p> : null}
           </div>
           <div className="buttons">
             <button

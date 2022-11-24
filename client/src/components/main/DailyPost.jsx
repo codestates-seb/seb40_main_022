@@ -14,8 +14,7 @@ import {
 } from '../../redux/action/MainAsync';
 
 export default function DailyPost() {
-  const data = useSelector(state => state.dailypost.data);
-
+  const data = useSelector(state => state.dailypost.data.items);
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
   const [isComment, setIsComment] = useState(false);
@@ -47,22 +46,32 @@ export default function DailyPost() {
                 <article className="Img">
                   <ImageSlider effectDelay={500} autoPlayDelay={3000}>
                     {list.pictures &&
-                      list.pictures.map(img => {
+                      list.pictures.map(el => {
                         return (
                           <Slide>
-                            <img className="dailyImg" src={img} alt="daily" />
+                            <img className="dailyImg" src={el} alt="daily" />
                           </Slide>
                         );
                       })}
+                    {/* {[...Array(5)].map(() => {
+                      return (
+                        <Slide>
+                          <img className="dailyImg" src={daily} alt="daily" />
+                        </Slide>
+                      );
+                    })} */}
                   </ImageSlider>
                 </article>
                 <div>
-                  <Link to={`/dailypost/edit/${list.id}`} className="buttons">
+                  <Link
+                    to={`/dailypost/edit/${list.post.postId}`}
+                    className="buttons"
+                  >
                     수정
                   </Link>
                   <button
                     onClick={() => {
-                      handleDelPost(list.id);
+                      handleDelPost(list.post.postId);
                     }}
                   >
                     삭제
@@ -83,8 +92,8 @@ export default function DailyPost() {
                     </div>
                     <div className="act">
                       <span className="date">
-                        {/* {list.post.createAt ? list.post.createdAt : null} */}
-                        22.12.09
+                        {list.post.createdAt}
+                        {/* 22.12.09 */}
                       </span>
                       <span>
                         <button
@@ -92,8 +101,8 @@ export default function DailyPost() {
                           className="comments"
                         >
                           댓글
-                          {/* {list.post.commentCount ? list.post.commentCount : 0} */}
-                          0 개
+                          {list.post.commentCount ? list.post.commentCount : 0}
+                          개{/* 0 개 */}
                         </button>
                       </span>
                       <span className="favorite">
@@ -111,8 +120,7 @@ export default function DailyPost() {
                             )
                           }
                           <span>
-                            {/* {list.post.likeCount ? list.post.likeCount : 0} */}
-                            0
+                            {list.post.likeCount ? list.post.likeCount : 0}
                           </span>
                         </button>
                       </span>
@@ -122,14 +130,16 @@ export default function DailyPost() {
                     <img
                       className="user"
                       src={
-                        // list.member.profileImage ? list.member.profileImage : null
+                        // list.member.profileImage
+                        //   ? list.member.profileImage
+                        //   : null
                         daily
                       }
                       alt="daily"
                     />
                     <span>
-                      {/* {list.member.username ? list.member.username : null} */}
-                      가나다
+                      {list.member.username ? list.member.username : null}
+                      {/* 가나다 */}
                     </span>
                   </span>
                 </article>
