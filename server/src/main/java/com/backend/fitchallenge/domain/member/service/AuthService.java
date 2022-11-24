@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.member.service;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
+import com.backend.fitchallenge.domain.notification.repository.EmitterRepository;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshToken;
 import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
 import com.backend.fitchallenge.domain.refreshtoken.exception.TokenNotExist;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -19,6 +22,7 @@ public class AuthService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberRepository memberRepository;
+    private final EmitterRepository emitterRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
 
@@ -37,11 +41,16 @@ public class AuthService {
         String email = jwtTokenProvider.parseEmail(refreshToken);
         Long untilExpiration = jwtTokenProvider.calExpDuration(accessToken);
 
+        String id = String.valueOf(memberRepository.findByEmail(email).get().getId());
+
         redisService.deleteValues(email);
         redisService.setBlackListValues(accessToken, "BlackList", untilExpiration);
 
 //        RefreshToken findToken = findExistToken(refreshToken);
         refreshTokenRepository.deleteRtkByTokenValue(refreshToken);
+        //로그인 멤버와 관련된 SsEmitter, Event모두삭제
+        emitterRepository.deleteAllEmitterStartWithId(id);
+        emitterRepository.deleteAllEventCacheStartWithId(id);
     }
 
     /**

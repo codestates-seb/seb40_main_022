@@ -12,6 +12,7 @@ import com.backend.fitchallenge.domain.challenge.repository.ChallengeRepository;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.member.service.MemberService;
+import com.backend.fitchallenge.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
@@ -35,16 +36,24 @@ public class ChallengeService {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final ChallengeRepository challengeRepository;
+    private final NotificationService notificationService;
 
     /**
      * 챌린지 제안
      * 상대방에게 챌린지 제안 알림 서비스 추가 필요
-     * 나와 상대방이 챌린지 진행중이 아닌 상태에대한 검증은 프론트에서 해결
+     * 상대방에게 챌린지 신청 알림 전송
      * @return
      */
     public Long suggest(Long memberId, Long counterpartId) {
 
         Challenge challenge = challengeRepository.save(Challenge.toEntity(memberId,counterpartId));
+
+        Member applicant = memberService.findVerifiedMemberById(memberId);
+
+        Member counterpart = memberService.findVerifiedMemberById(counterpartId);
+
+        // 상대방에게 알림 전송
+        notificationService.send(counterpart, challenge, applicant.getUsername()+"님이 챌린지를 신청하셨습니다.");
 
         return challenge.getId();
     }
@@ -108,7 +117,7 @@ public class ChallengeService {
      * start()메서드 - 챌린지 상태를 OnGoing으로 바꾸고 각 member에게 챌린지 추가
      * 챌린저들이 이전에 제안을 하거나 받은 제안들 삭제
      * 챌린지  시작, 끝나는 날짜 설정
-     * 챌린지 수락시 알림 필요
+     * 챌린지 수락시 신청자에게 알림 전송
      */
     public String accept(Long memberId, Long challengeId) {
 
@@ -124,8 +133,12 @@ public class ChallengeService {
             challenge.start(applicant, counterpart);
             List<Long> memberIds = List.of(challenge.getApplicantId(), memberId);
             challengeRepository.deleteSuggest(memberIds); // 챌린저들의 이전의 제안하거나 받은 제안들 삭제
+
+            // 챌린지 신청자에게 알림 전송
+            notificationService.send(applicant, challenge, "챌린지 신청이 수락되었습니다.");
             return challenge.setChallengeTerm();
-            //수락도 알림 필요
+
+
         } else {
             throw new CannotAcceptChallenge();
         }
@@ -137,12 +150,17 @@ public class ChallengeService {
      * 로그인 유저가 counterpart인경우만가능
      * 로그인 유저가 현재 챌린지를 진행중인지 체크
      * DB에서 해당 챌린지 삭제
+     * 신청에게 알림 전송
      */
     public void refuse(Long memberId, Long challengeId) {
         Challenge challenge = findChallenge(challengeId);
-        Member member = memberService.findVerifiedMemberById(memberId);
+        Member counterpart = memberService.findVerifiedMemberById(memberId);
+        Member applicant = memberService.findVerifiedMemberById(challenge.getApplicantId());
         //로그인 유저가 counterpart인경우만 거절가능
-        if (challenge.getCounterpartId() == memberId && isEmpty(member.getChallenge())) {
+        if (challenge.getCounterpartId() == memberId && isEmpty(counterpart.getChallenge())) {
+
+            //챌린지 신청자에게 알림 전송
+            notificationService.send(applicant, challenge, "챌린지 신청이 거절되었습니다.");
             challengeRepository.delete(challenge);
         } else {
             throw new CannotRefuseChallenge();
@@ -150,13 +168,15 @@ public class ChallengeService {
     }
 
     /**
-     *챌린지 중단
+     * 챌린지 중단
      * 로그인유저가 applicant,counterpart 둘중 하나여야한다.
      * 챌린지 승락후 당일이내에 취소가능 -페널티 없음
      * 챌린지 시작후 3일이 지나지 않았으면 중단 불가
-     * 챌린지 시작 3일후 중도포기시 페널티 부여 - 상세내용은 논의 필요
+     * 챌린지 참여자들에게 중단 알림 전송
+     *
+     * @return
      */
-    public void suspend(Long memberId, Long challengeId) {
+    public Long suspend(Long memberId, Long challengeId) {
 
         Challenge challenge = findChallenge(challengeId);
 
@@ -169,10 +189,16 @@ public class ChallengeService {
 
         if (LocalDate.now() == challenge.getModifiedAt().toLocalDate()) {
 
-            memberService.findVerifiedMemberById(challenge.getApplicantId()).suspendChallenge();
-            memberService.findVerifiedMemberById(challenge.getCounterpartId()).suspendChallenge();
+            Member applicant = memberService.findVerifiedMemberById(challenge.getApplicantId());
+            applicant.suspendChallenge();
+            notificationService.send(applicant, challenge, "챌린지가 중단되었습니다.");
 
-            challengeRepository.delete(challenge);
+            Member counterpart = memberService.findVerifiedMemberById(challenge.getCounterpartId());
+            counterpart.suspendChallenge();
+            notificationService.send(counterpart, challenge, "챌린지가 중단되었습니다.");
+
+             challengeRepository.delete(challenge);
+             return challenge.getId();
         }
 
 //         시작후 3일안됬으면 중지안된다
@@ -186,9 +212,11 @@ public class ChallengeService {
            memberService.findVerifiedMemberById(challenge.getCounterpartId()).suspendChallenge();
 
             challengeRepository.delete(challenge);
+             return challenge.getId();
 
             //memberPoint 감소
             //member authorities Black으로 변경
+
 
     }
 

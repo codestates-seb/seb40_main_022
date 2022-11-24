@@ -82,7 +82,9 @@ public class RecordService {
     // todo : db 접근 효율성 고려해 조회 방법 선택 고려
     @Transactional(readOnly = true)
     public RecordResponse getMonthlyRecordList(Long memberId, int month) {
+
         log.info("memberId: " + memberId + ", month: " + month);
+
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
 
         List<SimpleRecordResponse> recordResponses = recordRepository.findByMemberIdAndMonth(memberId, month).stream()
