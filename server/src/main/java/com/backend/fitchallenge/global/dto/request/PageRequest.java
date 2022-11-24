@@ -32,9 +32,9 @@ public final class PageRequest {
 
 	public void setDynamicSort() {
 		if (sortBy == null || sortBy.isBlank()) {
-			this.dynamicSort = Sort.by(sort, "id");
+			this.dynamicSort = Sort.by(sort, "recent");
 		} else {
-			this.dynamicSort = Sort.by(sort, "view");
+			this.dynamicSort = Sort.by(sort, "hot");
 		}
 	}
 
@@ -58,6 +58,5 @@ public final class PageRequest {
 		NoAnswer,
 		NoAcceptedAnswer
 	}
-
 }
 

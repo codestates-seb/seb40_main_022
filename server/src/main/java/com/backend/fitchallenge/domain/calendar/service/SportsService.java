@@ -1,11 +1,11 @@
 package com.backend.fitchallenge.domain.calendar.service;
 
 import com.backend.fitchallenge.domain.calendar.dto.request.SportsRequest;
-import com.backend.fitchallenge.domain.calendar.dto.response.SimpleSportsResponse;
+import com.backend.fitchallenge.domain.calendar.dto.response.RecordSportsResponse;
+import com.backend.fitchallenge.domain.calendar.dto.response.SportsResponse;
 import com.backend.fitchallenge.domain.calendar.entity.Sports;
 import com.backend.fitchallenge.domain.calendar.exception.SportsNotFound;
 import com.backend.fitchallenge.domain.calendar.repository.SportsRepository;
-import com.backend.fitchallenge.global.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +31,8 @@ public class SportsService {
      */
     public MultiResponse<?> getSportsList(Pageable pageable) {
 
-        Page<SimpleSportsResponse> sportsResponses = new PageImpl<>(sportsRepository.findAll(pageable).stream()
-                .map(SimpleSportsResponse::toResponse).collect(Collectors.toList()));
+        Page<SportsResponse> sportsResponses = new PageImpl<>(sportsRepository.findAll(pageable).stream()
+                .map(SportsResponse::toResponse).collect(Collectors.toList()));
 
         return MultiResponse.of(sportsResponses);
     }
@@ -48,10 +47,10 @@ public class SportsService {
      */
     public MultiResponse<?> getSportsListByPart(String bodyPart, Pageable pageable) {
         log.info("bodyPart: " + bodyPart);
-        Page<SimpleSportsResponse> sportsResponses = new PageImpl<>(
+        Page<SportsResponse> sportsResponses = new PageImpl<>(
                 sportsRepository.findByBodyPart(Sports.BodyPart.from(bodyPart), pageable)
                         .stream()
-                        .map(SimpleSportsResponse::toResponse)
+                        .map(SportsResponse::toResponse)
                         .collect(Collectors.toList()));
         log.info("sportsResponses: " + sportsResponses.toString());
 
@@ -73,14 +72,9 @@ public class SportsService {
      */
     //fixme : findAllById(List<Long> sportsIds)로 바꾸는 것 고려
     public List<Sports> getSports(List<SportsRequest> sportsRequests) {
-        List<Sports> sports = new ArrayList<>();
-        if (sportsRequests != null) {
-            sports = sportsRequests.stream()
-                    .map(sportsRequest -> findVerifiedSports(sportsRequest.getSportsId()))
-                    .collect(Collectors.toList());
-        }
-        return sports;
-
+        return sportsRequests.stream()
+                .map(sportsRequest -> findVerifiedSports(sportsRequest.getSportsId()))
+                .collect(Collectors.toList());
         //sportsId의 목록으로 sports를 조회
 //        return sportsRepository.findAllById(sportsRequests.stream()
 //                .map(SportsRequest::getId).collect(Collectors.toList()));

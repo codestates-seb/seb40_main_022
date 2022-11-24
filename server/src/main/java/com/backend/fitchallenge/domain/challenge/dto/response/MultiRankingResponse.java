@@ -14,8 +14,6 @@ public class MultiRankingResponse<T> {
     private PageInfo pageInfo;
 
 
-
-
     public MultiRankingResponse(Page<T> responses, Boolean myChallengeStatus) {
         this.responses = responses.getContent();
         this.myChallengeStatus = myChallengeStatus;

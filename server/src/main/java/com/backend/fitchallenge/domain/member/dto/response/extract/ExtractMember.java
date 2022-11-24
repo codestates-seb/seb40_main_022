@@ -7,15 +7,13 @@ import lombok.Getter;
 //마이페이지 response를 위해 필요 정보를 추출하는 클래스
 @Getter
 public class ExtractMember{
-    private Long memberId;
     private String userName;
     private String profileImage;
     private Integer height;
     private Integer Weight;
 
     @Builder
-    private ExtractMember(Long memberId, String userName, String profileImage, Integer height, Integer weight) {
-        this.memberId = memberId;
+    private ExtractMember(String userName, String profileImage, Integer height, Integer weight) {
         this.userName = userName;
         this.profileImage = profileImage;
         this.height = height;
@@ -24,7 +22,6 @@ public class ExtractMember{
 
     public static ExtractMember of(Member member){
         return ExtractMember.builder()
-                .memberId(member.getId())
                 .userName(member.getUsername())
                 .profileImage(member.getProfileImage().getPath())
                 .height(member.getHeight())

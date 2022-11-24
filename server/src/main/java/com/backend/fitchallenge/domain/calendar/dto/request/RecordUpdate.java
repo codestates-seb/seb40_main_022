@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.calendar.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -16,8 +17,13 @@ public class RecordUpdate {
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
     LocalTime startTime;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
     LocalTime endTime;
+
+    private String startImagePath;
+
+    private String endImagePath;
 
     private List<SportsRequest> sports;
 }
