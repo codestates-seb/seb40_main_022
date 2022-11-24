@@ -162,8 +162,8 @@ public class MemberService {
 
         memberRepository.delete(findMember);
         redisService.deleteValues(deletedEmail);
-        refreshTokenRepository.delete(
-                refreshTokenRepository.findById(deletedMemberId).orElseThrow(()->new TokenNotExist()));
+        refreshTokenRepository.delete(refreshTokenRepository.findByOwnerEmail(deletedEmail)
+                .orElseThrow(()->new TokenNotExist()));
 
         return deletedMemberId;
     }
