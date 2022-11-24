@@ -146,7 +146,7 @@ public class MemberService {
 
         return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), sliceResult, postCounts);
     }
-    
+
 
     /**
      * [회원 정보 삭제]

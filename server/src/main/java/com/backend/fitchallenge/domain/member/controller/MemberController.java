@@ -56,7 +56,6 @@ public class MemberController {
                                         @ModelAttribute PostGet postGet,
                                         @PageableDefault(size = 3) Pageable pageable){
 
-        System.out.println(memberDetails.toString());
         DetailsMemberResponse myPageResponse = memberService.getMyInfo(postGet.getLastPostId(), memberDetails.getEmail(), pageable);
 
         return new ResponseEntity(myPageResponse, HttpStatus.OK);
