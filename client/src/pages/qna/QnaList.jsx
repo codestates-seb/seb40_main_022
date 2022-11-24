@@ -19,7 +19,6 @@ function QnaList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const list = useSelector(state => state.qnalist.list);
-  console.log(list);
   useEffect(() => {
     dispatch(QnaAsynclist());
   }, []);

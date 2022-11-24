@@ -29,7 +29,6 @@ export const QnaAsynclist = createAsyncThunk('list', async () => {
 });
 
 export const QnaDetaillistdelete = createAsyncThunk('delete', async data => {
-  console.log(data[0]);
   axios.delete(`/questions/${data[0]}`, {
     headers: {
       Authorization: data[1],
@@ -46,6 +45,24 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
         title: data[2],
         content: data[3],
         tag: data[4],
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json;',
+          Authorization: data[0],
+          RefreshToken: data[1],
+        },
+      },
+    );
+  }
+});
+
+export const QnaDetailCommentAsync = createAsyncThunk('qnaanswer', data => {
+  if (data.answers[0].length !== 0) {
+    axios.post(
+      `/questions/${data.answers[0]}/answers`,
+      JSON.stringify({
+        content: data.answers[0],
       }),
       {
         headers: {
