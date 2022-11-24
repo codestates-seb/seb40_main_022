@@ -90,6 +90,7 @@ const dailypost = () => {
               </div>
             ) : null}
           </div>
+          {/* {files ? null : <p>이미지를 업로드해주세요</p>} */}
           <span className="contentTitle">내용</span>
           <textarea
             maxLength="200"
