@@ -1,18 +1,15 @@
+/*
 package com.backend.fitchallenge.domain.calendar.service;
 
 import com.backend.fitchallenge.domain.calendar.dto.request.TimePictureVO;
 import com.backend.fitchallenge.domain.calendar.exception.NotImageFile;
 import com.backend.fitchallenge.domain.calendar.exception.PictureDateMismatch;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.ExifSubIFDDirectory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Directory;
+import org.hibernate.boot.Metadata;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +34,7 @@ public class TimePictureService {
     private final AwsS3Service awsS3Service;
 
 
-    public LocalTime getTimeInfo(TimePictureVO timePictureVO) throws IOException, ImageProcessingException {
+    public LocalTime getTimeInfo(TimePictureVO timePictureVO) throws IOException {
 
         //MultipartFile을 readAttributes의 매개변수 타입인 File로 변환합니다.
         MultipartFile mFile = timePictureVO.getFile();
@@ -49,7 +46,8 @@ public class TimePictureService {
 //        fos.close();
 //        log.info("file: {}", file);
 
-        //오픈소스 api를 사용한 코드입니다. 추후 활용할 수 있을 것 같아 기록해두었습니다.
+    */
+/*    //오픈소스 api를 사용한 코드입니다. 추후 활용할 수 있을 것 같아 기록해두었습니다.
         Metadata metadata = ImageMetadataReader.readMetadata(mFile.getInputStream());
 
         for (Directory directory : metadata.getDirectories()) {
@@ -65,7 +63,8 @@ public class TimePictureService {
         }
 
         ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-//
+//*//*
+
 //        Date date = directory.getDateOriginal(TimeZone.getTimeZone("Asia/Seoul"));
 //        verifyIfFileIsImage(file);
 //
@@ -132,3 +131,4 @@ public class TimePictureService {
         }
     }
 }
+*/
