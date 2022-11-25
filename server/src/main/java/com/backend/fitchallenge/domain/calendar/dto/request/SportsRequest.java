@@ -14,7 +14,7 @@ public class SportsRequest {
 
     @NotNull(message = "운동의 id를 입력해주세요.")
     @Positive(message = "운동의 Id는 양의 정수여야 합니다.")
-    Long sportsId;
+    Long id;
 
     @NotNull(message = "세트 수를 입력해주세요.")
     @Positive(message = "세트 수는 양의 정수여야 합니다.")
