@@ -40,9 +40,17 @@ function Mypage() {
       <Header />
       {Clicked ? (
         <div className="delmodal">
-          <div className="contentbox">정말 삭제하시겠습니까?</div>
+          <div className="contentbox">정말 탈퇴하시겠습니까?</div>
           <div className="btns">
-            <button className="yes">예</button>
+            <button
+              className="yes"
+              onClick={() => {
+                dispatch(MyPostDelete());
+                navigate('/');
+              }}
+            >
+              예
+            </button>
             <button className="no" onClick={() => setClicked(!Clicked)}>
               아니요
             </button>
@@ -80,14 +88,7 @@ function Mypage() {
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
             정보 수정
           </button>
-          <button
-            onClick={() => {
-              dispatch(MyPostDelete());
-              navigate('/');
-            }}
-          >
-            회원 탈퇴
-          </button>
+          <button onClick={() => setClicked(!Clicked)}>회원 탈퇴</button>
         </RecordBox>
         <hr className="line" />
         <PictureBox>
