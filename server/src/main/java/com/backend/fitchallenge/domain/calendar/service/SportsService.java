@@ -73,7 +73,7 @@ public class SportsService {
     //fixme : findAllById(List<Long> sportsIds)로 바꾸는 것 고려
     public List<Sports> getSports(List<SportsRequest> sportsRequests) {
         return sportsRequests.stream()
-                .map(sportsRequest -> findVerifiedSports(sportsRequest.getSportsId()))
+                .map(sportsRequest -> findVerifiedSports(sportsRequest.getId()))
                 .collect(Collectors.toList());
         //sportsId의 목록으로 sports를 조회
 //        return sportsRepository.findAllById(sportsRequests.stream()

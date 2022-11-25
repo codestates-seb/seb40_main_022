@@ -8,9 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class TimePictureUpdateVO extends TimePictureVO {
 
-    @NotBlank
-    String date;
-
     private String point;
 
     @NotBlank(message = "기존 파일 경로를 입력해주세요.")
@@ -20,6 +17,6 @@ public class TimePictureUpdateVO extends TimePictureVO {
     private MultipartFile file;
 
     public TimePictureUpdateVO(String date, String point, MultipartFile file) {
-        super(date, point, file);
+        super(point, file);
     }
 }

@@ -23,22 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.backend.fitchallenge.domain.calendar.entity.QRecordSports.recordSports;
-import static com.backend.fitchallenge.domain.calendar.entity.QSports.sports;
-import static com.backend.fitchallenge.domain.post.entity.QPost.post;
-
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -83,8 +71,6 @@ public class RecordService {
         if (recordCreate.getStartTime().isAfter(recordCreate.getEndTime())) {
             throw new InvalidTimeInput();
         }
-
-
 
         List<Sports> sports = sportsService.getSports(recordCreate.getSports());
 
