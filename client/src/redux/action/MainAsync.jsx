@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
-  for (const pair of formData.entries()) {
-    console.log(`${pair[0]}, ${pair[1]}`);
-  }
+  // for (const pair of formData.entries()) {
+  //   console.log(`${pair[0]}, ${pair[1]}`);
+  // }
   axios
     .post('/dailyPosts', formData, {
       headers: {
@@ -20,22 +20,18 @@ export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
 
 export const asyncPostUpdate = createAsyncThunk(
   'list/update',
-  ({ files, content, tagList, id, ac, re }) => {
-    if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
-      axios.patch(
-        `/dailyPosts/${id.id}`,
-        // `http://localhost:3001/dailypost/${id.id}`,
-        JSON.stringify({ pictures: files, post: { content }, tags: tagList }),
-        {
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            'Content-Type': 'application/json',
-            Authorization: ac,
-            RefreshToken: re,
-          },
-        },
-      );
+  ({ formData, Number(list[0].post.postId) }) => {
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
     }
+    console.log(list[0].post.postId);
+    axios.post(`/dailyPosts/${list[0].post.postId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    });
   },
 );
 
@@ -84,20 +80,13 @@ export const asyncLikeundo = createAsyncThunk(
   },
 );
 
-export const asyncPostDel = createAsyncThunk('post/del', postId => {
-  axios.delete(
-    `/dailyPosts/${postId}`,
-    // `http://localhost:3001/dailypost/${id}`,
-    // {
-    //   id,
-    // },
+export const asyncPostDel = createAsyncThunk('post/del', async postId => {
+  axios.delete(`/dailyPosts/${postId}`, {
     headers: {
-      'Content-Type': 'multipart/form-data',
-      // 'Content-Type': 'application/json',
       Authorization: localStorage.getItem('Authorization'),
       RefreshToken: localStorage.getItem('RefreshToken'),
     },
-  );
+  });
 });
 
 export const asyncPostCmt = createAsyncThunk('comment', (id, ac, re) => {

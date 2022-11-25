@@ -16,14 +16,17 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', data => {
   return Mylist;
 });
 
-export const MypagePatch = createAsyncThunk('/member/myPage/edit', data => {
-  axios
-    .patch('/members/myPage', JSON.stringify(data), {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
-    })
-    .then(res => console.log(res));
-});
+export const MypagePatch = createAsyncThunk(
+  '/member/myPage/edit',
+  ({ data }) => {
+    axios
+      .post('/members/myPage', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
+      })
+      .then(res => console.log(res));
+  },
+);

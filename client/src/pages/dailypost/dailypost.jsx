@@ -27,7 +27,6 @@ const dailypost = () => {
         const reader = new FileReader();
         reader.readAsDataURL(e.target.files[i]);
         reader.onloadend = () => {
-          // setFiles([...files, e.target.files[i]]);
           const base64 = reader.result;
           if (base64) {
             const base64Sub = base64.toString();
@@ -63,17 +62,13 @@ const dailypost = () => {
   const deleteFile = index => {
     const imgArr = imgBase64.filter((el, idx) => idx !== index);
     setImgBase64([...imgArr]);
+
+    const uploadImgArr = files.filter((el, idx) => idx !== index);
+    setFiles([...uploadImgArr]);
   };
 
   const handleSubmit = () => {
     const formData = new FormData();
-    // console.log(files);
-    // Object.values(files).forEach(el => formData.append('files', el));
-    // Array.from(files).forEach(el => {
-    //   formData.append('files', el);
-    // });
-
-    // formData.append('files', files);
     for (let i = 0; i < files.length; i += 1) {
       formData.append('files', files[i]);
     }
@@ -83,10 +78,6 @@ const dailypost = () => {
     Array.from(tagList).forEach(el => {
       formData.append('tagDtos', el);
     });
-
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
-    }
 
     if (
       imgBase64.length !== 0 &&

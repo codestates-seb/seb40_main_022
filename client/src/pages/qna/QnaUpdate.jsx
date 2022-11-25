@@ -16,6 +16,7 @@ import { QnaAsynclistPatch } from '../../redux/action/QnaAsync';
 function QnaUpdate() {
   const taglist = ['운동', '식단', '영양소', '헬스', '습관', '신고'];
   const list = useSelector(state => state.qnalist.list);
+  console.log(list);
   const Id = useParams();
   const dispatch = useDispatch();
   const [title, setTitle] = useState(list[+Id.id].title);
