@@ -302,6 +302,7 @@ function ProfileEdit() {
               onClick={e => {
                 e.preventDefault();
                 handleSubmit();
+                navigate('/mypage');
               }}
             >
               완료
