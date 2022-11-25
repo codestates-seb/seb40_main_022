@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { MypageGet } from '../action/MypageAsync';
+import { MypageGet, MyPostDelete } from '../action/MypageAsync';
 
 const MypageSlice = createSlice({
   name: 'mypage',
@@ -11,17 +11,10 @@ const MypageSlice = createSlice({
   reducers: {},
   extraReducers: {
     [MypageGet.fulfilled]: (state, action) => {
-<<<<<<< HEAD
-      console.log(state, action);
-      state.dailyPosts = action.payload.dailyPosts;
-      state.activity = action.payload.activity;
-      state.userName = action.payload.userName;
-=======
       state.data = action.payload;
     },
     [MyPostDelete.fulfilled]: (state, action) => {
       state.comment = action.payload;
->>>>>>> 8768c064e4f6db6de6e2e5fb3bc3a6c181196128
     },
   },
 });
