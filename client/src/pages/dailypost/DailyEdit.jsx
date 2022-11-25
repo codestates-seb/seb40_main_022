@@ -1,20 +1,20 @@
 import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
-import { asyncPostUpdate } from '../../redux/action/MainAsync';
+// import { asyncPostUpdate } from '../../redux/action/MainAsync';
 
 function DailyEdit() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const Id = useParams();
   const photoUp = useRef();
   const selectdata = useSelector(state => state.dailypost.data.items);
   const list = selectdata.filter(postdata => postdata.post.postId === +Id.id);
-  console.log(list);
   const [files, setFiles] = useState(list[0].pictures);
   const [imgBase64, setImgBase64] = useState(list[0].pictures);
   const [content, setContent] = useState(list[0].post.content);
@@ -70,7 +70,7 @@ function DailyEdit() {
     setFiles([...uploadImgArr]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = new FormData();
     for (let i = 0; i < files.length; i += 1) {
       formData.append('files', files[i]);
@@ -82,13 +82,21 @@ function DailyEdit() {
       formData.append('tagDtos', el);
     });
 
+    const editId = +Id.id;
     if (
       imgBase64.length !== 0 &&
       content.length >= 10 &&
       tagList.length !== 0
     ) {
-      dispatch(asyncPostUpdate({ formData }, list[0].post.postId));
-      navigate('/');
+      await axios.post(`dailyPosts/${editId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
+      });
+      // dispatch(asyncPostUpdate({ formData }, editId));
+      // navigate('/');
     } else if (files.length === 0) alert('이미지를 업로드해주세요');
     else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
     else if (tagList.length === 0) alert('태그를 입력해주세요');

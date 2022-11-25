@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ImageSlider, { Slide } from 'react-auto-image-slider';
-import daily from '../../images/daily.jpg';
+// import daily from '../../images/daily.jpg';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import DailyCmt from './DailyCmt';
@@ -13,7 +13,7 @@ import {
   // asyncPostCmtEdit,
 } from '../../redux/action/MainAsync';
 
-export default function DailyPost() {
+export default function DailyPost({ idx }) {
   const data = useSelector(state => state.dailypost.data.items);
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
@@ -32,6 +32,13 @@ export default function DailyPost() {
   const handleDelPost = id => {
     dispatch(asyncPostDel(id));
     window.location.reload();
+  };
+
+  const handleLike = () => {
+    setFav(!fav);
+    if (list.likeState === false) {
+      dispatch();
+    }
   };
 
   return (
@@ -53,13 +60,6 @@ export default function DailyPost() {
                           </Slide>
                         );
                       })}
-                    {/* {[...Array(5)].map(() => {
-                      return (
-                        <Slide>
-                          <img className="dailyImg" src={daily} alt="daily" />
-                        </Slide>
-                      );
-                    })} */}
                   </ImageSlider>
                 </article>
                 <div>
@@ -87,14 +87,9 @@ export default function DailyPost() {
                     </div>
                     <div className="DailyMemo">
                       <div className="memo">{list.post.content}</div>
-                      {/* advanced */}
-                      {/* <span className="more">더보기</span> */}
                     </div>
                     <div className="act">
-                      <span className="date">
-                        {list.post.createdAt}
-                        {/* 22.12.09 */}
-                      </span>
+                      <span className="date">{list.post.createdAt}</span>
                       <span>
                         <button
                           onClick={() => setIsComment(!isComment)}
@@ -102,23 +97,20 @@ export default function DailyPost() {
                         >
                           댓글
                           {list.post.commentCount ? list.post.commentCount : 0}
-                          개{/* 0 개 */}
+                          개
                         </button>
                       </span>
                       <span className="favorite">
-                        <button onClick={() => !setFav(!fav)}>
-                          {
-                            // list.likeState
-                            fav ? (
-                              <img
-                                className="heart"
-                                src={heartFill}
-                                alt="heart"
-                              />
-                            ) : (
-                              <img className="heart" src={heart} alt="heart" />
-                            )
-                          }
+                        <button onClick={() => handleLike()}>
+                          {list.likeState ? (
+                            <img
+                              className="heart"
+                              src={heartFill}
+                              alt="heart"
+                            />
+                          ) : (
+                            <img className="heart" src={heart} alt="heart" />
+                          )}
                           <span>
                             {list.post.likeCount ? list.post.likeCount : 0}
                           </span>
@@ -130,20 +122,18 @@ export default function DailyPost() {
                     <img
                       className="user"
                       src={
-                        // list.member.profileImage
-                        //   ? list.member.profileImage
-                        //   : null
-                        daily
+                        list.member.profileImage
+                          ? list.member.profileImage
+                          : null
                       }
                       alt="daily"
                     />
                     <span>
                       {list.member.username ? list.member.username : null}
-                      {/* 가나다 */}
                     </span>
                   </span>
                 </article>
-                {isComment ? <DailyCmt /> : null}
+                {isComment ? <DailyCmt index={idx} /> : null}
               </DailyItem>
             );
           })}

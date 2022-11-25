@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
-  // for (const pair of formData.entries()) {
-  //   console.log(`${pair[0]}, ${pair[1]}`);
-  // }
+  for (const pair of formData.entries()) {
+    console.log(`${pair[0]}, ${pair[1]}`);
+  }
   axios
     .post('/dailyPosts', formData, {
       headers: {
@@ -15,17 +15,20 @@ export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
       },
       // transformRequest: formData => formData,
     })
-    .then(res => console.log(res));
+    .then(res => {
+      console.log(res);
+      window.location.reload();
+    });
 });
 
 export const asyncPostUpdate = createAsyncThunk(
   'list/update',
-  ({ formData, Number(list[0].post.postId) }) => {
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
-    }
-    console.log(list[0].post.postId);
-    axios.post(`/dailyPosts/${list[0].post.postId}`, formData, {
+  ({ formData }, editId) => {
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}, ${pair[1]}`);
+    // }
+    // console.log(editId);
+    axios.post(`/dailyPosts/${editId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: localStorage.getItem('Authorization'),
@@ -54,18 +57,19 @@ export const asyncPost = createAsyncThunk('post', (ac, re) => {
   return data;
 });
 
-export const asyncLike = createAsyncThunk(
-  'post/up',
-  ({ likeStates, id, ac, re }) => {
-    axios.post(`/dailyPosts/${id}/like`, JSON.stringify({ likeStates }), {
+export const asyncLike = createAsyncThunk('post/up', ({ likeStates, id }) => {
+  axios.post(
+    `/dailyPosts/${id}/like`,
+    { likeStates },
+    {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: ac,
-        RefreshToken: re,
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
       },
-    });
-  },
-);
+    },
+  );
+});
 
 export const asyncLikeundo = createAsyncThunk(
   'post/up',
