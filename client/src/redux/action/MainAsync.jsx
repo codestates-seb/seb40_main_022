@@ -10,8 +10,8 @@ export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
       headers: {
         'Content-Type': 'multipart/form-data',
         // 'Content-Type': 'application/json',
-        // Authorization: localStorage.getItem('Authorization'),
-        // RefreshToken: localStorage.getItem('RefreshToken'),
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
       },
       // transformRequest: formData => formData,
     })
