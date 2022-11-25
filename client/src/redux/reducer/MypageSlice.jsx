@@ -4,17 +4,22 @@ import { MypageGet, MyPostDelete } from '../action/MypageAsync';
 const MypageSlice = createSlice({
   name: 'mypage',
   initialState: {
-    userName: '',
+    member: [],
     dailyPosts: [],
     activity: [],
   },
   reducers: {},
   extraReducers: {
     [MypageGet.fulfilled]: (state, action) => {
-      state.data = action.payload;
+      console.log(state, action);
+      state.dailyPosts = action.payload.dailyPosts;
+      state.activity = action.payload.activity;
+      state.member = action.payload.member;
     },
-    [MyPostDelete.fulfilled]: (state, action) => {
-      state.comment = action.payload;
+    [MyPostDelete.fulfilled]: state => {
+      state.dailyPosts = [];
+      state.activity = [];
+      state.userName = '';
     },
   },
 });
