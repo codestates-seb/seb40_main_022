@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const QnaAsynclistPost = createAsyncThunk('qnaask', data => {
+  console.log(data);
   if (data[2].length !== 0 && data[3].length !== 0 && data[4].length !== 0) {
     axios.post(
       '/questions',

@@ -59,39 +59,39 @@ public class ChallengeController {
 
     /**
      * 챌린지 거절
-     * @param challengeId 해당 챌린지 Id
+     * @param id 해당 챌린지 Id
      */
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> refuse(
             @AuthMember MemberDetails memberDetails,
-            @RequestParam Long challengeId) {
-        challengeService.refuse(memberDetails.getMemberId(), challengeId);
+            @PathVariable Long id) {
+        challengeService.refuse(memberDetails.getMemberId(), id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     /**
      * 챌린지 중단
-     * @param challengeId 해당 챌린지 Id
+     * @param id 해당 챌린지 Id
      */
-    @DeleteMapping("/suspend")
+    @DeleteMapping("/{id}/suspend")
     public ResponseEntity<?> suspend(
         @AuthMember MemberDetails memberDetails,
-        @RequestParam Long challengeId) {
-        challengeService.suspend(memberDetails.getMemberId(), challengeId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        @PathVariable Long id) {
+        Long challengeId = challengeService.suspend(memberDetails.getMemberId(), id);
+        return new ResponseEntity<>(challengeId,HttpStatus.OK);
     }
 
 
     /**
      * 챌린지 수락
-     * @param challengeId 해당 챌린지 Id
+     * @param id 해당 챌린지 Id
      */
-    @PostMapping("/accept")
+    @PostMapping("/{id}/accept")
     public ResponseEntity<?> accept(
             @AuthMember MemberDetails memberDetails,
-            @RequestParam Long challengeId) {
-        challengeService.accept(memberDetails.getMemberId(), challengeId);
+            @PathVariable Long id) {
+        challengeService.accept(memberDetails.getMemberId(), id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -3,6 +3,9 @@ package com.backend.fitchallenge.domain.calendar.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -16,14 +19,22 @@ public class RecordCreate {
      *      DTO 단에서만 활용되고 추후 논의하고 변경해보겠습니다.
      * - 초는 제외할 수 있는 방법을 찾으면 추후 반영하겠습니다.
      */
-    //
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    LocalDate start;
+    private LocalDate start;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
-    LocalTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
-    LocalTime endTime;
+    private LocalTime startTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalTime endTime;
+
+    @NotBlank(message = "운동 시작 인증사진의 경로를 입력해주세요.")
+    private String startImagePath;
+
+    @NotBlank(message = "운동 종료 인증사진의 경로를 입력해주세요.")
+    private String endImagePath;
+
+    @Valid
     private List<SportsRequest> sports;
 }

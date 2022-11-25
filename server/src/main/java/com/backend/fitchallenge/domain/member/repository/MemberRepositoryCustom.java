@@ -1,5 +1,7 @@
 package com.backend.fitchallenge.domain.member.repository;
 
+import com.backend.fitchallenge.domain.calendar.entity.Record;
+
 import com.backend.fitchallenge.domain.challenge.dto.request.RankingCondition;
 import com.backend.fitchallenge.domain.challenge.dto.request.RankingDto;
 import com.backend.fitchallenge.domain.member.entity.Member;
@@ -18,7 +20,11 @@ public interface MemberRepositoryCustom {
 
     List<Member> findMemberList(List<Long> memberIds);
 
+
+    Member findOpponent(Long memberId);
+
     public List<Post> findList(Long lastPostId, Long memberId , Pageable pageable);
 
     Long pagingCount(RankingCondition rankingCondition, Pageable pageable);
+
 }
