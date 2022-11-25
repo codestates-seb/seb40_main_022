@@ -15,13 +15,7 @@ export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
       },
       // transformRequest: formData => formData,
     })
-    .then(res =>
-      console.log(
-        res,
-        localStorage.getItem('Authorization'),
-        localStorage.getItem('RefreshToken'),
-      ),
-    );
+    .then(res => console.log(res));
 });
 
 export const asyncPostUpdate = createAsyncThunk(
@@ -90,12 +84,18 @@ export const asyncLikeundo = createAsyncThunk(
   },
 );
 
-export const asyncPostDel = createAsyncThunk('post/del', id => {
+export const asyncPostDel = createAsyncThunk('post/del', postId => {
   axios.delete(
-    `/dailyPosts/${id}`,
+    `/dailyPosts/${postId}`,
     // `http://localhost:3001/dailypost/${id}`,
-    {
-      id,
+    // {
+    //   id,
+    // },
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      // 'Content-Type': 'application/json',
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
     },
   );
 });

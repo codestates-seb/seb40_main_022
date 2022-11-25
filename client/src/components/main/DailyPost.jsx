@@ -29,8 +29,8 @@ export default function DailyPost() {
     dispatch(asyncPost());
   }, []);
 
-  const handleDelPost = postId => {
-    dispatch(asyncPostDel(postId));
+  const handleDelPost = id => {
+    dispatch(asyncPostDel(id));
     window.location.reload();
   };
 

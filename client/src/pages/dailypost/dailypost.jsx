@@ -19,43 +19,24 @@ const dailypost = () => {
   const [tagList, setTagList] = useState([]);
 
   const handleFile = e => {
-    // const uploadFile = e.target.files[0];
-    // console.log(uploadFile);
-    setFiles(e.target.files[0]);
+    setFiles(e.target.files);
     setImgBase64([]);
 
     for (let i = 0; i < e.target.files.length; i += 1) {
       if (e.target.files[i]) {
         const reader = new FileReader();
-        reader.readAsDataURL(e.target.files[i]); // 1. 파일을 읽어 버퍼에 저장합니다.
-        // 파일 상태 업데이트
+        reader.readAsDataURL(e.target.files[i]);
         reader.onloadend = () => {
-          // 2. 읽기가 완료되면 아래코드가 실행됩니다.
+          // setFiles([...files, e.target.files[i]]);
           const base64 = reader.result;
           if (base64) {
             const base64Sub = base64.toString();
-
             setImgBase64([...imgBase64, base64Sub]);
+            setFiles([...files, e.target.files[i]]);
           }
         };
       }
     }
-
-    // const reader = new FileReader();
-    // reader.readAsDataURL(uploadFile);
-    // reader.onloadend = () => {
-    //   const base64 = reader.result;
-    //   setImgBase64([...imgBase64, base64.toString()]);
-    // };
-
-    // const reader = new FileReader();
-    // reader.readAsDataURL(e.target.files[0]);
-    // reader.onloadend = () => {
-    //   const resultImg = reader.result;
-    //   setFiles([...files, resultImg.toString()]);
-    // };
-
-    // setFiles([...files, uploadFile]);
   };
 
   const handleTag = e => {
@@ -92,12 +73,15 @@ const dailypost = () => {
     //   formData.append('files', el);
     // });
 
-    formData.append('files', files);
+    // formData.append('files', files);
+    for (let i = 0; i < files.length; i += 1) {
+      formData.append('files', files[i]);
+    }
 
-    formData.append('content', JSON.stringify(content));
+    formData.append('content', content);
 
     Array.from(tagList).forEach(el => {
-      formData.append('tagDtos', JSON.stringify(el));
+      formData.append('tagDtos', el);
     });
 
     for (const pair of formData.entries()) {
@@ -110,12 +94,10 @@ const dailypost = () => {
       tagList.length !== 0
     ) {
       dispatch(asyncPostUp({ formData }));
-      // navigate('/');
-    }
-
-    // else if (files.length === 0) alert('이미지를 업로드해주세요');
-    // else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
-    // else if (tagList.length === 0) alert('태그를 입력해주세요');
+      navigate('/');
+    } else if (files.length === 0) alert('이미지를 업로드해주세요');
+    else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
+    else if (tagList.length === 0) alert('태그를 입력해주세요');
   };
 
   return (
