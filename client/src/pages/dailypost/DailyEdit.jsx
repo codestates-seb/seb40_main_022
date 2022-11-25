@@ -13,14 +13,7 @@ function DailyEdit() {
   const id = useParams();
   const photoUp = useRef();
 
-  const selectdata = useSelector(state => state.dailypost.data);
-
-  // const listdata = [];
-  // for (let i = 0; i < selectdata.length; i += 1) {
-  //   if (selectdata[i].id === Number(id.id)) {
-  //     listdata.push(selectdata[i]);
-  //   }
-  // }
+  const selectdata = useSelector(state => state.dailypost.data.items);
 
   const list = selectdata.filter(postdata => postdata.id === +id.id);
 
@@ -68,8 +61,18 @@ function DailyEdit() {
   };
 
   const handleSubmit = () => {
+    const formData = new FormData();
+    Array.from(files).forEach(el => {
+      formData.append('pictures', el);
+    });
+    formData.append('content', JSON.stringify(content));
+    formData.append('tagDtos', JSON.stringify(tagList));
+
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}, ${pair[1]}`);
+    // }
     if (files.length !== 0 && content.length >= 10 && tagList.length !== 0) {
-      dispatch(asyncPostUpdate({ files, content, tagList, id, ac, re }));
+      dispatch(asyncPostUpdate({ formData, ac, re }));
       navigate('/');
     } else if (files.length === 0) alert('이미지를 업로드해주세요');
     else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');

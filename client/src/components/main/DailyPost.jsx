@@ -38,8 +38,8 @@ export default function DailyPost() {
     <DailyForm>
       {data &&
         data
-          .slice(0)
-          .reverse()
+          // .slice(0)
+          // .reverse()
           .map(list => {
             return (
               <DailyItem>

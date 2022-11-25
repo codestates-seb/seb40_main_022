@@ -1,37 +1,35 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const asyncPostUp = createAsyncThunk(
-  'post/up',
-  ({ formData, ac, re }) => {
-    axios.post(
-      '/dailyPosts',
-      formData,
-      // 'http://localhost:3001/dailypost',
-      // JSON.stringify({
-      //   pictures: files,
-      //   content,
-      //   tagDtos: tagList,
-      // }),
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          // 'Content-Type': 'application/json',
-          Authorization: ac,
-          RefreshToken: re,
-        },
-        // transformRequest: formData => formData,
+export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
+  for (const pair of formData.entries()) {
+    console.log(`${pair[0]}, ${pair[1]}`);
+  }
+  axios
+    .post('/dailyPosts', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // 'Content-Type': 'application/json',
+        // Authorization: localStorage.getItem('Authorization'),
+        // RefreshToken: localStorage.getItem('RefreshToken'),
       },
+      // transformRequest: formData => formData,
+    })
+    .then(res =>
+      console.log(
+        res,
+        localStorage.getItem('Authorization'),
+        localStorage.getItem('RefreshToken'),
+      ),
     );
-  },
-);
+});
 
 export const asyncPostUpdate = createAsyncThunk(
   'list/update',
   ({ files, content, tagList, id, ac, re }) => {
     if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
       axios.patch(
-        `/dailyPosts/${id}`,
+        `/dailyPosts/${id.id}`,
         // `http://localhost:3001/dailypost/${id.id}`,
         JSON.stringify({ pictures: files, post: { content }, tags: tagList }),
         {
