@@ -29,6 +29,7 @@ function Mypage() {
   const re = useSelector(state => state.authToken.token);
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [Clicked, setClicked] = useState(false);
+  const [btnClick, setBtnClick] = useState(false);
   const data = [ac, re];
 
   useEffect(() => {
@@ -36,7 +37,6 @@ function Mypage() {
   }, []);
 
   const listdata1 = useSelector(state => state.mypage.data);
-  console.log(listdata1);
 
   return (
     <Wrapper>
@@ -56,7 +56,15 @@ function Mypage() {
         <div className="delmodal">
           <div className="contentbox">정말 탈퇴하시겠습니까?</div>
           <div className="btns">
-            <button className="yes">예</button>
+            <button
+              className="yes"
+              onClick={() => {
+                dispatch(MyPostDelete(data));
+                navigate('/');
+              }}
+            >
+              예
+            </button>
             <button className="no" onClick={() => setBtnClick(!btnClick)}>
               아니요
             </button>
@@ -74,13 +82,13 @@ function Mypage() {
         </NameBox>
         <FollowBox>
           <div>게시물 1</div>
-          <div>포인트 {listdata1.activity.point}</div>
+          {/* <div>포인트 {listdata1.activity.point}</div> */}
         </FollowBox>
         <RecordBox>
           <div className="boxs">
             <div className="box">
               <FontAwesomeIcon icon={faDumbbell} />
-              {listdata1.activity.kilogram}kg
+              {/* {listdata1.activity.kilogram}kg */}
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
@@ -94,14 +102,7 @@ function Mypage() {
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
             정보 수정
           </button>
-          <button
-            onClick={() => {
-              dispatch(MyPostDelete(data));
-              navigate('/');
-            }}
-          >
-            회원 탈퇴
-          </button>
+          <button onClick={() => setBtnClick(!btnClick)}>회원 탈퇴</button>
         </RecordBox>
         <hr className="line" />
         <PictureBox>
