@@ -56,21 +56,38 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
     );
   }
 });
-
+export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
+  return axios.get(`/questions/${data}`).then(res => {
+    return res.data;
+  });
+});
 export const QnaDetailCommentAsync = createAsyncThunk('qnaanswer', data => {
-  if (data.answers[0].length !== 0) {
-    axios.post(
-      `/questions/${data.answers[0]}/answers`,
-      JSON.stringify({
-        content: data.answers[0],
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/json;',
-          Authorization: data[0],
-          RefreshToken: data[1],
+  console.log(data);
+  if (data.length !== 0) {
+    axios
+      .post(
+        `/questions/${data[0]}/answers`,
+        JSON.stringify({
+          content: data[1],
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json;',
+            Authorization: localStorage.getItem('Authorization'),
+            RefreshToken: localStorage.getItem('RefreshToken'),
+          },
         },
-      },
-    );
+      )
+      .then(res => console.log(res));
   }
+});
+
+export const QnaanswerDetaildelete = createAsyncThunk('delete', async id => {
+  console.log(id);
+  axios.delete(`/questions/${id[0]}/answers/${id[1]}`, {
+    headers: {
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });

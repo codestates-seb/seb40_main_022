@@ -30,28 +30,21 @@ function ProfileEdit() {
   const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  // const list = useSelector(state => state.mypageedit.data);
-  // console.log(list);
-  // console.log(profileImage);
-
+  const formData = new FormData();
   const reader = new FileReader();
   const dispatch = useDispatch();
-  const formData = new FormData();
-  formData.append('profileImage', profileImage);
-  formData.append('username', username);
-  formData.append('job', job);
-  formData.append('address', address);
-  formData.append('sex', sex);
-  formData.append('split', select);
-  formData.append('age', age);
-  formData.append('height', height);
-  formData.append('weight', weight);
-  formData.append('kilogram', kilogram);
-  formData.append('period', period);
-  formData.append('password', password);
-  // useEffect(() => {
-  //   dispatch(MypageEditGet(data));
-  // }, [data]);
+  formData.append('password', JSON.stringify(password));
+  formData.append('username', JSON.stringify(username));
+  formData.append('job', JSON.stringify(job));
+  formData.append('address', JSON.stringify(address));
+  formData.append('sex', JSON.stringify(sex));
+  formData.append('split', JSON.stringify(select));
+  formData.append('age', JSON.stringify(age));
+  formData.append('height', JSON.stringify(height));
+  formData.append('weight', JSON.stringify(weight));
+  formData.append('kilogram', JSON.stringify(kilogram));
+  formData.append('period', JSON.stringify(period));
+  formData.append('profileImage', JSON.stringify(profileImage));
 
   const handleprofileImage = e => {
     reader.readAsDataURL(e.target.files[0]);
@@ -59,25 +52,28 @@ function ProfileEdit() {
       const resultImg = reader.result;
       setProfileImage(resultImg.toString());
     };
+    setProfileImage(e.target.files[0]);
   };
-
   const handelClick = () => {
     photoUp.current.click();
   };
-
   const deleteFile = () => {
     setProfileImage('');
   };
-
   const handleSubmit = () => {
     dispatch(MypagePatch(formData));
     // navigate('/mypage');
   };
-
   return (
     <Wrapper>
       <Header />
-      <div>
+      <form
+        id="form"
+        onSubmit={e => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <ImageBox>
           <img src={profileImage} alt="userProfile" />
           <button onClick={() => deleteFile(profileImage)} className="Imgdel">
@@ -101,6 +97,7 @@ function ProfileEdit() {
           <ProfileGrid>
             <div className="boxname">이름</div>
             <ProfileInput
+              type="text"
               value={username}
               placeholder="이름을 입력하세요."
               onChange={e => {
@@ -109,6 +106,7 @@ function ProfileEdit() {
             />
             <div className="boxname">비밀번호</div>
             <ProfileInput
+              type="password"
               value={password}
               placeholder="비밀번호를 입력하세요."
               onChange={e => {
@@ -117,6 +115,7 @@ function ProfileEdit() {
             />
             <div className="boxname">직업</div>
             <ProfileInput
+              type="text"
               value={job}
               placeholder="직업을 입력하세요."
               onChange={e => {
@@ -125,6 +124,7 @@ function ProfileEdit() {
             />
             <div className="boxname">주소</div>
             <ProfileInput
+              type="text"
               value={address}
               placeholder="주소를 입력하세요."
               onChange={e => {
@@ -142,6 +142,7 @@ function ProfileEdit() {
                       value="man"
                       checked="checked"
                       onChange={e => {
+                        e.preventDefault();
                         setSex(e.target.value);
                       }}
                     />
@@ -153,6 +154,7 @@ function ProfileEdit() {
                       name="sex"
                       value="woman"
                       onChange={e => {
+                        e.preventDefault();
                         setSex(e.target.value);
                       }}
                     />
@@ -172,6 +174,7 @@ function ProfileEdit() {
                     <div className="contents">
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -179,6 +182,7 @@ function ProfileEdit() {
                       </button>
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -186,6 +190,7 @@ function ProfileEdit() {
                       </button>
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -193,6 +198,7 @@ function ProfileEdit() {
                       </button>
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -205,6 +211,7 @@ function ProfileEdit() {
             </div>
             <div className="boxname">나이</div>
             <ProfileInput
+              type="text"
               value={age}
               placeholder="나이를 입력하세요."
               onChange={e => {
@@ -221,6 +228,7 @@ function ProfileEdit() {
             />
             <div className="boxname">몸무게</div>
             <ProfileInput
+              type="text"
               value={weight}
               placeholder="몸무게를 입력하세요."
               onChange={e => {
@@ -229,6 +237,7 @@ function ProfileEdit() {
             />
             <div className="boxname">중량</div>
             <ProfileInput
+              type="text"
               value={kilogram}
               placeholder="중량을 입력하세요."
               onChange={e => {
@@ -237,6 +246,7 @@ function ProfileEdit() {
             />
             <div className="boxname">경력</div>
             <ProfileInput
+              type="text"
               value={period}
               placeholder="경력을 입력하세요."
               onChange={e => {
@@ -245,18 +255,13 @@ function ProfileEdit() {
             />
           </ProfileGrid>
           <BtnBox>
-            <button
-              className="set-btn"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
+            <button className="set-btn" type="submit">
               완료
             </button>
             <button onClick={() => navigate('/mypage')}>취소</button>
           </BtnBox>
         </ProfileBox>
-      </div>
+      </form>
       <Footer />
     </Wrapper>
   );

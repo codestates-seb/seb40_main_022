@@ -12,35 +12,35 @@ import {
   DetailNDB,
   DetailSubmit,
   DetailTitle,
-  // AnswerNDB,
+  AnswerNDB,
   DetailUpdate,
   DetailDelete,
   DetailButton,
 } from './QnaDetailStyle';
 import {
-  QnaAsynclist,
   QnaDetaillistdelete,
   QnaDetailCommentAsync,
+  QnaDetailAsync,
+  QnaanswerDetaildelete,
 } from '../../redux/action/QnaAsync';
 
 function QnaDetail() {
   const [content, setContent] = useState('');
   const list = useSelector(state => state.qnalist.list);
-  const ac = useSelector(state => state.authToken.accessToken);
-  const re = useSelector(state => state.authToken.token);
+  const answer = useSelector(state => state.qnalist.answers.answers);
   const Id = useParams();
-  const data = [list[+Id.id].questionId, ac, re];
+  const data = list[+Id.id].questionId;
   const dispatch = useDispatch();
-
-  const answerdata = [ac, re, content];
-
+  const Upanswer = [data, content];
   const handleAnswer = () => {
-    dispatch(QnaDetailCommentAsync(answerdata));
-    console.log(answerdata);
+    dispatch(QnaDetailCommentAsync(Upanswer))
+      .unwrap()
+      .then(() => {
+        setTimeout(dispatch(QnaDetailAsync({ data })), 2000);
+      });
   };
-
   useEffect(() => {
-    dispatch(QnaAsynclist());
+    dispatch(QnaDetailAsync({ data }));
   }, []);
 
   return (
@@ -82,23 +82,38 @@ function QnaDetail() {
           </section>
         </DetailTitle>
         <DetailAnswer>
-          {/* {list[+Id.id].answers.map(data => {
-            return (
-              <>
-                <h2>답변 {list[+Id.id].answers.length}</h2>
-                <h3>{data.content}</h3>
-                <AnswerNDB>
-                  <div>
-                    <h4>{data.answerWriter.username}</h4>
-                    <h4>{data.createdAt}</h4>
-                  </div>
-                  <button className={data.accepted ? 'accepted' : 'noaccepted'}>
-                    {data.accepted ? 'V' : null}
-                  </button>
-                </AnswerNDB>
-              </>
-            );
-          })} */}
+          {answer &&
+            answer.map(ansdata => {
+              return (
+                <>
+                  <h2>답변 {ansdata.length}</h2>
+                  <h3>{ansdata.content}</h3>
+                  <AnswerNDB>
+                    <div>
+                      <h4>{ansdata.answerWriter.username}</h4>
+                      <h4>{ansdata.createdAt}</h4>
+                    </div>
+                    <button
+                    // className={ansdata.accepted ? 'accepted' : 'noaccepted'}
+                    >
+                      {ansdata.accepted ? 'V' : '채택'}
+                    </button>
+                    <div>
+                      <button>수정</button>
+                      <button
+                        onClick={() => {
+                          const answerid = [data, ansdata.answerWriter.id];
+                          console.log(answerid);
+                          dispatch(QnaanswerDetaildelete(answerid));
+                        }}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </AnswerNDB>
+                </>
+              );
+            })}
         </DetailAnswer>
         <DetailComment>
           <h2>답변 작성</h2>

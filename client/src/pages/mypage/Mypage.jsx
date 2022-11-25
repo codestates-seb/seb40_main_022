@@ -19,7 +19,6 @@ import {
   RecordBox,
   PictureBox,
 } from './style';
-import daily from '../../images/daily.jpg';
 import myimage from '../../images/qnaImg.jpg';
 
 function Mypage() {
@@ -27,11 +26,11 @@ function Mypage() {
   const dispatch = useDispatch();
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [Clicked, setClicked] = useState(false);
-  const userName = useSelector(state => state.mypage.userName);
+  const member = useSelector(state => state.mypage.member);
   const dailyPosts = useSelector(state => state.mypage.dailyPosts);
   const activity = useSelector(state => state.mypage.activity);
 
-  console.log(userName, dailyPosts, activity);
+  console.log(member, dailyPosts, activity);
   useEffect(() => {
     dispatch(MypageGet());
   }, []);
@@ -53,11 +52,11 @@ function Mypage() {
       <div className="box">
         <ProfileBox>
           <div className="circle">
-            <img src={daily} alt="userProfile" />
+            <img src={member.profileImage} alt="userProfile" />
           </div>
         </ProfileBox>
         <NameBox>
-          <div className="username">{userName}</div>
+          <div className="username">{member.userName}</div>
         </NameBox>
         <FollowBox>
           <div>게시물 1</div>
