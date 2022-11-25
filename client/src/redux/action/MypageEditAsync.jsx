@@ -16,48 +16,14 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', data => {
   return Mylist;
 });
 
-export const MypagePatch = createAsyncThunk(
-  '/member/myPage/edit',
-  ({
-    username,
-    password,
-    job,
-    address,
-    sex,
-    select,
-    age,
-    height,
-    weight,
-    kilogram,
-    period,
-    profileImage,
-    data,
-  }) => {
-    axios
-      .patch(
-        '/members/myPage',
-        JSON.stringify({
-          password,
-          username,
-          job,
-          address,
-          sex,
-          split: select,
-          age,
-          height,
-          weight,
-          kilogram,
-          period,
-          profileImage,
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: data[0],
-            RefreshToken: data[1],
-          },
-        },
-      )
-      .then(res => console.log(res));
-  },
-);
+export const MypagePatch = createAsyncThunk('/member/myPage/edit', data => {
+  axios
+    .patch('/members/myPage', JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => console.log(res));
+});
