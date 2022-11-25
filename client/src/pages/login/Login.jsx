@@ -5,7 +5,7 @@ import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import Ouaths from '../../components/ouath/Ouaths';
 import LoginStyle from './LoginStyle';
-import { LoginAsync, ReTokenLogin } from '../../redux/action/LoginAsync';
+import { LoginAsync } from '../../redux/action/LoginAsync';
 
 function Login() {
   const [Evalue, setEvalue] = useState('');
@@ -20,10 +20,7 @@ function Login() {
     } else if (pwd === '') {
       alert('비밀번호가 비어있습니다.');
     } else {
-      dispatch(LoginAsync(data))
-        .unwrap()
-        .then(() => setInterval(dispatch(ReTokenLogin()), 10000));
-
+      dispatch(LoginAsync(data));
       navigate('/');
     }
   };

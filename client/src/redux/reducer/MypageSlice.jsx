@@ -4,7 +4,9 @@ import { MypageGet, MyPostDelete } from '../action/MypageAsync';
 const MypageSlice = createSlice({
   name: 'mypage',
   initialState: {
-    data: [],
+    userName: '',
+    dailyPosts: [],
+    activity: [],
   },
   reducers: {},
   extraReducers: {

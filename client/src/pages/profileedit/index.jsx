@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faGear } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { MypagePatch } from '../../redux/action/MypageEditAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
@@ -19,17 +19,14 @@ import {
 } from './style';
 
 function ProfileEdit() {
-  const [select, setSelect] = useState('');
   const navigate = useNavigate();
-  const ac = useSelector(state => state.authToken.accessToken);
-  const re = useSelector(state => state.authToken.token);
-  const data = [ac, re];
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [job, setJob] = useState('');
   const [address, setAddress] = useState('');
   const [sex, setSex] = useState('man');
   const [age, setAge] = useState('');
+  const [select, setSelect] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [kilogram, setKilogram] = useState('');
@@ -43,7 +40,19 @@ function ProfileEdit() {
   const PWDTest = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
 
   const dispatch = useDispatch();
-
+  const formData = new FormData();
+  formData.append('profileImage', profileImage);
+  formData.append('username', username);
+  formData.append('job', job);
+  formData.append('address', address);
+  formData.append('sex', sex);
+  formData.append('split', select);
+  formData.append('age', age);
+  formData.append('height', height);
+  formData.append('weight', weight);
+  formData.append('kilogram', kilogram);
+  formData.append('period', period);
+  formData.append('password', password);
   // useEffect(() => {
   //   dispatch(MypageEditGet(data));
   // }, [data]);
@@ -78,23 +87,7 @@ function ProfileEdit() {
   }, [username, password]);
 
   const handleSubmit = () => {
-    dispatch(
-      MypagePatch({
-        username,
-        password,
-        job,
-        address,
-        sex,
-        select,
-        age,
-        height,
-        weight,
-        kilogram,
-        period,
-        profileImage,
-        data,
-      }),
-    );
+    dispatch(MypagePatch(formData));
     // navigate('/mypage');
   };
 

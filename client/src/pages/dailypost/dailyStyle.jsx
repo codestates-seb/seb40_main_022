@@ -10,6 +10,7 @@ export const DetailMain = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
+
   .DetailBox {
     border-radius: 10px;
     margin-top: 50px;
@@ -19,6 +20,14 @@ export const DetailMain = styled.main`
     background-color: #fff;
     display: flex;
     flex-direction: column;
+    .errorMsg {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      font-size: var(--font-12);
+      font-weight: bold;
+      color: var(--logored);
+    }
     .contentTitle {
       margin-top: 30px;
       margin-bottom: 5px;
@@ -88,6 +97,7 @@ export const DetailMain = styled.main`
       align-items: flex-end;
       justify-content: center;
       height: 100px;
+      margin-bottom: 20px;
       > button {
         cursor: pointer;
         width: 120px;

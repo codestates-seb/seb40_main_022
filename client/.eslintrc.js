@@ -20,6 +20,12 @@ module.exports = {
     'react/button-has-type': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 0,
+    'no-restricted-syntax': [
+      'error',
+      'ForInStatement',
+      'LabeledStatement',
+      'WithStatement',
+    ],
     'no-param-reassign': [
       'error',
       { props: true, ignorePropertyModificationsFor: ['state'] },

@@ -25,18 +25,17 @@ import myimage from '../../images/qnaImg.jpg';
 function Mypage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const ac = useSelector(state => state.authToken.accessToken);
-  const re = useSelector(state => state.authToken.token);
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [Clicked, setClicked] = useState(false);
   const [btnClick, setBtnClick] = useState(false);
-  const data = [ac, re];
+  const userName = useSelector(state => state.mypage.userName);
+  const dailyPosts = useSelector(state => state.mypage.dailyPosts);
+  const activity = useSelector(state => state.mypage.activity);
 
+  console.log(userName, dailyPosts, activity);
   useEffect(() => {
-    dispatch(MypageGet(data));
+    dispatch(MypageGet());
   }, []);
-
-  const listdata1 = useSelector(state => state.mypage.data);
 
   return (
     <Wrapper>
@@ -59,7 +58,7 @@ function Mypage() {
             <button
               className="yes"
               onClick={() => {
-                dispatch(MyPostDelete(data));
+                dispatch(MyPostDelete());
                 navigate('/');
               }}
             >
@@ -78,17 +77,17 @@ function Mypage() {
           </div>
         </ProfileBox>
         <NameBox>
-          <div className="username">{listdata1.userName}</div>
+          <div className="username">{userName}</div>
         </NameBox>
         <FollowBox>
           <div>게시물 1</div>
-          {/* <div>포인트 {listdata1.activity.point}</div> */}
+          <div>포인트 {activity.point}</div>
         </FollowBox>
         <RecordBox>
           <div className="boxs">
             <div className="box">
               <FontAwesomeIcon icon={faDumbbell} />
-              {/* {listdata1.activity.kilogram}kg */}
+              {activity.kilogram}kg
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
@@ -96,7 +95,7 @@ function Mypage() {
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faPersonRunning} />
-              1일
+              {activity.dayCount}일
             </div>
           </div>
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
