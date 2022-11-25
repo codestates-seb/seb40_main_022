@@ -42,7 +42,8 @@ function QnaDetail() {
   useEffect(() => {
     dispatch(QnaDetailAsync({ data }));
   }, []);
-
+  console.log(data);
+  console.log(answer);
   return (
     <Detail>
       <Headerwrap>
@@ -84,6 +85,7 @@ function QnaDetail() {
         <DetailAnswer>
           {answer &&
             answer.map(ansdata => {
+              console.log(ansdata);
               return (
                 <>
                   <h2>답변 {ansdata.length}</h2>

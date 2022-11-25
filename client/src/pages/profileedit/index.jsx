@@ -30,27 +30,14 @@ function ProfileEdit() {
   const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
   const [profileImage, setProfileImage] = useState('');
-  const formData = new FormData();
-  const reader = new FileReader();
+  const [prevImage, setPrevImage] = useState('');
   const dispatch = useDispatch();
-  formData.append('password', JSON.stringify(password));
-  formData.append('username', JSON.stringify(username));
-  formData.append('job', JSON.stringify(job));
-  formData.append('address', JSON.stringify(address));
-  formData.append('sex', JSON.stringify(sex));
-  formData.append('split', JSON.stringify(select));
-  formData.append('age', JSON.stringify(age));
-  formData.append('height', JSON.stringify(height));
-  formData.append('weight', JSON.stringify(weight));
-  formData.append('kilogram', JSON.stringify(kilogram));
-  formData.append('period', JSON.stringify(period));
-  formData.append('profileImage', JSON.stringify(profileImage));
-
   const handleprofileImage = e => {
+    const reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
-      setProfileImage(resultImg.toString());
+      setPrevImage(resultImg.toString());
     };
     setProfileImage(e.target.files[0]);
   };
@@ -61,21 +48,32 @@ function ProfileEdit() {
     setProfileImage('');
   };
   const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append('password', password);
+    formData.append('username', username);
+    formData.append('job', job);
+    formData.append('address', address);
+    formData.append('sex', sex);
+    formData.append('split', +select.slice(0, 1));
+    formData.append('age', age);
+    formData.append('height', height);
+    formData.append('weight', weight);
+    formData.append('kilogram', kilogram);
+    formData.append('period', period);
+    formData.append('profileImage', profileImage);
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}, ${pair[1]}`);
+    // }
     dispatch(MypagePatch(formData));
+    console.log(formData);
     // navigate('/mypage');
   };
   return (
     <Wrapper>
       <Header />
-      <form
-        id="form"
-        onSubmit={e => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
+      <div>
         <ImageBox>
-          <img src={profileImage} alt="userProfile" />
+          <img src={prevImage} alt="userProfile" />
           <button onClick={() => deleteFile(profileImage)} className="Imgdel">
             x
           </button>
@@ -255,13 +253,19 @@ function ProfileEdit() {
             />
           </ProfileGrid>
           <BtnBox>
-            <button className="set-btn" type="submit">
+            <button
+              className="set-btn"
+              onClick={e => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
               완료
             </button>
             <button onClick={() => navigate('/mypage')}>취소</button>
           </BtnBox>
         </ProfileBox>
-      </form>
+      </div>
       <Footer />
     </Wrapper>
   );
