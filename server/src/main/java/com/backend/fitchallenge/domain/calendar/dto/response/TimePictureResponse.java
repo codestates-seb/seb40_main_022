@@ -7,19 +7,16 @@ import java.time.LocalTime;
 @Getter
 public class TimePictureResponse {
 
-    private String imagePath;
-
     private String point;
 
-    private LocalTime time;
+    private String imagePath;
 
-    private TimePictureResponse(String imagePath, String point, LocalTime time) {
-        this.imagePath = imagePath;
+    private TimePictureResponse(String point, String imagePath) {
         this.point = point;
-        this.time = time;
+        this.imagePath = imagePath;
     }
 
-    public static TimePictureResponse of(String imagePath, String point, LocalTime time) {
-        return new TimePictureResponse(imagePath, point, time);
+    public static TimePictureResponse of(String point, String imagePath) {
+        return new TimePictureResponse(point, imagePath);
     }
 }
