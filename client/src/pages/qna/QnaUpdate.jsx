@@ -22,9 +22,11 @@ function QnaUpdate() {
   const [title, setTitle] = useState(list[+Id.id].title);
   const [content, setContent] = useState(list[+Id.id].summary);
   const [tag, setTag] = useState(list[+Id.id].tag);
-  const ac = useSelector(state => state.authToken.accessToken);
-  const re = useSelector(state => state.authToken.token);
-  const dataUp = [ac, re, title, content, tag, list[+Id.id].questionId];
+  const formdata = new FormData();
+  formdata.append('title', title);
+  formdata.append('content', content);
+  formdata.append('tag', tag);
+  const dataUp = [formdata, list[+Id.id].questionId];
   const navigate = useNavigate();
   return (
     <QnaPostBack>

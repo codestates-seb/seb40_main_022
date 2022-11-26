@@ -31,44 +31,31 @@ function ProfileEdit() {
   const [weight, setWeight] = useState('');
   const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
+  const [prevImage, setPrevImage] = useState('');
   const [profileImage, setProfileImage] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
   );
   const [nameError, setNameError] = useState({ display: 'none' });
   const [passwordError, setPasswordError] = useState({ display: 'none' });
-
+  const photoUp = useRef();
   const PWDTest = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
 
   const dispatch = useDispatch();
-  const formData = new FormData();
-  formData.append('profileImage', profileImage);
-  formData.append('username', username);
-  formData.append('job', job);
-  formData.append('address', address);
-  formData.append('sex', sex);
-  formData.append('split', select);
-  formData.append('age', age);
-  formData.append('height', height);
-  formData.append('weight', weight);
-  formData.append('kilogram', kilogram);
-  formData.append('period', period);
-  formData.append('password', password);
-  // useEffect(() => {
-  //   dispatch(MypageEditGet(data));
-  // }, [data]);
-
-  const reader = new FileReader();
-  const photoUp = useRef();
-  const handelClick = () => {
-    photoUp.current.click();
-  };
 
   const handleprofileImage = e => {
+    const reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
-      setProfileImage(resultImg.toString());
+      setPrevImage(resultImg.toString());
     };
+    setProfileImage(e.target.files[0]);
+  };
+  const handelClick = () => {
+    photoUp.current.click();
+  };
+  const deleteFile = () => {
+    setProfileImage('');
   };
 
   useEffect(() => {
@@ -87,16 +74,35 @@ function ProfileEdit() {
   }, [username, password]);
 
   const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append('password', password);
+    formData.append('username', username);
+    formData.append('job', job);
+    formData.append('address', address);
+    formData.append('sex', sex);
+    formData.append('split', +select.slice(0, 1));
+    formData.append('age', age);
+    formData.append('height', height);
+    formData.append('weight', weight);
+    formData.append('kilogram', kilogram);
+    formData.append('period', period);
+    formData.append('profileImage', profileImage);
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}, ${pair[1]}`);
+    // }
     dispatch(MypagePatch(formData));
+    console.log(formData);
     // navigate('/mypage');
   };
-
   return (
     <Wrapper>
       <Header />
       <div>
         <ImageBox>
-          <img src={profileImage} alt="userProfile" />
+          <img src={prevImage} alt="userProfile" />
+          <button onClick={() => deleteFile(profileImage)} className="Imgdel">
+            x
+          </button>
           <FontAwesomeIcon
             icon={faGear}
             className="setting"
@@ -163,6 +169,7 @@ function ProfileEdit() {
                       value="man"
                       checked="checked"
                       onChange={e => {
+                        e.preventDefault();
                         setSex(e.target.value);
                       }}
                     />
@@ -174,6 +181,7 @@ function ProfileEdit() {
                       name="sex"
                       value="woman"
                       onChange={e => {
+                        e.preventDefault();
                         setSex(e.target.value);
                       }}
                     />
@@ -193,6 +201,7 @@ function ProfileEdit() {
                     <div className="contents">
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -200,6 +209,7 @@ function ProfileEdit() {
                       </button>
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -207,6 +217,7 @@ function ProfileEdit() {
                       </button>
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -214,6 +225,7 @@ function ProfileEdit() {
                       </button>
                       <button
                         onClick={e => {
+                          e.preventDefault();
                           setSelect(e.target.innerHTML);
                         }}
                       >
@@ -287,8 +299,10 @@ function ProfileEdit() {
           <BtnBox>
             <button
               className="set-btn"
-              onClick={() => {
+              onClick={e => {
+                e.preventDefault();
                 handleSubmit();
+                navigate('/mypage');
               }}
             >
               완료

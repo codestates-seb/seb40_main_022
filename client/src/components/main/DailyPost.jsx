@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ImageSlider, { Slide } from 'react-auto-image-slider';
-// import daily from '../../images/daily.jpg';
+import daily from '../../images/daily.jpg';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import DailyCmt from './DailyCmt';
@@ -10,10 +10,12 @@ import { DailyForm, DailyItem } from './MainStyle';
 import {
   asyncPost,
   asyncPostDel,
+  asyncLike,
+  asyncLikeundo,
   // asyncPostCmtEdit,
 } from '../../redux/action/MainAsync';
 
-export default function DailyPost({ idx }) {
+export default function DailyPost() {
   const data = useSelector(state => state.dailypost.data.items);
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
@@ -32,13 +34,6 @@ export default function DailyPost({ idx }) {
   const handleDelPost = id => {
     dispatch(asyncPostDel(id));
     window.location.reload();
-  };
-
-  const handleLike = () => {
-    setFav(!fav);
-    if (list.likeState === false) {
-      dispatch();
-    }
   };
 
   return (
@@ -86,7 +81,7 @@ export default function DailyPost({ idx }) {
                         })}
                     </div>
                     <div className="DailyMemo">
-                      <div className="memo">{list.post.content}</div>
+                      <p className="memo">{list.post.content}</p>
                     </div>
                     <div className="act">
                       <span className="date">{list.post.createdAt}</span>
@@ -101,8 +96,17 @@ export default function DailyPost({ idx }) {
                         </button>
                       </span>
                       <span className="favorite">
-                        <button onClick={() => handleLike()}>
-                          {list.likeState ? (
+                        <button
+                          onClick={() => {
+                            setFav(!fav);
+                            if (fav === false) {
+                              dispatch(asyncLikeundo(list.post.postId));
+                            } else {
+                              dispatch(asyncLike(list.post.postId));
+                            }
+                          }}
+                        >
+                          {fav ? (
                             <img
                               className="heart"
                               src={heartFill}
@@ -118,22 +122,22 @@ export default function DailyPost({ idx }) {
                       </span>
                     </div>
                   </div>
-                  <span className="userInfo">
+                  <div className="userInfo">
                     <img
                       className="user"
                       src={
                         list.member.profileImage
                           ? list.member.profileImage
-                          : null
+                          : daily
                       }
                       alt="daily"
                     />
                     <span>
                       {list.member.username ? list.member.username : null}
                     </span>
-                  </span>
+                  </div>
                 </article>
-                {isComment ? <DailyCmt index={idx} /> : null}
+                {isComment ? <DailyCmt /> : null}
               </DailyItem>
             );
           })}

@@ -57,13 +57,13 @@ export const asyncPost = createAsyncThunk('post', (ac, re) => {
   return data;
 });
 
-export const asyncLike = createAsyncThunk('post/up', ({ likeStates, id }) => {
+export const asyncLike = createAsyncThunk('post/up', postId => {
   axios.post(
-    `/dailyPosts/${id}/like`,
-    { likeStates },
+    `/dailyPosts/${postId}/like`,
+    { postId },
     {
       headers: {
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
       },
@@ -71,18 +71,19 @@ export const asyncLike = createAsyncThunk('post/up', ({ likeStates, id }) => {
   );
 });
 
-export const asyncLikeundo = createAsyncThunk(
-  'post/up',
-  ({ likeStates, id, ac, re }) => {
-    axios.post(`dailyPosts/${id}/like/undo`, JSON.stringify({ likeStates }), {
+export const asyncLikeundo = createAsyncThunk('post/up', postId => {
+  axios.post(
+    `dailyPosts/${postId}/like/undo`,
+    { postId },
+    {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: ac,
-        RefreshToken: re,
+        // 'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
       },
-    });
-  },
-);
+    },
+  );
+});
 
 export const asyncPostDel = createAsyncThunk('post/del', async postId => {
   axios.delete(`/dailyPosts/${postId}`, {

@@ -17,11 +17,13 @@ const Ouathbutton = styled.div`
     }
   }
   .goolobutton {
+    cursor: pointer;
     background-color: #fff;
     color: #3b4045;
     margin-top: 30px;
   }
   .kakaobutton {
+    cursor: pointer;
     background-color: #fee500;
     color: #000;
   }
