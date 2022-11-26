@@ -7,6 +7,7 @@ import com.backend.fitchallenge.domain.challenge.dto.request.RankingDto;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.post.entity.Post;
 
+import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -26,5 +27,7 @@ public interface MemberRepositoryCustom {
     public List<Post> findList(Long lastPostId, Long memberId , Pageable pageable);
 
     Long pagingCount(RankingCondition rankingCondition, Pageable pageable);
+
+    List<Tuple> findMemberRecords();
 
 }

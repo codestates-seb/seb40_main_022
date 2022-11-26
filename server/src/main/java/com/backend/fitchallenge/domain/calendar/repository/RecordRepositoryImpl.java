@@ -34,7 +34,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
     @Override
     public Long findMemberIdByRecordId(Long recordId) {
         return jpaQueryFactory
-                .select(record.memberId)
+                .select(record.member.id)
                 .from(record)
                 .where(record.id.eq(recordId))
                 .fetchOne();
@@ -58,7 +58,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
                 jpaQueryFactory
                         .select(record)
                         .from(record)
-                        .leftJoin(member).on(record.memberId.eq(member.id))
+                        .leftJoin(member).on(record.member.id.eq(member.id))
                         .where(member.id.eq(memberId),
                                 yearEq(year),
                                 monthEq(month),
@@ -82,8 +82,8 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
                         record.result
                 )
                 ).from(record)
-                .leftJoin(member).on(record.memberId.eq(member.id))
-                .where(record.memberId.eq(memberId).and(record.month.eq(month)))
+                .leftJoin(member).on(record.member.id.eq(member.id))
+                .where(record.member.id.eq(memberId).and(record.month.eq(month)))
                 .fetch();
     }
 
@@ -100,7 +100,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
                         record.volume,
                         record.result
                 ))
-                .leftJoin(member).on(record.memberId.eq(member.id))
+                .leftJoin(member).on(record.member.id.eq(member.id))
                 .leftJoin(member.challenge, challenge)
                 .where(challengeMemberIdEq(memberId, opponentId),
                         memberIdEq(opponentId))
@@ -122,7 +122,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
     }
 
     private BooleanExpression memberIdEq(Long memberId) {
-        return memberId != null ? record.memberId.eq(memberId) : null;
+        return memberId != null ? record.member.id.eq(memberId) : null;
     }
 
     //년 일치

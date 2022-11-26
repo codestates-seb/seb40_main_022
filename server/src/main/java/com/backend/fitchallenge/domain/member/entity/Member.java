@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.member.entity;
 
 
+import com.backend.fitchallenge.domain.calendar.entity.Record;
 import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.backend.fitchallenge.domain.question.entity.Question;
@@ -69,6 +70,11 @@ public class Member extends Auditable {
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileImage profileImage;
+
+    //원투매니 레코드
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> records = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();

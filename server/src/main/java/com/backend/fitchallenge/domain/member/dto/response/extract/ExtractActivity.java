@@ -9,15 +9,14 @@ import lombok.Getter;
 public class ExtractActivity{
     private Integer kilogram;
     private Integer dayCount;
-    private Long point;
-    private Integer rank;
+    private Double point;
 
     @Builder
-    private ExtractActivity(Integer kilogram, Integer dayCount, Long point, Integer rank) {
+    private ExtractActivity(Integer kilogram, Integer dayCount, Double point) {
         this.kilogram = kilogram;
         this.dayCount = dayCount;
         this.point = point;
-        this.rank = rank;
+
     }
 
     public static ExtractActivity of(MemberActivity memberActivity){
@@ -25,7 +24,6 @@ public class ExtractActivity{
                 .kilogram(memberActivity.getKilogram() == null ? '0' : memberActivity.getKilogram())
                 .dayCount(memberActivity.getDayCount())
                 .point(memberActivity.getPoint())
-                .rank(memberActivity.getRank())
                 .build();
     }
 }

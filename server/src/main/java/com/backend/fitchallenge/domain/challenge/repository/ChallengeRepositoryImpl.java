@@ -1,7 +1,6 @@
 package com.backend.fitchallenge.domain.challenge.repository;
 
 import com.backend.fitchallenge.domain.challenge.entity.Challenge;
-import com.backend.fitchallenge.domain.challenge.entity.QChallenge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -33,4 +32,10 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom{
                 .execute();
     }
 
+    public List<Challenge> ongoingChallenges(){
+        return jpaQueryFactory.select(challenge)
+                .from(challenge)
+                .where(challenge.challengeStatus.eq(Challenge.ChallengeStatus.ONGOING))
+                .fetch();
+    }
 }

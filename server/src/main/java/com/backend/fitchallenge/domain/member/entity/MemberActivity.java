@@ -22,23 +22,27 @@ public class MemberActivity {
     private Integer dayCount = 0;
 
     @Column(name = "POINT")
-    private Long point = 0L;
-
-    @Column(name = "COMMUNITY_POINT")
-    private Long communityPoint = 0L;
-
-    private Integer rank = 0;
+    private Double point = 0.0D;
 
     @Builder
-    private MemberActivity(Integer kilogram, Integer dayCount, Long point, Integer rank) {
+    private MemberActivity(Integer kilogram, Integer dayCount, Double point) {
         this.kilogram = kilogram;
         this.dayCount = dayCount;
         this.point = point;
-        this.rank = rank;
     }
     public static MemberActivity of(MemberUpdateVO memberUpdateVO){
         return MemberActivity.builder()
                 .kilogram(memberUpdateVO.getKilogram())
                 .build();
+    }
+
+    public void updatePointAndDayCount(double point, int dayCount){
+
+        this.point += point;
+        this.dayCount += dayCount;
+    }
+
+    public void updatePoint(double point){
+        this.point += point;
     }
 }

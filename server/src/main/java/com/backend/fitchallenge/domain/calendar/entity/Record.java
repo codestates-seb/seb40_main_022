@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.calendar.entity;
 import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreate;
 import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdate;
 import com.backend.fitchallenge.domain.calendar.dto.request.SportsRequest;
+import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,8 +32,9 @@ public class Record {
     @Column(name = "CALENDAR_DAY", nullable = false)
     private int day;
 
-    @Column(name = "MEMBER_ID", nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="member_id")
+    private Member member;
 
     @Column(name = "START_TIME", nullable = false)
     private LocalTime startTime;
@@ -71,7 +73,7 @@ public class Record {
         }
     }
 
-    public static Record createRecord(RecordCreate recordCreate, Long memberId, List<Sports> sports) {
+    public static Record createRecord(RecordCreate recordCreate, Member member, List<Sports> sports) {
 
         List<SportsRequest> sportsRequests = recordCreate.getSports();
 
@@ -81,7 +83,7 @@ public class Record {
                 .day(recordCreate.getStart().getDayOfMonth())
                 .startTime(recordCreate.getStartTime())
                 .endTime(recordCreate.getEndTime())
-                .memberId(memberId)
+                .member(member)
                 //record에 등록된 sports들의 set, count, weight를 활용해 volume 계산
                 .volume(sportsRequests.stream()
                         .map(sportsRequest ->

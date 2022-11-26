@@ -5,7 +5,6 @@ import com.backend.fitchallenge.domain.calendar.dto.response.*;
 import com.backend.fitchallenge.domain.calendar.exception.*;
 import com.backend.fitchallenge.domain.calendar.repository.QueryRecordSportsRepository;
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
-import com.backend.fitchallenge.domain.challenge.repository.ChallengeRepository;
 
 import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
@@ -72,9 +71,14 @@ public class RecordService {
             throw new InvalidTimeInput();
         }
 
+        // fixme:포인트,운동일수 올리는 로직. 추후 검토 필요
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
+        member.getMemberActivity().updatePointAndDayCount(1.0D, 1);
+        memberRepository.save(member);
+
         List<Sports> sports = sportsService.getSports(recordCreate.getSports());
 
-        Record record = Record.createRecord(recordCreate, memberId, sports);
+        Record record = Record.createRecord(recordCreate, member, sports);
 
         return recordRepository.save(record).getId();
     }
@@ -93,7 +97,9 @@ public class RecordService {
     public DetailRecordResponse getDailyRecord(Long memberId, Long recordId) {
         Record findRecord = recordRepository.findDailyRecord(recordId).orElseThrow(RecordNotFound::new);
 
-        if (memberId != findRecord.getMemberId()) {
+        //수정부분 11.26
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
+        if (memberId != member.getId()) {
             throw new NotRecordWriter();
         }
 
@@ -203,6 +209,10 @@ public class RecordService {
         awsS3Service.DeleteFile(files);
 
         recordRepository.delete(findRecord);
+
+        // fixme:포인트, 운동일수 내리는 로직. 추후 검토 필요
+        member.getMemberActivity().updatePointAndDayCount(-1.0D,-1);
+        memberRepository.save(member);
 
         return recordId;
     }
