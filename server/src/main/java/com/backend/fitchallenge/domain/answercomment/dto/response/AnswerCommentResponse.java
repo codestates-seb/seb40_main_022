@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 public class AnswerCommentResponse {
 
+    private Long answerCommentId;
+
     private String content;
 
     private LocalDateTime createdAt;
@@ -19,16 +21,20 @@ public class AnswerCommentResponse {
     private MemberResponse commentWriter;
 
     @Builder
-    private AnswerCommentResponse(AnswerComment answerComment, MemberResponse commentWriter) {
-        this.content = answerComment.getContent();
-        this.createdAt = answerComment.getCreatedAt();
-        this.modifiedAt = answerComment.getModifiedAt();
+    private AnswerCommentResponse(Long answerCommentId, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, MemberResponse commentWriter) {
+        this.answerCommentId = answerCommentId;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
         this.commentWriter = commentWriter;
     }
 
     public static AnswerCommentResponse of(AnswerComment answerComment) {
         return AnswerCommentResponse.builder()
-                .answerComment(answerComment)
+                .answerCommentId(answerComment.getId())
+                .content(answerComment.getContent())
+                .createdAt(answerComment.getCreatedAt())
+                .modifiedAt(answerComment.getModifiedAt())
                 .commentWriter(MemberResponse.of(answerComment.getMember()))
                 .build();
     }
