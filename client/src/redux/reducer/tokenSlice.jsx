@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LoginAsync, LogoutAsync, ReLodingLogin } from '../action/LoginAsync';
-
-export const TOKEN_TIME_OUT = 600 * 1000;
+import {
+  LoginAsync,
+  LogoutAsync,
+  ReLodingLogin,
+  Retoken,
+} from '../action/LoginAsync';
+import { MyPostDelete } from '../action/MypageAsync';
 
 export const tokenSlice = createSlice({
   name: 'authToken',
@@ -9,7 +13,6 @@ export const tokenSlice = createSlice({
     isLogin: false,
     authenticated: false,
     accessToken: null,
-    expireTime: null,
     token: null,
   },
   reducers: {},
@@ -49,6 +52,20 @@ export const tokenSlice = createSlice({
         state.accessToken = accessToken;
         state.token = refresh;
       }
+    },
+    [Retoken.fulfilled]: (state, action) => {
+      const accessToken = action.payload[0];
+      const refresh = action.payload[1];
+      state.authenticated = true;
+      state.isLogin = true;
+      state.accessToken = accessToken;
+      state.token = refresh;
+    },
+    [MyPostDelete.fulfilled]: state => {
+      state.isLogin = false;
+      state.authenticated = false;
+      state.accessToken = null;
+      state.token = null;
     },
   },
 });
