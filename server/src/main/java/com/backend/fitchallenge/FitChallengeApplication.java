@@ -17,7 +17,7 @@ public class FitChallengeApplication{
 		public static void main (String[]args){
 			SpringApplication.run(FitChallengeApplication.class, args);
 		}
-
+		
 	}
 
 

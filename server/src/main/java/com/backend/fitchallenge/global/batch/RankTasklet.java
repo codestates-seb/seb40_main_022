@@ -7,6 +7,7 @@ import com.backend.fitchallenge.domain.challenge.repository.ChallengeRepository;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
@@ -31,6 +32,7 @@ import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 @RequiredArgsConstructor
 @Component
 @StepScope
+@Slf4j
 public class RankTasklet implements Tasklet, StepExecutionListener {
 
     private final ChallengeRepository challengeRepository;
@@ -58,6 +60,10 @@ public class RankTasklet implements Tasklet, StepExecutionListener {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext){
         // challenge 아이디값들끼리 비교한다.
+
+        log.info(contribution.toString());
+        log.info(chunkContext.toString());
+        log.info(">>>>> This is Step1");
 
         ongoingChallenges.forEach(challenge -> {
 
@@ -101,9 +107,11 @@ public class RankTasklet implements Tasklet, StepExecutionListener {
             //총점 계산
             if(apPoint < cpPoint){
                 cpRecord.getMember().getMemberActivity().updatePoint(3);
+                challenge.updatePoint(-3); // applicant는 counterpart보다 3점 뒤지게 됨.
             }
             else if(apPoint > cpPoint){
                 apRecord.getMember().getMemberActivity().updatePoint(3);
+                challenge.updatePoint(3); // applicant는 counterpart보다 3점 앞서게 됨
             }
             else{
                 cpRecord.getMember().getMemberActivity().updatePoint(1);

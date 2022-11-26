@@ -39,6 +39,9 @@ public class Challenge extends Auditable {
     @Column(name = "challenge_end")
     private LocalDate challengeEnd;
 
+    @Column(name = "challenge_point")
+    private Integer challengePoint;
+
     public enum ChallengeStatus {
         SUGGESTED("제안됨"),
         ONGOING("진행중");
@@ -79,52 +82,7 @@ public class Challenge extends Auditable {
         return this.challengeStart.toString() + " ~ " + challengeEnd.toString();
     }
 
+    public void updatePoint(int point){
+        this.challengePoint += point;
+    }
 }
-
-/*
-
-CHALLENGE_ID  	CREATED_AT  	LAST_MODIFIED_AT  	APPLICANT_ID  	CHALLENGE_END  	CHALLENGE_START  	CHALLENGE_STATUS  	COUNTERPART_ID
-
- APPLICANT_ID, COUNTERPART_ID -> member id
-
-SELECT
- CHALLENGE_ID, APPLICANT_ID, COUNTERPART_ID
-FROM CHALLENGE;
-
-
-SELECT
- START_TIME, VOLUME, END_TIME, MEMBER_ID
-FROM RECORED;
-
-
--- applicant_id
-SELECT chg.CHALLENGE_ID, chg.APPLICANT_ID AS MEMBER_ID, chg.CHALLENGE_STATUS rcd.START_TIME, rcd.VOLUME, rcd.END_TIME
-FROM CHALLENGE AS chg
-LEFT JOIN RECORD AS rcd ON chg.APPLICANT_ID = rcd.MEMBER_ID
-WHERE chg.CHALLENGE_STATUS = 'ONGOING'
-
-UNION ALL
-
--- counterpart_id
-SELECT chg.CHALLENGE_ID, chg.COUNTERPART_ID AS MEMBER_ID, rcd.START_TIME, rcd.VOLUME, rcd.END_TIME
-FROM CHALLENGE AS chg
-LEFT JOIN RECORD AS rcd ON chg.COUNTERPART_ID = rcd.MEMBER_ID
-
-
-
-
-
-WITH TEST AS (
-SELECT chg.CHALLENGE_ID, chg.APPLICANT_ID AS MEMBER_ID, rcd.START_TIME, rcd.VOLUME, rcd.END_TIME
-FROM CHALLENGE AS chg
-LEFT JOIN RECORD AS rcd ON chg.APPLICANT_ID = rcd.MEMBER_ID
-
-UNION ALL
-
--- counterpart_id
-SELECT chg.CHALLENGE_ID, chg.COUNTERPART_ID AS MEMBER_ID, rcd.START_TIME, rcd.VOLUME, rcd.END_TIME
-FROM CHALLENGE AS chg
-LEFT JOIN RECORD AS rcd ON chg.COUNTERPART_ID = rcd.MEMBER_ID)
-SELECT * FROM TEST
-WHERE WHRJS S
-*/
