@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { QnaAsynclist } from '../action/QnaAsync';
+import { QnaAsynclist, QnaDetailAsync } from '../action/QnaAsync';
 
 const QnaSlice = createSlice({
   name: 'qna',
@@ -11,6 +11,10 @@ const QnaSlice = createSlice({
   extraReducers: {
     [QnaAsynclist.fulfilled]: (state, action) => {
       state.list = action.payload;
+    },
+    [QnaDetailAsync.fulfilled]: (state, action) => {
+      console.log(action);
+      state.answers = action.payload;
     },
   },
 });

@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import rcddetailbtn from '../../images/rcddetailbtn.png';
 import rcddecordminus from '../../images/rcddecordminus.png';
 import DetailCamera from '../../images/DetailCamera.png';
+import RecordTagAsync from '../../redux/action/RecordAsync';
 
 function Detail() {
   const list = [
@@ -54,6 +56,7 @@ function Detail() {
   const [clicked, setClicked] = useState(false);
   const [files, setFiles] = useState([]);
   const reader = new FileReader();
+  const dispatch = useDispatch();
 
   const handleFile = e => {
     reader.readAsDataURL(e.target.files[0]);
@@ -69,6 +72,9 @@ function Detail() {
     const imgArr = files.filter((el, idx) => idx !== index);
     setFiles([...imgArr]);
   };
+  const tagClick = () => {
+    dispatch(RecordTagAsync(tags));
+  };
   return (
     <DetailBox>
       <Header />
@@ -78,7 +84,7 @@ function Detail() {
             <label htmlFor="starttime" className="timelabel">
               Start-Time
             </label>
-            <input id="starttime" />
+            <input id="starttime" placeholder="ex) 21:19:00" />
             <input
               className="imgadd"
               type="file"
@@ -95,7 +101,7 @@ function Detail() {
             <label htmlFor="starttime" className="endtimelabel">
               End-Time
             </label>
-            <input id="starttime" />
+            <input id="starttime" placeholder="ex) 22:19:00" />
             <input
               className="imgadd"
               type="file"
@@ -141,7 +147,12 @@ function Detail() {
               <div>
                 <div className="Inselect">
                   <span className="title">운동</span>
-                  <select onChange={e => setHealth(e.target.value)}>
+                  <select
+                    onChange={e => {
+                      setHealth(e.target.value);
+                      tagClick();
+                    }}
+                  >
                     {taghealth[0][tags] &&
                       taghealth[0][tags].map(data => {
                         return <option>{data}</option>;

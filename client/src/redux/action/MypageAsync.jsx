@@ -25,5 +25,9 @@ export const MyPostDelete = createAsyncThunk('/member/mypage', () => {
         RefreshToken: localStorage.getItem('RefreshToken'),
       },
     })
-    .then(res => console.log(res));
+    .then(() => {
+      localStorage.removeItem('Authorization');
+      localStorage.removeItem('RefreshToken');
+      localStorage.clear();
+    });
 });

@@ -5,6 +5,7 @@ import {
   ReLodingLogin,
   Retoken,
 } from '../action/LoginAsync';
+import { MyPostDelete } from '../action/MypageAsync';
 
 export const tokenSlice = createSlice({
   name: 'authToken',
@@ -59,6 +60,12 @@ export const tokenSlice = createSlice({
       state.isLogin = true;
       state.accessToken = accessToken;
       state.token = refresh;
+    },
+    [MyPostDelete.fulfilled]: state => {
+      state.isLogin = false;
+      state.authenticated = false;
+      state.accessToken = null;
+      state.token = null;
     },
   },
 });

@@ -20,7 +20,7 @@ export function Retoken() {
         localStorage.setItem('RefreshToken', res.headers.refreshtoken);
         const auth = [res.headers.authorization, res.headers.refreshtoken];
         console.log(auth);
-        setTimeout(Retoken, 870000);
+        setTimeout(Retoken, 600000);
         return auth;
       });
   }
