@@ -17,10 +17,6 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', data => {
 });
 
 export const MypagePatch = createAsyncThunk('/myPage/edit', data => {
-  console.log(data);
-  for (const pair of data.entries()) {
-    console.log(`${pair[0]}, ${pair[1]}`);
-  }
   axios
     .post('/members/myPage', data, {
       headers: {
@@ -30,13 +26,4 @@ export const MypagePatch = createAsyncThunk('/myPage/edit', data => {
       },
     })
     .then(res => console.log(res));
-  // fetch('/members/myPage', {
-  //   method: 'PATCH',
-  //   body: data,
-  //   headers: {
-  //     'Content-Type': 'multipart/form-data',
-  //     Authorization: localStorage.getItem('Authorization'),
-  //     RefreshToken: localStorage.getItem('RefreshToken'),
-  //   },
-  // }).then(res => console.log(res));
 });

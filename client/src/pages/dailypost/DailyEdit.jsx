@@ -1,30 +1,45 @@
 import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
-import { asyncPostUpdate } from '../../redux/action/MainAsync';
+// import { asyncPostUpdate } from '../../redux/action/MainAsync';
 
 function DailyEdit() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const id = useParams();
+  // const dispatch = useDispatch();
+  const Id = useParams();
   const photoUp = useRef();
-
   const selectdata = useSelector(state => state.dailypost.data.items);
-
-  const list = selectdata.filter(postdata => postdata.id === +id.id);
-
+  const list = selectdata.filter(postdata => postdata.post.postId === +Id.id);
   const [files, setFiles] = useState(list[0].pictures);
+  const [imgBase64, setImgBase64] = useState(list[0].pictures);
   const [content, setContent] = useState(list[0].post.content);
   const [tags, setTags] = useState('');
   const [tagList, setTagList] = useState(list[0].tags);
-  const ac = useSelector(state => state.authToken.accessToken);
-  const re = useSelector(state => state.authToken.token);
 
-  const reader = new FileReader();
+  const handleFile = e => {
+    setFiles(e.target.files);
+    setImgBase64([]);
+
+    for (let i = 0; i < e.target.files.length; i += 1) {
+      if (e.target.files[i]) {
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[i]);
+        reader.onloadend = () => {
+          const base64 = reader.result;
+          if (base64) {
+            const base64Sub = base64.toString();
+            setImgBase64([...imgBase64, base64Sub]);
+            setFiles([...files, e.target.files[i]]);
+          }
+        };
+      }
+    }
+  };
 
   const handleTag = e => {
     if (e.key === 'Enter' && e.target.value !== '') {
@@ -43,37 +58,45 @@ function DailyEdit() {
     setTagList(filtertag);
   };
 
-  const handleFile = e => {
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onloadend = () => {
-      const resultImg = reader.result;
-      setFiles([...files, resultImg.toString()]);
-    };
-  };
-
   const handelClick = () => {
     photoUp.current.click();
   };
 
   const deleteFile = index => {
-    const imgArr = files.filter((el, idx) => idx !== index);
-    setFiles([...imgArr]);
+    const imgArr = imgBase64.filter((el, idx) => idx !== index);
+    setImgBase64([...imgArr]);
+
+    const uploadImgArr = files.filter((el, idx) => idx !== index);
+    setFiles([...uploadImgArr]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = new FormData();
-    Array.from(files).forEach(el => {
-      formData.append('pictures', el);
-    });
-    formData.append('content', JSON.stringify(content));
-    formData.append('tagDtos', JSON.stringify(tagList));
+    for (let i = 0; i < files.length; i += 1) {
+      formData.append('files', files[i]);
+    }
 
-    // for (const pair of formData.entries()) {
-    //   console.log(`${pair[0]}, ${pair[1]}`);
-    // }
-    if (files.length !== 0 && content.length >= 10 && tagList.length !== 0) {
-      dispatch(asyncPostUpdate({ formData, ac, re }));
-      navigate('/');
+    formData.append('content', content);
+
+    Array.from(tagList).forEach(el => {
+      formData.append('tagDtos', el);
+    });
+
+    const editId = +Id.id;
+    if (
+      imgBase64.length !== 0 &&
+      content.length >= 10 &&
+      tagList.length !== 0
+    ) {
+      await axios.post(`dailyPosts/${editId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
+      });
+      // dispatch(asyncPostUpdate({ formData }, editId));
+      // navigate('/');
     } else if (files.length === 0) alert('이미지를 업로드해주세요');
     else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
     else if (tagList.length === 0) alert('태그를 입력해주세요');
@@ -85,8 +108,8 @@ function DailyEdit() {
       <DetailMain>
         <div className="DetailBox">
           <div className="Imgbox">
-            {files &&
-              files.map((el, index) => {
+            {imgBase64 &&
+              imgBase64.map((el, index) => {
                 return (
                   <div className="boxs">
                     <img src={el} alt="오완운사진" className="Imgs" />
@@ -106,6 +129,8 @@ function DailyEdit() {
                   className="ImgInput"
                   ref={photoUp}
                   onChange={handleFile}
+                  accept="image/jpg, image/jpeg, image/png"
+                  multiple="multiple"
                 />
                 <button className="ImgButton" onClick={() => handelClick()}>
                   <img src={plus} alt="버튼로고" />
@@ -114,7 +139,7 @@ function DailyEdit() {
             ) : null}
           </div>
           <div className="errorMsg">
-            {files.length < 1 ? <p>이미지를 업로드해주세요</p> : null}
+            {imgBase64.length < 1 ? <p>이미지를 업로드해주세요</p> : null}
           </div>
           <span className="contentTitle">내용</span>
           <textarea
