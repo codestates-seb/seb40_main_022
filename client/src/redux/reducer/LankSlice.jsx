@@ -1,14 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
+import LankProfileGet from '../action/LankAsync';
 
 const LankSlice = createSlice({
   name: 'lank',
   initialState: {
-    list: ['분할', '키', '몸무게', '경력', '점수'],
+    member: [],
   },
   reducers: {
     SET_LANK: (state, action) => {
-      console.log(state, action);
-      state.list = action.payload;
+      state.data = action.payload;
+    },
+  },
+  extraReducers: {
+    [LankProfileGet.fulfilled]: (state, action) => {
+      // console.log(state, action);
+      state.member = action.payload;
     },
   },
 });

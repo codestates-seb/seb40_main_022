@@ -39,7 +39,13 @@ function QnaList() {
           </button>
         </QnaTitle>
         <QnaSearch>
-          <input id="SearchIn" placeholder="찾으시는 질문이 있으신가요?" />
+          <input
+            id="SearchIn"
+            type="text"
+            placeholder="찾으시는 질문이 있으신가요?"
+            // onChange={searchInputHandler}
+            // value={inputValue}
+          />
           <label htmlFor="SearchIn">
             <img src={searchIcon} alt="검색아이콘" className="search" />
           </label>
