@@ -10,6 +10,8 @@ import { DailyForm, DailyItem } from './MainStyle';
 import {
   asyncPost,
   asyncPostDel,
+  asyncLike,
+  asyncLikeundo,
   // asyncPostCmtEdit,
 } from '../../redux/action/MainAsync';
 
@@ -29,8 +31,8 @@ export default function DailyPost() {
     dispatch(asyncPost());
   }, []);
 
-  const handleDelPost = postId => {
-    dispatch(asyncPostDel(postId));
+  const handleDelPost = id => {
+    dispatch(asyncPostDel(id));
     window.location.reload();
   };
 
@@ -53,13 +55,6 @@ export default function DailyPost() {
                           </Slide>
                         );
                       })}
-                    {/* {[...Array(5)].map(() => {
-                      return (
-                        <Slide>
-                          <img className="dailyImg" src={daily} alt="daily" />
-                        </Slide>
-                      );
-                    })} */}
                   </ImageSlider>
                 </article>
                 <div>
@@ -86,15 +81,10 @@ export default function DailyPost() {
                         })}
                     </div>
                     <div className="DailyMemo">
-                      <div className="memo">{list.post.content}</div>
-                      {/* advanced */}
-                      {/* <span className="more">더보기</span> */}
+                      <p className="memo">{list.post.content}</p>
                     </div>
                     <div className="act">
-                      <span className="date">
-                        {list.post.createdAt}
-                        {/* 22.12.09 */}
-                      </span>
+                      <span className="date">{list.post.createdAt}</span>
                       <span>
                         <button
                           onClick={() => setIsComment(!isComment)}
@@ -102,23 +92,29 @@ export default function DailyPost() {
                         >
                           댓글
                           {list.post.commentCount ? list.post.commentCount : 0}
-                          개{/* 0 개 */}
+                          개
                         </button>
                       </span>
                       <span className="favorite">
-                        <button onClick={() => !setFav(!fav)}>
-                          {
-                            // list.likeState
-                            fav ? (
-                              <img
-                                className="heart"
-                                src={heartFill}
-                                alt="heart"
-                              />
-                            ) : (
-                              <img className="heart" src={heart} alt="heart" />
-                            )
-                          }
+                        <button
+                          onClick={() => {
+                            setFav(!fav);
+                            if (fav === false) {
+                              dispatch(asyncLikeundo(list.post.postId));
+                            } else {
+                              dispatch(asyncLike(list.post.postId));
+                            }
+                          }}
+                        >
+                          {fav ? (
+                            <img
+                              className="heart"
+                              src={heartFill}
+                              alt="heart"
+                            />
+                          ) : (
+                            <img className="heart" src={heart} alt="heart" />
+                          )}
                           <span>
                             {list.post.likeCount ? list.post.likeCount : 0}
                           </span>
@@ -126,22 +122,20 @@ export default function DailyPost() {
                       </span>
                     </div>
                   </div>
-                  <span className="userInfo">
+                  <div className="userInfo">
                     <img
                       className="user"
                       src={
-                        // list.member.profileImage
-                        //   ? list.member.profileImage
-                        //   : null
-                        daily
+                        list.member.profileImage
+                          ? list.member.profileImage
+                          : daily
                       }
                       alt="daily"
                     />
                     <span>
                       {list.member.username ? list.member.username : null}
-                      {/* 가나다 */}
                     </span>
-                  </span>
+                  </div>
                 </article>
                 {isComment ? <DailyCmt /> : null}
               </DailyItem>
