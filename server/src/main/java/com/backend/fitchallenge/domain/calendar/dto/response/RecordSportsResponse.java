@@ -1,12 +1,15 @@
 package com.backend.fitchallenge.domain.calendar.dto.response;
 
 import com.backend.fitchallenge.domain.calendar.entity.Sports;
+import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class RecordSportsResponse {
+
+    private MemberResponse member;
 
     private Long sportsId;
 
@@ -21,7 +24,8 @@ public class RecordSportsResponse {
     private int weight;
 
     @QueryProjection
-    public RecordSportsResponse(Long sportsId, Sports.BodyPart bodyPart, String name, int set, int count, int weight) {
+    public RecordSportsResponse(MemberResponse member, Long sportsId, Sports.BodyPart bodyPart, String name, int set, int count, int weight) {
+        this.member = member;
         this.sportsId = sportsId;
         this.bodyPart = bodyPart.getValue();
         this.name = name;

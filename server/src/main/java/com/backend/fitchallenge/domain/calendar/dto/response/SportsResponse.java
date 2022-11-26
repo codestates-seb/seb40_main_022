@@ -2,7 +2,9 @@ package com.backend.fitchallenge.domain.calendar.dto.response;
 
 import com.backend.fitchallenge.domain.calendar.entity.Sports;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class SportsResponse {
 
     private Long sportsId;
@@ -10,7 +12,7 @@ public class SportsResponse {
     private String name;
 
     @Builder
-    public SportsResponse(Long sportsId, String bodyPart, String name, int set, int count, int weight) {
+    public SportsResponse(Long sportsId, String bodyPart, String name) {
         this.sportsId = sportsId;
         this.bodyPart = bodyPart;
         this.name = name;
