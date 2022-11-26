@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "member": [
+        {
+          "memberId": 21,
+          "userName": "권혁",
+          "profileImage": "https://lh3.googleusercontent.com/a/ALm5wu1QgJcvr2DCXXCzlv8qu4IEGgs1ldcwLxQQV_4w=k-s256",
+          "weight": "56",
+          "height": "166",
+          "point": "1700",
+          "period": "25"
+        },
+
+        {
+          "memberId": 22,
+          "userName": "김계란",
+          "profileImage": "https://lh3.googleusercontent.com/a/ALm5wu1QgJcvr2DCXXCzlv8qu4IEGgs1ldcwLxQQV_4w=k-s256",
+          "weight": "79",
+          "height": "180",
+          "point": "1500",
+          "period": "22"
+        },
+
+        {
+          "memberId": 23,
+          "userName": "말왕",
+          "profileImage": "https://lh3.googleusercontent.com/a/ALm5wu1QgJcvr2DCXXCzlv8qu4IEGgs1ldcwLxQQV_4w=k-s256",
+          "weight": "72",
+          "height": "176",
+          "point": "1300",
+          "period": "21"
+        }
+      ]
+    }
+  ]
+}
