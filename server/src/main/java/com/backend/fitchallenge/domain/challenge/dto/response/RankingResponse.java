@@ -19,7 +19,7 @@ public class RankingResponse {
     private String profileImage;
     private Integer height;
     private Integer weight;
-    private Long point;
+    private Double point;
     private Integer period;
     private Boolean challengeStatus;
     private LocalDate challengeEndDate;
@@ -27,7 +27,7 @@ public class RankingResponse {
 
 
     @Builder
-    public RankingResponse(Long memberId, String userName, String profileImage, Integer height, Integer weight, Long point,
+    public RankingResponse(Long memberId, String userName, String profileImage, Integer height, Integer weight, Double point,
                            Integer period, Boolean challengeStatus, LocalDate challengeEndDate) {
         this.memberId = memberId;
         this.userName = userName;

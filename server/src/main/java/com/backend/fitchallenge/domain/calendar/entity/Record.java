@@ -1,7 +1,7 @@
 package com.backend.fitchallenge.domain.calendar.entity;
 
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreate;
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdate;
+import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreateVO;
+import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdateVO;
 import com.backend.fitchallenge.domain.calendar.dto.request.SportsRequest;
 import lombok.*;
 
@@ -71,16 +71,16 @@ public class Record {
         }
     }
 
-    public static Record createRecord(RecordCreate recordCreate, Long memberId, List<Sports> sports) {
+    public static Record createRecord(RecordCreateVO recordCreateVO, List<String> imagePathList, Long memberId, List<Sports> sports) {
 
-        List<SportsRequest> sportsRequests = recordCreate.getSports();
+        List<SportsRequest> sportsRequests = recordCreateVO.getSports();
 
         Record record = Record.builder()
-                .year(recordCreate.getStart().getYear())
-                .month(recordCreate.getStart().getMonthValue())
-                .day(recordCreate.getStart().getDayOfMonth())
-                .startTime(recordCreate.getStartTime())
-                .endTime(recordCreate.getEndTime())
+                .year(recordCreateVO.getStart().getYear())
+                .month(recordCreateVO.getStart().getMonthValue())
+                .day(recordCreateVO.getStart().getDayOfMonth())
+                .startTime(recordCreateVO.getStartTime())
+                .endTime(recordCreateVO.getEndTime())
                 .memberId(memberId)
                 //record에 등록된 sports들의 set, count, weight를 활용해 volume 계산
                 .volume(sportsRequests.stream()
@@ -91,9 +91,7 @@ public class Record {
                         .mapToInt(volume -> volume)
                         .sum())
                 .result(Result.NO_RESULT)
-                .timePicture(TimePicture.of(
-                        recordCreate.getStartImagePath(),
-                        recordCreate.getEndImagePath()))
+                .timePicture(TimePicture.of(imagePathList.get(0), imagePathList.get(1)))
                 .build();
 
         //recordSports를 생성하기 위해서는, sportsRequest의 세트, 횟수, 무게에 대한 정보가 필요합니다.
@@ -107,17 +105,25 @@ public class Record {
         return record;
     }
 
-    public void updateRecord(RecordUpdate recordUpdate, List<Sports> sports) {
-        LocalTime changedStartTime = recordUpdate.getStartTime();
-        LocalTime changedEndTime = recordUpdate.getEndTime();
-        String changedStartImagePath = recordUpdate.getStartImagePath();
-        String changedEndImagePath = recordUpdate.getEndImagePath();
-        List<SportsRequest> changedSportsList = recordUpdate.getSports();
+    public void updateRecord(RecordUpdateVO recordUpdateVO, List<String> imagePathList, List<Sports> sports) {
+        LocalTime changedStartTime = recordUpdateVO.getStartTime();
+        LocalTime changedEndTime = recordUpdateVO.getEndTime();
+        List<SportsRequest> changedSportsList = recordUpdateVO.getSports();
 
         this.startTime = changedStartTime != null ? changedStartTime : this.startTime;
         this.endTime = changedEndTime != null ? changedEndTime : this.endTime;
-        this.timePicture = (changedStartImagePath != null && changedEndImagePath != null) ?
-                TimePicture.of(changedStartImagePath, changedEndImagePath) : this.timePicture;
+        this.timePicture =
+                // 운동 인증사진을 둘 다 수정하는 경우
+                recordUpdateVO.includesBothImages() ?
+                        TimePicture.of(imagePathList.get(0), imagePathList.get(1)) :
+                // 운동 시작 인증사진을 수정하는 경우
+                recordUpdateVO.includesStartImage() ?
+                        TimePicture.of(imagePathList.get(0), this.timePicture.getEndPicPath()) :
+                // 운동 종료 인증사진을 수정하는 경우
+                recordUpdateVO.includesEndImage() ?
+                        TimePicture.of(this.timePicture.getStartPicPath(), imagePathList.get(0)) :
+                // 사진을 수정하지 않는 경우우
+                       this.timePicture;
         this.volume = changedSportsList != null ?
                 changedSportsList.stream()
                         .map(sportsRequest ->
@@ -129,7 +135,7 @@ public class Record {
 
         this.getRecordSports().clear();
 
-        List<SportsRequest> sportsRequests = recordUpdate.getSports();
+        List<SportsRequest> sportsRequests = recordUpdateVO.getSports();
 
         for (int i = 0; i < sports.size(); i++) {
             RecordSports.addRecordSports(this, sports.get(i), sportsRequests.get(i));

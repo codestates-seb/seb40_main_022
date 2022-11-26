@@ -1,7 +1,7 @@
 package com.backend.fitchallenge.domain.calendar.controller;
 
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreate;
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdate;
+import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreateVO;
+import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdateVO;
 import com.backend.fitchallenge.domain.calendar.dto.request.TimePictureUpdateVO;
 import com.backend.fitchallenge.domain.calendar.dto.request.TimePictureVO;
 import com.backend.fitchallenge.domain.calendar.dto.response.TimePictureResponse;
@@ -29,9 +29,9 @@ public class RecordController {
     //운동 기록 생성
     @PostMapping("/records")
     public ResponseEntity<Long> create(@AuthMember MemberDetails memberDetails,
-                                       @Valid @RequestBody RecordCreate recordCreate) {
+                                       @Valid RecordCreateVO recordCreateVO) {
 
-        return ResponseEntity.ok(recordService.createRecord(memberDetails.getMemberId(), recordCreate));
+        return ResponseEntity.ok(recordService.createRecord(memberDetails.getMemberId(), recordCreateVO));
     }
 
     @GetMapping("/records/{record-id}")
@@ -53,9 +53,9 @@ public class RecordController {
     @PatchMapping("/records/{record-id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("record-id") Long recordId,
-                                       @Valid @RequestBody RecordUpdate recordUpdate) {
+                                       @Valid RecordUpdateVO recordUpdateVO) {
 
-        return ResponseEntity.ok(recordService.updateRecord(memberDetails.getMemberId(), recordId, recordUpdate));
+        return ResponseEntity.ok(recordService.updateRecord(memberDetails.getMemberId(), recordId, recordUpdateVO));
     }
 
     //운동 기록 삭제

@@ -39,6 +39,9 @@ public class Challenge extends Auditable {
     @Column(name = "challenge_end")
     private LocalDate challengeEnd;
 
+    @Column(name = "challenge_point")
+    private Integer challengePoint;
+
     public enum ChallengeStatus {
         SUGGESTED("제안됨"),
         ONGOING("진행중");

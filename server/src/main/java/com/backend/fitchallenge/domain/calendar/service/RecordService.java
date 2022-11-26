@@ -1,17 +1,16 @@
 package com.backend.fitchallenge.domain.calendar.service;
 
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreate;
+import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreateVO;
 import com.backend.fitchallenge.domain.calendar.dto.response.*;
 import com.backend.fitchallenge.domain.calendar.exception.*;
 import com.backend.fitchallenge.domain.calendar.repository.QueryRecordSportsRepository;
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
-import com.backend.fitchallenge.domain.challenge.repository.ChallengeRepository;
 
 import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdate;
+import com.backend.fitchallenge.domain.calendar.dto.request.RecordUpdateVO;
 import com.backend.fitchallenge.domain.calendar.entity.Record;
 import com.backend.fitchallenge.domain.calendar.entity.Sports;
 import com.backend.fitchallenge.domain.calendar.repository.CalendarRepository;
@@ -23,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -55,26 +55,29 @@ public class RecordService {
      * 4. record에 입력할 sports의 목록을 생성합니다.
      * 5. record를 생성합니다.
      */
-    // todo : 캘린더 존재 여부 확인하는 과정 필요한지 논의 필요
-    public Long createRecord(Long memberId, RecordCreate recordCreate) {
+    public Long createRecord(Long memberId, RecordCreateVO recordCreateVO) {
 
         //1에 해당하는 부분
-        if (!calendarRepository.existsById(CalendarId.of(recordCreate))) {
+        if (!calendarRepository.existsById(CalendarId.of(recordCreateVO))) {
             throw new CalendarNotFound();
         }
 
         //2에 해당하는 부분
-        if (recordRepository.exist(memberId, recordCreate.getStart()))
+        if (recordRepository.exist(memberId, recordCreateVO.getStart()))
             throw new DuplicateRecordCreation();
 
         //시작시간과 종료시간의 선후관계를 확인하는 부분
-        if (recordCreate.getStartTime().isAfter(recordCreate.getEndTime())) {
+        if (recordCreateVO.getStartTime().isAfter(recordCreateVO.getEndTime())) {
             throw new InvalidTimeInput();
         }
 
-        List<Sports> sports = sportsService.getSports(recordCreate.getSports());
+        List<String> imagePathList = awsS3Service.StoreFile(
+                List.of(recordCreateVO.getStartImage(),
+                        recordCreateVO.getEndImage()));
+        log.info("recordCreateVO getSports: {}", recordCreateVO.getSports().toString());
+        List<Sports> sports = sportsService.getSports(recordCreateVO.getSports());
 
-        Record record = Record.createRecord(recordCreate, memberId, sports);
+        Record record = Record.createRecord(recordCreateVO, imagePathList, memberId, sports);
 
         return recordRepository.save(record).getId();
     }
@@ -169,17 +172,39 @@ public class RecordService {
      * 3. sports, startTime, endTime 등의 수정사항을 record에 반영합니다.
      */
     // todo : 추후 비즈니스 로직 추가되면 반영
-    public Long updateRecord(Long memberId, Long recordId, RecordUpdate recordUpdate) {
+    public Long updateRecord(Long memberId, Long recordId, RecordUpdateVO recordUpdateVO) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Record findRecord = recordRepository
                 .findById(recordId)
                 .orElseThrow(RecordNotFound::new);
         verifyWriter(memberId, findRecord);
 
-        List<Sports> sports = sportsService.getSports(recordUpdate.getSports());
+        //운동 인증사진을 둘 다 수정하는 경우
+        List<String> imagePathList = List.of();
+        if (recordUpdateVO.includesBothImages()) {
+            imagePathList = awsS3Service.UpdateFile(
+                    List.of(findRecord.getTimePicture().getStartPicPath(), findRecord.getTimePicture().getEndPicPath()),
+                    List.of(recordUpdateVO.getStartImage(), recordUpdateVO.getEndImage())
+            );
+        }
+        //운동 시작 인증사진만을 수정하는 경우
+        else if (recordUpdateVO.includesStartImage()) {
+            imagePathList = awsS3Service.UpdateFile(
+                    List.of(findRecord.getTimePicture().getStartPicPath()),
+                    List.of(recordUpdateVO.getStartImage())
+            );
+        }
+        //운동 종료 인증사진만을 수정하는 경우
+        else if (recordUpdateVO.includesEndImage()) {
+            imagePathList = awsS3Service.UpdateFile(
+                    List.of(findRecord.getTimePicture().getEndPicPath()),
+                    List.of(recordUpdateVO.getEndImage())
+            );
+        }
 
-        findRecord.updateRecord(recordUpdate, sports);
+        List<Sports> sports = sportsService.getSports(recordUpdateVO.getSports());
+
+        findRecord.updateRecord(recordUpdateVO, imagePathList, sports);
 
         return findRecord.getId();
     }

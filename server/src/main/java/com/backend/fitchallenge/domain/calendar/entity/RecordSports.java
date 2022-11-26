@@ -1,6 +1,5 @@
 package com.backend.fitchallenge.domain.calendar.entity;
 
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreate;
 import com.backend.fitchallenge.domain.calendar.dto.request.SportsRequest;
 import lombok.AccessLevel;
 import lombok.Builder;

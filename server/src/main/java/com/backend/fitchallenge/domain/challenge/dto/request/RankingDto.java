@@ -14,14 +14,14 @@ public class RankingDto {
     private String profileImage;
     private Integer height;
     private Integer weight;
-    private Long point;
+    private Double point;
     private Integer period;
     private Long challengeId;
 
 
     @QueryProjection
     public RankingDto(Long memberId, String userName, String profileImage, Integer height, Integer weight,
-                      Long point, Integer period, Long challengeId) {
+                      Double point, Integer period, Long challengeId) {
         this.memberId = memberId;
         this.userName = userName;
         this.profileImage = profileImage;
