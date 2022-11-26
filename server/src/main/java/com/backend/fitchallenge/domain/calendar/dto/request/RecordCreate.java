@@ -29,10 +29,10 @@ public class RecordCreate {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
     private LocalTime endTime;
 
-    @NotNull(message = "운동 시작 인증사진의 경로를 입력해주세요.")
+    @NotBlank(message = "운동 시작 인증사진의 경로를 입력해주세요.")
     private String startImagePath;
 
-    @NotNull(message = "운동 종료 인증사진의 경로를 입력해주세요.")
+    @NotBlank(message = "운동 종료 인증사진의 경로를 입력해주세요.")
     private String endImagePath;
 
     @Valid

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -75,18 +74,15 @@ public class RecordController {
      */
     //todo : s3에 사진을 넣지 않고도 프론트엔드 단에서 사진을 띄울 수 있을까?
     //     -> 가능하다면 저장할 필요 없이 시간 값만 보내주면 됨
-   /* @PostMapping("/records/pictures")
+   @PostMapping("/records/pictures")
     public ResponseEntity<?> createPicture(@AuthMember MemberDetails memberDetails,
                                            TimePictureVO timePictureVO) throws IOException {
-
-        //사진의 날짜가 입력받은 값이 맞는지 검증하고 시간 정보를 추출합니다.
-//        LocalTime time = pictureService.getTimeInfo(timePictureVO);
 
         //s3에 사진을 저장하고 경로를 얻습니다.
         List<String> imagePathList = awsS3Service.StoreFile(List.of(timePictureVO.getFile()));
 
         //사진의 경로와 시간 정보를 반환합니다.
-//        return ResponseEntity.ok(TimePictureResponse.of(imagePathList.get(0), timePictureVO.getPoint(), time));
+        return ResponseEntity.ok(TimePictureResponse.of(imagePathList.get(0), timePictureVO.getPoint()));
     }
 
     @PatchMapping("/records/pictures")
@@ -102,6 +98,6 @@ public class RecordController {
         );
 
         //사진의 경로와 시간 정보를 반환합니다.
-//        return ResponseEntity.ok(TimePictureResponse.of(imagePathList.get(0), timePictureUpdateVO.getPoint(), time));
-    }*/
+        return ResponseEntity.ok(TimePictureResponse.of(imagePathList.get(0), timePictureUpdateVO.getPoint()));
+    }
 }

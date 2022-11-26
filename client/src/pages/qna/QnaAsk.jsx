@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from '../../components/header/Header';
@@ -20,14 +20,13 @@ function QnaAsk() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const dispatch = useDispatch();
-  const ac = useSelector(state => state.authToken.accessToken);
-  const re = useSelector(state => state.authToken.token);
-  const tokendata = [ac, re, title, content, tag];
-
+  const formdata = new FormData();
+  formdata.append('title', title);
+  formdata.append('content', content);
+  formdata.append('tag', tag);
   const handleSubmit = () => {
-    dispatch(QnaAsynclistPost(tokendata));
+    dispatch(QnaAsynclistPost({ formdata }));
     navigate('/qna');
-    // console.log(tokendata);
   };
 
   return (
