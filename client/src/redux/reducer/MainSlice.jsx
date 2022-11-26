@@ -10,7 +10,6 @@ const MainSlice = createSlice({
   reducers: {},
   extraReducers: {
     [asyncPost.fulfilled]: (state, action) => {
-      // console.log(state, action);
       state.data = action.payload;
     },
     [asyncPostCmt.fulfilled]: (state, action) => {

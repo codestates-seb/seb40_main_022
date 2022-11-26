@@ -15,11 +15,26 @@ export const Wrapper = styled.div`
 
 export const ImageBox = styled.div`
   margin: 0.5rem;
+  display: flex;
+  justify-content: center;
   img {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
+    border: 3px solid var(--black-200);
     object-fit: cover;
     border-radius: 50%;
+    text-indent: -100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ImgInput {
+    display: none;
+  }
+  .setting {
+    position: relative;
+    top: 120px;
   }
 `;
 
@@ -135,8 +150,6 @@ export const ProfileBox = styled.div`
 
 export const ProfileGrid = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
   width: 100%;
   padding: 30px 72px;
@@ -159,8 +172,11 @@ export const ProfileGrid = styled.div`
     justify-content: start;
   }
 `;
+export const ProfileInputBox = styled.div`
+  display: flex;
+`;
 
-export const ProfileInput = styled.input`
+export const ProfileInputTop = styled.input`
   width: 300px;
   height: 30px;
   border-top: none;
@@ -168,6 +184,23 @@ export const ProfileInput = styled.input`
   border-left: none;
   outline: none;
   padding-left: 10px;
+`;
+
+export const ProfileInputDown = styled.input`
+  width: 140px;
+  height: 30px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  outline: none;
+  padding-left: 10px;
+`;
+
+export const ErrorP = styled.p`
+  margin: 2px 0px;
+  padding: 2px;
+  color: #d0393e;
+  font-size: 12px;
 `;
 
 export const BtnBox = styled.div`
