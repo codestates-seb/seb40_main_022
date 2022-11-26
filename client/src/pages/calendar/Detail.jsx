@@ -1,13 +1,13 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import rcddetailbtn from '../../images/rcddetailbtn.png';
 import rcddecordminus from '../../images/rcddecordminus.png';
 import DetailCamera from '../../images/DetailCamera.png';
-import RecordTagAsync from '../../redux/action/RecordAsync';
+import { RecordTagAsync, RecordUpAsync } from '../../redux/action/RecordAsync';
 
 function Detail() {
   const list = [
@@ -19,42 +19,22 @@ function Detail() {
     { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
   ];
   const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
-  const taghealth = [
-    {
-      등: [
-        '폴업',
-        '바벨 로우',
-        '덤벨 로우',
-        '펜들레이 로우',
-        '머신 로우',
-        '랫풀다운',
-        '친업',
-        '백 익스텐션',
-        '굿모닝 엑서사이즈',
-        '시티드 케이블 로우',
-      ],
-      가슴: [
-        '벤치 프레스',
-        '덤벨 벤치 프레스',
-        '인클라인 벤치 프레스',
-        '디클라인 벤치 프레스',
-        '디클라인 덤벨 벤치 프레스',
-        '딥스',
-        '덤벨 풀오버',
-        '버터 플라이 머신',
-        '케이블 크로스 오버',
-      ],
-    },
-  ];
+  const taghealth1 = useSelector(state => state.record.data.data);
+  console.log(taghealth1);
+
   const navigate = useNavigate();
   const photoUp = useRef();
-  const [health, setHealth] = useState('');
-  const [tags, setTags] = useState('');
+  const [health, setHealth] = useState('풀업');
+  const [tags, setTags] = useState('등');
   const [set, setSet] = useState('');
   const [num, setNum] = useState('');
   const [weight, setWeight] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const today = new Date().toISOString().slice(0, 10);
   const [clicked, setClicked] = useState(false);
   const [files, setFiles] = useState([]);
+  const [realImg, setRealImg] = useState([]);
   const reader = new FileReader();
   const dispatch = useDispatch();
 
@@ -62,19 +42,38 @@ function Detail() {
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
-      setFiles([...files, resultImg.toString()]);
+      setRealImg([...realImg, resultImg.toString()]);
     };
+    setFiles([...files, e.target.files[0]]);
   };
   const handelClick = () => {
     photoUp.current.click();
   };
-  const deleteFile = index => {
-    const imgArr = files.filter((el, idx) => idx !== index);
-    setFiles([...imgArr]);
+  const deleteFile = () => {
+    setRealImg([]);
+    setFiles([]);
   };
   const tagClick = () => {
     dispatch(RecordTagAsync(tags));
   };
+  const handleAddClick = () => {
+    const Healthdata = [
+      startTime,
+      endTime,
+      today,
+      health,
+      set,
+      num,
+      weight,
+      tags,
+      files,
+    ];
+    console.log(Healthdata);
+    dispatch(RecordUpAsync(Healthdata));
+  };
+  useEffect(() => {
+    dispatch(RecordTagAsync(tags));
+  }, []);
   return (
     <DetailBox>
       <Header />
@@ -84,7 +83,11 @@ function Detail() {
             <label htmlFor="starttime" className="timelabel">
               Start-Time
             </label>
-            <input id="starttime" placeholder="ex) 21:19:00" />
+            <input
+              id="starttime"
+              placeholder="ex) 21:19:00"
+              onChange={e => setStartTime(e.target.value)}
+            />
             <input
               className="imgadd"
               type="file"
@@ -101,7 +104,11 @@ function Detail() {
             <label htmlFor="starttime" className="endtimelabel">
               End-Time
             </label>
-            <input id="starttime" placeholder="ex) 22:19:00" />
+            <input
+              id="starttime"
+              placeholder="ex) 22:19:00"
+              onChange={e => setEndTime(e.target.value)}
+            />
             <input
               className="imgadd"
               type="file"
@@ -116,8 +123,8 @@ function Detail() {
           </div>
         </section>
         <section className="Imgs">
-          {files &&
-            files.map((data, idx) => {
+          {realImg &&
+            realImg.map((data, idx) => {
               return (
                 <div className="imgboxs">
                   <img src={data} alt="증명사진" className="TimeImgs" />
@@ -136,6 +143,7 @@ function Detail() {
                 <select
                   onChange={e => {
                     setTags(e.target.value);
+                    tagClick(e.target.value);
                   }}
                 >
                   {btns &&
@@ -150,12 +158,11 @@ function Detail() {
                   <select
                     onChange={e => {
                       setHealth(e.target.value);
-                      tagClick();
                     }}
                   >
-                    {taghealth[0][tags] &&
-                      taghealth[0][tags].map(data => {
-                        return <option>{data}</option>;
+                    {taghealth1 &&
+                      taghealth1.map(data => {
+                        return <option>{data.name}</option>;
                       })}
                   </select>
                 </div>
@@ -196,13 +203,7 @@ function Detail() {
               </div>
               <button
                 onClick={() => {
-                  list.push({
-                    title: health,
-                    tag: tags,
-                    set,
-                    num,
-                    weight,
-                  });
+                  handleAddClick();
                 }}
               >
                 등록
@@ -245,7 +246,7 @@ function Detail() {
               navigate('/record');
             }}
           >
-            취소
+            나가기
           </button>
         </section>
       </DetailMain>

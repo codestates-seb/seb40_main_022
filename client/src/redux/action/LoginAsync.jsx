@@ -14,7 +14,6 @@ export function Retoken() {
         },
       })
       .then(res => {
-        console.log(res);
         axios.defaults.headers.common.token = res.headers.authorization;
         localStorage.setItem('Authorization', res.headers.authorization);
         localStorage.setItem('RefreshToken', res.headers.refreshtoken);
@@ -22,6 +21,14 @@ export function Retoken() {
         console.log(auth);
         setTimeout(Retoken, 600000);
         return auth;
+      })
+      .catch(err => {
+        if (err.response.data.status === 401) {
+          localStorage.removeItem('Authorization');
+          localStorage.removeItem('RefreshToken');
+          localStorage.clear();
+          window.location.reload();
+        }
       });
   }
   return null;
