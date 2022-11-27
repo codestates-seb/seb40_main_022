@@ -10,7 +10,6 @@ import com.backend.fitchallenge.domain.notification.repository.EmitterRepository
 import com.backend.fitchallenge.domain.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -81,12 +80,11 @@ public class NotificationService {
                     //데이터 캐시 저장(유실된 데이터처리하기위함)
                     emitterRepository.saveEventCache(key, notification);
                     //데이터 전송
-                    sendNotification(emitter, eventId, key, NotificationResponse.from(notification));
-                    log.info("notification= {}", NotificationResponse.from(notification).getContent());
+                    sendNotification(emitter, eventId, key, NotificationResponse.of(notification));
+                    log.info("notification= {}", NotificationResponse.of(notification).getContent());
                 });
     }
 
-    // 알림생성
     private Notification createNotification(Member receiver, String content, Challenge challenge) {
         return Notification.builder()
                 .receiver(receiver)
@@ -96,7 +94,6 @@ public class NotificationService {
                 .build();
     }
 
-    // 알림 전송
     private void sendNotification(SseEmitter emitter, String eventId, String emitterId, Object data) {
         try {
             emitter.send(SseEmitter.event()
@@ -123,14 +120,12 @@ public class NotificationService {
                 .forEach(entry -> sendNotification(emitter, entry.getKey(), emitterId, entry.getValue()));
     }
 
-    //모든 알림 조회
     @Transactional
     public Object findAllById(Long memberId) {
         List<NotificationResponse> responses = notificationRepository.findAllByReceiverId(memberId).stream()
-                                                             .map(NotificationResponse::from)
+                                                             .map(NotificationResponse::of)
                                                             .collect(Collectors.toList());
 
-        // 읽지 않은 알림수 조회
         long unreadCount = responses.stream()
                 .filter(notification -> !notification.isRead())
                 .count();
@@ -138,7 +133,6 @@ public class NotificationService {
         return MultiNotificationResponse.of(responses, unreadCount);
     }
 
-    // 알림 읽음 처리
     @Transactional
     public void readNotification(Long id) {
         Notification notification = notificationRepository.findById(id).orElseThrow(NotificationNotFound::new);

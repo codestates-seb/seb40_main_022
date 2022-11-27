@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.calendar.util;
 
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreateVO;
+import com.backend.fitchallenge.domain.record.dto.request.RecordCreateVO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

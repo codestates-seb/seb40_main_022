@@ -33,7 +33,7 @@ public class Picture {
      * 연관관계 편의 메소드
      * 받아온 파라미터로 Picture 생성후, post에 추가
      */
-    public static void createPicture(Post post, String path) {
+    public static void create(Post post, String path) {
         Picture picture = Picture.builder()
                 .path(path)
                 .post(post)

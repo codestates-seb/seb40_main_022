@@ -42,14 +42,6 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final QueryTagRepository queryTagRepository;
 
-    /**
-     * 게시물 작성
-     * @param memberId      로그인 유저 memberId
-     * @param postCreate    Post 생성 요청 정보
-     * @param imagePathList S3에 저장후 CloudFront+ 파일명 목록
-     * @return DB에 Post와 관련 Tag,Picture 저장후 postId 반환
-     */
-    //Todo: 간접참조(난이도상)
     public Long createPost(Long memberId, PostCreateVO postCreate, List<String> imagePathList) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
@@ -65,12 +57,11 @@ public class PostService {
             return postRepository.save(postWithTag).getId();
         } else {
             // Tag 없을경우, Tag 포함하지 않는 Post 생성
-            Post post = Post.toPost(postCreate, member, imagePathList);
+            Post post = Post.create(postCreate, member, imagePathList);
             return postRepository.save(post).getId();
         }
 
     }
-
 
     /**
      * 전체 게시물 조회
@@ -80,7 +71,6 @@ public class PostService {
      * 3. PostResponse로 build
      * 4. 무한 스크롤 처리
      */
-    // hasNext = false이면 더이상 불러올 post가 없습니다. 알림 띄워주기
     @Transactional(readOnly = true)
     public MultiResponse<?> getPostList(Long lastPostId, Long memberId, Pageable pageable) {
 
@@ -89,7 +79,7 @@ public class PostService {
                 .map(postTuple ->
                         PostResponse.builder()
                                 .member(SimplePostMemberResponse.toResponse(postTuple.get(post).getMember()))
-                                .post(SimplePostResponse.toResponse(postTuple.get(post), postTuple.get(post).getLikes().size(), postTuple.get(post.postComments.size())))
+                                .post(SimplePostResponse.of(postTuple.get(post), postTuple.get(post).getLikes().size(), postTuple.get(post.postComments.size())))
                                 .tags(postTuple.get(post).getPostTags().stream()
                                         .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                                 .pictures(postTuple.get(post).getPictures().stream()
@@ -105,6 +95,7 @@ public class PostService {
 
         return MultiResponse.of(result);
     }
+
     /**
      * 전체 게시물 조회 - 로그인 없이
      * 무한 스크롤 페이지네이션 - noOffset, Slice
@@ -121,7 +112,7 @@ public class PostService {
                 .map(postTuple ->
                         PostResponse.builder()
                                 .member(SimplePostMemberResponse.toResponse(postTuple.get(post).getMember()))
-                                .post(SimplePostResponse.toResponse(postTuple.get(post), postTuple.get(post).getLikes().size(), postTuple.get(post.postComments.size())))
+                                .post(SimplePostResponse.of(postTuple.get(post), postTuple.get(post).getLikes().size(), postTuple.get(post.postComments.size())))
                                 .tags(postTuple.get(post).getPostTags().stream()
                                         .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                                 .pictures(postTuple.get(post).getPictures().stream()
@@ -144,7 +135,6 @@ public class PostService {
      * 2.태그 Id 목록에 해당하는 post의 id 가져오기 태그목록중 한개만 포함해도 가져온다.
      * 3. post id에 해당하는 게시물 + 좋아요 상태 + 게시물댓글수 가져오기
      * 4. 무한스크롤 페이지네이션 처리
-     * @return
      */
     public MultiResponse<?> getSearchList(Long memberId, Pageable pageable, Long lastPostId, List<String> tagNames) {
 
@@ -160,7 +150,7 @@ public class PostService {
         List<PostResponse> responses = postRepository.findSearchList(memberId, postIds).stream()
                 .map(tuple -> PostResponse.builder()
                         .member(SimplePostMemberResponse.toResponse(tuple.get(post).getMember()))
-                        .post(SimplePostResponse.toResponse(tuple.get(post), tuple.get(post).getLikes().size(), tuple.get(post.postComments.size())))
+                        .post(SimplePostResponse.of(tuple.get(post), tuple.get(post).getLikes().size(), tuple.get(post.postComments.size())))
                         .tags(tuple.get(post).getPostTags().stream()
                                 .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                         .pictures(tuple.get(post).getPictures().stream()
@@ -179,23 +169,20 @@ public class PostService {
      * 2.태그 Id 목록에 해당하는 post의 id 가져오기 태그목록중 한개만 포함해도 가져온다.
      * 3. post id에 해당하는 게시물 + 게시물댓글수 가져오기
      * 4. 무한스크롤 페이지네이션 처리
-     * @return
      */
     public MultiResponse<?> getSearchListWithoutLogin( Pageable pageable, Long lastPostId, List<String> tagNames) {
 
-        // 2. 태그 Id목록에 해당하는 postid 가져오기
         List<Long> tagIds = queryTagRepository.findTagsByContent(tagNames);
         if (tagIds.isEmpty()) {
             throw new PostNotFound();
         }
 
-        // 3. post id에 해당하는 게시물 + 게시물 댓글수 가져와서 response로 반환
         List<Long> postIds = queryTagRepository.findPostByTag(lastPostId, tagIds, pageable);
 
         List<PostResponse> responses = postRepository.findSearchListWithoutLogin(postIds).stream()
                 .map(tuple -> PostResponse.builder()
                         .member(SimplePostMemberResponse.toResponse(tuple.get(post).getMember()))
-                        .post(SimplePostResponse.toResponse(tuple.get(post), tuple.get(post).getLikes().size(), tuple.get(post.postComments.size())))
+                        .post(SimplePostResponse.of(tuple.get(post), tuple.get(post).getLikes().size(), tuple.get(post.postComments.size())))
                         .tags(tuple.get(post).getPostTags().stream()
                                 .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                         .pictures(tuple.get(post).getPictures().stream()
@@ -207,6 +194,7 @@ public class PostService {
 
         return MultiResponse.of(result);
     }
+
     /**
      * 게시물 수정
      * 1. 로그인 유저가 게시물 작성자인지 체크
@@ -219,7 +207,6 @@ public class PostService {
 
         Post post = findPostById(postId);
 
-        //포스트 작성자와 로그인 유저가 동일한 경우에만 수정 가능
         if (memberId != post.getMember().getId()) {
             throw new CannotUpdatePost();
         }
@@ -230,18 +217,15 @@ public class PostService {
                     return picture.getPath().substring(index + 1);
                 }).collect(toList());
 
-        // S3 이미지파일 수정
         List<String> imagePaths = awsS3Service.UpdateFile(paths, postUpdate.getFiles());
 
-        //Tag 있을경우 수정
         if (postUpdate.getTagDtos() != null) {
             List<Tag> tags = createTag(postUpdate.getTagDtos());
             post.patchWithTag(postUpdate.getContent(), imagePaths, tags);
         } else {
-            //Tag 없을경우 나머지 사진,내용 수정
             post.patch(postUpdate.getContent(), imagePaths);
         }
-        return PostUpdateResponse.toResponse(post);
+        return PostUpdateResponse.of(post);
     }
 
     /**
@@ -253,7 +237,6 @@ public class PostService {
 
         Post post = findPostById(postId);
 
-        //포스트 작성자와 로그인 유저가 동일한 경우에만 삭제 가능
         if (memberId != post.getMember().getId()) {
             throw new CannotDeletePost();
         }
@@ -263,23 +246,19 @@ public class PostService {
                     int index = picture.getPath().lastIndexOf("/");
                     return picture.getPath().substring(index + 1);
                 }).collect(toList());
-        //s3에서 포스트에 해당하는 사진 삭제
         awsS3Service.DeleteFile(paths);
 
-        //db에서 post삭제
         postRepository.delete(post);
 
     }
 
-    //DB에 Tag 저장
     private List<Tag> createTag(List<TagDto> tagDtos) {
         return tagDtos.stream()
                 .map(dto ->
-                        tagService.createTag(dto))
+                        tagService.create(dto))
                 .collect(toList());
     }
 
-    // 무한 스크롤 처리
     private Slice<PostResponse> checkLastPage(List<PostResponse> postResponses, Pageable pageable) {
 
         boolean hasNext = false;
@@ -296,7 +275,6 @@ public class PostService {
         return new SliceImpl<>(postResponses, pageable, hasNext);
     }
 
-    //DB에서 Post 불러옴
     public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(PostNotFound::new);
     }

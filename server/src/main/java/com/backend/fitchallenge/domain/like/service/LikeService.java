@@ -23,7 +23,7 @@ public class LikeService {
 
     public void up(Long postId, Long memberId) {
         Post post = postService.findPostById(postId);
-        Member member = memberService.findVerifiedMemberById(memberId);
+        Member member = memberService.findMemberById(memberId);
 
         Likes likes = Likes.toEntity(member, post);
         likeRepository.up(likes);

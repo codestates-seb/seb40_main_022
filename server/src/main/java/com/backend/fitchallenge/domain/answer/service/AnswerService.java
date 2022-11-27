@@ -35,43 +35,43 @@ public class AnswerService {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Question question = questionRepository.findById(id).orElseThrow(QuestionNotFound::new);
 
-        return answerRepository.save(Answer.createAnswer(answerCreate, question, member)).getId();
+        return answerRepository.save(Answer.toEntity(answerCreate, question, member)).getId();
     }
 
     public Long updateAnswer(Long memberId, Long answerId, AnswerUpdate answerUpdate) {
 
-        Answer findAnswer = findVerifiedAnswer(answerId);
+        Answer answer = findAnswer(answerId);
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
-        verifyWriter(member.getId(), findAnswer);
+        verifyWriter(member.getId(), answer);
 
-        findAnswer.updateAnswer(answerUpdate);
+        answer.update(answerUpdate);
 
-        return answerRepository.save(findAnswer).getId();
+        return answerRepository.save(answer).getId();
     }
 
     public Long deleteAnswer(Long memberId, Long answerId) {
 
-        Answer findAnswer = findVerifiedAnswer(answerId);
+        Answer answer = findAnswer(answerId);
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
-        verifyWriter(member.getId(), findAnswer);
+        verifyWriter(member.getId(), answer);
 
-        answerRepository.delete(findAnswer);
+        answerRepository.delete(answer);
 
         return answerId;
     }
 
     public Long accept(Long memberId, Long id, Long answerId) {
 
-        Answer findAnswer = findVerifiedAnswer(answerId);
+        Answer answer = findAnswer(answerId);
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Question question = questionRepository.findById(id).orElseThrow(QuestionNotFound::new);
 
         if (member.getId().equals(question.getMember().getId())) {
-            findAnswer.accept();
-            if (!findAnswer.getMember().getId().equals(member.getId())) {
+            answer.accept();
+            if (!answer.getMember().getId().equals(member.getId())) {
                 // 채택자의 Community Point가 증가
             }
         } else {
@@ -82,7 +82,7 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    private Answer findVerifiedAnswer(Long answerId) {
+    private Answer findAnswer(Long answerId) {
         Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
 
         return optionalAnswer.orElseThrow(AnswerNotFound::new);

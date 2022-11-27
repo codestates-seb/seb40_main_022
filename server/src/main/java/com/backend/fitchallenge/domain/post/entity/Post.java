@@ -60,13 +60,13 @@ public class Post extends Auditable {
      *   Tag가 없는 post 생성메서드
      *   post 생성후, createPicture 메서드로 각 이미지의 경로와 postId를 가진 Picture 생성
      */
-    public static Post toPost(PostCreateVO postCreateVO, Member member, List<String> paths) {
+    public static Post create(PostCreateVO postCreateVO, Member member, List<String> paths) {
         Post post = Post.builder()
                 .member(member)
                 .content(postCreateVO.getContent())
                 .build();
 
-        paths.forEach(path -> Picture.createPicture(post,path));
+        paths.forEach(path -> Picture.create(post,path));
 
         return post;
     }
@@ -81,8 +81,8 @@ public class Post extends Auditable {
                 .content(postCreateVO.getContent())
                 .build();
 
-        tags.forEach(tag -> PostTag.addPostTag(post, tag));
-        paths.forEach(path -> Picture.createPicture(post,path));
+        tags.forEach(tag -> PostTag.create(post, tag));
+        paths.forEach(path -> Picture.create(post,path));
 
         return post;
     }
@@ -93,13 +93,13 @@ public class Post extends Auditable {
         this.postTags.clear();
         this.pictures.clear();
 
-        tags.forEach(tag ->PostTag.addPostTag(this, tag) );
-        paths.forEach(path -> Picture.createPicture(this,path));
+        tags.forEach(tag ->PostTag.create(this, tag) );
+        paths.forEach(path -> Picture.create(this,path));
     }
 
     public void patch(String content, List<String> paths) {
         this.content = content;
         this.pictures.clear();
-        paths.forEach(path -> Picture.createPicture(this,path));
+        paths.forEach(path -> Picture.create(this,path));
     }
 }
