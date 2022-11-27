@@ -6,16 +6,18 @@ import MainSlice from '../reducer/MainSlice';
 import QnaSlice from '../reducer/QnaSlice';
 import MypageSlice from '../reducer/MypageSlice';
 import MypageEditSlice from '../reducer/MypageEditSlice';
+import RecordSlice from '../reducer/RecordSlice';
 
 // Slice Append Here
 const reducer = {
   signup: SignupSlice,
   authToken: tokenReducer,
   dailypost: MainSlice,
-  lank: LankSlice,
+  challenge: LankSlice,
   qnalist: QnaSlice,
   mypage: MypageSlice,
   mypageedit: MypageEditSlice,
+  record: RecordSlice,
 };
 
 const store = configureStore({

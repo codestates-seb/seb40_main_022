@@ -11,10 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionUpdateVO {
-
-    private Long id;
 
     @NotBlank
     private String title;

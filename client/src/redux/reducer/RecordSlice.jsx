@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { RecordTagAsync } from '../action/RecordAsync';
 
 const RecordSlice = createSlice({
   name: 'record',
@@ -6,7 +7,11 @@ const RecordSlice = createSlice({
     data: [],
   },
   reducers: {},
-  extraReducers: {},
+  extraReducers: {
+    [RecordTagAsync.fulfilled]: (state, action) => {
+      state.data = action.payload;
+    },
+  },
 });
 
 export const signupActions = RecordSlice.actions;

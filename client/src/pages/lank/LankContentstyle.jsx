@@ -4,7 +4,7 @@ import UserProfile from '../../images/userprofile.png';
 export const LankBody = styled.section`
   margin-top: 10px;
 `;
-export const Lankcontent = styled.section`
+export const Lankcontents = styled.section`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,7 +44,7 @@ export const Lankcontent = styled.section`
   }
   > h4 {
     line-height: 70px;
-    font-size: var(--font-16);
+    font-size: var(--font-11);
     font-weight: 600;
   }
   > :nth-child(7) {

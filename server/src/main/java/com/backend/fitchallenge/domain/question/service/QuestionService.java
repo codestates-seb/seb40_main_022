@@ -58,15 +58,21 @@ public class QuestionService {
 
     public DetailQuestionResponse getQuestion(Long id) {
 
+        //질문 조회수 증가
         Question findQuestion = questionRepository.findQuestionWithWriter(id).orElseThrow(QuestionNotFound::new);
         findQuestion.addView();
+
+        //해당 질문 작성자 community point 증가
+        Member questionWriter = findQuestion.getMember();
+        questionWriter.getMemberActivity().updatePoint(0.01);
+        memberRepository.save(questionWriter);
 
         List<AnswerResponse> answerResponses = queryAnswerRepository.findAnswersAndCommentsWithWriters(id).stream()
                 .map(answer ->
                         AnswerResponse.of(answer, answer.getComments().stream().map(AnswerCommentResponse::of).collect(Collectors.toList())))
                 .collect(Collectors.toList());
 
-        MemberResponse memberResponse = MemberResponse.of(findQuestion.getMember());
+        MemberResponse memberResponse = MemberResponse.of(questionWriter);
 
         return DetailQuestionResponse.of(findQuestion, memberResponse, answerResponses);
     }

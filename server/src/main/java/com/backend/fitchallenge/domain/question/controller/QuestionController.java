@@ -49,17 +49,12 @@ public class QuestionController {
     @GetMapping("/questions")
     public ResponseEntity<MultiResponse<?>> list(PageRequest pageable) {
 
-        pageable.setDynamicSort();
-        log.info("sortBy: {}", pageable.getSortBy());
-        log.info("sort: {}", pageable.getSortBy());
-
         return ResponseEntity.ok(questionService.getQuestionList(pageable));
     }
 
     @GetMapping("/questions/search")
     public ResponseEntity<MultiResponse<?>> searchList(PageRequest pageable,
                                                        @ModelAttribute QuestionSearchQuery questionSearchQuery) {
-        pageable.setDynamicSort();
 
         QuestionSearch questionSearch = questionSearchQuery.queryParsing();
         log.info("query: {}", questionSearch.getQuery());

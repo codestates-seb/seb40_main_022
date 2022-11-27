@@ -15,33 +15,26 @@ export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
       },
       // transformRequest: formData => formData,
     })
-    .then(res =>
-      console.log(
-        res,
-        localStorage.getItem('Authorization'),
-        localStorage.getItem('RefreshToken'),
-      ),
-    );
+    .then(res => {
+      console.log(res);
+      window.location.reload();
+    });
 });
 
 export const asyncPostUpdate = createAsyncThunk(
   'list/update',
-  ({ files, content, tagList, id, ac, re }) => {
-    if (files.length !== 0 && content.length !== 0 && tagList.length !== 0) {
-      axios.patch(
-        `/dailyPosts/${id.id}`,
-        // `http://localhost:3001/dailypost/${id.id}`,
-        JSON.stringify({ pictures: files, post: { content }, tags: tagList }),
-        {
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            'Content-Type': 'application/json',
-            Authorization: ac,
-            RefreshToken: re,
-          },
-        },
-      );
-    }
+  ({ formData }, editId) => {
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}, ${pair[1]}`);
+    // }
+    // console.log(editId);
+    axios.post(`/dailyPosts/${editId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    });
   },
 );
 
@@ -64,40 +57,41 @@ export const asyncPost = createAsyncThunk('post', (ac, re) => {
   return data;
 });
 
-export const asyncLike = createAsyncThunk(
-  'post/up',
-  ({ likeStates, id, ac, re }) => {
-    axios.post(`/dailyPosts/${id}/like`, JSON.stringify({ likeStates }), {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: ac,
-        RefreshToken: re,
-      },
-    });
-  },
-);
-
-export const asyncLikeundo = createAsyncThunk(
-  'post/up',
-  ({ likeStates, id, ac, re }) => {
-    axios.post(`dailyPosts/${id}/like/undo`, JSON.stringify({ likeStates }), {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: ac,
-        RefreshToken: re,
-      },
-    });
-  },
-);
-
-export const asyncPostDel = createAsyncThunk('post/del', id => {
-  axios.delete(
-    `/dailyPosts/${id}`,
-    // `http://localhost:3001/dailypost/${id}`,
+export const asyncLike = createAsyncThunk('post/up', postId => {
+  axios.post(
+    `/dailyPosts/${postId}/like`,
+    { postId },
     {
-      id,
+      headers: {
+        // 'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
     },
   );
+});
+
+export const asyncLikeundo = createAsyncThunk('post/up', postId => {
+  axios.post(
+    `dailyPosts/${postId}/like/undo`,
+    { postId },
+    {
+      headers: {
+        // 'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    },
+  );
+});
+
+export const asyncPostDel = createAsyncThunk('post/del', async postId => {
+  axios.delete(`/dailyPosts/${postId}`, {
+    headers: {
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });
 
 export const asyncPostCmt = createAsyncThunk('comment', (id, ac, re) => {

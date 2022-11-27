@@ -87,18 +87,18 @@ export const Content = styled.div`
     width: 130px;
     height: 130px;
     border: 5px solid var(--logored);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
     > img {
       cursor: pointer;
       width: 110px;
       height: 110px;
       border-radius: 50%;
       object-fit: cover;
-      position: absolute;
-      top: 35px;
+      /* position: absolute;
+      top: 35px; */
     }
   }
 
@@ -203,12 +203,15 @@ export const DailyItem = styled.div`
 
     .DailyTags {
       font-weight: bold;
+      color: var(--black-500);
     }
 
     .memo {
       font-weight: bold;
       cursor: text;
       width: 500px;
+      overflow: hidden;
+      word-wrap: break-word;
     }
 
     .date {

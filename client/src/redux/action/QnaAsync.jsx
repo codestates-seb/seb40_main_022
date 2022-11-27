@@ -30,7 +30,7 @@ export const QnaDetaillistdelete = createAsyncThunk('delete', async data => {
 });
 
 export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
-  axios.patch(`/questions/${data[1]}`, data[0], {
+  axios.post(`/questions/${data[1]}`, data[0], {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: localStorage.getItem('Authorization'),

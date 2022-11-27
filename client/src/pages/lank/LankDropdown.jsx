@@ -1,47 +1,49 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, Dropdivi } from './LankDropdownStyle';
-import SET_LANK from '../../redux/reducer/LankSlice';
+// import React, { useState } from 'react';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { Dropdown, Dropdivi } from './LankDropdownStyle';
+// import SET_LANK from '../../redux/reducer/LankSlice';
+
+import { Dropdown } from './LankDropdownStyle';
 
 function LankDropdown() {
-  const list = [
-    {
-      분할: ['2분할', '3분할', '4분할', '5분할'],
-    },
-    { 키: ['181cm이상', '175cm ~ 179cm', '171cm ~ 174cm', '170cm 이하'] },
-    {
-      몸무게: [
-        '120kg이상',
-        '101kg ~ 119kg',
-        '81kg ~ 100kg',
-        '60kg ~ 80kg',
-        '40kg ~ 59kg',
-        '39kg이하',
-      ],
-    },
-    {
-      경력: [
-        '20년 이상',
-        '15년 ~ 19년',
-        '10년 ~ 14년',
-        '5년 ~ 9년',
-        '4년 이하',
-      ],
-    },
-    {
-      점수: ['10000p 이상', '8000p ~ 9999p', '6000p ~ 7999p', '4000p ~ 5999p'],
-    },
-  ];
-  const listadata1 = useSelector(state => state.lank.list);
-  const name = [];
-  const [names, setNames] = useState(['분할', '키', '몸무게', '경력', '점수']);
-  const dispatch = useDispatch();
-  dispatch(SET_LANK);
+  // const list = [
+  //   {
+  //     분할: ['2분할', '3분할', '4분할', '5분할'],
+  //   },
+  //   { 키: ['181cm이상', '175cm ~ 179cm', '171cm ~ 174cm', '170cm 이하'] },
+  //   {
+  //     몸무게: [
+  //       '120kg이상',
+  //       '101kg ~ 119kg',
+  //       '81kg ~ 100kg',
+  //       '60kg ~ 80kg',
+  //       '40kg ~ 59kg',
+  //       '39kg이하',
+  //     ],
+  //   },
+  //   {
+  //     경력: [
+  //       '20년 이상',
+  //       '15년 ~ 19년',
+  //       '10년 ~ 14년',
+  //       '5년 ~ 9년',
+  //       '4년 이하',
+  //     ],
+  //   },
+  //   {
+  //     점수: ['10000p 이상', '8000p ~ 9999p', '6000p ~ 7999p', '4000p ~ 5999p'],
+  //   },
+  // ];
+  // const listadata1 = useSelector(state => state);
+  // const name = [];
+  // const [names, setNames] = useState(['분할', '키', '몸무게', '경력', '점수']);
+  // const dispatch = useDispatch();
+  // dispatch(SET_LANK);
   return (
     <Dropdown>
-      {listadata1 &&
+      {/* {listadata1 &&
         listadata1.map((data, idx) => {
           name.push(Object.keys(list[idx])[0]);
           return (
@@ -78,7 +80,7 @@ function LankDropdown() {
               </div>
             </Dropdivi>
           );
-        })}
+        })} */}
       {/* <Dropdivi>
         <div className="container">
           <input id="dropdown" type="checkbox" />

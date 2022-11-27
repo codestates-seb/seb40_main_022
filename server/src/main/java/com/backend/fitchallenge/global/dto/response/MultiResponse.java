@@ -14,7 +14,7 @@ public class MultiResponse<T> {
     private MultiResponse(Page<T> items) {
         this.data = items.getContent();
         this.pageInfo = PageInfo.builder()
-                .page(items.getNumber() + 1)
+                .page(items.getNumber())
                 .size(items.getSize())
                 .totalElements(items.getNumberOfElements())
                 .totalPages(items.getTotalPages())
@@ -34,7 +34,7 @@ public class MultiResponse<T> {
 
         @Builder
         public PageInfo(int page, int size, int totalElements, int totalPages) {
-            this.page = page;
+            this.page = page + 1;
             this.size = size;
             this.totalElements = totalElements;
             this.totalPages = totalPages;
