@@ -1,10 +1,8 @@
-package com.backend.fitchallenge.global.batch;
+package com.backend.fitchallenge.global.batch.tasklet;
 
 import com.backend.fitchallenge.domain.calendar.entity.Record;
-import com.backend.fitchallenge.domain.calendar.repository.RecordRepository;
 import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.backend.fitchallenge.domain.challenge.repository.ChallengeRepository;
-import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,6 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -27,13 +24,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.backend.fitchallenge.domain.calendar.entity.QRecord.record;
-import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 
 @RequiredArgsConstructor
 @Component
 @StepScope
 @Slf4j
-public class RankTasklet implements Tasklet, StepExecutionListener {
+public class DailyPointTasklet implements Tasklet, StepExecutionListener {
 
     private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
@@ -63,7 +59,7 @@ public class RankTasklet implements Tasklet, StepExecutionListener {
 
         log.info(contribution.toString());
         log.info(chunkContext.toString());
-        log.info(">>>>> This is Step1");
+        log.info(">>>>> This is dailyPointStep");
 
         ongoingChallenges.forEach(challenge -> {
 

@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.global.batch;
+package com.backend.fitchallenge.global.batch.scheduler;
 
 import com.backend.fitchallenge.global.config.BatchConfig;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class JobScheduler {
     private final JobLauncher jobLauncher;
     private final BatchConfig batchConfig;
 
-    @Scheduled(cron="0/5 * * * * *")
+    @Scheduled(cron="0/30 * * * * *")
     public void runJob(){
 
         Map<String, JobParameter> confMap = new HashMap<>();
@@ -33,6 +33,7 @@ public class JobScheduler {
         try {
 
             jobLauncher.run(batchConfig.calRankJob(), jobParameters);
+            jobLauncher.run(batchConfig.notificationJob(), jobParameters);
 
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
                  | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {

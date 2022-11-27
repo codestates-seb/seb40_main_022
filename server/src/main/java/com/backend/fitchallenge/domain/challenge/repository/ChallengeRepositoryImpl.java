@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.backend.fitchallenge.domain.challenge.entity.QChallenge.*;
@@ -36,6 +37,14 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom{
         return jpaQueryFactory.select(challenge)
                 .from(challenge)
                 .where(challenge.challengeStatus.eq(Challenge.ChallengeStatus.ONGOING))
+                .fetch();
+    }
+
+    @Override
+    public List<Challenge> findAllByEndDateAndStatus(LocalDate endDate) {
+        return jpaQueryFactory.selectFrom(challenge)
+                .where(challenge.challengeStatus.eq(Challenge.ChallengeStatus.ONGOING),
+                        challenge.challengeEnd.eq(endDate))
                 .fetch();
     }
 }
