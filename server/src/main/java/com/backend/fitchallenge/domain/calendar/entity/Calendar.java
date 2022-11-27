@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.calendar.entity;
 
 import com.backend.fitchallenge.domain.calendar.util.CalendarId;
+import com.backend.fitchallenge.domain.record.entity.Record;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

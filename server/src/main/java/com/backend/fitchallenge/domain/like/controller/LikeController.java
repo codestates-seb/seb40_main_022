@@ -26,6 +26,7 @@ public class LikeController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PostMapping("/undo")
     public ResponseEntity<?> cancel(
             @PathVariable("id") Long postId,
@@ -35,5 +36,4 @@ public class LikeController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

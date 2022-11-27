@@ -1,15 +1,19 @@
 package com.backend.fitchallenge.domain.challenge.repository;
 
 import com.backend.fitchallenge.domain.challenge.entity.Challenge;
-import com.backend.fitchallenge.domain.challenge.entity.QChallenge;
+import com.backend.fitchallenge.domain.member.entity.QMember;
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.backend.fitchallenge.domain.challenge.entity.QChallenge.*;
+import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,4 +37,40 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom{
                 .execute();
     }
 
+    @Override
+    public List<Challenge> findAllByEndDateAndStatus(LocalDate endDate) {
+        return jpaQueryFactory.selectFrom(challenge)
+                .where(challenge.challengeStatus.eq(Challenge.ChallengeStatus.ONGOING),
+                        challenge.challengeEnd.eq(endDate))
+                .fetch();
+    }
+
+    @Override
+    public List<Tuple> findChallengeAndMembers(LocalDate endDate) {
+        QMember applicant = new QMember("applicant");
+        QMember counterpart = new QMember("counterpart");
+
+        return jpaQueryFactory
+                .select(challenge,
+                        JPAExpressions
+                                .selectFrom(applicant)
+                                .where(applicant.id.eq(challenge.applicantId))
+                        ,
+                        JPAExpressions
+                                .selectFrom(counterpart)
+                                .where(counterpart.id.eq(challenge.counterpartId))
+                )
+                .from(member)
+                .join(member.challenge, challenge).fetchJoin()
+                .where(challenge.challengeStatus.eq(Challenge.ChallengeStatus.ONGOING))
+                .fetch();
+    }
+
+    @Override
+    public List<Challenge> ongoingChallenges(){
+        return jpaQueryFactory.select(challenge)
+                .from(challenge)
+                .where(challenge.challengeStatus.eq(Challenge.ChallengeStatus.ONGOING))
+                .fetch();
+    }
 }

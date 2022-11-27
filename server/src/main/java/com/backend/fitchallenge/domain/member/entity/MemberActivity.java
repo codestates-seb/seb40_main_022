@@ -22,7 +22,7 @@ public class MemberActivity {
     private Integer dayCount = 0;
 
     @Column(name = "POINT")
-    private Double point = 0.0;
+    private Double point = 0.0D;
 
     @Builder
     private MemberActivity(Integer kilogram, Integer dayCount, Double point) {
@@ -36,7 +36,14 @@ public class MemberActivity {
                 .build();
     }
 
-    public void updatePoint(double point) {
+    public void updatePointAndDayCount(double point, int dayCount){
+
+        this.point += point;
+        this.dayCount += dayCount;
+    }
+
+    public void updatePoint(double point){
         this.point += point;
     }
+
 }

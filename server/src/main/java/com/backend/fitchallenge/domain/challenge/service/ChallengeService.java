@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.challenge.service;
 
 import com.backend.fitchallenge.domain.challenge.dto.request.RankingCondition;
+import com.backend.fitchallenge.domain.challenge.dto.response.ChallengeResponse;
 import com.backend.fitchallenge.domain.challenge.dto.response.MultiRankingResponse;
 import com.backend.fitchallenge.domain.challenge.dto.response.RankingResponse;
 import com.backend.fitchallenge.domain.challenge.entity.Challenge;
@@ -48,14 +49,27 @@ public class ChallengeService {
 
         Challenge challenge = challengeRepository.save(Challenge.toEntity(memberId,counterpartId));
 
-        Member applicant = memberService.findVerifiedMemberById(memberId);
+        Member applicant = memberService.findMemberById(memberId);
 
-        Member counterpart = memberService.findVerifiedMemberById(counterpartId);
+        Member counterpart = memberService.findMemberById(counterpartId);
 
         // 상대방에게 알림 전송
         notificationService.send(counterpart, challenge, applicant.getUsername()+"님이 챌린지를 신청하셨습니다.");
 
         return challenge.getId();
+    }
+
+    public ChallengeResponse getChallenge(Long memberId, Long challengeId) {
+
+        Challenge challenge = findChallenge(challengeId);
+
+        if (memberId != challenge.getCounterpartId() && memberId != challenge.getApplicantId()) {
+            throw new ChallengeNotFound();
+        }
+        Member counterpart = memberService.findMemberById(challenge.getCounterpartId());
+        Member applicant = memberService.findMemberById(challenge.getApplicantId());
+
+        return ChallengeResponse.of(applicant, counterpart);
     }
 
     /**
@@ -66,7 +80,7 @@ public class ChallengeService {
     public MultiRankingResponse search(Long memberId, RankingCondition condition, Pageable pageable) {
 
 
-        Member member = memberService.findVerifiedMemberById(memberId);
+        Member member = memberService.findMemberById(memberId);
 
         boolean myChallengeStatus = Optional.ofNullable(member.getChallenge()).isPresent();
 
@@ -76,23 +90,17 @@ public class ChallengeService {
                 .map(rankingDto -> {
                     boolean challengeStatus = Optional.ofNullable(rankingDto.getChallengeId()).isPresent();
                     if (challengeStatus) {
-                        return RankingResponse.toResponse(rankingDto, findChallenge(rankingDto.getChallengeId()).getChallengeEnd());
+                        return RankingResponse.of(rankingDto, findChallenge(rankingDto.getChallengeId()).getChallengeEnd());
                     } else {
-                        return RankingResponse.toResponse(rankingDto);
+                        return RankingResponse.of(rankingDto);
                     }
                 }).collect(Collectors.toList());
 
 
 
-        return MultiRankingResponse.of(new PageImpl<>(responses,pageable,total),myChallengeStatus);
+        return MultiRankingResponse.withLogin(new PageImpl<>(responses,pageable,total),myChallengeStatus);
     }
 
-
-    /**
-     * @param condition
-     * @param pageable
-     * @return
-     */
     public MultiRankingResponse<?> searchWithoutLogin(RankingCondition condition, Pageable pageable) {
 
         Long total = memberRepository.pagingCount(condition, pageable);
@@ -101,9 +109,9 @@ public class ChallengeService {
                 .map(rankingDto -> {
                     boolean challengeStatus = Optional.ofNullable(rankingDto.getChallengeId()).isPresent();
                     if (challengeStatus) {
-                        return RankingResponse.toResponse(rankingDto, findChallenge(rankingDto.getChallengeId()).getChallengeEnd());
+                        return RankingResponse.of(rankingDto, findChallenge(rankingDto.getChallengeId()).getChallengeEnd());
                     } else {
-                        return RankingResponse.toResponse(rankingDto);
+                        return RankingResponse.of(rankingDto);
                     }
                 }).collect(Collectors.toList()),pageable,total);
 
@@ -112,7 +120,7 @@ public class ChallengeService {
 
     /**
      * 챌린지 수락
-     * 로그인 유저가 counterpart인경우만가능
+     * 로그인 유저가 counterpart인 경우만 가능
      * 로그인 유저가 현재 챌린지를 진행중인지 체크
      * start()메서드 - 챌린지 상태를 OnGoing으로 바꾸고 각 member에게 챌린지 추가
      * 챌린저들이 이전에 제안을 하거나 받은 제안들 삭제
@@ -123,8 +131,8 @@ public class ChallengeService {
 
         Challenge challenge = findChallenge(challengeId);
         //로그인 유저가 counterpart인경우만 수락가능
-        Member counterpart = memberService.findVerifiedMemberById(memberId);
-        Member applicant = memberService.findVerifiedMemberById(challenge.getApplicantId());
+        Member counterpart = memberService.findMemberById(memberId);
+        Member applicant = memberService.findMemberById(challenge.getApplicantId());
 
 
         if (challenge.getCounterpartId() == memberId && isEmpty(counterpart.getChallenge())) {
@@ -154,8 +162,8 @@ public class ChallengeService {
      */
     public void refuse(Long memberId, Long challengeId) {
         Challenge challenge = findChallenge(challengeId);
-        Member counterpart = memberService.findVerifiedMemberById(memberId);
-        Member applicant = memberService.findVerifiedMemberById(challenge.getApplicantId());
+        Member counterpart = memberService.findMemberById(memberId);
+        Member applicant = memberService.findMemberById(challenge.getApplicantId());
         //로그인 유저가 counterpart인경우만 거절가능
         if (challenge.getCounterpartId() == memberId && isEmpty(counterpart.getChallenge())) {
 
@@ -189,11 +197,11 @@ public class ChallengeService {
 
         if (LocalDate.now() == challenge.getModifiedAt().toLocalDate()) {
 
-            Member applicant = memberService.findVerifiedMemberById(challenge.getApplicantId());
+            Member applicant = memberService.findMemberById(challenge.getApplicantId());
             applicant.suspendChallenge();
             notificationService.send(applicant, challenge, "챌린지가 중단되었습니다.");
 
-            Member counterpart = memberService.findVerifiedMemberById(challenge.getCounterpartId());
+            Member counterpart = memberService.findMemberById(challenge.getCounterpartId());
             counterpart.suspendChallenge();
             notificationService.send(counterpart, challenge, "챌린지가 중단되었습니다.");
 
@@ -208,8 +216,8 @@ public class ChallengeService {
 
 
             //시작 후 3일 이후의 중도포기
-            memberService.findVerifiedMemberById(challenge.getApplicantId()).suspendChallenge();
-           memberService.findVerifiedMemberById(challenge.getCounterpartId()).suspendChallenge();
+            memberService.findMemberById(challenge.getApplicantId()).suspendChallenge();
+           memberService.findMemberById(challenge.getCounterpartId()).suspendChallenge();
 
             challengeRepository.delete(challenge);
              return challenge.getId();
@@ -223,7 +231,4 @@ public class ChallengeService {
     private Challenge findChallenge(Long challengeId) {
         return challengeRepository.findById(challengeId).orElseThrow(ChallengeNotFound::new);
     }
-
-
-
 }

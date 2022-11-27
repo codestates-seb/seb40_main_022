@@ -63,7 +63,7 @@ public class OAuth2DetailsService implements OAuth2UserService<OAuth2UserRequest
                 .email(email)
                 .username(name)
                 .build();
-        Member member = memberCreate.toMember();
+        Member member = memberCreate.toEntity();
 
         memberRepository.save(member);
     }

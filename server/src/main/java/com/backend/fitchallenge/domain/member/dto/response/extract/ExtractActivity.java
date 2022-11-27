@@ -10,14 +10,12 @@ public class ExtractActivity{
     private Integer kilogram;
     private Integer dayCount;
     private Double point;
-    private Integer rank;
 
     @Builder
-    private ExtractActivity(Integer kilogram, Integer dayCount, Double point, Integer rank) {
+    private ExtractActivity(Integer kilogram, Integer dayCount, Double point) {
         this.kilogram = kilogram;
         this.dayCount = dayCount;
         this.point = point;
-        this.rank = rank;
     }
 
     public static ExtractActivity of(MemberActivity memberActivity){
@@ -25,7 +23,6 @@ public class ExtractActivity{
                 .kilogram(memberActivity.getKilogram() == null ? '0' : memberActivity.getKilogram())
                 .dayCount(memberActivity.getDayCount())
                 .point(memberActivity.getPoint())
-//                .rank(memberActivity.getRank())
                 .build();
     }
 }

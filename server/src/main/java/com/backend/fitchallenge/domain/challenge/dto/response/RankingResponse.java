@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,7 +41,7 @@ public class RankingResponse {
 
 
 
-    public static RankingResponse toResponse(RankingDto rankingDto) {
+    public static RankingResponse of(RankingDto rankingDto) {
         return RankingResponse.builder()
                 .memberId(rankingDto.getMemberId())
                 .userName(rankingDto.getUserName())
@@ -57,7 +55,7 @@ public class RankingResponse {
 
     }
 
-    public static RankingResponse toResponse(RankingDto rankingDto,LocalDate challengeEnd) {
+    public static RankingResponse of(RankingDto rankingDto, LocalDate challengeEnd) {
         return RankingResponse.builder()
                 .memberId(rankingDto.getMemberId())
                 .userName(rankingDto.getUserName())
@@ -71,5 +69,4 @@ public class RankingResponse {
                 .build();
 
     }
-
 }

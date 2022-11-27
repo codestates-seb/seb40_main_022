@@ -5,6 +5,7 @@ import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.member.dto.request.MemberUpdateVO;
+import com.backend.fitchallenge.domain.record.entity.Record;
 import com.backend.fitchallenge.global.audit.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -79,6 +80,9 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> records = new ArrayList<>();
 
     @Builder(builderMethodName = "createBuilder")
     public Member(String email, String password, String username, ProfileImage profileImage) {
