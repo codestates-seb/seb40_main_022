@@ -40,7 +40,7 @@ public class MemberController {
     }
 
     //회원 정보 수정
-    @PatchMapping("/myPage")
+    @PostMapping("/myPage")
     public ResponseEntity update(@AuthMember MemberDetails memberDetails,
                                  MemberUpdateVO memberUpdateVO){ //todo. requestbody 때기 - checked
 

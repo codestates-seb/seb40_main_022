@@ -3,6 +3,7 @@ package com.backend.fitchallenge.global.security.userdetails;
 
 import com.backend.fitchallenge.domain.member.dto.request.MemberCreate;
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.backend.fitchallenge.domain.member.entity.ProfileImage;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.global.security.oauth2.GoogleUserInfo;
@@ -17,6 +18,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * OAuth2로 부터 가져온 유저 정보로 MemberDetail을 생성하는 클래스
@@ -59,11 +61,18 @@ public class OAuth2DetailsService implements OAuth2UserService<OAuth2UserRequest
 
 
     private void saveMember(String email, String name) {
+
+        ProfileImage profileImage = ProfileImage.createWithPath(
+                "https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png");
         MemberCreate memberCreate = MemberCreate.builder()
                 .email(email)
                 .username(name)
+                .password(UUID.randomUUID().toString())
                 .build();
+
         Member member = memberCreate.toEntity();
+        member.oauth2Update(profileImage);
+        profileImage.setMember(member);
 
         memberRepository.save(member);
     }
