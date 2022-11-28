@@ -7,7 +7,11 @@ import Header from '../../components/header/Header';
 import rcddetailbtn from '../../images/rcddetailbtn.png';
 import rcddecordminus from '../../images/rcddecordminus.png';
 import DetailCamera from '../../images/DetailCamera.png';
-import { RecordTagAsync, RecordUpAsync } from '../../redux/action/RecordAsync';
+import {
+  RecordTagAsync,
+  RecordUpAsync,
+  RecordListAsync,
+} from '../../redux/action/RecordAsync';
 
 function Detail() {
   const list = [
@@ -20,15 +24,16 @@ function Detail() {
   ];
   const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
   const taghealth1 = useSelector(state => state.record.data.data);
-  console.log(taghealth1);
-
+  const List = useSelector(state => state);
+  console.log(List);
   const navigate = useNavigate();
   const photoUp = useRef();
-  const [health, setHealth] = useState('풀업');
+  const [health, setHealth] = useState(null);
   const [tags, setTags] = useState('등');
-  const [set, setSet] = useState('');
-  const [num, setNum] = useState('');
-  const [weight, setWeight] = useState('');
+  const [set, setSet] = useState(null);
+  const [num, setNum] = useState(null);
+  const [weight, setWeight] = useState(null);
+  const [split, setSplit] = useState([]);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const today = new Date().toISOString().slice(0, 10);
@@ -37,7 +42,7 @@ function Detail() {
   const [realImg, setRealImg] = useState([]);
   const reader = new FileReader();
   const dispatch = useDispatch();
-
+  console.log(health, today);
   const handleFile = e => {
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
@@ -57,22 +62,65 @@ function Detail() {
     dispatch(RecordTagAsync(tags));
   };
   const handleAddClick = () => {
-    const Healthdata = [
-      startTime,
-      endTime,
-      today,
-      health,
-      set,
-      num,
-      weight,
-      tags,
-      files,
-    ];
-    console.log(Healthdata);
-    dispatch(RecordUpAsync(Healthdata));
+    if (set.length !== 0 && num.length !== 0 && weight.length !== 0) {
+      setSplit([...split, { id: 22, set, count: num, weight }]);
+    } else {
+      alert('데이터를 제대로 입력해주세요!');
+    }
+  };
+  const handleUp = () => {
+    if (
+      split.length !== 0 &&
+      startTime.length !== 0 &&
+      endTime.length !== 0 &&
+      files.length !== 0
+    ) {
+      const formdata = new FormData();
+      const sports = [
+        {
+          id: 10,
+          set: 10,
+          count: 10,
+          weight: 10,
+        },
+        {
+          id: 10,
+          set: 10,
+          count: 10,
+          weight: 10,
+        },
+        {
+          id: 10,
+          set: 10,
+          count: 10,
+          weight: 10,
+        },
+      ];
+      // const redata = [today, startTime, endTime];
+      formdata.append('start', today.toString());
+      formdata.append('startTime', startTime);
+      formdata.append('endTime', endTime);
+      formdata.append('startImage', files[0]);
+      formdata.append('endImage', files[1]);
+      formdata.append(
+        'recordCreateVO',
+        new Blob([JSON.stringify({ sports })], { type: 'application/json' }),
+      );
+      // for (let i = 0; i < split.length; i += 1) {
+      //   formdata.append(`sports[${i}].id`, split[i].id);
+      //   formdata.append(`sports[${i}].set`, split[i].set);
+      //   formdata.append(`sports[${i}].count`, split[i].count);
+      //   formdata.append(`sports[${i}].weight`, split[i].weight);
+      //   formdata.append(`sports[${i}]`, JSON.stringify(split[i]));
+      // }
+      dispatch(RecordUpAsync(formdata));
+    } else {
+      alert('데이터를 제대로 입력해주세요!');
+    }
   };
   useEffect(() => {
     dispatch(RecordTagAsync(tags));
+    dispatch(RecordListAsync());
   }, []);
   return (
     <DetailBox>
@@ -157,7 +205,10 @@ function Detail() {
                   <span className="title">운동</span>
                   <select
                     onChange={e => {
-                      setHealth(e.target.value);
+                      const Id = taghealth1.filter(
+                        data => data.name === e.target.value,
+                      );
+                      setHealth(Id[0].sportsId);
                     }}
                   >
                     {taghealth1 &&
@@ -176,7 +227,7 @@ function Detail() {
                 <input
                   id="set"
                   placeholder="숫자만 적어주세요."
-                  onChange={e => setSet(e.target.value)}
+                  onChange={e => setSet(+e.target.value)}
                 />
               </div>
               <div className="Inselect">
@@ -186,7 +237,7 @@ function Detail() {
                 <input
                   id="set"
                   placeholder="숫자만 적어주세요."
-                  onChange={e => setNum(e.target.value)}
+                  onChange={e => setNum(+e.target.value)}
                 />
               </div>
             </div>
@@ -198,7 +249,7 @@ function Detail() {
                 <input
                   id="set"
                   placeholder="숫자만 적어주세요."
-                  onChange={e => setWeight(e.target.value)}
+                  onChange={e => setWeight(+e.target.value)}
                 />
               </div>
               <button
@@ -239,7 +290,9 @@ function Detail() {
             })}
         </section>
         <section className="subcan">
-          <button className="submit">등록</button>
+          <button className="submit" onClick={() => handleUp()}>
+            등록
+          </button>
           <button
             className="cancle"
             onClick={() => {
