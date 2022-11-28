@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const MypageEditGet = createAsyncThunk('/mypage/edit', data => {
+export const MypageEditGet = createAsyncThunk('/mypage/edit', () => {
   const Mylist = axios
     .get('/members/myPage', {
       headers: {
-        Authorization: data[0],
-        RefreshToken: data[1],
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
       },
     })
     .then(res => {
@@ -16,7 +16,7 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', data => {
   return Mylist;
 });
 
-export const MypagePatch = createAsyncThunk('/myPage/edit', data => {
+export const MypagePost = createAsyncThunk('/myPage/edit', data => {
   axios
     .post('/members/myPage', data, {
       headers: {

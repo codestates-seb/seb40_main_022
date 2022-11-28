@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { MypageEditGet, MypagePatch } from '../action/MypageEditAsync';
+import { MypageEditGet, MypagePost } from '../action/MypageEditAsync';
 
 const MypageEditSlice = createSlice({
   name: 'mypageedit',
@@ -11,7 +11,7 @@ const MypageEditSlice = createSlice({
     [MypageEditGet.fulfilled]: (state, action) => {
       state.data = action.payload;
     },
-    [MypagePatch.fulfilled]: (state, action) => {
+    [MypagePost.fulfilled]: (state, action) => {
       state.comment = action.payload;
     },
   },
