@@ -11,6 +11,7 @@ import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.global.annotation.AuthMember;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class RecordController {
 
     private final RecordService recordService;
@@ -27,8 +29,8 @@ public class RecordController {
 
     @PostMapping("/records")
     public ResponseEntity<Long> create(@AuthMember MemberDetails memberDetails,
-                                       RecordCreateVO recordCreateVO) {
-
+                                       @RequestBody RecordCreateVO recordCreateVO) {
+        log.info("start: {}", recordCreateVO.getStart());
         return ResponseEntity.ok(recordService.createRecord(memberDetails.getMemberId(), recordCreateVO));
     }
 
