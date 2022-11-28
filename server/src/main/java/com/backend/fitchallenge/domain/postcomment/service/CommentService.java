@@ -38,12 +38,10 @@ public class CommentService {
     private final QueryCommentRepository queryCommentRepository;
     private final MemberRepository memberRepository;
 
-    //댓글 생성
     public Long createComment(Long postId, Long memberId, CommentCreate commentCreate) {
         Post post = postService.findPostById(postId);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
 
-        // Dto -> toEntity
         PostComment postComment = commentCreate.toEntity(post, member);
 
         return commentRepository.save(postComment).getId();
@@ -57,43 +55,31 @@ public class CommentService {
      */
     public SliceMultiResponse<?> getCommentList(Long postId, Long lastCommentId, Pageable pageable) {
 
-        // postComment 목록 조회
         List<CommentResponse> commentResponses = queryCommentRepository.findPostComments(postId, lastCommentId, pageable).stream()
                 .map(postComment -> CommentResponse.toResponse(postComment, postComment.getMember()))
                 .collect(Collectors.toList());
 
-        //무한 스크롤 처리
         Slice<CommentResponse> result = checkLastPage(commentResponses, pageable);
 
         return SliceMultiResponse.of(result);
     }
 
-    /**
-     *댓글 수정
-     * 로그인 유저가 댓글 작성자인지 체크
-     * @return 수정된 댓글 정보
-     */
+
     public CommentUpdateResponse updateComment(Long commentId, Long memberId, CommentUpdate commentUpdate) {
         PostComment postComment = findCommentById(commentId);
 
-        // 로그인 유저가 댓글 작성자인지 체크
         if (postComment.getMember().getId() != memberId) {
             throw new CannotUpdateComment();
         }
-        //댓글 수정
         postComment.patch(commentUpdate);
        return CommentUpdateResponse.toResponse(postComment);
     }
 
-    /**
-     * 댓글 삭제
-     * 로그인 유저가 댓글 작성자인지 체크
-     */
+
     public void deleteComment(Long commentId, Long memberId) {
 
         PostComment postComment = findCommentById(commentId);
 
-        // 로그인 유저가 댓글 작성자인지 체크
         if (postComment.getMember().getId() != memberId) {
             throw new CannotDeleteComment();
         }
@@ -101,20 +87,18 @@ public class CommentService {
         commentRepository.delete(postComment);
     }
 
-    //댓글 조회
+
     private PostComment findCommentById(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(CommentNotFound::new);
     }
 
-    //무한 스크롤 페이지 처리
+
     private Slice<CommentResponse> checkLastPage(List<CommentResponse> commentResponses, Pageable pageable ) {
 
         boolean hasNext = false;
 
-        //조회 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
         if (commentResponses.size() > pageable.getPageSize()) {
             hasNext = true;
-            // 확인용으로 추가한데이터 remove
             commentResponses.remove(pageable.getPageSize());
         }
 

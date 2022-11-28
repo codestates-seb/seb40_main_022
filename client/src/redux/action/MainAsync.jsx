@@ -1,10 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// 게시글 create
 export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
-  for (const pair of formData.entries()) {
-    console.log(`${pair[0]}, ${pair[1]}`);
-  }
   axios
     .post('/dailyPosts', formData, {
       headers: {
@@ -21,13 +19,14 @@ export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
     });
 });
 
+// 게시글 update
 export const asyncPostUpdate = createAsyncThunk(
   'list/update',
-  ({ formData }, editId) => {
-    // for (const pair of formData.entries()) {
-    //   console.log(`${pair[0]}, ${pair[1]}`);
-    // }
-    // console.log(editId);
+  ({ formData, editId }) => {
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    }
+    console.log(editId);
     axios.post(`/dailyPosts/${editId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -38,16 +37,17 @@ export const asyncPostUpdate = createAsyncThunk(
   },
 );
 
-export const asyncPost = createAsyncThunk('post', (ac, re) => {
+// 게시글 read
+export const asyncPost = createAsyncThunk('post', () => {
   const data = axios
     .get(
-      '/dailyPosts',
-      // 'http://localhost:3001/dailypost',
+      // `/dailyPosts?lastPostId=${lastPostId}`,
+      `/dailyPosts`,
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: ac,
-          RefreshToken: re,
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
         },
       },
     )
@@ -55,6 +55,32 @@ export const asyncPost = createAsyncThunk('post', (ac, re) => {
       return res.data;
     });
   return data;
+});
+
+export const asyncPostScroll = createAsyncThunk('post', lastPostId => {
+  console.log(lastPostId);
+  const data = axios
+    .get(`/dailyPosts?lastPostId=${lastPostId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => {
+      return res.data;
+    });
+  return data;
+});
+
+// 게시글 delete
+export const asyncPostDel = createAsyncThunk('post/del', async postId => {
+  axios.delete(`/dailyPosts/${postId}`, {
+    headers: {
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });
 
 export const asyncLike = createAsyncThunk('post/up', postId => {
@@ -85,60 +111,66 @@ export const asyncLikeundo = createAsyncThunk('post/up', postId => {
   );
 });
 
-export const asyncPostDel = createAsyncThunk('post/del', async postId => {
-  axios.delete(`/dailyPosts/${postId}`, {
-    headers: {
-      Authorization: localStorage.getItem('Authorization'),
-      RefreshToken: localStorage.getItem('RefreshToken'),
-    },
-  });
-});
-
-export const asyncPostCmt = createAsyncThunk('comment', (id, ac, re) => {
+// 댓글 read
+export const asyncPostCmt = createAsyncThunk('comment', index => {
   const data = axios
-    .get(
-      // `/dailyposts/${id}/comments`,
-      `http://localhost:3001/comment`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: ac,
-          RefreshToken: re,
-        },
+    .get(`/dailyPosts/${index}/comments`, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+    })
     .then(res => {
+      // console.log(res);
       return res.data;
     });
-
   return data;
 });
 
-export const asyncPostCmtUp = createAsyncThunk('post/up', (data, ac, re) => {
-  axios.post(
-    `http:/localhost:3001/comment`,
-    JSON.stringify({
-      contentId: data[0],
-      content: data[1],
-      // memberId: data[2],
-      // userName: data[3],
-      // profileImage: data[4],
-      // isBol: false,
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: ac,
-        RefreshToken: re,
-      },
-    },
-  );
-});
+// 댓글 create
+export const asyncPostCmtUp = createAsyncThunk(
+  'post/up',
+  ({ answervalue, index }) => {
+    // console.log(answervalue, index);
+    axios
+      .post(
+        `/dailyPosts/${index}/comments`,
+        JSON.stringify({
+          content: answervalue,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: localStorage.getItem('Authorization'),
+            RefreshToken: localStorage.getItem('RefreshToken'),
+          },
+        },
+      )
+      .then(res => {
+        window.location.reload();
+        console.log(res);
+      });
+  },
+);
 
-export const asyncPostCmtDel = createAsyncThunk('post/del', id => {
-  axios.delete(`http://localhost:3001/comment/${id}`);
-});
+// 댓글 delete
+export const asyncPostCmtDel = createAsyncThunk(
+  'post/del',
+  ({ index, commentId }) => {
+    axios
+      .delete(`/dailyPosts/${index}/comments/${commentId}`, {
+        headers: {
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
+      })
+      .then(res => {
+        window.location.reload();
+        console.log(res);
+      });
+  },
+);
 
+// 댓글 update
 export const asyncPostCmtEdit = createAsyncThunk(
   'post/up',
   (id, data, ac, re) => {

@@ -8,7 +8,7 @@ import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.service.QuestionService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
-import com.backend.fitchallenge.global.dto.request.PageRequest;
+import com.backend.fitchallenge.domain.question.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,17 +49,12 @@ public class QuestionController {
     @GetMapping("/questions")
     public ResponseEntity<MultiResponse<?>> list(PageRequest pageable) {
 
-        pageable.setDynamicSort();
-        log.info("sortBy: {}", pageable.getSortBy());
-        log.info("sort: {}", pageable.getSortBy());
-
         return ResponseEntity.ok(questionService.getQuestionList(pageable));
     }
 
     @GetMapping("/questions/search")
     public ResponseEntity<MultiResponse<?>> searchList(PageRequest pageable,
                                                        @ModelAttribute QuestionSearchQuery questionSearchQuery) {
-        pageable.setDynamicSort();
 
         QuestionSearch questionSearch = questionSearchQuery.queryParsing();
         log.info("query: {}", questionSearch.getQuery());

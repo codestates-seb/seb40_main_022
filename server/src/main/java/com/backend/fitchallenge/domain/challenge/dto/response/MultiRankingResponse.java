@@ -2,7 +2,6 @@ package com.backend.fitchallenge.domain.challenge.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class MultiRankingResponse<T> {
     }
 
 
-    public static MultiRankingResponse<?> of(Page<?> responses, Boolean myChallengeStatus) {
+    public static MultiRankingResponse<?> withLogin(Page<?> responses, Boolean myChallengeStatus) {
         return new MultiRankingResponse<>(responses, myChallengeStatus);
 
     }

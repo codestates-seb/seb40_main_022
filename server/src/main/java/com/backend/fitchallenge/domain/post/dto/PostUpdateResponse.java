@@ -23,7 +23,7 @@ public class PostUpdateResponse {
         this.imagePaths = imagePaths;
     }
 
-    public static PostUpdateResponse toResponse(Post post) {
+    public static PostUpdateResponse of(Post post) {
       return  PostUpdateResponse.builder()
                 .postId(post.getId())
                 .content(post.getContent())

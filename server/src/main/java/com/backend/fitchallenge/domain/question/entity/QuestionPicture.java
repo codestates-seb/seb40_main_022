@@ -1,7 +1,5 @@
 package com.backend.fitchallenge.domain.question.entity;
 
-import com.backend.fitchallenge.domain.post.entity.Picture;
-import com.backend.fitchallenge.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +29,7 @@ public class QuestionPicture {
         this.question = question;
     }
 
-    public static void createPicture(String path, Question question) {
+    public static void create(String path, Question question) {
         QuestionPicture picture = QuestionPicture.builder()
                 .path(path)
                 .question(question)
@@ -40,7 +38,7 @@ public class QuestionPicture {
         question.getQuestionPictures().add(picture);
     }
 
-    public static QuestionPicture withEmptyPath() {
+    public static QuestionPicture createWithEmptyPath() {
         return QuestionPicture.builder().path("").build();
     }
 }

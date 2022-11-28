@@ -42,7 +42,7 @@ public class AwsS3Service {
     public List<String> StoreFile(List<MultipartFile> files) {
 
         //파일 유무 체크
-        validateFileExists(files);
+        isFileExist(files);
 
         //반환할 이미지 저장경로 리스트
         List<String> imagePathList = new ArrayList<>();
@@ -79,7 +79,7 @@ public class AwsS3Service {
      */
     public List<String> UpdateFile(List<String> paths,List<MultipartFile> files) {
 
-        validateFileExists(files);
+        isFileExist(files);
 
         //S3에서 이미지 경로에 해당하는 파일 있는지 조회
         for (String path : paths) {
@@ -130,7 +130,7 @@ public class AwsS3Service {
     }
 
     // 파일 유무 체크
-    private void validateFileExists(List<MultipartFile> files) {
+    private void isFileExist(List<MultipartFile> files) {
         if (files.isEmpty()) {
             throw new NoImage();
         }

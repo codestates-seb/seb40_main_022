@@ -18,7 +18,6 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-
     /**
      * 로그인 한 유저 sse 연결
      * @param memberDetails 로그인 세션정보
@@ -38,7 +37,7 @@ public class NotificationController {
      * 로그인 한 유저의 모든 알림 조회
      */
     @GetMapping("/notifications")
-    public ResponseEntity<?> notifacations(@AuthMember MemberDetails memberDetails) {
+    public ResponseEntity<?> notificationList(@AuthMember MemberDetails memberDetails) {
         return new ResponseEntity<>(notificationService.findAllById(memberDetails.getMemberId()),HttpStatus.OK);
     }
 

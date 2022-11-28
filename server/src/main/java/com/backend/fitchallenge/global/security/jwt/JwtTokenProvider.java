@@ -80,9 +80,6 @@ public class JwtTokenProvider {
         return expiration.getTime() - now;
     }
 
-
-
-
     //accessToken 생성방법
     public String accessTokenAssembly(Map<String, Object> claims,
                                       String subject,
@@ -152,20 +149,6 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(jws);
             return claimsJws;
-        }
-        catch(JwtException e){
-            throw new TokenNotValid();
-        }
-    }
-
-    public void verifyClaims(String jws) {
-        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
-
-        try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(jws);
         }
         catch(JwtException e){
             throw new TokenNotValid();

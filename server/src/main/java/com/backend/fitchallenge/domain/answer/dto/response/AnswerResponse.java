@@ -16,6 +16,8 @@ import java.util.List;
 @Getter
 public class AnswerResponse {
 
+    private Long answerId;
+
     private String content;
 
     private Boolean accepted;
@@ -29,12 +31,14 @@ public class AnswerResponse {
     private List<AnswerCommentResponse> comments;
 
     @Builder
-    private AnswerResponse(String content,
+    private AnswerResponse(Long answerId,
+                           String content,
                            boolean isAccepted,
                            LocalDateTime createdAt,
                            LocalDateTime modifiedAt,
                            MemberResponse answerWriter,
                            List<AnswerCommentResponse> comments) {
+        this.answerId = answerId;
         this.content = content;
         this.accepted = isAccepted;
         this.createdAt = createdAt;
@@ -45,6 +49,7 @@ public class AnswerResponse {
 
     public static AnswerResponse of(Answer answer, List<AnswerCommentResponse> comments) {
         return AnswerResponse.builder()
+                .answerId(answer.getId())
                 .content(answer.getContent())
                 .isAccepted(answer.isAccepted())
                 .createdAt(answer.getCreatedAt())

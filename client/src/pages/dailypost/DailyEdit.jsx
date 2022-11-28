@@ -1,16 +1,15 @@
 import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
-// import { asyncPostUpdate } from '../../redux/action/MainAsync';
+import { asyncPostUpdate } from '../../redux/action/MainAsync';
 
 function DailyEdit() {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const Id = useParams();
   const photoUp = useRef();
   const selectdata = useSelector(state => state.dailypost.data.items);
@@ -88,14 +87,7 @@ function DailyEdit() {
       content.length >= 10 &&
       tagList.length !== 0
     ) {
-      await axios.post(`dailyPosts/${editId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: localStorage.getItem('Authorization'),
-          RefreshToken: localStorage.getItem('RefreshToken'),
-        },
-      });
-      // dispatch(asyncPostUpdate({ formData }, editId));
+      dispatch(asyncPostUpdate({ formData, editId }));
       // navigate('/');
     } else if (files.length === 0) alert('이미지를 업로드해주세요');
     else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
