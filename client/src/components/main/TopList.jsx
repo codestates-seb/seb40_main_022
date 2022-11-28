@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import daily from '../../images/daily.jpg';
 import dailyAdd from '../../images/daily_add.svg';
@@ -7,12 +7,21 @@ import { Top, Content } from './MainStyle';
 export default function TopList() {
   // const member = useSelector(state => state.mypage.member);
   const data = useSelector(state => state.dailypost.data.items);
+  // const ac = localStorage.getItem('Authorization');
+  const navigate = useNavigate();
+
+  const newPost = () => {
+    // if (!ac) {
+    //   alert('로그인 후 이용할 수 있습니다.');
+    // } else {
+    navigate('/dailypost');
+    // }
+  };
 
   return (
     <Top>
       {data &&
         data.map(list => {
-          console.log(list.member.profileImage);
           return (
             <Content>
               <div className="imgprofile">
@@ -30,11 +39,9 @@ export default function TopList() {
           );
         })}
       <Content>
-        <Link to="/dailypost">
-          <div className="imgprofile dailynew">
-            <img src={dailyAdd} alt="dailyAdd" />
-          </div>
-        </Link>
+        <button className="imgprofile dailynew" onClick={() => newPost()}>
+          <img src={dailyAdd} alt="dailyAdd" />
+        </button>
         <span>새 게시물</span>
       </Content>
     </Top>
