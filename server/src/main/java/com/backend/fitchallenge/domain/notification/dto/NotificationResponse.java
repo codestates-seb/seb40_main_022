@@ -31,7 +31,7 @@ public class NotificationResponse {
         this.read = read;
     }
 
-    public static NotificationResponse from(Notification notification) {
+    public static NotificationResponse of(Notification notification) {
         return NotificationResponse.builder()
                 .id(notification.getId())
                 .content(notification.getContent())

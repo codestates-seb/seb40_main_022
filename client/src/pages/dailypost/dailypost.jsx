@@ -60,11 +60,11 @@ const dailypost = () => {
   };
 
   const deleteFile = index => {
+    const uploadImgArr = [...files].filter((el, idx) => idx !== index);
+    setFiles([...uploadImgArr]);
+
     const imgArr = imgBase64.filter((el, idx) => idx !== index);
     setImgBase64([...imgArr]);
-
-    const uploadImgArr = files.filter((el, idx) => idx !== index);
-    setFiles([...uploadImgArr]);
   };
 
   const handleSubmit = () => {

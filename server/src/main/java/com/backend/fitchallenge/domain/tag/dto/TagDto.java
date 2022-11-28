@@ -10,15 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TagDto {
 
-
     private String name;
-
 
     public TagDto(String name) {
         this.name = name;
     }
 
-    public  Tag toTag() {
+    public  Tag toEntity() {
         return Tag.of(name);
     }
 }

@@ -35,32 +35,32 @@ public class AnswerCommentService {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(AnswerNotFound::new);
 
-        return answerCommentRepository.save(AnswerComment.createAnswerComment(answerCommentCreate, answer, member)).getId();
+        return answerCommentRepository.save(AnswerComment.toEntity(answerCommentCreate, answer, member)).getId();
     }
 
     public Long updateAnswerComment(Long memberId, Long answerCommentId, AnswerCommentUpdate answerCommentUpdate) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
-        AnswerComment findAnswerComment = findVerifiedAnswerComment(answerCommentId);
-        verifyWriter(member.getId(), findAnswerComment);
+        AnswerComment answerComment = findAnswerComment(answerCommentId);
+        verifyWriter(member.getId(), answerComment);
 
-        findAnswerComment.updateAnswerComment(answerCommentUpdate);
+        answerComment.update(answerCommentUpdate);
 
-        return answerCommentRepository.save(findAnswerComment).getId();
+        return answerCommentRepository.save(answerComment).getId();
     }
 
     public Long deleteAnswerComment(Long memberId, Long answerCommentId) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
-        AnswerComment findAnswerComment = findVerifiedAnswerComment(answerCommentId);
-        verifyWriter(member.getId(), findAnswerComment);
+        AnswerComment answerComment = findAnswerComment(answerCommentId);
+        verifyWriter(member.getId(), answerComment);
 
-        answerCommentRepository.delete(findAnswerComment);
+        answerCommentRepository.delete(answerComment);
 
         return answerCommentId;
     }
 
-    private AnswerComment findVerifiedAnswerComment(Long answerCommentId) {
+    private AnswerComment findAnswerComment(Long answerCommentId) {
         Optional<AnswerComment> optionalAnswerComment = answerCommentRepository.findById(answerCommentId);
 
         return optionalAnswerComment.orElseThrow(CommentNotFound::new);

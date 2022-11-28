@@ -18,7 +18,6 @@ public class AnswerController {
 
     private final AnswerService answerService;
 
-    //답변 등록
     @PostMapping("/answers")
     public ResponseEntity<Long> create(@AuthMember MemberDetails memberDetails,
                                        @PathVariable Long id,
@@ -27,7 +26,6 @@ public class AnswerController {
         return ResponseEntity.ok(answerService.createAnswer(memberDetails.getMemberId(), id, answerCreate));
     }
 
-    //답변 수정
     @PatchMapping("/answers/{answer-id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable Long id,
@@ -37,7 +35,6 @@ public class AnswerController {
         return ResponseEntity.ok(answerService.updateAnswer(memberDetails.getMemberId(), answerId, answerUpdate));
     }
 
-    //답변 삭제
     @DeleteMapping("/answers/{answer-id}")
     public ResponseEntity<Long> delete(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("answer-id") Long answerId) {
@@ -45,7 +42,6 @@ public class AnswerController {
         return ResponseEntity.ok(answerService.deleteAnswer(memberDetails.getMemberId(), answerId));
     }
 
-    //답변 채택
     @PostMapping("/answers/{answer-id}/accept")
     public ResponseEntity<Long> accept(@AuthMember MemberDetails memberDetails,
                                        @PathVariable Long id,

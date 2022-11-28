@@ -22,12 +22,6 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
-    /**
-     * 챌린지 제안
-     * @param memberDetails 로그인 세션 정보
-     * @param counterpartId 상대방 id
-     * @return
-     */
     @PostMapping
     public ResponseEntity<?> suggest(
             @AuthMember MemberDetails memberDetails,
@@ -38,9 +32,17 @@ public class ChallengeController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> challengeDetails(
+            @AuthMember MemberDetails memberDetails,
+            @PathVariable Long id) {
+
+        return new ResponseEntity<>(challengeService.getChallenge(memberDetails.getMemberId(), id), HttpStatus.OK);
+
+    }
+
     /**
      * 랭킹 페이지
-     * @param pageRequest  페이지네이션 프론트와 추후논의 필요
      * @param condition 검색 필터 조건 - 분할, 키, 몸무게, 경력
      */
     @GetMapping
@@ -57,10 +59,6 @@ public class ChallengeController {
         }
     }
 
-    /**
-     * 챌린지 거절
-     * @param id 해당 챌린지 Id
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> refuse(
             @AuthMember MemberDetails memberDetails,
@@ -69,11 +67,6 @@ public class ChallengeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    /**
-     * 챌린지 중단
-     * @param id 해당 챌린지 Id
-     */
     @DeleteMapping("/{id}/suspend")
     public ResponseEntity<?> suspend(
         @AuthMember MemberDetails memberDetails,
@@ -82,11 +75,6 @@ public class ChallengeController {
         return new ResponseEntity<>(challengeId,HttpStatus.OK);
     }
 
-
-    /**
-     * 챌린지 수락
-     * @param id 해당 챌린지 Id
-     */
     @PostMapping("/{id}/accept")
     public ResponseEntity<?> accept(
             @AuthMember MemberDetails memberDetails,
@@ -94,6 +82,4 @@ public class ChallengeController {
         challengeService.accept(memberDetails.getMemberId(), id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }

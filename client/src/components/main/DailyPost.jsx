@@ -1,25 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ImageSlider, { Slide } from 'react-auto-image-slider';
-import daily from '../../images/daily.jpg';
-import heart from '../../images/Heart.svg';
-import heartFill from '../../images/heart_fill.svg';
-import DailyCmt from './DailyCmt';
+
+// import DailyCmt from './DailyCmt';
+import DailyInfomation from './DailyInfo';
 import { DailyForm, DailyItem } from './MainStyle';
 import {
   asyncPost,
   asyncPostDel,
-  asyncLike,
-  asyncLikeundo,
+  asyncPostScroll,
   // asyncPostCmtEdit,
 } from '../../redux/action/MainAsync';
 
 export default function DailyPost() {
   const data = useSelector(state => state.dailypost.data.items);
+  console.log(data);
+
+  const lastPost = data && data[data.length - 1];
+  console.log(lastPost);
+
   const dispatch = useDispatch();
-  const [fav, setFav] = useState(false);
-  const [isComment, setIsComment] = useState(false);
+
+  const [postList, setPostList] = useState([data]);
+  console.log(postList);
+  // setPostList([...postList, data]);
+
   // const [bol, setBol] = useState(true);
 
   // const handleansbol = () => {
@@ -43,9 +49,10 @@ export default function DailyPost() {
           // .slice(0)
           // .reverse()
           .map(list => {
+            // console.log(list.member.profileImage);
             return (
               <DailyItem>
-                <article className="Img">
+                <article className="Img" list={list} key={list.post.postId}>
                   <ImageSlider effectDelay={500} autoPlayDelay={3000}>
                     {list.pictures &&
                       list.pictures.map(el => {
@@ -72,75 +79,19 @@ export default function DailyPost() {
                     삭제
                   </button>
                 </div>
-                <article className="DailyInfo">
-                  <div className="Info">
-                    <div className="DailyTags">
-                      {list.tags &&
-                        list.tags.map(tag => {
-                          return <span>{`#${tag}`}</span>;
-                        })}
-                    </div>
-                    <div className="DailyMemo">
-                      <p className="memo">{list.post.content}</p>
-                    </div>
-                    <div className="act">
-                      <span className="date">{list.post.createdAt}</span>
-                      <span>
-                        <button
-                          onClick={() => setIsComment(!isComment)}
-                          className="comments"
-                        >
-                          댓글
-                          {list.post.commentCount ? list.post.commentCount : 0}
-                          개
-                        </button>
-                      </span>
-                      <span className="favorite">
-                        <button
-                          onClick={() => {
-                            setFav(!fav);
-                            if (fav === false) {
-                              dispatch(asyncLikeundo(list.post.postId));
-                            } else {
-                              dispatch(asyncLike(list.post.postId));
-                            }
-                          }}
-                        >
-                          {fav ? (
-                            <img
-                              className="heart"
-                              src={heartFill}
-                              alt="heart"
-                            />
-                          ) : (
-                            <img className="heart" src={heart} alt="heart" />
-                          )}
-                          <span>
-                            {list.post.likeCount ? list.post.likeCount : 0}
-                          </span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="userInfo">
-                    <img
-                      className="user"
-                      src={
-                        list.member.profileImage
-                          ? list.member.profileImage
-                          : daily
-                      }
-                      alt="daily"
-                    />
-                    <span>
-                      {list.member.username ? list.member.username : null}
-                    </span>
-                  </div>
-                </article>
-                {isComment ? <DailyCmt /> : null}
+                <DailyInfomation el={list} index={list.post.postId} />
               </DailyItem>
             );
           })}
+      <button
+        onClick={() => {
+          dispatch(asyncPostScroll(lastPost.post.postId));
+          setPostList([...postList, data]);
+          console.log(lastPost.post.postId);
+        }}
+      >
+        ++++++++++++++++
+      </button>
     </DailyForm>
   );
 }

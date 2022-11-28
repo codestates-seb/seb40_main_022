@@ -1,19 +1,21 @@
-import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import logingoogle from '../../images/logingoogle.png';
 import kakao from '../../images/kakao.png';
 import Ouathbutton from './Ouathbutton';
 
 function Ouaths() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('access_token');
+  const tokenname = useParams();
+  console.log(token, tokenname);
+  console.log(window.location);
   const handleClick = () => {
-    axios
-      .post(
-        'oauth2/authorization/google?redirect_uri=http://ec2-13-125-247-218.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google',
-      )
-      .then(res => console.log(res));
+    window.location.href =
+      'http://ec2-3-34-98-9.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google';
   };
   return (
     <Ouathbutton>
-      <button disabled className="goolobutton" onClick={() => handleClick()}>
+      <button className="goolobutton" onClick={() => handleClick()}>
         <img src={logingoogle} alt="구글로고" />
         Log in with Google
       </button>

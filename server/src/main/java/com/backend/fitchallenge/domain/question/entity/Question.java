@@ -58,7 +58,7 @@ public class Question extends Auditable {
         this.member = member;
     }
 
-    public static Question createQuestion(QuestionCreateVO questionCreateVO, Member member, List<String> paths) {
+    public static Question create(QuestionCreateVO questionCreateVO, Member member, List<String> paths) {
         Question question = Question.builder()
                 .title(questionCreateVO.getTitle())
                 .content(questionCreateVO.getContent())
@@ -67,12 +67,12 @@ public class Question extends Auditable {
                 .member(member)
                 .build();
 
-        paths.forEach(path -> QuestionPicture.createPicture(path, question));
+        paths.forEach(path -> QuestionPicture.create(path, question));
 
         return question;
     }
 
-    public void updateQuestion(QuestionUpdateVO questionUpdateVO) {
+    public void update(QuestionUpdateVO questionUpdateVO) {
         String changedTitle = questionUpdateVO.getTitle();
         String changedContent = questionUpdateVO.getContent();
         String changedTag = questionUpdateVO.getTag();

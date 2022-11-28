@@ -28,7 +28,7 @@ public class SimplePostResponse {
         this.commentMore = commentMore;
     }
 
-    public static SimplePostResponse toResponse(Post post, Integer likeSize, Integer commentSize) {
+    public static SimplePostResponse of(Post post, Integer likeSize, Integer commentSize) {
         return SimplePostResponse.builder()
                 .postId(post.getId())
                 .createdAt(post.getCreatedAt())

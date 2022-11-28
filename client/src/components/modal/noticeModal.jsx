@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import userProfile from '../../images/daily.jpg';
 import {
   Notice,
@@ -8,36 +9,53 @@ import {
   ModalList,
 } from './modalstyle';
 import Challenge from './Challenge';
+import { Notifications } from '../../redux/action/LankAsync';
 
 function Modal() {
   const [challenge, setChallenge] = useState(false);
+  const [acceptId, setAcceptId] = useState(null);
+  const dispatch = useDispatch();
+  const notification = useSelector(
+    state => state.challenge.data.notificationResponses,
+  );
+  useEffect(() => {
+    dispatch(Notifications());
+  }, []);
   return (
     <Notice>
       <NoticeSection>
         <ModalHeader>알림</ModalHeader>
         <ModalMain>
-          {[...Array(3)].map(() => {
-            return (
-              <ModalList
-                onClick={() => setChallenge(true)}
-                className="challenge"
-              >
-                <img
-                  className="userProfile"
-                  src={userProfile}
-                  alt="userProfile"
-                />
-                <div className="content">
-                  <div className="fightday">
-                    <h3>대결 신청</h3>
-                    <span>2022.11.10</span>
+          {notification &&
+            notification.map((data, idx) => {
+              return (
+                <ModalList
+                  onClick={() => {
+                    setAcceptId(idx);
+                    setChallenge(true);
+                  }}
+                  className="challenge"
+                >
+                  <img
+                    className="userProfile"
+                    src={userProfile}
+                    alt="userProfile"
+                  />
+                  <div className="content">
+                    <div className="fightday">
+                      <h3>대결 신청</h3>
+                      <span>{data.createdAt}</span>
+                    </div>
+                    <div>{data.content}</div>
                   </div>
-                  <div>헬스남님이 대결을 신청하셨습니다.</div>
-                </div>
-              </ModalList>
-            );
-          })}
-          <Challenge open={challenge} close={() => setChallenge(false)} />
+                </ModalList>
+              );
+            })}
+          <Challenge
+            open={challenge}
+            close={() => setChallenge(false)}
+            id={acceptId}
+          />
         </ModalMain>
       </NoticeSection>
     </Notice>

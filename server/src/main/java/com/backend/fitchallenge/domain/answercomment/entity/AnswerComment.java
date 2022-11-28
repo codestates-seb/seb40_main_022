@@ -40,7 +40,7 @@ public class AnswerComment extends Auditable {
         this.member = member;
     }
 
-    public static AnswerComment createAnswerComment(AnswerCommentCreate answerCommentCreate, Answer answer, Member member) {
+    public static AnswerComment toEntity(AnswerCommentCreate answerCommentCreate, Answer answer, Member member) {
         return AnswerComment.builder()
                 .content(answerCommentCreate.getContent())
                 .answer(answer)
@@ -48,7 +48,7 @@ public class AnswerComment extends Auditable {
                 .build();
     }
 
-    public void updateAnswerComment(AnswerCommentUpdate answerCommentUpdate) {
+    public void update(AnswerCommentUpdate answerCommentUpdate) {
         String changedContent = answerCommentUpdate.getContent();
 
         if (changedContent != null) {

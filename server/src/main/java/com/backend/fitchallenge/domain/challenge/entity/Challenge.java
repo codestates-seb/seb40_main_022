@@ -23,7 +23,6 @@ public class Challenge extends Auditable {
     @Column(name = "challenge_id")
     private Long id;
 
-
     @Column(name ="applicant_id")
     private Long applicantId;
 
@@ -38,6 +37,9 @@ public class Challenge extends Auditable {
 
     @Column(name = "challenge_end")
     private LocalDate challengeEnd;
+
+    @Column(name = "challenge_point")
+    private Integer challengePoint;
 
     public enum ChallengeStatus {
         SUGGESTED("제안됨"),
@@ -77,6 +79,10 @@ public class Challenge extends Auditable {
         this.challengeStart = this.getModifiedAt().plusDays(1).toLocalDate();
         this.challengeEnd = this.challengeStart.plusDays(7);
         return this.challengeStart.toString() + " ~ " + challengeEnd.toString();
+    }
+
+    public void updatePoint(int point){
+        this.challengePoint += point;
     }
 
 }

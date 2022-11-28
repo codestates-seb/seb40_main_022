@@ -19,7 +19,7 @@ public class QueryAnswerRepository {
 
     public List<Answer> findAnswersAndCommentsWithWriters(Long questionId) {
         return jpaQueryFactory
-                .select(answer)
+                .select(answer).distinct()
                 .from(answer)
                 .leftJoin(answer.member).fetchJoin()
                 .leftJoin(answer.comments, answerComment).fetchJoin()
