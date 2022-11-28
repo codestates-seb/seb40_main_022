@@ -49,6 +49,14 @@ export const LoginAsync = createAsyncThunk('login', data => {
       localStorage.setItem('Authorization', res.headers.authorization);
       localStorage.setItem('RefreshToken', res.headers.refreshtoken);
       const auth = [res.headers.authorization, res.headers.refreshtoken];
+      axios
+        .get('/connect', {
+          headers: {
+            Authorization: res.headers.authorization,
+            RefreshToken: res.headers.refreshtoken,
+          },
+        })
+        .then(response => console.log(response));
       setTimeout(Retoken, 870000);
       return auth;
     });

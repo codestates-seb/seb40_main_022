@@ -10,7 +10,21 @@ export const RecordTagAsync = createAsyncThunk('/recordtag', tag => {
 });
 
 export const RecordUpAsync = createAsyncThunk('/recordup', data => {
-  console.log(data);
-  console.log();
-  return axios.post();
+  for (const pair of data.entries()) {
+    console.log(`${pair[0]}, ${pair[1]}`);
+  }
+  axios
+    .post('/records', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // 'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => console.log(res));
+});
+
+export const RecordListAsync = createAsyncThunk('/recordList', () => {
+  return axios.get('/records').then(res => console.log(res));
 });
