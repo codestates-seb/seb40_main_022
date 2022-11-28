@@ -46,7 +46,7 @@ public class RecordController {
         return ResponseEntity.ok(recordService.getMonthlyRecordList(memberDetails.getMemberId(), month));
     }
 
-    @PatchMapping("/records/{record-id}")
+    @PostMapping("/records/{record-id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("record-id") Long recordId,
                                        RecordUpdateVO recordUpdateVO) {
