@@ -25,41 +25,40 @@ public class Member extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MEMBER_ID", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "EMAIL", nullable = false, updatable = false, unique = true)
+    @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(name = "PASSWORD")
+    @Column
     private String password;
 
-    @Column(name = "USERNAME")
+    @Column
     private String username;
 
-
-    @Column(name = "GENDER")
+    @Column
     private String gender;
 
-    @Column(name = "JOB")
+    @Column
     private String job;
 
-    @Column(name = "ADDRESS")
+    @Column
     private String address;
 
-    @Column(name = "AGE")
+    @Column
     private Integer age;
 
-    @Column(name = "HEIGHT")
+    @Column
     private Integer height;
 
-    @Column(name = "WEIGHT")
+    @Column
     private Integer weight;
 
-    @Column(name = "SPLIT")
+    @Column
     private Integer split;
 
-    @Column(name = "PERIOD")
+    @Column
     private Integer period;
 
     @Enumerated(EnumType.STRING)
@@ -109,6 +108,10 @@ public class Member extends Auditable {
                 .build();
         this.split = memberUpdateVO.getSplit() == null ? this.split : memberUpdateVO.getSplit();
         this.period = memberUpdateVO.getPeriod() == null ? this.period : memberUpdateVO.getPeriod();
+    }
+
+    public void oauth2Update(ProfileImage profileImage){
+        this.profileImage = profileImage;
     }
 
 

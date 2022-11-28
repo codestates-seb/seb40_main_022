@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../../components/header/Header';
 import searchIcon from '../../images/searchIcon.png';
 import Footer from '../../components/footer/Footer';
@@ -13,17 +13,29 @@ import {
   QnaContent,
   QnaRadio,
 } from './QnaStyle';
-import { QnaAsynclist } from '../../redux/action/QnaAsync';
+import { QnaAsynclist, QnaSearchreload } from '../../redux/action/QnaAsync';
 
 function QnaList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const list = useSelector(state => state.qnalist.list);
-  console.log(list);
+  const questiondata = useSelector(state => state.qnalist.search);
+  console.log(questiondata);
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState('recent');
+  const [result, setResult] = useState(false);
+  const datasearch = [search, sort];
   useEffect(() => {
     dispatch(QnaAsynclist());
   }, []);
-
+  const handleSearch = () => {
+    if (search === '') {
+      setResult(false);
+    } else {
+      setResult(true);
+    }
+    dispatch(QnaSearchreload(datasearch));
+  };
   return (
     <QnABack>
       <Header />
@@ -44,46 +56,82 @@ function QnaList() {
             id="SearchIn"
             type="text"
             placeholder="찾으시는 질문이 있으신가요?"
-            // onChange={searchInputHandler}
-            // value={inputValue}
+            onChange={e => setSearch(e.target.value)}
           />
-          <label htmlFor="SearchIn">
+          <button onClick={() => handleSearch()}>
             <img src={searchIcon} alt="검색아이콘" className="search" />
-          </label>
+          </button>
         </QnaSearch>
         <QnaRadio>
           <label>
-            <input type="radio" id="newest" name="contact" defaultChecked />
+            <input
+              type="radio"
+              id="newest"
+              name="contact"
+              defaultChecked
+              onClick={() => setSort('recent')}
+            />
             <span>최신 순</span>
           </label>
           <label>
-            <input type="radio" id="popularity" name="contact" />
+            <input
+              type="radio"
+              id="popularity"
+              name="contact"
+              onClick={() => setSort('hot')}
+            />
             <span>인기 순</span>
           </label>
         </QnaRadio>
         <QnaContent>
-          {list &&
-            list.map((data, idx) => {
-              return (
-                <div className="qnabox">
-                  <article>
-                    <div>
-                      <Link to={`/qnadetail/${idx}`} className="titlename">
-                        {data.title}
-                      </Link>
-                      <h3>{data.summary}</h3>
-                    </div>
-                    <span>
-                      <h3 className="answerfont">답변 : {data.answerCount}</h3>
-                      <h3>{data.member.username}</h3>
-                      <h3>{data.createdAt}</h3>
-                      <button>{data.tag}</button>
-                    </span>
-                  </article>
-                  <span />
-                </div>
-              );
-            })}
+          {result
+            ? questiondata.map((data, idx) => {
+                return (
+                  <div className="qnabox">
+                    <article>
+                      <div>
+                        <Link to={`/qnadetail/${idx}`} className="titlename">
+                          {data.title}
+                        </Link>
+                        <h3>{data.summary}</h3>
+                      </div>
+                      <span>
+                        <h3 className="answerfont">
+                          답변 : {data.answerCount}
+                        </h3>
+                        <h3>{data.member.username}</h3>
+                        <h3>{data.createdAt}</h3>
+                        <button>{data.tag}</button>
+                      </span>
+                    </article>
+                    <span />
+                  </div>
+                );
+              })
+            : list &&
+              list.map((data, idx) => {
+                return (
+                  <div className="qnabox">
+                    <article>
+                      <div>
+                        <Link to={`/qnadetail/${idx}`} className="titlename">
+                          {data.title}
+                        </Link>
+                        <h3>{data.summary}</h3>
+                      </div>
+                      <span>
+                        <h3 className="answerfont">
+                          답변 : {data.answerCount}
+                        </h3>
+                        <h3>{data.member.username}</h3>
+                        <h3>{data.createdAt}</h3>
+                        <button>{data.tag}</button>
+                      </span>
+                    </article>
+                    <span />
+                  </div>
+                );
+              })}
         </QnaContent>
       </Qna>
       <Footer />

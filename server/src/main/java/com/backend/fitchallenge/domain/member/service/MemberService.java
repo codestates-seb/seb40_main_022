@@ -48,7 +48,8 @@ public class MemberService {
 
         isMemberExist(memberCreate.getEmail());
 
-        ProfileImage profileImage = ProfileImage.createWithPath("https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png");
+        ProfileImage profileImage = ProfileImage.createWithPath(
+                "https://pre-project-bucket-seb40-017.s3.ap-northeast-2.amazonaws.com/00398f65-51c3-4c1d-baac-38070910c5b3.png");
         Member member = memberCreate.toEntity(passwordEncoder, profileImage);
         profileImage.setMember(member);
 

@@ -63,7 +63,7 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.getQuestionList(pageable, questionSearch));
     }
 
-    @PatchMapping("/questions/{id}")
+    @PostMapping("/questions/{id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable Long id,
                                        QuestionUpdateVO questionUpdateVO) {

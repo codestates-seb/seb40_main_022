@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-// import Footer from '../../components/footer/Footer';
+import Footer from '../../components/footer/Footer';
 import Head from '../../components/header/Header';
 import MainInside from '../../components/main/MainInside';
 
@@ -14,7 +14,7 @@ function Main() {
     <Maincontainer>
       <Head />
       <MainInside />
-      {/* <Footer /> */}
+      <Footer />
     </Maincontainer>
   );
 }
