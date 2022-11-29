@@ -1,4 +1,6 @@
 // import styled from 'styled-components';
+// import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import userProfile from '../../images/daily.jpg';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
@@ -9,9 +11,14 @@ import {
   User,
   Buttons,
 } from './ChallengeStyle';
+import { LankChallenge } from '../../redux/action/LankAsync';
 
 export default function ChallengeReq(props) {
-  const { open, close } = props;
+  const { open, close, id } = props;
+  const dispatch = useDispatch();
+  const handleClick = () => {
+    dispatch(LankChallenge(id));
+  };
   return (
     <Wrapper>
       <div className={open ? 'openModal modal' : 'modal'}>
@@ -59,7 +66,9 @@ export default function ChallengeReq(props) {
                 </User>
               </VsInfo>
               <Buttons>
-                <button className="accBut">대결 신청</button>
+                <button className="accBut" onClick={() => handleClick()}>
+                  대결 신청
+                </button>
               </Buttons>
             </ModalMain>
           </ModalSection>

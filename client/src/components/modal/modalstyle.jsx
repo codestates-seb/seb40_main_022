@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Notice = styled.div`
   position: absolute;
-  margin-left: -160px;
+  margin-left: -190px;
   margin-top: 18px;
   width: 400px;
   background-color: var(--backwhite);
@@ -100,6 +100,8 @@ export const ModalHeaderBtn = styled.section`
 `;
 export const ModalMain = styled.main`
   padding: 16px;
+  height: 400px;
+  overflow-y: auto;
   border-bottom: 1px solid #dee2e6;
   border-top: 1px solid #dee2e6;
 `;

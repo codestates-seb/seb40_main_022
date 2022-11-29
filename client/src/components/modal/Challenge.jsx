@@ -1,4 +1,5 @@
-import userProfile from '../../images/daily.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
 import {
@@ -8,9 +9,33 @@ import {
   User,
   Buttons,
 } from './ChallengeStyle';
+import {
+  ChallengeAccept,
+  EnemyUserInfo,
+  ChallengeDelete,
+} from '../../redux/action/LankAsync';
 
 export default function Challenge(props) {
-  const { open, close } = props;
+  const { open, close, id } = props;
+  const dispatch = useDispatch();
+  const userdata = useSelector(
+    state => state.challenge.data.notificationResponses,
+  );
+  // const [userId, setUserId] = useState(7);
+  // const dataId = userdata[0].id;
+  const userdb = useSelector(state => state.challenge.userInfo);
+  if (userdata !== undefined && userdb !== undefined) {
+    // userdata[id].filter(data => console.log(data));
+  }
+  console.log(userdata, userdb, id);
+
+  const handledelete = () => {
+    close();
+    dispatch(ChallengeDelete(id));
+  };
+  useEffect(() => {
+    dispatch(EnemyUserInfo(id));
+  }, []);
   return (
     <Wrapper>
       <div className={open ? 'openModal modal' : 'modal'}>
@@ -27,15 +52,15 @@ export default function Challenge(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userProfile}
+                      src={userdb.counterpartImage}
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">운동인1</span>
+                  <span className="userName">{userdb.counterpartName}</span>
                   <span className="userInfo">
-                    <div>신장 178cm</div>
-                    <div>몸무게 87kg</div>
-                    <div>중량 350kg</div>
+                    <div>신장 {userdb.counterpartHeight}cm</div>
+                    <div>몸무게 {userdb.counterpartWeight}kg</div>
+                    <div>중량 {userdb.counterpartWeight}kg</div>
                   </span>
                 </User>
                 <span className="vsIcon">
@@ -45,21 +70,31 @@ export default function Challenge(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userProfile}
+                      src={userdb.applicantImage}
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">운동인2</span>
+                  <span className="userName">{userdb.applicantName}</span>
                   <span className="userInfo">
-                    <div>신장 183cm</div>
-                    <div>몸무게 91kg</div>
-                    <div>중량 410kg</div>
+                    <div>신장 {userdb.applicantHeight}cm</div>
+                    <div>몸무게 {userdb.applicantWeight}kg</div>
+                    <div>중량 {userdb.applicantWeight}kg</div>
                   </span>
                 </User>
               </VsInfo>
               <Buttons>
-                <button className="accBut">대결 수락</button>
-                <button className="decBut" onClick={close}>
+                <button
+                  className="accBut"
+                  onClick={() => dispatch(ChallengeAccept(id))}
+                >
+                  대결 수락
+                </button>
+                <button
+                  className="decBut"
+                  onClick={() => {
+                    handledelete();
+                  }}
+                >
                   대결 거절
                 </button>
               </Buttons>

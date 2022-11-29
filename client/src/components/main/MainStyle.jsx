@@ -91,6 +91,7 @@ export const Content = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--white);
     > img {
       cursor: pointer;
       width: 110px;
@@ -112,11 +113,19 @@ export const Content = styled.div`
 `;
 
 export const DailyForm = styled.div`
-  position: relative;
+  /* position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 10px; */
+
+  .list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
 `;
 
 export const DailyItem = styled.div`
@@ -137,8 +146,20 @@ export const DailyItem = styled.div`
 
     .comment {
       display: flex;
+      justify-content: space-between;
       align-items: center;
       padding: 10px;
+      padding-right: 20px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+
+      .cmtContent {
+        display: flex;
+        align-items: center;
+        .content {
+          width: 500px;
+        }
+      }
       img {
         cursor: pointer;
         width: 45px;
@@ -149,6 +170,20 @@ export const DailyItem = styled.div`
       }
       .cmtUserName {
         font-weight: bold;
+      }
+      .buttons {
+        > button {
+          background: var(--white);
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+          margin: 5px;
+          > img {
+            width: 20px;
+            height: 20px;
+          }
+        }
       }
     }
   }
@@ -165,7 +200,7 @@ export const DailyItem = styled.div`
     height: 550px;
     position: relative;
 
-    .iUXjrE {
+    .fnCZwB {
       height: 550px;
     }
   }
@@ -252,6 +287,7 @@ export const AddComment = styled.div`
   display: flex;
   align-items: center;
   padding: 10px;
+  margin-bottom: 20px;
   .user {
     width: 45px;
     height: 45px;
@@ -289,7 +325,7 @@ export const CommentInput = styled.input`
   box-shadow: inset var(--box-shadow);
   border-radius: 50px;
   outline: 1px solid var(--black-100);
-  padding-left: 20px;
+  padding: 0 20px;
 
   &::placeholder {
     color: var(--black-300);

@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-// import Footer from '../../components/footer/Footer';
+import Footer from '../../components/footer/Footer';
 import Head from '../../components/header/Header';
 import MainInside from '../../components/main/MainInside';
 
@@ -10,11 +12,22 @@ const Maincontainer = styled.main`
 `;
 
 function Main() {
+  const data1 = new URL(window.location.href).searchParams.get('access_token');
+  const data2 = new URL(window.location.href).searchParams.get('refresh_token');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (data1 !== null && data2 !== null) {
+      window.localStorage.setItem('Authorization', `Bearer ${data1}`);
+      window.localStorage.setItem('RefreshToken', `${data2}`);
+      navigate('/');
+    }
+  }, []);
   return (
     <Maincontainer>
       <Head />
       <MainInside />
-      {/* <Footer /> */}
+      <Footer />
     </Maincontainer>
   );
 }

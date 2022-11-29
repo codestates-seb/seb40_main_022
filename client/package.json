@@ -23,6 +23,7 @@
     "react-auto-image-slider": "^1.0.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-intersection-observer": "^9.4.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
@@ -66,5 +67,5 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "2.7.1"
   },
-  "proxy": "http://ec2-43-201-25-136.ap-northeast-2.compute.amazonaws.com:8080/"
+  "proxy": "http://ec2-13-125-71-176.ap-northeast-2.compute.amazonaws.com:8080/"
 }

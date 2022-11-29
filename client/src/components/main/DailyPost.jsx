@@ -1,25 +1,36 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import ImageSlider, { Slide } from 'react-auto-image-slider';
-import daily from '../../images/daily.jpg';
-import heart from '../../images/Heart.svg';
-import heartFill from '../../images/heart_fill.svg';
-import DailyCmt from './DailyCmt';
-import { DailyForm, DailyItem } from './MainStyle';
+import { useEffect, useState } from 'react';
 import {
-  asyncPost,
-  asyncPostDel,
-  asyncLike,
-  asyncLikeundo,
-  // asyncPostCmtEdit,
-} from '../../redux/action/MainAsync';
+  // useDispatch,
+  useSelector,
+} from 'react-redux';
+import axios from 'axios';
+// import { useInView } from 'react-intersection-observer';
+// import DailyCmt from './DailyCmt';
+import DailyInfomation from './DailyInfo';
+import DailyImg from './DailyImg';
+import { DailyForm, DailyItem } from './MainStyle';
+// import {
+//   // asyncPost,
+//   // asyncPostDel,
+//   asyncPostScroll,
+//   // asyncPostCmtEdit,
+// } from '../../redux/action/MainAsync';
 
 export default function DailyPost() {
   const data = useSelector(state => state.dailypost.data.items);
-  const dispatch = useDispatch();
-  const [fav, setFav] = useState(false);
-  const [isComment, setIsComment] = useState(false);
+  console.log(data);
+
+  // const dispatch = useDispatch();
+
+  const [postList, setPostList] = useState([]);
+  console.log(postList);
+
+  const lastPost = postList && postList[postList.length - 1];
+  console.log(lastPost);
+
+  // const [loading, setLoading] = useState(true);
+  // setPostList([...postList, data]);
+
   // const [bol, setBol] = useState(true);
 
   // const handleansbol = () => {
@@ -27,120 +38,76 @@ export default function DailyPost() {
   //   setBol(false);
   // };
 
+  // useEffect(() => {
+  //   dispatch(asyncPostScroll());
+  // }, []);
+  // const [ref, inView] = useInView();
   useEffect(() => {
-    dispatch(asyncPost());
+    // setLoading(true);
+    const getPost = async () => {
+      const res = await axios.get(`/dailyPosts`);
+      const post = await res.data.items;
+      setPostList([post]);
+      // if (postList.length !== 0 && lastPost && lastPost.post.postId >= 1 && inView) {
+      //   dispatch(asyncPostScroll(lastPost.post.postId));
+      //   setPostList([...postList, post]);
+      // }
+      // setLoading(false);
+    };
+    getPost();
+    // const lastPost = postList[0];
+    // console.log(lastPost);
   }, []);
 
-  const handleDelPost = id => {
-    dispatch(asyncPostDel(id));
-    window.location.reload();
-  };
+  // useEffect(() => {
+  //   if (
+  //     postList.length !== 0 &&
+  //     lastPost &&
+  //     lastPost.post.postId >= 1 &&
+  //     inView
+  //   ) {
+  //     dispatch(asyncPostScroll(lastPost[2].post.postId));
+  //     // setPostList([...postList, postList]);
+  //   }
+  // }, [inView]);
+
+  // const handleDelPost = id => {
+  //   dispatch(asyncPostDel(id));
+  //   window.location.reload();
+  // };
 
   return (
     <DailyForm>
-      {data &&
-        data
-          // .slice(0)
-          // .reverse()
-          .map(list => {
-            return (
-              <DailyItem>
-                <article className="Img">
-                  <ImageSlider effectDelay={500} autoPlayDelay={3000}>
-                    {list.pictures &&
-                      list.pictures.map(el => {
-                        return (
-                          <Slide>
-                            <img className="dailyImg" src={el} alt="daily" />
-                          </Slide>
-                        );
-                      })}
-                  </ImageSlider>
-                </article>
-                <div>
-                  <Link
-                    to={`/dailypost/edit/${list.post.postId}`}
-                    className="buttons"
-                  >
-                    수정
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleDelPost(list.post.postId);
-                    }}
-                  >
-                    삭제
-                  </button>
-                </div>
-                <article className="DailyInfo">
-                  <div className="Info">
-                    <div className="DailyTags">
-                      {list.tags &&
-                        list.tags.map(tag => {
-                          return <span>{`#${tag}`}</span>;
-                        })}
-                    </div>
-                    <div className="DailyMemo">
-                      <p className="memo">{list.post.content}</p>
-                    </div>
-                    <div className="act">
-                      <span className="date">{list.post.createdAt}</span>
-                      <span>
-                        <button
-                          onClick={() => setIsComment(!isComment)}
-                          className="comments"
-                        >
-                          댓글
-                          {list.post.commentCount ? list.post.commentCount : 0}
-                          개
-                        </button>
-                      </span>
-                      <span className="favorite">
-                        <button
-                          onClick={() => {
-                            setFav(!fav);
-                            if (fav === false) {
-                              dispatch(asyncLikeundo(list.post.postId));
-                            } else {
-                              dispatch(asyncLike(list.post.postId));
-                            }
-                          }}
-                        >
-                          {fav ? (
-                            <img
-                              className="heart"
-                              src={heartFill}
-                              alt="heart"
-                            />
-                          ) : (
-                            <img className="heart" src={heart} alt="heart" />
-                          )}
-                          <span>
-                            {list.post.likeCount ? list.post.likeCount : 0}
-                          </span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="userInfo">
-                    <img
-                      className="user"
-                      src={
-                        list.member.profileImage
-                          ? list.member.profileImage
-                          : daily
-                      }
-                      alt="daily"
-                    />
-                    <span>
-                      {list.member.username ? list.member.username : null}
-                    </span>
-                  </div>
-                </article>
-                {isComment ? <DailyCmt /> : null}
-              </DailyItem>
-            );
-          })}
+      {postList &&
+        postList.map(all => {
+          return (
+            <div className="list">
+              {all &&
+                all.map(list => {
+                  return (
+                    <DailyItem key={list.post.postId}>
+                      <DailyImg el={list} />
+                      <DailyInfomation el={list} index={list.post.postId} />
+                    </DailyItem>
+                  );
+                })}
+              {/* <div ref={ref} /> */}
+            </div>
+          );
+        })}
+      {lastPost ? (
+        <button
+          onClick={() => {
+            const lastPostId =
+              lastPost && lastPost[lastPost.length - 1].post.postId;
+            axios.get(`/dailyPosts?lastPostId=${lastPostId}`).then(res => {
+              setPostList([...postList, res.data.items]);
+            });
+          }}
+        >
+          ++++++++++++++++
+        </button>
+      ) : null}
     </DailyForm>
   );
 }

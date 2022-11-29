@@ -1,20 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { QnaAsynclist, QnaDetailAsync } from '../action/QnaAsync';
+import {
+  QnaAsynclist,
+  QnaDetailAsync,
+  QnaSearchreload,
+} from '../action/QnaAsync';
 
 const QnaSlice = createSlice({
   name: 'qna',
   initialState: {
     list: [],
     answers: [],
+    search: [],
+    pageInfo: [],
   },
   reducers: {},
   extraReducers: {
     [QnaAsynclist.fulfilled]: (state, action) => {
-      state.list = action.payload;
+      console.log(state, action);
+      state.list = action.payload.data;
+      state.pageInfo = action.payload.pageInfo;
     },
     [QnaDetailAsync.fulfilled]: (state, action) => {
-      console.log(action);
       state.answers = action.payload;
+    },
+    [QnaSearchreload.fulfilled]: (state, action) => {
+      state.search = action.payload;
     },
   },
 });

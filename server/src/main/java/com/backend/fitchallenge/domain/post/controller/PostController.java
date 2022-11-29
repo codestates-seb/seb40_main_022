@@ -91,7 +91,7 @@ public class PostController {
      *
      * @param postUpdate    게시물 수정 요청 정보
      */
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<?> update(
             @AuthMember MemberDetails memberDetails, @PathVariable Long id,
             PostUpdateVO postUpdate) {

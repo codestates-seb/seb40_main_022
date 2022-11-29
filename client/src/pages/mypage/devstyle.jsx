@@ -170,40 +170,29 @@ export const RecordBox = styled.div`
 `;
 
 export const PictureBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 50px;
-
-  /* display: grid;
+  display: grid;
   grid-row-gap: 30px;
   grid-template-rows: auto;
   grid-template-columns: auto auto auto;
   width: 100%;
-  margin-bottom: 10px; */
-
+  margin-bottom: 10px;
   > div {
-    width: 85vw;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
-    margin-bottom: 50px;
-  }
-  .imgbox {
-    display: flex;
     flex-direction: column;
-    width: 80%;
-
     > img {
       width: 300px;
       height: 300px;
     }
     > button {
       cursor: pointer;
-      width: 40px;
+      border: none;
+      /* margin-left: 72%; */
       margin-top: 10px;
+      display: flex;
+      justify-content: end;
     }
   }
 `;

@@ -43,6 +43,8 @@ public class MemberCreate {
     public Member toEntity(){
         return Member.createBuilder()
                 .email(email)
+                .username(username)
+                .password(password)
                 .build();
     }
 }

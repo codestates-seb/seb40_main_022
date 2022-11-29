@@ -19,10 +19,7 @@ function Lank() {
             </button>
           </div>
         </div>
-        {/* {[...Array(10)].map(() => {
-          return <LankContent />;
-        })} */}
-        <LankContent />;
+        <LankContent />
       </LankMain>
       <Footer />
     </LankBox>

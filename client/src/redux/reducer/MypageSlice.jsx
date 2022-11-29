@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { MypageGet, MyPostDelete } from '../action/MypageAsync';
+import { MypageGet, UserProfileGet } from '../action/MypageAsync';
 
 const MypageSlice = createSlice({
   name: 'mypage',
@@ -7,6 +7,8 @@ const MypageSlice = createSlice({
     member: [],
     dailyPosts: [],
     activity: [],
+    postCounts: 0,
+    // data: [],
   },
   reducers: {},
   extraReducers: {
@@ -15,12 +17,19 @@ const MypageSlice = createSlice({
       state.dailyPosts = action.payload.dailyPosts;
       state.activity = action.payload.activity;
       state.member = action.payload.member;
+      state.postCounts = action.payload.postCounts;
     },
-    [MyPostDelete.fulfilled]: state => {
-      state.dailyPosts = [];
-      state.activity = [];
-      state.userName = '';
+    [UserProfileGet.fulfilled]: (state, action) => {
+      console.log(state, action);
+      state.dailyPosts = action.payload.dailyPosts;
+      state.activity = action.payload.activity;
+      state.member = action.payload.member;
+      state.postCounts = action.payload.postCounts;
     },
+    // [MypageGet.fulfilled]: (state, action) => {
+    //   console.log(state, action);
+    //   state.data = action.payload;
+    // },
   },
 });
 
