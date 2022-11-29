@@ -68,6 +68,7 @@ export const asyncPostScroll = createAsyncThunk('post', lastPostId => {
       },
     })
     .then(res => {
+      console.log(res);
       return res.data;
     });
   return data;
@@ -126,6 +127,21 @@ export const asyncPostCmt = createAsyncThunk('comment', index => {
   return data;
 });
 
+export const asynCmtScroll = createAsyncThunk('comment', listUp => {
+  console.log(listUp);
+  const data = axios
+    .get(`/dailyPosts/${listUp[0]}/comments?lastCommentId=${listUp[1]}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(res => {
+      // console.log(res);
+      return res.data;
+    });
+  return data;
+});
+
 // 댓글 create
 export const asyncPostCmtUp = createAsyncThunk(
   'post/up',
@@ -146,7 +162,7 @@ export const asyncPostCmtUp = createAsyncThunk(
         },
       )
       .then(res => {
-        window.location.reload();
+        // window.location.reload();
         console.log(res);
       });
   },

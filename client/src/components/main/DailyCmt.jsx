@@ -9,6 +9,7 @@ import { AddComment, CommentInput } from './MainStyle';
 import {
   asyncPostCmtUp,
   asyncPostCmt,
+  asynCmtScroll,
   asyncPostCmtDel,
 } from '../../redux/action/MainAsync';
 
@@ -20,7 +21,10 @@ export default function DailyCmt({ index }) {
   const ac = localStorage.getItem('Authorization');
   const cmtData = useSelector(state => state.dailypost.comment.items);
   console.log(cmtData);
-  // const [cmtList, SetCmtList]=useState(cmtData);
+  const [cmtList, setCmtList] = useState([cmtData]);
+  console.log(cmtList);
+  const lastCmt = cmtData && cmtData[cmtData.length - 1];
+  console.log(lastCmt);
 
   const handleAnswer = e => {
     e.preventDefault();
@@ -51,6 +55,12 @@ export default function DailyCmt({ index }) {
     ],
   );
 
+  const plusBut = () => {
+    const listUp = [index, lastCmt.commentId];
+    dispatch(asynCmtScroll(listUp));
+    setCmtList([...cmtList, cmtData]);
+  };
+
   return (
     <div className="commentdiv">
       <AddComment>
@@ -71,45 +81,61 @@ export default function DailyCmt({ index }) {
           <img className="add" src={dailyAdd} alt="dailyAdd" />
         </button>
       </AddComment>
-      {cmtData &&
-        cmtData.map(comment => {
+      {cmtList &&
+        cmtList.map(comment => {
           return (
-            <div className="comment">
-              <div className="cmtContent">
-                <span className="cmtUserImg">
-                  <img
-                    className="user"
-                    src={comment.profileImage ? comment.profileImage : null}
-                    alt="daily"
-                  />
-                </span>
-                <div className="id_content">
-                  <div className="cmtUserName">
-                    {comment.userName ? comment.userName : null}
-                  </div>
-                  <div className="content">
-                    {comment.content && cmtEditBut ? (
-                      <input
-                        value={comment.content}
-                        // onChange={e => setEditAnswer(e.target.value)}
-                      />
-                    ) : (
-                      comment.content
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="buttons">
-                <button onClick={() => setCmtEditBut(!cmtEditBut)}>
-                  <img className="edit" src={edit} alt="edit" />
-                </button>
-                <button onClick={() => handleCmtDel(comment.commentId)}>
-                  <img className="delete" src={del} alt="delete" />
-                </button>
-              </div>
+            <div>
+              {comment &&
+                comment.map(all => {
+                  return (
+                    <div className="comment">
+                      <div className="cmtContent">
+                        <span className="cmtUserImg">
+                          <img
+                            className="user"
+                            src={all.profileImage}
+                            alt="daily"
+                          />
+                        </span>
+                        <div className="id_content">
+                          <div className="cmtUserName">{all.userName}</div>
+                          <div className="content">
+                            {all.content && cmtEditBut ? (
+                              <input
+                                value={all.content}
+                                // onChange={e => setEditAnswer(e.target.value)}
+                              />
+                            ) : (
+                              all.content
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="buttons">
+                        <button onClick={() => setCmtEditBut(!cmtEditBut)}>
+                          <img className="edit" src={edit} alt="edit" />
+                        </button>
+                        <button
+                          onClick={() => handleCmtDel(all.commentId, index)}
+                        >
+                          <img className="delete" src={del} alt="delete" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           );
         })}
+      {lastCmt && lastCmt.commentId >= 1 ? (
+        <button
+          onClick={() => {
+            plusBut();
+          }}
+        >
+          ++++++++++
+        </button>
+      ) : null}
     </div>
   );
 }

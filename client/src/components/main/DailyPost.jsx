@@ -1,29 +1,34 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import ImageSlider, { Slide } from 'react-auto-image-slider';
-
+import {
+  // useDispatch,
+  useSelector,
+} from 'react-redux';
+import axios from 'axios';
+// import { useInView } from 'react-intersection-observer';
 // import DailyCmt from './DailyCmt';
 import DailyInfomation from './DailyInfo';
+import DailyImg from './DailyImg';
 import { DailyForm, DailyItem } from './MainStyle';
-import {
-  asyncPost,
-  asyncPostDel,
-  asyncPostScroll,
-  // asyncPostCmtEdit,
-} from '../../redux/action/MainAsync';
+// import {
+//   // asyncPost,
+//   // asyncPostDel,
+//   asyncPostScroll,
+//   // asyncPostCmtEdit,
+// } from '../../redux/action/MainAsync';
 
 export default function DailyPost() {
   const data = useSelector(state => state.dailypost.data.items);
   console.log(data);
 
-  const lastPost = data && data[data.length - 1];
+  // const dispatch = useDispatch();
+
+  const [postList, setPostList] = useState([]);
+  console.log(postList);
+
+  const lastPost = postList && postList[postList.length - 1];
   console.log(lastPost);
 
-  const dispatch = useDispatch();
-
-  const [postList, setPostList] = useState([data]);
-  console.log(postList);
+  // const [loading, setLoading] = useState(true);
   // setPostList([...postList, data]);
 
   // const [bol, setBol] = useState(true);
@@ -33,65 +38,76 @@ export default function DailyPost() {
   //   setBol(false);
   // };
 
+  // useEffect(() => {
+  //   dispatch(asyncPostScroll());
+  // }, []);
+  // const [ref, inView] = useInView();
   useEffect(() => {
-    dispatch(asyncPost());
+    // setLoading(true);
+    const getPost = async () => {
+      const res = await axios.get(`/dailyPosts`);
+      const post = await res.data.items;
+      setPostList([post]);
+      // if (postList.length !== 0 && lastPost && lastPost.post.postId >= 1 && inView) {
+      //   dispatch(asyncPostScroll(lastPost.post.postId));
+      //   setPostList([...postList, post]);
+      // }
+      // setLoading(false);
+    };
+    getPost();
+    // const lastPost = postList[0];
+    // console.log(lastPost);
   }, []);
 
-  const handleDelPost = id => {
-    dispatch(asyncPostDel(id));
-    window.location.reload();
-  };
+  // useEffect(() => {
+  //   if (
+  //     postList.length !== 0 &&
+  //     lastPost &&
+  //     lastPost.post.postId >= 1 &&
+  //     inView
+  //   ) {
+  //     dispatch(asyncPostScroll(lastPost[2].post.postId));
+  //     // setPostList([...postList, postList]);
+  //   }
+  // }, [inView]);
+
+  // const handleDelPost = id => {
+  //   dispatch(asyncPostDel(id));
+  //   window.location.reload();
+  // };
 
   return (
     <DailyForm>
-      {data &&
-        data
-          // .slice(0)
-          // .reverse()
-          .map(list => {
-            // console.log(list.member.profileImage);
-            return (
-              <DailyItem>
-                <article className="Img" list={list} key={list.post.postId}>
-                  <ImageSlider effectDelay={500} autoPlayDelay={3000}>
-                    {list.pictures &&
-                      list.pictures.map(el => {
-                        return (
-                          <Slide>
-                            <img className="dailyImg" src={el} alt="daily" />
-                          </Slide>
-                        );
-                      })}
-                  </ImageSlider>
-                </article>
-                <div>
-                  <Link
-                    to={`/dailypost/edit/${list.post.postId}`}
-                    className="buttons"
-                  >
-                    수정
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleDelPost(list.post.postId);
-                    }}
-                  >
-                    삭제
-                  </button>
-                </div>
-                <DailyInfomation el={list} index={list.post.postId} />
-              </DailyItem>
-            );
-          })}
-      <button
-        onClick={() => {
-          dispatch(asyncPostScroll(lastPost.post.postId));
-          setPostList([...postList, data]);
-          console.log(lastPost.post.postId);
-        }}
-      >
-        ++++++++++++++++
-      </button>
+      {postList &&
+        postList.map(all => {
+          return (
+            <div className="list">
+              {all &&
+                all.map(list => {
+                  return (
+                    <DailyItem key={list.post.postId}>
+                      <DailyImg el={list} />
+                      <DailyInfomation el={list} index={list.post.postId} />
+                    </DailyItem>
+                  );
+                })}
+              {/* <div ref={ref} /> */}
+            </div>
+          );
+        })}
+      {lastPost ? (
+        <button
+          onClick={() => {
+            const lastPostId =
+              lastPost && lastPost[lastPost.length - 1].post.postId;
+            axios.get(`/dailyPosts?lastPostId=${lastPostId}`).then(res => {
+              setPostList([...postList, res.data.items]);
+            });
+          }}
+        >
+          ++++++++++++++++
+        </button>
+      ) : null}
     </DailyForm>
   );
 }
