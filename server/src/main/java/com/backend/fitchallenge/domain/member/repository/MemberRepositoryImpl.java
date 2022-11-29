@@ -1,29 +1,27 @@
 package com.backend.fitchallenge.domain.member.repository;
 
 
-import com.backend.fitchallenge.domain.calendar.entity.Record;
-
 import com.backend.fitchallenge.domain.challenge.dto.request.QRankingDto;
 import com.backend.fitchallenge.domain.challenge.dto.request.RankingCondition;
 import com.backend.fitchallenge.domain.challenge.dto.request.RankingDto;
 
+import com.backend.fitchallenge.domain.challenge.entity.Challenge;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.post.entity.Post;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
-import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.backend.fitchallenge.domain.challenge.entity.QChallenge.challenge;
 import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 import static com.backend.fitchallenge.domain.member.entity.QMemberActivity.*;
 import static com.backend.fitchallenge.domain.post.entity.QPost.post;
+import static com.backend.fitchallenge.domain.record.entity.QRecord.record;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
@@ -108,6 +106,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         periodGoe(condition.getPeriodGoe()),
                         periodLt(condition.getPeriodLt()))
                 .fetchOne();
+    }
+
+    public List<Tuple> findMemberRecords(){
+        return jpaQueryFactory.select(member, record)
+                .from(member)
+                .leftJoin(record).on(member.id.eq(record.member.id))
+                .where(member.challenge.challengeStatus.eq(Challenge.ChallengeStatus.ONGOING))
+                .fetch();
     }
 
 

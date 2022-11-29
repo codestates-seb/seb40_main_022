@@ -1,6 +1,6 @@
 package com.backend.fitchallenge.domain.calendar.util;
 
-import com.backend.fitchallenge.domain.calendar.dto.request.RecordCreate;
+import com.backend.fitchallenge.domain.record.dto.request.RecordCreateVO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -33,11 +33,11 @@ public class CalendarId implements Serializable {
                 .build();
     }
 
-    public static CalendarId of(RecordCreate recordCreate) {
+    public static CalendarId of(RecordCreateVO recordCreateVO) {
         return CalendarId.builder()
-                .year(recordCreate.getStart().getYear())
-                .month(recordCreate.getStart().getMonthValue())
-                .day(recordCreate.getStart().getDayOfMonth())
+                .year(recordCreateVO.getStart().getYear())
+                .month(recordCreateVO.getStart().getMonthValue())
+                .day(recordCreateVO.getStart().getDayOfMonth())
                 .build();
     }
 }

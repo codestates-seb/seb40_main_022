@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faGear } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { MypagePatch } from '../../redux/action/MypageEditAsync';
+import { useDispatch, useSelector } from 'react-redux';
+import { MypagePost } from '../../redux/action/MypageEditAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import {
@@ -20,20 +20,23 @@ import {
 
 function ProfileEdit() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const userdata = useSelector(state => state.mypage);
+
+  // const list = userdata.filter(postdata => postdata.post.postId === +Id.id);
+  const [username, setUsername] = useState(userdata.member.userName);
   const [password, setPassword] = useState('');
   const [job, setJob] = useState('');
   const [address, setAddress] = useState('');
-  const [sex, setSex] = useState('man');
+  const [gender, setGender] = useState('male');
   const [age, setAge] = useState('');
   const [select, setSelect] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
-  const [kilogram, setKilogram] = useState('');
+  const [height, setHeight] = useState(userdata.member.height);
+  const [weight, setWeight] = useState(userdata.member.weight);
+  const [kilogram, setKilogram] = useState(userdata.activity.kilogram);
   const [period, setPeriod] = useState('');
   const [prevImage, setPrevImage] = useState('');
   const [profileImage, setProfileImage] = useState(
-    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+    userdata.member.profileImage,
   );
   const [nameError, setNameError] = useState({ display: 'none' });
   const [passwordError, setPasswordError] = useState({ display: 'none' });
@@ -53,9 +56,6 @@ function ProfileEdit() {
   };
   const handelClick = () => {
     photoUp.current.click();
-  };
-  const deleteFile = () => {
-    setProfileImage('');
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ function ProfileEdit() {
     formData.append('username', username);
     formData.append('job', job);
     formData.append('address', address);
-    formData.append('sex', sex);
+    formData.append('gender', gender);
     formData.append('split', +select.slice(0, 1));
     formData.append('age', age);
     formData.append('height', height);
@@ -90,9 +90,7 @@ function ProfileEdit() {
     // for (const pair of formData.entries()) {
     //   console.log(`${pair[0]}, ${pair[1]}`);
     // }
-    dispatch(MypagePatch(formData));
-    console.log(formData);
-    // navigate('/mypage');
+    dispatch(MypagePost(formData));
   };
   return (
     <Wrapper>
@@ -100,9 +98,6 @@ function ProfileEdit() {
       <div>
         <ImageBox>
           <img src={prevImage} alt="userProfile" />
-          <button onClick={() => deleteFile(profileImage)} className="Imgdel">
-            x
-          </button>
           <FontAwesomeIcon
             icon={faGear}
             className="setting"
@@ -166,11 +161,11 @@ function ProfileEdit() {
                     <input
                       type="radio"
                       name="sex"
-                      value="man"
+                      value="male"
                       checked="checked"
                       onChange={e => {
-                        e.preventDefault();
-                        setSex(e.target.value);
+                        // e.preventDefault();
+                        setGender(e.target.value);
                       }}
                     />
                     <span>남성</span>
@@ -179,10 +174,10 @@ function ProfileEdit() {
                     <input
                       type="radio"
                       name="sex"
-                      value="woman"
+                      value="female"
                       onChange={e => {
-                        e.preventDefault();
-                        setSex(e.target.value);
+                        // e.preventDefault();
+                        setGender(e.target.value);
                       }}
                     />
                     <span>여성</span>
@@ -302,7 +297,7 @@ function ProfileEdit() {
               onClick={e => {
                 e.preventDefault();
                 handleSubmit();
-                navigate('/mypage');
+                // navigate('/mypage');
               }}
             >
               완료

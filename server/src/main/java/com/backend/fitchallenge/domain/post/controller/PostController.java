@@ -26,13 +26,6 @@ public class PostController {
     private final PostService postService;
     private final AwsS3Service awsS3Service;
 
-    /**
-     * 게시물 작성
-     *
-     * @param memberDetails 로그인세션 정보
-     * @param postCreate    게시물 작성 요청 정보
-     * @return 생성된 게시물 id, 응답상태코드 - created
-     */
     @PostMapping
     public ResponseEntity<?> create(
             @AuthMember MemberDetails memberDetails,
@@ -54,7 +47,6 @@ public class PostController {
      *
      * @param postGet  현재 유저가 보고있는 게시물의 마지막 postId를 담고있는 객체
      * @param pageable default page = 0, size = 3
-     * @return 최신순으로 페이지네이션된 게시물 목록, 응답 상태 코드 OK
      */
     @GetMapping
     public ResponseEntity<MultiResponse<?>> getList(
@@ -69,14 +61,13 @@ public class PostController {
         } else {
             return new ResponseEntity<>(postService.getPostList(postGet.getLastPostId(), memberDetails.getMemberId(), pageable), HttpStatus.OK);
         }
-
     }
+
     /**
      * 게시물 검색
      * #~~ 형식의 tag 검색어 parsing 해서 tagNames List에 추가
      * @param pageable   size default 3
      * @param postSearch tag + lastPostId(마지막게시물 포스트 Id)
-     * @return
      */
     @GetMapping("/search")
     public ResponseEntity<MultiResponse<?>> getSearchList(@PageableDefault(size = 3) Pageable pageable,
@@ -98,10 +89,7 @@ public class PostController {
     /**
      * 게시물 수정
      *
-     * @param memberDetails 로그인세션 정보
-     * @param id            수정할 게시물 postId
      * @param postUpdate    게시물 수정 요청 정보
-     * @return 수정된 게시물 정보, 응답상태코드 OK
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> update(
@@ -110,13 +98,6 @@ public class PostController {
         return new ResponseEntity<>(postService.updatePost(id, memberDetails.getMemberId(), postUpdate), HttpStatus.OK);
     }
 
-    /**
-     * 게시물 삭제
-     *
-     * @param id 삭제할 게시물 postId
-     * @return 응답상태코드 OK
-     * @AuthenticationPrincipal을 통해 로그인세션 정보를 불러옴
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(
             @AuthMember MemberDetails memberDetails,
@@ -125,5 +106,4 @@ public class PostController {
         postService.deletePost(id, memberDetails.getMemberId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

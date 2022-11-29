@@ -82,6 +82,8 @@ export const ProfileBox = styled.div`
       height: 110px;
       border-radius: 50%;
       object-fit: cover;
+      text-indent: -100%;
+      overflow: hidden;
     }
   }
 `;
@@ -187,7 +189,7 @@ export const PictureBox = styled.div`
     > button {
       cursor: pointer;
       border: none;
-      margin-left: 72%;
+      /* margin-left: 72%; */
       margin-top: 10px;
       display: flex;
       justify-content: end;

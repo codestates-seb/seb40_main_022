@@ -19,20 +19,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/dailyposts/{id}")
+@RequestMapping("/dailyPosts/{id}")
 @RequiredArgsConstructor
 @Slf4j
 public class CommentController {
 
     private final CommentService commentService;
 
-    /**
-     * 댓글 생성
-     * @param id postId
-     * @param memberDetails 로그인 세션정보
-     * @param commentCreate 댓글 생성 요청
-     * @return commentId
-     */
     @PostMapping("/comments")
     private ResponseEntity<?> create(@PathVariable("id") Long id,
                                   @AuthMember MemberDetails memberDetails,
@@ -45,7 +38,6 @@ public class CommentController {
 
     /**
      * 댓글 조회 - 무한 스크롤 페이지네이션
-     * @param id postId
      * @param lastCommentId 현재 페이지의 마지막 postId
      * @param pageable default size = 10, page = 0
      * @return 댓글 목록 최신순으로 리턴
@@ -58,13 +50,6 @@ public class CommentController {
         return new ResponseEntity<>(commentService.getCommentList(id,lastCommentId,  pageable), HttpStatus.OK);
     }
 
-    /**
-     * 댓글 수정
-     * @param commentId 댓글 Id
-     * @param memberDetails 로그인 세션정보
-     * @param commentUpdate 댓글 수정 요청정보
-     * @return 수정한 댓글 정보
-     */
     @PatchMapping("/comments/{comments-id}")
     private ResponseEntity<?> update(@PathVariable("id") Long id,
                                      @PathVariable("comments-id") Long commentId,
@@ -74,12 +59,6 @@ public class CommentController {
         return new ResponseEntity<>(commentService.updateComment(commentId, memberDetails.getMemberId(), commentUpdate), HttpStatus.OK);
     }
 
-    /**
-     *댓글 삭제
-     * @param memberDetails 로그인 세션정보
-     * @param commentId 댓글 Id
-     * @return 응답상태코드 200
-     */
     @DeleteMapping("/comments/{comments-id}")
     private ResponseEntity<?> delete(@PathVariable("id") Long id,
                                      @PathVariable("comments-id") Long commentId,

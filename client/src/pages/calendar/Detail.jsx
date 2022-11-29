@@ -1,13 +1,17 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import rcddetailbtn from '../../images/rcddetailbtn.png';
 import rcddecordminus from '../../images/rcddecordminus.png';
 import DetailCamera from '../../images/DetailCamera.png';
-import RecordTagAsync from '../../redux/action/RecordAsync';
+import {
+  RecordTagAsync,
+  RecordUpAsync,
+  RecordListAsync,
+} from '../../redux/action/RecordAsync';
 
 function Detail() {
   const list = [
@@ -19,62 +23,105 @@ function Detail() {
     { title: '랫풀다운', tag: '등', set: '5', num: '20', weight: '80' },
   ];
   const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
-  const taghealth = [
-    {
-      등: [
-        '폴업',
-        '바벨 로우',
-        '덤벨 로우',
-        '펜들레이 로우',
-        '머신 로우',
-        '랫풀다운',
-        '친업',
-        '백 익스텐션',
-        '굿모닝 엑서사이즈',
-        '시티드 케이블 로우',
-      ],
-      가슴: [
-        '벤치 프레스',
-        '덤벨 벤치 프레스',
-        '인클라인 벤치 프레스',
-        '디클라인 벤치 프레스',
-        '디클라인 덤벨 벤치 프레스',
-        '딥스',
-        '덤벨 풀오버',
-        '버터 플라이 머신',
-        '케이블 크로스 오버',
-      ],
-    },
-  ];
+  const taghealth1 = useSelector(state => state.record.data.data);
+  const List = useSelector(state => state);
+  console.log(List);
   const navigate = useNavigate();
   const photoUp = useRef();
-  const [health, setHealth] = useState('');
-  const [tags, setTags] = useState('');
-  const [set, setSet] = useState('');
-  const [num, setNum] = useState('');
-  const [weight, setWeight] = useState('');
+  const [health, setHealth] = useState(null);
+  const [tags, setTags] = useState('등');
+  const [set, setSet] = useState(null);
+  const [num, setNum] = useState(null);
+  const [weight, setWeight] = useState(null);
+  const [split, setSplit] = useState([]);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const today = new Date().toISOString().slice(0, 10);
   const [clicked, setClicked] = useState(false);
   const [files, setFiles] = useState([]);
+  const [realImg, setRealImg] = useState([]);
   const reader = new FileReader();
   const dispatch = useDispatch();
-
+  console.log(health, today);
   const handleFile = e => {
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
-      setFiles([...files, resultImg.toString()]);
+      setRealImg([...realImg, resultImg.toString()]);
     };
+    setFiles([...files, e.target.files[0]]);
   };
   const handelClick = () => {
     photoUp.current.click();
   };
-  const deleteFile = index => {
-    const imgArr = files.filter((el, idx) => idx !== index);
-    setFiles([...imgArr]);
+  const deleteFile = () => {
+    setRealImg([]);
+    setFiles([]);
   };
   const tagClick = () => {
     dispatch(RecordTagAsync(tags));
   };
+  const handleAddClick = () => {
+    if (set.length !== 0 && num.length !== 0 && weight.length !== 0) {
+      setSplit([...split, { id: 22, set, count: num, weight }]);
+    } else {
+      alert('데이터를 제대로 입력해주세요!');
+    }
+  };
+  const handleUp = () => {
+    if (
+      split.length !== 0 &&
+      startTime.length !== 0 &&
+      endTime.length !== 0 &&
+      files.length !== 0
+    ) {
+      const formdata = new FormData();
+      const sports = [
+        {
+          id: 10,
+          set: 10,
+          count: 10,
+          weight: 10,
+        },
+        {
+          id: 10,
+          set: 10,
+          count: 10,
+          weight: 10,
+        },
+        {
+          id: 10,
+          set: 10,
+          count: 10,
+          weight: 10,
+        },
+      ];
+      // const redata = [today, startTime, endTime];
+      formdata.append('start', today.toString());
+      formdata.append('startTime', startTime);
+      formdata.append('endTime', endTime);
+      formdata.append('startImage', files[0]);
+      formdata.append('endImage', files[1]);
+      formdata.append(
+        'recordCreateVO',
+        new Blob([JSON.stringify({ sports })], { type: 'application/json' }),
+      );
+      // for (let i = 0; i < split.length; i += 1) {
+      //   formdata.append(`sports[${i}].id`, split[i].id);
+      //   formdata.append(`sports[${i}].set`, split[i].set);
+      //   formdata.append(`sports[${i}].count`, split[i].count);
+      //   formdata.append(`sports[${i}].weight`, split[i].weight);
+      //   formdata.append(`sports[${i}]`, JSON.stringify(split[i]));
+      // }
+      dispatch(RecordUpAsync(formdata));
+    } else {
+      alert('데이터를 제대로 입력해주세요!');
+    }
+  };
+  useEffect(() => {
+    dispatch(RecordTagAsync(tags));
+    dispatch(RecordListAsync());
+  }, []);
   return (
     <DetailBox>
       <Header />
@@ -84,7 +131,11 @@ function Detail() {
             <label htmlFor="starttime" className="timelabel">
               Start-Time
             </label>
-            <input id="starttime" placeholder="ex) 21:19:00" />
+            <input
+              id="starttime"
+              placeholder="ex) 21:19:00"
+              onChange={e => setStartTime(e.target.value)}
+            />
             <input
               className="imgadd"
               type="file"
@@ -101,7 +152,11 @@ function Detail() {
             <label htmlFor="starttime" className="endtimelabel">
               End-Time
             </label>
-            <input id="starttime" placeholder="ex) 22:19:00" />
+            <input
+              id="starttime"
+              placeholder="ex) 22:19:00"
+              onChange={e => setEndTime(e.target.value)}
+            />
             <input
               className="imgadd"
               type="file"
@@ -116,8 +171,8 @@ function Detail() {
           </div>
         </section>
         <section className="Imgs">
-          {files &&
-            files.map((data, idx) => {
+          {realImg &&
+            realImg.map((data, idx) => {
               return (
                 <div className="imgboxs">
                   <img src={data} alt="증명사진" className="TimeImgs" />
@@ -136,6 +191,7 @@ function Detail() {
                 <select
                   onChange={e => {
                     setTags(e.target.value);
+                    tagClick(e.target.value);
                   }}
                 >
                   {btns &&
@@ -149,13 +205,15 @@ function Detail() {
                   <span className="title">운동</span>
                   <select
                     onChange={e => {
-                      setHealth(e.target.value);
-                      tagClick();
+                      const Id = taghealth1.filter(
+                        data => data.name === e.target.value,
+                      );
+                      setHealth(Id[0].sportsId);
                     }}
                   >
-                    {taghealth[0][tags] &&
-                      taghealth[0][tags].map(data => {
-                        return <option>{data}</option>;
+                    {taghealth1 &&
+                      taghealth1.map(data => {
+                        return <option>{data.name}</option>;
                       })}
                   </select>
                 </div>
@@ -169,7 +227,7 @@ function Detail() {
                 <input
                   id="set"
                   placeholder="숫자만 적어주세요."
-                  onChange={e => setSet(e.target.value)}
+                  onChange={e => setSet(+e.target.value)}
                 />
               </div>
               <div className="Inselect">
@@ -179,7 +237,7 @@ function Detail() {
                 <input
                   id="set"
                   placeholder="숫자만 적어주세요."
-                  onChange={e => setNum(e.target.value)}
+                  onChange={e => setNum(+e.target.value)}
                 />
               </div>
             </div>
@@ -191,18 +249,12 @@ function Detail() {
                 <input
                   id="set"
                   placeholder="숫자만 적어주세요."
-                  onChange={e => setWeight(e.target.value)}
+                  onChange={e => setWeight(+e.target.value)}
                 />
               </div>
               <button
                 onClick={() => {
-                  list.push({
-                    title: health,
-                    tag: tags,
-                    set,
-                    num,
-                    weight,
-                  });
+                  handleAddClick();
                 }}
               >
                 등록
@@ -238,14 +290,16 @@ function Detail() {
             })}
         </section>
         <section className="subcan">
-          <button className="submit">등록</button>
+          <button className="submit" onClick={() => handleUp()}>
+            등록
+          </button>
           <button
             className="cancle"
             onClick={() => {
               navigate('/record');
             }}
           >
-            취소
+            나가기
           </button>
         </section>
       </DetailMain>

@@ -35,7 +35,7 @@ public class PostTag {
     /**
      * 연관 관계 편의 메서드, postTag 생성후 post에 추가
      */
-    public static void addPostTag(Post post,Tag tag) {
+    public static void create(Post post, Tag tag) {
         PostTag postTag = PostTag.builder()
                 .tag(tag)
                 .post(post)

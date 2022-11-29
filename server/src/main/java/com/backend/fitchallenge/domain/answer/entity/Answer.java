@@ -50,7 +50,7 @@ public class Answer extends Auditable {
         this.member = member;
     }
 
-    public static Answer createAnswer(AnswerCreate answerCreate, Question question, Member member) {
+    public static Answer toEntity(AnswerCreate answerCreate, Question question, Member member) {
         return Answer.builder()
                 .content(answerCreate.getContent())
                 .isAccepted(false)
@@ -59,7 +59,7 @@ public class Answer extends Auditable {
                 .build();
     }
 
-    public void updateAnswer(AnswerUpdate answerUpdate) {
+    public void update(AnswerUpdate answerUpdate) {
         String changedContent = answerUpdate.getContent();
 
         if (changedContent != null) {
@@ -71,7 +71,4 @@ public class Answer extends Auditable {
         this.isAccepted = true;
     }
 
-    public void unAccept() {
-        this.isAccepted = false;
-    }
 }

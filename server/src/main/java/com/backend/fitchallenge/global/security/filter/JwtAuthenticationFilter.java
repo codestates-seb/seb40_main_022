@@ -1,8 +1,7 @@
 package com.backend.fitchallenge.global.security.filter;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
-import com.backend.fitchallenge.domain.refreshtoken.RefreshTokenRepository;
-import com.backend.fitchallenge.global.dto.LoginDto;
+import com.backend.fitchallenge.global.dto.request.LoginDto;
 import com.backend.fitchallenge.global.redis.RedisService;
 import com.backend.fitchallenge.global.security.exception.MemberAlreadyLoggedIn;
 import com.backend.fitchallenge.global.security.jwt.JwtTokenProvider;
@@ -17,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 /**
  * 설명 : 로그인 인증을 위한 필터.

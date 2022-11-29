@@ -22,28 +22,32 @@ import {
   QnaDetailCommentAsync,
   QnaDetailAsync,
   QnaanswerDetaildelete,
+  QnaanswerAccept,
 } from '../../redux/action/QnaAsync';
 
 function QnaDetail() {
-  const [content, setContent] = useState('');
   const list = useSelector(state => state.qnalist.list);
   const answer = useSelector(state => state.qnalist.answers.answers);
+  const [content, setContent] = useState('');
   const Id = useParams();
   const data = list[+Id.id].questionId;
   const dispatch = useDispatch();
   const Upanswer = [data, content];
+
   const handleAnswer = () => {
-    dispatch(QnaDetailCommentAsync(Upanswer))
-      .unwrap()
-      .then(() => {
-        setTimeout(dispatch(QnaDetailAsync({ data })), 2000);
-      });
+    dispatch(QnaDetailCommentAsync(Upanswer));
+    setContent('');
+  };
+  const handleAccept = id => {
+    dispatch(QnaanswerAccept(id));
+  };
+  const handleDelete = id => {
+    dispatch(QnaanswerDetaildelete(id));
   };
   useEffect(() => {
     dispatch(QnaDetailAsync({ data }));
   }, []);
-  console.log(data);
-  console.log(answer);
+
   return (
     <Detail>
       <Headerwrap>
@@ -85,28 +89,29 @@ function QnaDetail() {
         <DetailAnswer>
           {answer &&
             answer.map(ansdata => {
-              console.log(ansdata);
+              const AcId = [data, ansdata.answerId];
               return (
                 <>
                   <h2>답변 {ansdata.length}</h2>
-                  <h3>{ansdata.content}</h3>
+
+                  <h4>{ansdata.content}</h4>
                   <AnswerNDB>
                     <div>
                       <h4>{ansdata.answerWriter.username}</h4>
                       <h4>{ansdata.createdAt}</h4>
                     </div>
                     <button
-                    // className={ansdata.accepted ? 'accepted' : 'noaccepted'}
+                      onClick={() => {
+                        handleAccept(AcId);
+                      }}
                     >
                       {ansdata.accepted ? 'V' : '채택'}
                     </button>
                     <div>
-                      <button>수정</button>
+                      <button onClick={() => {}}>수정</button>
                       <button
                         onClick={() => {
-                          const answerid = [data, ansdata.answerWriter.id];
-                          console.log(answerid);
-                          dispatch(QnaanswerDetaildelete(answerid));
+                          handleDelete(AcId);
                         }}
                       >
                         삭제

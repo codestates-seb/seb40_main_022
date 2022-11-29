@@ -1,6 +1,7 @@
 package com.backend.fitchallenge.domain.member.dto.response.extract;
 
 import com.backend.fitchallenge.domain.member.entity.Member;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,18 +14,17 @@ public class MemberResponse {
 
     private String profileImage;
 
-    @Builder
-    private MemberResponse(Long id, String username, String profileImage) {
+    @QueryProjection
+    public MemberResponse(Long id, String username, String profileImage) {
         this.id = id;
         this.username = username;
         this.profileImage = profileImage;
     }
 
     public static MemberResponse of(Member member) {
-        return MemberResponse.builder()
-                .id(member.getId())
-                .username(member.getUsername())
-                .profileImage(member.getProfileImage().getPath())
-                .build();
+        return new MemberResponse(
+                member.getId(),
+                member.getUsername(),
+                member.getProfileImage().getPath());
     }
 }

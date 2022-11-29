@@ -17,7 +17,24 @@ export const MypageGet = createAsyncThunk('/mypage', () => {
   return list;
 });
 
-export const MyPostDelete = createAsyncThunk('/member/mypage', () => {
+export const MypageScroll = createAsyncThunk('mypage/scroll', lastPostId => {
+  console.log(lastPostId);
+  const list = axios
+    .get(`/members/myPage?lastPostId=${lastPostId}`, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => {
+      console.log(res);
+      return res.data;
+    });
+
+  return list;
+});
+
+export const MyIdDelete = createAsyncThunk('/member/mypage', () => {
   axios
     .delete(`/members/myPage/delete`, {
       headers: {
