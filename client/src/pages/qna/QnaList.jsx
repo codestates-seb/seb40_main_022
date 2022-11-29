@@ -14,6 +14,7 @@ import {
   QnaRadio,
 } from './QnaStyle';
 import { QnaAsynclist, QnaSearchreload } from '../../redux/action/QnaAsync';
+import Pagination from './Pagination';
 
 function QnaList() {
   const navigate = useNavigate();
@@ -24,10 +25,19 @@ function QnaList() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);
+
+  // const [size, setSize] = useState(10);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [paginationLength, setPaginationLength] = useState(3);
+
+  // const sizeHandler = per => setSize(per);
+  // const currentPageHandler = p => setCurrentPage(p);
+
   const datasearch = [search, sort];
   useEffect(() => {
     dispatch(QnaAsynclist());
   }, []);
+
   const handleSearch = () => {
     if (search === '') {
       setResult(false);
@@ -36,6 +46,7 @@ function QnaList() {
     }
     dispatch(QnaSearchreload(datasearch));
   };
+
   return (
     <QnABack>
       <Header />
@@ -133,6 +144,7 @@ function QnaList() {
                 );
               })}
         </QnaContent>
+        <Pagination />
       </Qna>
       <Footer />
     </QnABack>

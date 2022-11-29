@@ -11,17 +11,19 @@ const QnaSlice = createSlice({
     list: [],
     answers: [],
     search: [],
+    pageInfo: [],
   },
   reducers: {},
   extraReducers: {
     [QnaAsynclist.fulfilled]: (state, action) => {
-      state.list = action.payload;
+      console.log(state, action);
+      state.list = action.payload.data;
+      state.pageInfo = action.payload.pageInfo;
     },
     [QnaDetailAsync.fulfilled]: (state, action) => {
       state.answers = action.payload;
     },
     [QnaSearchreload.fulfilled]: (state, action) => {
-      console.log(state, action);
       state.search = action.payload;
     },
   },
