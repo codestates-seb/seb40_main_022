@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.record.repository;
 import com.backend.fitchallenge.domain.record.dto.response.PersonalSimpleRecordResponse;
 import com.backend.fitchallenge.domain.record.dto.response.QPersonalSimpleRecordResponse;
 import com.backend.fitchallenge.domain.record.entity.Record;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -73,26 +74,26 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
                         record.endTime,
                         record.volume,
                         record.result
-                )
-                ).from(record)
+                )).from(record)
                 .leftJoin(member).on(record.member.id.eq(member.id))
                 .where(record.member.id.eq(memberId).and(record.month.eq(month)))
+                .orderBy(dateOrder())
                 .fetch();
     }
 
     @Override
     public List<PersonalSimpleRecordResponse> findByMemberIdAndOpponentId(Long memberId, Long opponentId) {
         return jpaQueryFactory.select(
-                new QPersonalSimpleRecordResponse(
-                        record.id,
-                        record.year,
-                        record.month,
-                        record.day,
-                        record.startTime,
-                        record.endTime,
-                        record.volume,
-                        record.result
-                ))
+                        new QPersonalSimpleRecordResponse(
+                                record.id,
+                                record.year,
+                                record.month,
+                                record.day,
+                                record.startTime,
+                                record.endTime,
+                                record.volume,
+                                record.result
+                        )).from(record)
                 .leftJoin(member).on(record.member.id.eq(member.id))
                 .leftJoin(member.challenge, challenge)
                 .where(challengeMemberIdEq(memberId, opponentId),
@@ -102,6 +103,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
 
     @Override
     public Boolean exist(Long memberId, LocalDate date) {
+
         Integer fetchOne = jpaQueryFactory
                 .selectOne()
                 .from(record)
@@ -125,12 +127,12 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
 
     //월 일치
     private BooleanExpression monthEq(Integer month) {
-        return month != null ? record.year.eq(month) : null;
+        return month != null ? record.month.eq(month) : null;
     }
 
     //일 일치
     private BooleanExpression dayEq(Integer day) {
-        return day != null ? record.year.eq(day) : null;
+        return day != null ? record.day.eq(day) : null;
     }
 
     private BooleanExpression challengeMemberIdEq(Long memberId, Long opponentId) {
@@ -139,4 +141,11 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom {
                         .or(challenge.applicantId.eq(opponentId).and(challenge.counterpartId.eq(memberId))));
     }
 
+    private OrderSpecifier<?>[] dateOrder() {
+        return new OrderSpecifier[]{
+                record.year.asc(),
+                record.month.asc(),
+                record.day.asc()
+        };
+    }
 }

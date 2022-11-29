@@ -9,12 +9,14 @@ import java.util.List;
 public class SimpleRecordResponse {
     List<PersonalSimpleRecordResponse> member;
     List<PersonalSimpleRecordResponse> opponent;
+    Long challengeId;
 
     @Builder
     private SimpleRecordResponse(List<PersonalSimpleRecordResponse> member,
-                                 List<PersonalSimpleRecordResponse> opponent) {
+                                 List<PersonalSimpleRecordResponse> opponent, Long challengeId) {
         this.member = member;
         this.opponent = opponent;
+        this.challengeId = challengeId;
     }
 
     public static SimpleRecordResponse containingOnly(List<PersonalSimpleRecordResponse> member) {
@@ -24,10 +26,12 @@ public class SimpleRecordResponse {
     }
 
     public static SimpleRecordResponse containingBoth(List<PersonalSimpleRecordResponse> member,
-                                                      List<PersonalSimpleRecordResponse> opponent) {
+                                                      List<PersonalSimpleRecordResponse> opponent,
+                                                      Long challengeId) {
         return SimpleRecordResponse.builder()
                 .member(member)
                 .opponent(opponent)
+                .challengeId(challengeId)
                 .build();
     }
 }
