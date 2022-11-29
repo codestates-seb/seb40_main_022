@@ -1,11 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { RecordTagAsync, RecordListAsync } from '../action/RecordAsync';
+import {
+  RecordTagAsync,
+  RecordListAsync,
+  RecordListGet,
+} from '../action/RecordAsync';
 
 const RecordSlice = createSlice({
   name: 'record',
   initialState: {
     data: [],
     List: [],
+    GetList: [],
   },
   reducers: {},
   extraReducers: {
@@ -15,6 +20,10 @@ const RecordSlice = createSlice({
     [RecordListAsync.fulfilled]: (state, action) => {
       console.log(action);
       state.List = action.payload;
+    },
+    [RecordListGet.fulfilled]: (state, action) => {
+      console.log(action);
+      state.GetList = action.payload;
     },
   },
 });

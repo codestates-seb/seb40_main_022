@@ -15,19 +15,21 @@ public class ChallengeResponse {
 
     private Long applicantId;
     private String applicantName;
-    private ProfileImage applicantImage;
+//    private ProfileImage applicantImage;
+    private String applicantImage;
     private Integer applicantHeight;
     private Integer applicantWeight;
 
     private Long counterpartId;
     private String counterpartName;
-    private ProfileImage counterpartImage;
+//    private ProfileImage counterpartImage;
+    private String counterpartImage;
     private Integer counterpartHeight;
     private Integer counterpartWeight;
 
 @Builder
-    public ChallengeResponse(Long applicantId, String applicantName, ProfileImage applicantImage, Integer applicantHeight, Integer applicantWeight,
-                             Long counterpartId, String counterpartName, ProfileImage counterpartImage, Integer counterpartHeight, Integer counterpartWeight) {
+    public ChallengeResponse(Long applicantId, String applicantName, String applicantImage, Integer applicantHeight, Integer applicantWeight,
+                             Long counterpartId, String counterpartName, String counterpartImage, Integer counterpartHeight, Integer counterpartWeight) {
         this.applicantId = applicantId;
         this.applicantName = applicantName;
         this.applicantImage = applicantImage;
@@ -44,16 +46,14 @@ public class ChallengeResponse {
         return ChallengeResponse.builder()
                 .applicantId(applicant.getId())
                 .applicantName(applicant.getUsername())
-                .applicantImage(applicant.getProfileImage())
+                .applicantImage(applicant.getProfileImage().getPath())
                 .applicantHeight(applicant.getHeight())
                 .applicantWeight(applicant.getWeight())
                 .counterpartId(counterpart.getId())
                 .counterpartName(counterpart.getUsername())
-                .counterpartImage(counterpart.getProfileImage())
+                .counterpartImage(counterpart.getProfileImage().getPath())
                 .counterpartHeight(counterpart.getHeight())
                 .counterpartWeight(counterpart.getWeight())
                 .build();
     }
-
-
 }

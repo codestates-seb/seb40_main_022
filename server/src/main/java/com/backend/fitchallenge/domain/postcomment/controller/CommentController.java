@@ -2,6 +2,7 @@ package com.backend.fitchallenge.domain.postcomment.controller;
 
 import com.backend.fitchallenge.domain.post.service.PostService;
 import com.backend.fitchallenge.domain.postcomment.dto.CommentCreate;
+import com.backend.fitchallenge.domain.postcomment.dto.CommentGet;
 import com.backend.fitchallenge.domain.postcomment.dto.CommentUpdate;
 import com.backend.fitchallenge.domain.postcomment.service.CommentService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
@@ -38,16 +39,15 @@ public class CommentController {
 
     /**
      * 댓글 조회 - 무한 스크롤 페이지네이션
-     * @param lastCommentId 현재 페이지의 마지막 postId
      * @param pageable default size = 10, page = 0
      * @return 댓글 목록 최신순으로 리턴
      */
     @GetMapping("/comments")
     private ResponseEntity<?> getList(@PathVariable("id") Long id,
-           @RequestParam Long lastCommentId,
+           @ModelAttribute CommentGet commentGet,
            @PageableDefault(size = 10)  Pageable pageable) {
 
-        return new ResponseEntity<>(commentService.getCommentList(id,lastCommentId,  pageable), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.getCommentList(id, commentGet.getLastCommentId(),  pageable), HttpStatus.OK);
     }
 
     @PatchMapping("/comments/{comments-id}")

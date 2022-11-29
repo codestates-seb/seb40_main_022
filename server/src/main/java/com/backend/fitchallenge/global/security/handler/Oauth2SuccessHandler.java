@@ -114,6 +114,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .newInstance()
                 .scheme("http")
                 .host("localhost")
+                .port(3000)
                 .queryParams(queryParams)
                 .build()
                 .toUri();
