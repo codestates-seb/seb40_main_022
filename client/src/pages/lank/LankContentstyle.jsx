@@ -11,6 +11,10 @@ export const Lankcontents = styled.section`
   border-bottom: 1px solid #c1c1c1;
   width: 100%;
   height: 100px;
+  .cont-picturebtn {
+    background: none;
+    border: none;
+  }
   > h1 {
     line-height: 70px;
     font-weight: bolder;
@@ -26,7 +30,7 @@ export const Lankcontents = styled.section`
     background-position: 80% 100%;
     margin-right: 20px;
   }
-  > button {
+  .challenge {
     width: 100px;
     height: 55px;
     background-color: var(--logored);

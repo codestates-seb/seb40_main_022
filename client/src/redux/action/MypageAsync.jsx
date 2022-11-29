@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const MypageGet = createAsyncThunk('/mypage', () => {
-  const list = axios
+  const data = axios
     .get('/members/myPage', {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
@@ -14,12 +14,12 @@ export const MypageGet = createAsyncThunk('/mypage', () => {
       return res.data;
     });
 
-  return list;
+  return data;
 });
 
-export const MypageScroll = createAsyncThunk('mypage/scroll', lastPostId => {
+export const MypageScroll = createAsyncThunk('/mypage', lastPostId => {
   console.log(lastPostId);
-  const list = axios
+  const data = axios
     .get(`/members/myPage?lastPostId=${lastPostId}`, {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
@@ -31,7 +31,24 @@ export const MypageScroll = createAsyncThunk('mypage/scroll', lastPostId => {
       return res.data;
     });
 
-  return list;
+  return data;
+});
+
+export const UserProfileGet = createAsyncThunk('/mypage', id => {
+  console.log(id);
+  const data = axios
+    .get(`/members/${id}`, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => {
+      console.log(res);
+      return res.data;
+    });
+
+  return data;
 });
 
 export const MyIdDelete = createAsyncThunk('/member/mypage', () => {

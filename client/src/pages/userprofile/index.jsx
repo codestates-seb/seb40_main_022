@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useInView } from 'react-intersection-observer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faDumbbell,
   faTrophy,
   faPersonRunning,
-  // faTrash,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   MypageGet,
   MypageScroll,
   MyIdDelete,
+  UserProfileGet,
 } from '../../redux/action/MypageAsync';
 import { asyncPostDel } from '../../redux/action/MainAsync';
 import Footer from '../../components/footer/Footer';
@@ -24,25 +25,26 @@ import {
   FollowBox,
   RecordBox,
   PictureBox,
-  // PictureContainer,
 } from './style';
 
-function Mypage() {
+function UserProfile() {
+  const { params } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(MypageGet());
+    dispatch(UserProfileGet(params));
   }, []);
 
   const navigate = useNavigate();
   // const [Clicked, setClicked] = useState(false);
   const [btnClick, setBtnClick] = useState(false);
   const data = useSelector(state => state.mypage);
-  const member = useSelector(state => state.mypage.member);
-  const dailyPosts = useSelector(state => state.mypage.dailyPosts.items);
-  const activity = useSelector(state => state.mypage.activity);
-  const [postlist, setPostlist] = useState(dailyPosts);
-  console.log(dailyPosts, postlist);
+  const member = useSelector(state => state.mypage.data.member);
+  const dailyPosts = useSelector(state => state.mypage.data.dailyPosts);
+  const activity = useSelector(state => state.mypage.data.activity);
   const lastMyPost = dailyPosts && dailyPosts[dailyPosts.length - 1];
+
+  //   const [postlist, setPostlist] = useState([dailyPosts]);
+  // console.log(postlist);
 
   // const [page, setPage] = useState(1);
   // const [loading, setLoading] = useState(false);
@@ -58,11 +60,6 @@ function Mypage() {
   // useEffect(() => {
   //   getItems();
   // }, [getItems]);
-
-  // useEffect(() => {
-  //   dispatch(MypageScroll(dailyPosts[2].postId));
-  //   setPostlist([...postlist, dailyPosts]);
-  // });
 
   // useEffect(() => {
   //   if (inView && !loading) {
@@ -144,55 +141,53 @@ function Mypage() {
               {activity.dayCount ? activity.dayCount : 0}일
             </div>
           </div>
-          <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
+          {/* <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
             정보 수정
           </button>
-          <button onClick={() => setBtnClick(!btnClick)}>회원 탈퇴</button>
+          <button onClick={() => setBtnClick(!btnClick)}>회원 탈퇴</button> */}
         </RecordBox>
         <hr className="line" />
+        <button
+          onClick={() => {
+            dispatch(MypageGet());
+          }}
+        >
+          -
+        </button>
         <PictureBox>
-          {postlist &&
-            postlist
-              // .filter(el => typeof el.image === 'string')
-              .map(list => {
+          {dailyPosts &&
+            dailyPosts
+              .filter(el => typeof el.image === 'string')
+              .map(post => {
                 return (
-                  <div>
-                    {list &&
-                      list.map(el => {
-                        return (
-                          <div key={el.postId} className="imgbox">
-                            <img src={el.image} alt="" />
-                            <button
-                              onClick={() => {
-                                handleDelPost(el.postId);
-                              }}
-                            >
-                              삭제
-                              {/* <FontAwesomeIcon icon={faTrash} /> */}
-                            </button>
-                          </div>
-                        );
-                      })}
+                  <div key={post.postId}>
+                    <img src={post.image} alt="" />
+                    <button
+                      onClick={() => {
+                        handleDelPost(post.postId);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </div>
                 );
               })}
           {/* <div ref={ref} /> */}
+          <button
+            onClick={() => {
+              dispatch(MypageScroll(lastMyPost.postId));
+            }}
+          >
+            +
+          </button>
         </PictureBox>
-        <button
-          onClick={() => {
-            dispatch(MypageScroll(lastMyPost.postId));
-            setPostlist([...postlist, dailyPosts]);
-          }}
-        >
-          +
-        </button>
       </div>
       <Footer />
     </Wrapper>
   );
 }
 
-export default Mypage;
+export default UserProfile;
 
 // {dailyPosts &&
 //   dailyPosts
@@ -215,24 +210,6 @@ export default Mypage;
 //                 </div>
 //               );
 //             })}
-//         </div>
-//       );
-//     })}
-
-// {dailyPosts &&
-//   dailyPosts
-//     // .filter(el => typeof el.image === 'string')
-//     .map(post => {
-//       return (
-//         <div key={post.postId}>
-//           <img src={post.image} alt="" />
-//           <button
-//             onClick={() => {
-//               handleDelPost(post.postId);
-//             }}
-//           >
-//             <FontAwesomeIcon icon={faTrash} />
-//           </button>
 //         </div>
 //       );
 //     })}
