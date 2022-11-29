@@ -30,7 +30,7 @@ public class CalendarSetup implements ApplicationListener<ContextRefreshedEvent>
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        for (int year = 2020; year <= 2030; year++) {
+        for (int year = 2022; year <= 2024; year++) {
             for (int month = 1; month <=12; month++) {
                 addCalendar(year, month);
             }

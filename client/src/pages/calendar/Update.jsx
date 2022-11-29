@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
@@ -11,11 +11,14 @@ import {
   RecordTagAsync,
   RecordUpAsync,
   RecordImgUp,
+  RecordListDelete,
 } from '../../redux/action/RecordAsync';
 
-function Detail() {
+function Update() {
   const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
   const taghealth1 = useSelector(state => state.record.data.data);
+  const ListupGet = useSelector(state => state.record.GetList.member.sports);
+  console.log(ListupGet);
   const navigate = useNavigate();
   const startphotoUp = useRef();
   const endphotoUp = useRef();
@@ -37,6 +40,7 @@ function Detail() {
   const reader = new FileReader();
   const dispatch = useDispatch();
   const formdata = new FormData();
+  const recordId = +useParams().id;
   const handleStartFile = e => {
     formdata.append('point', 'start');
     formdata.append('file', e.target.files[0]);
@@ -55,11 +59,9 @@ function Detail() {
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
-      console.log(resultImg);
       setEndRealImg(resultImg.toString());
     };
     setEndTime(e.target.files[0]);
-    console.log(e.target.files[0]);
   };
   const handelClick = name => {
     if (name === 'start') {
@@ -67,6 +69,9 @@ function Detail() {
     } else {
       endphotoUp.current.click();
     }
+  };
+  const handledelete = () => {
+    dispatch(RecordListDelete(recordId));
   };
   const deleteFile = name => {
     if (name === 'start') {
@@ -260,6 +265,26 @@ function Detail() {
           </button>
         </section>
         <section className="setInfo">
+          {ListupGet &&
+            ListupGet.map(data => {
+              return (
+                <div>
+                  <span>{data.bodyPart}</span>
+                  <span>{data.name}</span>
+                  <span>{data.set}세트</span>
+                  <span>{data.count}회</span>
+                  <span>{data.weight}kg</span>
+                  <button onClick={() => {}}>수정</button>
+                  <button
+                    onClick={() => {
+                      dispatch(RecordListDelete(data.sportsId));
+                    }}
+                  >
+                    삭제
+                  </button>
+                </div>
+              );
+            })}
           {split &&
             split.map((data, index) => {
               const selectHealth = taghealth1.filter(
@@ -303,7 +328,10 @@ function Detail() {
         </section>
         <section className="subcan">
           <button className="submit" onClick={() => handleUp()}>
-            등록
+            수정
+          </button>
+          <button className="submit" onClick={() => handledelete()}>
+            삭제
           </button>
           <button
             className="cancle"
@@ -320,4 +348,4 @@ function Detail() {
   );
 }
 
-export default Detail;
+export default Update;

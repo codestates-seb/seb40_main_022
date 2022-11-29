@@ -23,7 +23,7 @@ public class JobScheduler {
     private final JobLauncher jobLauncher;
     private final BatchConfig batchConfig;
 
-    @Scheduled(cron="* */5 * * * *")
+    @Scheduled(cron="0 0 12 * * *")
     public void runJob(){
 
         Map<String, JobParameter> confMap = new HashMap<>();
