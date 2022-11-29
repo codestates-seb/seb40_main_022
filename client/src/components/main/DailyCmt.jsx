@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useDispatch,
+  // useSelector
+} from 'react-redux';
+import axios from 'axios';
 import daily from '../../images/daily.jpg';
 import dailyAdd from '../../images/daily_add.svg';
 import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
-
 import { AddComment, CommentInput } from './MainStyle';
 import {
   asyncPostCmtUp,
-  asyncPostCmt,
-  asynCmtScroll,
+  // asyncPostCmt,
+  // asynCmtScroll,
   asyncPostCmtDel,
 } from '../../redux/action/MainAsync';
 
@@ -19,11 +22,12 @@ export default function DailyCmt({ index }) {
   const [cmtEditBut, setCmtEditBut] = useState(false);
   // const [editAnwer, setEditAnswer] = useState('');
   const ac = localStorage.getItem('Authorization');
-  const cmtData = useSelector(state => state.dailypost.comment.items);
-  console.log(cmtData);
-  const [cmtList, setCmtList] = useState([cmtData]);
-  console.log(cmtList);
-  const lastCmt = cmtData && cmtData[cmtData.length - 1];
+  // const cmtData = useSelector(state => state.dailypost.comment.items);
+  // console.log(cmtData);
+
+  const [cmtList, setCmtList] = useState([]);
+  const lookCmt = cmtList && cmtList[cmtList.length - 1];
+  const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   console.log(lastCmt);
 
   const handleAnswer = e => {
@@ -46,19 +50,39 @@ export default function DailyCmt({ index }) {
     setAnswervalue(e.target.value);
   };
 
-  useEffect(
-    () => {
-      dispatch(asyncPostCmt(index));
-    },
-    [
-      // dispatch, cmtData
-    ],
-  );
+  useEffect(() => {
+    const getPostCmt = async () => {
+      const res = await axios.get(`/dailyPosts/${index}/comments`);
+      const cmt = await res.data.items;
+      setCmtList([cmt]);
+      // if (postList.length !== 0 && lastPost && lastPost.post.postId >= 1 && inView) {
+      //   dispatch(asyncPostScroll(lastPost.post.postId));
+      //   setPostList([...postList, post]);
+      // }
+      // setLoading(false);
+      console.log(res);
+    };
+    getPostCmt();
+    // const lastPost = postList[0];
+    // console.log(lastPost);
+    // () => {
+    //   dispatch(asyncPostCmt(index));
+    // },
+    // [
+    //   // dispatch, cmtData
+    // ],
+  }, []);
 
   const plusBut = () => {
     const listUp = [index, lastCmt.commentId];
-    dispatch(asynCmtScroll(listUp));
-    setCmtList([...cmtList, cmtData]);
+    // dispatch(asynCmtScroll(listUp));
+    // setCmtList([...cmtList, cmtData]);
+    axios
+      .get(`/dailyPosts/${listUp[0]}/comments?lastCommentId=${listUp[1]}`)
+      .then(res => {
+        setCmtList([...cmtList, res.data.items]);
+        console.log(res);
+      });
   };
 
   return (
@@ -127,15 +151,17 @@ export default function DailyCmt({ index }) {
             </div>
           );
         })}
-      {lastCmt && lastCmt.commentId >= 1 ? (
-        <button
-          onClick={() => {
-            plusBut();
-          }}
-        >
-          ++++++++++
-        </button>
-      ) : null}
+      <div className="cmtListAdd">
+        {lastCmt && lastCmt.commentId > 1 ? (
+          <button
+            onClick={() => {
+              plusBut();
+            }}
+          >
+            <img className="add" src={dailyAdd} alt="dailyAdd" />
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

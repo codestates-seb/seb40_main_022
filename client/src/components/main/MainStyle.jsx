@@ -144,6 +144,28 @@ export const DailyItem = styled.div`
     width: 100%;
     animation: modal-bg-show 0.5s;
 
+    .cmtListAdd {
+      display: flex;
+      justify-content: center;
+      > button {
+        cursor: pointer;
+        color: var(--white);
+        border: none;
+        background-color: var(--white);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        box-shadow: var(--box-shadow);
+
+        .add {
+          width: 50px;
+          height: 50px;
+          &:hover {
+            filter: opacity(0.4) drop-shadow(0 0 0 var(--logored));
+          }
+        }
+      }
+    }
     .comment {
       display: flex;
       justify-content: space-between;

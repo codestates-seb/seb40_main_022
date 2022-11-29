@@ -10,6 +10,7 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', () => {
       },
     })
     .then(res => {
+      console.log(res);
       return res.data;
     });
 
