@@ -52,6 +52,7 @@ export const asyncPost = createAsyncThunk('post', () => {
       },
     )
     .then(res => {
+      console.log(res);
       return res.data;
     });
   return data;

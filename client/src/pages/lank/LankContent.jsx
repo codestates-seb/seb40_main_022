@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import ChallengeReq from '../../components/modal/ChallengeReq';
 import { LankBody, Lankcontents } from './LankContentstyle';
 import { LankProfileGet } from '../../redux/action/LankAsync';
@@ -13,6 +14,7 @@ function LankContent() {
   // const [period, setPeriod] = useState('');
   // const [point, setPoint] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const lanklist = useSelector(state => state.challenge.member.responses);
   // const listdata = [userName, height, weight, period, point];
@@ -32,11 +34,18 @@ function LankContent() {
           return (
             <Lankcontents>
               <h1>{idx + 1}</h1>
-              <img
-                src={data.profileImage}
-                className="cont-picture"
-                alt="프로필이미지"
-              />
+              <button
+                onClick={() => {
+                  navigate('/members/:id');
+                }}
+                className="cont-picturebtn"
+              >
+                <img
+                  src={data.profileImage}
+                  className="cont-picture"
+                  alt="프로필이미지"
+                />
+              </button>
               <h4 className="cont-name">{data.userName}</h4>
               <h4 className="cont-height">신장 : {data.height}</h4>
               <h4 className="cont-weight">몸무게 : {data.weight}</h4>
