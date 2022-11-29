@@ -9,7 +9,10 @@ import {
   ModalList,
 } from './modalstyle';
 import Challenge from './Challenge';
-import { Notifications } from '../../redux/action/LankAsync';
+import {
+  Notifications,
+  Notificationsallam,
+} from '../../redux/action/LankAsync';
 
 function Modal() {
   const [challenge, setChallenge] = useState(false);
@@ -18,6 +21,10 @@ function Modal() {
   const notification = useSelector(
     state => state.challenge.data.notificationResponses,
   );
+  const handleClick = id => {
+    setAcceptId(id);
+    dispatch(Notificationsallam(id));
+  };
   useEffect(() => {
     dispatch(Notifications());
   }, []);
@@ -27,12 +34,12 @@ function Modal() {
         <ModalHeader>알림</ModalHeader>
         <ModalMain>
           {notification &&
-            notification.map((data, idx) => {
+            notification.map(data => {
               return (
                 <ModalList
                   onClick={() => {
-                    setAcceptId(idx);
                     setChallenge(true);
+                    handleClick(data.url);
                   }}
                   className="challenge"
                 >

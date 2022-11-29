@@ -16,7 +16,6 @@ import { LankChallenge } from '../../redux/action/LankAsync';
 export default function ChallengeReq(props) {
   const { open, close, id } = props;
   const dispatch = useDispatch();
-
   const handleClick = () => {
     dispatch(LankChallenge(id));
   };
