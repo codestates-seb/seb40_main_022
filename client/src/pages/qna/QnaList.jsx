@@ -20,7 +20,7 @@ function QnaList() {
   const dispatch = useDispatch();
   const list = useSelector(state => state.qnalist.list);
   const questiondata = useSelector(state => state.qnalist.search);
-  console.log(questiondata);
+  console.log(questiondata, list);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);

@@ -1,15 +1,30 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import crown from '../../images/crown.png';
 import { MainBox, CalBox } from './Style';
+import { RecordListAsync, RecordListGet } from '../../redux/action/RecordAsync';
 
 function Calendar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const member = useSelector(state => state.record.List.member);
+  const opponent = useSelector(state => state.record.List.opponent);
+  const getlist = useSelector(state => state.record.GetList.member);
+  const getopponent = useSelector(state => state.record.GetList.opponent);
+  console.log(member, opponent, getlist, getopponent);
   const [Clicked, setClicked] = useState(false);
+  const memberId =
+    member && member.length !== 0 ? member[member.length - 1].recordId : null;
+  useEffect(() => {
+    const TodayMonth = new Date().getMonth() + 1;
+    dispatch(RecordListAsync(TodayMonth));
+    dispatch(RecordListGet(memberId));
+  }, []);
   return (
     <>
       <Header />
@@ -78,29 +93,54 @@ function Calendar() {
                 대결 중단
               </button>
             </div>
-            <div className="userInfoBox">
+            <div className={opponent ? 'userInfoBox' : 'userInfoBox2'}>
               <div className="box2">
                 <div className="name1">
                   <img src={crown} alt="승자이미지" />
-                  헬창남
+                  {getlist && getlist.member.username}
                 </div>
-                <button
-                  className="userdata1"
-                  onClick={() => {
-                    navigate('/detail');
-                  }}
-                >
-                  <span>날짜 : 11/14</span>
-                  <span>운동 시간 : 10:00 ~ 12:00</span>
-                </button>
+                <Link to={`/detail/${memberId}`} className="userdata1">
+                  <div className="oneday">
+                    <span>날짜 : {getlist && getlist.date.slice(5)}</span>
+                    <span>
+                      운동 시간 : {getlist && getlist.startTime}~{' '}
+                      {getlist && getlist.endTime}
+                    </span>
+                  </div>
+                  {getlist &&
+                    getlist.sports.map((data, idx) => {
+                      return idx < 3 ? (
+                        <div className="dayover">
+                          <span>{data.bodyPart}</span>
+                          <span>{data.name}</span>
+                          <span>
+                            {data.set}세트/{data.count}회
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="dayover">...</div>
+                      );
+                    })}
+                </Link>
               </div>
-              <div className="box2">
-                <div className="name2">헬잘알</div>
-                <button className="userdata2">
-                  <span>날짜 : 11/14</span>
-                  <span>운동 시간 : 10:00 ~ 12:00</span>
-                </button>
-              </div>
+              {opponent !== null ? (
+                <div className="box2">
+                  <div className="name2">
+                    {getopponent && getopponent.member.username}
+                  </div>
+                  <button className="userdata2">
+                    {opponent &&
+                      opponent.map(data => {
+                        return (
+                          <>
+                            <span>날짜 : {data.date}</span>
+                            <span>운동 시간 : {data.timeRecord}</span>
+                          </>
+                        );
+                      })}
+                  </button>
+                </div>
+              ) : null}
             </div>
           </article>
         </CalBox>

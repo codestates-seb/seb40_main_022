@@ -77,6 +77,72 @@ export const CalBox = styled.section`
         align-items: center;
         justify-content: center;
       }
+      .box1 {
+        .name1 {
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          margin-bottom: 10px;
+          font-weight: 700;
+          > img {
+            margin: 0 auto;
+            width: 30px;
+          }
+        }
+        .userdata1 {
+          width: 400px;
+          display: flex;
+          padding: 30px;
+          flex-direction: column;
+          align-items: top;
+          border: none;
+          background-color: var(--logored);
+          color: white;
+          border-radius: 5px;
+          box-shadow: var(--box-shadow);
+          text-decoration: none;
+          cursor: pointer;
+          .dayover {
+            width: 100%;
+            font-size: var(--font-16);
+            display: flex;
+            justify-content: space-around;
+            font-weight: 600;
+            margin: 0 auto;
+            border: none;
+            background-color: var(--logored);
+
+            :hover {
+              cursor: pointer;
+              background-color: #fa8a8a;
+            }
+          }
+          .oneday {
+            border: none;
+            padding: 3px;
+            background-color: var(--logored);
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto auto;
+            text-align: center;
+            :hover {
+              cursor: pointer;
+              background-color: #fa8a8a;
+            }
+            > span {
+              font-size: var(--font-10);
+              font-weight: 600;
+              margin: 5px 0px;
+            }
+          }
+        }
+      }
+    }
+    .userInfoBox2 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       .box1,
       .box2 {
         .name1 {
@@ -98,20 +164,43 @@ export const CalBox = styled.section`
         }
         .userdata1 {
           width: 400px;
-          height: 150px;
           display: flex;
           padding: 30px;
-          justify-content: space-between;
+          flex-direction: column;
           align-items: top;
           border: none;
           background-color: var(--logored);
           color: white;
           border-radius: 5px;
           box-shadow: var(--box-shadow);
+          text-decoration: none;
           cursor: pointer;
-          > span {
-            font-size: var(--font-16);
+          .dayover {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            font-size: var(--font-20);
             font-weight: 600;
+            color: #fff;
+            border: none;
+            background-color: var(--logored);
+            font-size: var(--font-16);
+            display: flex;
+            justify-content: space-around;
+          }
+          .oneday {
+            border: none;
+            padding: 3px;
+            background-color: var(--logored);
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto auto;
+            text-align: center;
+            > span {
+              font-size: var(--font-10);
+              font-weight: 600;
+              margin: 5px 0px;
+            }
           }
         }
         .userdata2 {
@@ -119,7 +208,7 @@ export const CalBox = styled.section`
           height: 150px;
           display: flex;
           padding: 30px;
-          justify-content: space-between;
+          justify-content: center;
           align-items: top;
           border: none;
           background-color: var(--boxblue);

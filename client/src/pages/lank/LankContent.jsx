@@ -28,11 +28,10 @@ function LankContent() {
         id={id}
       />
       {lanklist &&
-        lanklist.map(data => {
-          console.log(data);
+        lanklist.map((data, idx) => {
           return (
             <Lankcontents>
-              <h1>1</h1>
+              <h1>{idx + 1}</h1>
               <img
                 src={data.profileImage}
                 className="cont-picture"
