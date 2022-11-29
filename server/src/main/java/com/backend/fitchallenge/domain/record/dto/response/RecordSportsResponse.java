@@ -8,8 +8,6 @@ import lombok.Getter;
 @Getter
 public class RecordSportsResponse {
 
-    private MemberResponse member;
-
     private Long sportsId;
 
     private String bodyPart;
@@ -23,8 +21,7 @@ public class RecordSportsResponse {
     private int weight;
 
     @QueryProjection
-    public RecordSportsResponse(MemberResponse member, Long sportsId, Sports.BodyPart bodyPart, String name, int set, int count, int weight) {
-        this.member = member;
+    public RecordSportsResponse(Long sportsId, Sports.BodyPart bodyPart, String name, int set, int count, int weight) {
         this.sportsId = sportsId;
         this.bodyPart = bodyPart.getValue();
         this.name = name;

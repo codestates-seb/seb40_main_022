@@ -25,7 +25,6 @@ const LankSlice = createSlice({
       state.data = action.payload;
     },
     [EnemyUserInfo.fulfilled]: (state, action) => {
-      console.log(action);
       state.userInfo = action.payload;
     },
   },

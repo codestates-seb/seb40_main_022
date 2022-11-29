@@ -18,6 +18,7 @@ import ProfileEdit from './pages/profileedit/index';
 import QnaUpdate from './pages/qna/QnaUpdate';
 import UserProfile from './pages/userprofile/index';
 import { ReLodingLogin } from './redux/action/LoginAsync';
+import Update from './pages/calendar/Update';
 
 function App() {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ function App() {
       <Route path="/qna" element={<QnaList />} />
       <Route path="/record" element={<Calendar />} />
       <Route path="/detail" element={<Detail />} />
+      <Route path="/detail/:id" element={<Update />} />
       <Route path="/qnadetail/:id" element={<QnaDetail />} />
       <Route path="/qnaupdate/:id" element={<QnaUpdate />} />
     </Routes>

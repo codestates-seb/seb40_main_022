@@ -113,11 +113,19 @@ export const Content = styled.div`
 `;
 
 export const DailyForm = styled.div`
-  position: relative;
+  /* position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 10px; */
+
+  .list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
 `;
 
 export const DailyItem = styled.div`

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const LankProfileGet = createAsyncThunk('challenge', async () => {
   const lank = await axios.get('/challenge?page=1').then(res => {
-    // console.log(res);
+    console.log(res);
     return res.data;
   });
 
@@ -33,14 +33,32 @@ export const Notifications = createAsyncThunk('notifications', () => {
 });
 
 export const ChallengeAccept = createAsyncThunk('accpet', id => {
-  // console.log(id);
-  return axios.post(`/challenge/${id}/accept`).then(res => console.log(res));
+  console.log(id);
+  axios
+    .post(`${id}/accept`, id, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => console.log(res));
+});
+
+export const ChallengeDelete = createAsyncThunk('delete', id => {
+  console.log(id);
+  axios
+    .delete(id, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => console.log(res));
 });
 
 export const EnemyUserInfo = createAsyncThunk('userInfo', () => {
-  // console.log(id);
-  axios
-    .get(`/challenge/7`, {
+  return axios
+    .get(`/challenge/1`, {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
@@ -50,4 +68,15 @@ export const EnemyUserInfo = createAsyncThunk('userInfo', () => {
       console.log(res);
       return res.data;
     });
+});
+
+export const Notificationsallam = createAsyncThunk('allam', id => {
+  return axios
+    .patch(`/notifications/${id}`, id, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => console.log(res));
 });
