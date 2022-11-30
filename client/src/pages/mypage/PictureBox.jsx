@@ -4,45 +4,49 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import faTrash from '@fortawesome/free-solid-svg-icons';
-import Loader from '../../components/main/Loader';
+// import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import del from '../../images/delete.svg';
+import Loader from '../main/Loader';
 import { asyncPostDel } from '../../redux/action/MainAsync';
 
 export const Pictures = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   margin-bottom: 50px;
 
-  /* display: grid;
-  grid-row-gap: 30px;
-  grid-template-rows: auto;
-  grid-template-columns: auto auto auto;
-  width: 100%;
-  margin-bottom: 10px; */
-
-  > div {
-    width: 85vw;
+  .postList {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    margin-bottom: 50px;
+    margin: 100px 0 100px 0;
   }
   .imgbox {
     display: flex;
     flex-direction: column;
-    width: 80%;
-
+    align-items: flex-end;
+    padding: 5px;
     > img {
-      width: 300px;
-      height: 300px;
+      width: 400px;
+      height: 400px;
+      /* border: 5px solid var(--white); */
     }
     > button {
       cursor: pointer;
-      width: 40px;
+      /*width: 40px;
       margin-top: 10px;
+      border: none;
+      background: var(--white); */
+      background: var(--white);
+      border: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+      margin: 5px;
+      > img {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 `;
@@ -104,7 +108,7 @@ export function PictureBox() {
           // .filter(el => typeof el.image === 'string')
           .map(list => {
             return (
-              <div>
+              <div className="postList">
                 {list &&
                   list.map(el => {
                     return (
@@ -115,13 +119,12 @@ export function PictureBox() {
                             handleDelPost(el.postId);
                           }}
                         >
-                          삭제
-                          {/* <FontAwesomeIcon icon={faTrash} /> */}
+                          <img className="delete" src={del} alt="delete" />
                         </button>
                       </div>
                     );
                   })}
-                <div ref={ref} />
+                {/* <div ref={ref} /> */}
               </div>
             );
           })}

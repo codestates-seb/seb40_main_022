@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
-import Loader from '../../components/main/Loader';
+import Loader from '../main/Loader';
 
 const Pictures = styled.div`
   display: flex;

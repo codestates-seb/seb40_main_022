@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../../components/footer/Footer';
 import Head from '../../components/header/Header';
-import MainInside from '../../components/main/MainInside';
+import MainInside from './MainInside';
 
 const Maincontainer = styled.main`
   width: 100%;

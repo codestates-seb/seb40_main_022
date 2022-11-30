@@ -1,17 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import daily from '../../images/daily.jpg';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import dailyAdd from '../../images/daily_add.svg';
 import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
-
 import { AddComment, CommentInput } from './MainStyle';
-import {
-  asyncPostCmtUp,
-  asyncPostCmt,
-  asynCmtScroll,
-  asyncPostCmtDel,
-} from '../../redux/action/MainAsync';
+import { asyncPostCmtUp, asyncPostCmtDel } from '../../redux/action/MainAsync';
 
 export default function DailyCmt({ index }) {
   const dispatch = useDispatch();
@@ -19,12 +14,10 @@ export default function DailyCmt({ index }) {
   const [cmtEditBut, setCmtEditBut] = useState(false);
   // const [editAnwer, setEditAnswer] = useState('');
   const ac = localStorage.getItem('Authorization');
-  const cmtData = useSelector(state => state.dailypost.comment.items);
-  console.log(cmtData);
-  const [cmtList, setCmtList] = useState([cmtData]);
-  console.log(cmtList);
-  const lastCmt = cmtData && cmtData[cmtData.length - 1];
-  console.log(lastCmt);
+  const [cmtList, setCmtList] = useState([]);
+  const lookCmt = cmtList && cmtList[cmtList.length - 1];
+  const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
+  const navigate = useNavigate();
 
   const handleAnswer = e => {
     e.preventDefault();
@@ -46,27 +39,27 @@ export default function DailyCmt({ index }) {
     setAnswervalue(e.target.value);
   };
 
-  useEffect(
-    () => {
-      dispatch(asyncPostCmt(index));
-    },
-    [
-      // dispatch, cmtData
-    ],
-  );
+  useEffect(() => {
+    const getPostCmt = async () => {
+      const res = await axios.get(`/dailyPosts/${index}/comments`);
+      const cmt = await res.data.items;
+      setCmtList([cmt]);
+    };
+    getPostCmt();
+  }, []);
 
   const plusBut = () => {
     const listUp = [index, lastCmt.commentId];
-    dispatch(asynCmtScroll(listUp));
-    setCmtList([...cmtList, cmtData]);
+    axios
+      .get(`/dailyPosts/${listUp[0]}/comments?lastCommentId=${listUp[1]}`)
+      .then(res => {
+        setCmtList([...cmtList, res.data.items]);
+      });
   };
 
   return (
     <div className="commentdiv">
       <AddComment>
-        <span className="cmtUserImg">
-          <img className="user" src={daily} alt="daily" />
-        </span>
         <CommentInput
           placeholder="comment"
           maxLength={30}
@@ -91,11 +84,18 @@ export default function DailyCmt({ index }) {
                     <div className="comment">
                       <div className="cmtContent">
                         <span className="cmtUserImg">
-                          <img
-                            className="user"
-                            src={all.profileImage}
-                            alt="daily"
-                          />
+                          <button
+                            onClick={() => {
+                              navigate(`/members/${all.memberId}`);
+                            }}
+                            className="cont-picture"
+                          >
+                            <img
+                              className="user"
+                              src={all.profileImage}
+                              alt="daily"
+                            />
+                          </button>
                         </span>
                         <div className="id_content">
                           <div className="cmtUserName">{all.userName}</div>
@@ -127,15 +127,17 @@ export default function DailyCmt({ index }) {
             </div>
           );
         })}
-      {lastCmt && lastCmt.commentId >= 1 ? (
-        <button
-          onClick={() => {
-            plusBut();
-          }}
-        >
-          ++++++++++
-        </button>
-      ) : null}
+      <div className="cmtListAdd">
+        {lastCmt && lastCmt.commentId > 1 && cmtList[0].length >= 5 ? (
+          <button
+            onClick={() => {
+              plusBut();
+            }}
+          >
+            <img className="add" src={dailyAdd} alt="dailyAdd" />
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
