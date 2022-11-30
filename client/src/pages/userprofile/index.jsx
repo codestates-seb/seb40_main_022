@@ -1,117 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { useInView } from 'react-intersection-observer';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faDumbbell,
   faTrophy,
   faPersonRunning,
-  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  MypageGet,
-  MypageScroll,
-  MyIdDelete,
-  UserProfileGet,
-} from '../../redux/action/MypageAsync';
-import { asyncPostDel } from '../../redux/action/MainAsync';
+import { UserProfileGet } from '../../redux/action/ProfileAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
-import {
-  Wrapper,
-  ProfileBox,
-  NameBox,
-  FollowBox,
-  RecordBox,
-  PictureBox,
-} from './style';
+import userPicture from './userPicture';
+import { Wrapper, ProfileBox, NameBox, FollowBox, RecordBox } from './style';
 
 function UserProfile() {
-  const { params } = useParams();
   const dispatch = useDispatch();
+  const Id = +useParams().id;
   useEffect(() => {
-    dispatch(UserProfileGet(params));
+    dispatch(UserProfileGet(Id));
   }, []);
 
-  const navigate = useNavigate();
-  // const [Clicked, setClicked] = useState(false);
-  const [btnClick, setBtnClick] = useState(false);
-  const data = useSelector(state => state.mypage);
-  const member = useSelector(state => state.mypage.data.member);
-  const dailyPosts = useSelector(state => state.mypage.data.dailyPosts);
-  const activity = useSelector(state => state.mypage.data.activity);
-  const lastMyPost = dailyPosts && dailyPosts[dailyPosts.length - 1];
-
-  //   const [postlist, setPostlist] = useState([dailyPosts]);
-  // console.log(postlist);
-
-  // const [page, setPage] = useState(1);
-  // const [loading, setLoading] = useState(false);
-  // const [ref, inView] = useInView();
-
-  // const getItems = useCallback(() => {
-  //   setLoading(true);
-  //   dispatch(MypageScroll(dailyPosts[2].postId));
-  //   setPostlist([...postlist, dailyPosts]);
-  //   setLoading(false);
-  // }, [page]);
-
-  // useEffect(() => {
-  //   getItems();
-  // }, [getItems]);
-
-  // useEffect(() => {
-  //   if (inView && !loading) {
-  //     setPage(prevState => prevState + 1);
-  //   }
-  // }, [inView, loading]);
-
-  const handleDelPost = id => {
-    dispatch(asyncPostDel(id));
-    window.location.reload();
-  };
+  const data = useSelector(state => state.profile);
+  console.log(data);
+  const member = useSelector(state => state.profile.member);
+  const activity = useSelector(state => state.profile.activity);
 
   return (
     <Wrapper>
       <Header />
-      {/* {Clicked ? (
-        <div className="delmodal">
-          <div className="contentbox">게시글을 삭제하시겠습니까?</div>
-          <div className="btns">
-            <button
-              className="yes"
-              onClick={() => {
-                handleDelPost(list.post.postId);
-              }}
-            >
-              예
-            </button>
-            <button className="no" onClick={() => setClicked(!Clicked)}>
-              아니요
-            </button>
-          </div>
-        </div>
-      ) : null} */}
-      {btnClick ? (
-        <div className="delmodal">
-          <div className="contentbox">정말 탈퇴하시겠습니까?</div>
-          <div className="btns">
-            <button
-              className="yes"
-              onClick={() => {
-                dispatch(MyIdDelete());
-                navigate('/');
-              }}
-            >
-              예
-            </button>
-            <button className="no" onClick={() => setBtnClick(!btnClick)}>
-              아니요
-            </button>
-          </div>
-        </div>
-      ) : null}
       <div className="box">
         <ProfileBox>
           <div className="circle">
@@ -141,46 +57,9 @@ function UserProfile() {
               {activity.dayCount ? activity.dayCount : 0}일
             </div>
           </div>
-          {/* <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
-            정보 수정
-          </button>
-          <button onClick={() => setBtnClick(!btnClick)}>회원 탈퇴</button> */}
         </RecordBox>
         <hr className="line" />
-        <button
-          onClick={() => {
-            dispatch(MypageGet());
-          }}
-        >
-          -
-        </button>
-        <PictureBox>
-          {dailyPosts &&
-            dailyPosts
-              .filter(el => typeof el.image === 'string')
-              .map(post => {
-                return (
-                  <div key={post.postId}>
-                    <img src={post.image} alt="" />
-                    <button
-                      onClick={() => {
-                        handleDelPost(post.postId);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-                );
-              })}
-          {/* <div ref={ref} /> */}
-          <button
-            onClick={() => {
-              dispatch(MypageScroll(lastMyPost.postId));
-            }}
-          >
-            +
-          </button>
-        </PictureBox>
+        <userPicture />
       </div>
       <Footer />
     </Wrapper>
@@ -188,28 +67,3 @@ function UserProfile() {
 }
 
 export default UserProfile;
-
-// {dailyPosts &&
-//   dailyPosts
-//     // .filter(el => typeof el.image === 'string')
-//     .map(list => {
-//       return (
-//         <div>
-//           {list &&
-//             list.map(data => {
-//               return (
-//                 <div key={data.postId}>
-//                   <img src={data.image} alt="" />
-//                   <button
-//                     onClick={() => {
-//                       handleDelPost(data.postId);
-//                     }}
-//                   >
-//                     <FontAwesomeIcon icon={faTrash} />
-//                   </button>
-//                 </div>
-//               );
-//             })}
-//         </div>
-//       );
-//     })}

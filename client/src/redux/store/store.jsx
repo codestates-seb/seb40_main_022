@@ -7,6 +7,7 @@ import QnaSlice from '../reducer/QnaSlice';
 import MypageSlice from '../reducer/MypageSlice';
 import MypageEditSlice from '../reducer/MypageEditSlice';
 import RecordSlice from '../reducer/RecordSlice';
+import ProfileSlice from '../reducer/ProfileSlice';
 
 // Slice Append Here
 const reducer = {
@@ -18,6 +19,7 @@ const reducer = {
   mypage: MypageSlice,
   mypageedit: MypageEditSlice,
   record: RecordSlice,
+  profile: ProfileSlice,
 };
 
 const store = configureStore({

@@ -32,7 +32,7 @@ function ProfileEdit() {
   const [select, setSelect] = useState('');
   const [height, setHeight] = useState(userdata.member.height);
   const [weight, setWeight] = useState(userdata.member.weight);
-  const [kilogram, setKilogram] = useState(userdata.activity.kilogram);
+  const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
   const [prevImage, setPrevImage] = useState('');
   const [profileImage, setProfileImage] = useState(
@@ -162,7 +162,7 @@ function ProfileEdit() {
                       type="radio"
                       name="sex"
                       value="male"
-                      checked="checked"
+                      defaultChecked
                       onChange={e => {
                         // e.preventDefault();
                         setGender(e.target.value);
@@ -294,8 +294,7 @@ function ProfileEdit() {
           <BtnBox>
             <button
               className="set-btn"
-              onClick={e => {
-                e.preventDefault();
+              onClick={() => {
                 handleSubmit();
                 navigate('/mypage');
               }}
