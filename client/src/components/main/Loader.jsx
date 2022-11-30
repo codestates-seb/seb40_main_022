@@ -9,12 +9,13 @@ const LoaderWrap = styled.div`
   justify-content: center;
   text-align: center;
   align-items: center;
+  margin-bottom: 35px;
 `;
 
 function Loader() {
   return (
     <LoaderWrap>
-      <ReactLoading type="spin" color="#A593E0" />
+      <ReactLoading type="spin" color="#626262" />
     </LoaderWrap>
   );
 }

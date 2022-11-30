@@ -38,6 +38,7 @@ function Mypage() {
   const [btnClick, setBtnClick] = useState(false);
   const data = useSelector(state => state.mypage);
   const member = useSelector(state => state.mypage.member);
+  console.log(member);
   const dailyPosts = useSelector(state => state.mypage.dailyPosts.items);
   const activity = useSelector(state => state.mypage.activity);
   const [postlist, setPostlist] = useState(dailyPosts);

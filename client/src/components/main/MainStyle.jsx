@@ -66,6 +66,9 @@ export const ContentForm = styled.div`
   margin-top: 180px;
   /* left: 50px;
   right: 50px; */
+  .cont-picture {
+    border-radius: 50%;
+  }
 `;
 
 export const Top = styled.div`
@@ -181,14 +184,22 @@ export const DailyItem = styled.div`
         .content {
           width: 500px;
         }
+
+        .cont-picture {
+          background-color: var(--white);
+          width: 45px;
+          height: 45px;
+          margin-right: 10px;
+        }
       }
+
       img {
         cursor: pointer;
         width: 45px;
         height: 45px;
         border-radius: 50%;
         object-fit: cover;
-        margin-right: 10px;
+        /* margin-right: 10px; */
       }
       .cmtUserName {
         font-weight: bold;
@@ -308,6 +319,7 @@ export const DailyItem = styled.div`
 export const AddComment = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 10px;
   margin-bottom: 20px;
   .user {

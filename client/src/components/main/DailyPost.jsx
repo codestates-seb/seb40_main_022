@@ -1,35 +1,16 @@
 import { useEffect, useState } from 'react';
-// import {
-//   // useDispatch,
-//   useSelector,
-// } from 'react-redux';
 import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
-// import DailyCmt from './DailyCmt';
 import DailyInfomation from './DailyInfo';
 import DailyImg from './DailyImg';
 import { DailyForm, DailyItem } from './MainStyle';
-// import {
-//   // asyncPost,
-//   // asyncPostDel,
-//   asyncPostScroll,
-//   // asyncPostCmtEdit,
-// } from '../../redux/action/MainAsync';
+import Loader from './Loader';
 
 export default function DailyPost() {
-  // const data = useSelector(state => state.dailypost.data.items);
-  // console.log(data);
-
-  // const dispatch = useDispatch();
-
   const [postList, setPostList] = useState([]);
-  // console.log(postList);
 
   const lastPost = postList && postList[postList.length - 1];
-  // console.log(lastPost);
-
-  // const [loading, setLoading] = useState(true);
-  // setPostList([...postList, data]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // const [bol, setBol] = useState(true);
 
@@ -38,49 +19,29 @@ export default function DailyPost() {
   //   setBol(false);
   // };
 
-  // useEffect(() => {
-  //   dispatch(asyncPostScroll());
-  // }, []);
   const [ref, inView] = useInView();
+
   useEffect(() => {
-    // setLoading(true);
     const getPost = async () => {
       const res = await axios.get(`/dailyPosts`);
       const post = await res.data.items;
       setPostList([post]);
-      // if (postList.length !== 0 && lastPost && lastPost.post.postId >= 1 && inView) {
-      //   dispatch(asyncPostScroll(lastPost.post.postId));
-      //   setPostList([...postList, post]);
-      // }
-      // setLoading(false);
-      console.log(res);
     };
     getPost();
-    // const lastPost = postList[0];
-    // console.log(lastPost);
   }, []);
 
   useEffect(() => {
-    if (
-      // postList && lastPost && lastPost.post.postId > 1 &&
-      // 초깃값 설정 제대로...
-      inView
-    ) {
-      const lastPostId = lastPost && lastPost[lastPost.length - 1].post.postId;
+    const lastPostId = lastPost && lastPost[lastPost.length - 1].post.postId;
+    if (lastPost && lastPostId > 1 && inView) {
+      setIsLoaded(true);
       setTimeout(() => {
-        // setTimeout 설정 제대로....
         axios.get(`/dailyPosts?lastPostId=${lastPostId}`).then(res => {
           setPostList([...postList, res.data.items]);
-          console.log(res);
+          setIsLoaded(false);
         });
-      }, 2000);
+      }, 1000);
     }
   }, [inView]);
-
-  // const handleDelPost = id => {
-  //   dispatch(asyncPostDel(id));
-  //   window.location.reload();
-  // };
 
   return (
     <DailyForm>
@@ -97,25 +58,11 @@ export default function DailyPost() {
                     </DailyItem>
                   );
                 })}
-              {/* <div ref={ref} /> */}
+              <div ref={ref} />
             </div>
           );
         })}
-      <div ref={ref} />
-      {/* {lastPost ? (
-        <button
-          onClick={() => {
-            const lastPostId =
-              lastPost && lastPost[lastPost.length - 1].post.postId;
-            axios.get(`/dailyPosts?lastPostId=${lastPostId}`).then(res => {
-              setPostList([...postList, res.data.items]);
-              console.log(res);
-            });
-          }}
-        >
-          ++++++++++++++++
-        </button>
-      ) : null} */}
+      <div ref={ref}>{isLoaded && <Loader />}</div>
     </DailyForm>
   );
 }
