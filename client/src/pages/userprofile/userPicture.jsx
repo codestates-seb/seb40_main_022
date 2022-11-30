@@ -44,7 +44,7 @@ const Pictures = styled.div`
   }
 `;
 
-function userPicture() {
+function UserPicture() {
   const Id = +useParams().id;
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -100,4 +100,4 @@ function userPicture() {
   );
 }
 
-export default userPicture;
+export default UserPicture;

@@ -10,8 +10,8 @@ import {
 import { UserProfileGet } from '../../redux/action/ProfileAsync';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
-import userPicture from './userPicture';
 import { Wrapper, ProfileBox, NameBox, FollowBox, RecordBox } from './style';
+import UserPicture from './UserPicture';
 
 function UserProfile() {
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ function UserProfile() {
           </div>
         </RecordBox>
         <hr className="line" />
-        <userPicture />
+        <UserPicture />
       </div>
       <Footer />
     </Wrapper>

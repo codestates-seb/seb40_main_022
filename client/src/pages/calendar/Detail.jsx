@@ -20,7 +20,7 @@ function Detail() {
   const startphotoUp = useRef();
   const endphotoUp = useRef();
   const [tags, setTags] = useState('등');
-  const [health, setHealth] = useState(taghealth1 && taghealth1[0].sportsId);
+  const [health, setHealth] = useState(taghealth1[0].sportsId);
   const [set, setSet] = useState(null);
   const [num, setNum] = useState(null);
   const [weight, setWeight] = useState(null);
@@ -37,8 +37,6 @@ function Detail() {
   const formdata = new FormData();
   const startImagePath = useSelector(state => state.record.Start);
   const endImagePath = useSelector(state => state.record.End);
-  const [bodyPart, setBodyPart] = useState([]);
-  const [tagname, setTagname] = useState([]);
   const handleStartFile = e => {
     formdata.append('point', 'start');
     formdata.append('file', e.target.files[0]);
@@ -77,10 +75,6 @@ function Detail() {
     dispatch(RecordTagAsync(tag));
   };
   const handleAddClick = () => {
-    const Id = taghealth1.filter(list => list.id === health);
-    console.log(Id, bodyPart, tagname);
-    setBodyPart([...bodyPart, Id[0].bodyPart]);
-    setTagname([...tagname, Id[0].name]);
     if (set.length !== 0 && num.length !== 0 && weight.length !== 0) {
       setSplit([...split, { id: health, set, count: num, weight }]);
     } else {
@@ -192,7 +186,7 @@ function Detail() {
                       const Id = taghealth1.filter(
                         data => data.name === e.target.value,
                       );
-                      setHealth([...health, Id[0].sportsId]);
+                      setHealth(Id[0].sportsId);
                     }}
                   >
                     {taghealth1 &&

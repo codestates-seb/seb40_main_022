@@ -21,15 +21,39 @@ function Calendar() {
   const challId = useSelector(state => state.record.List.challengeId);
   const getlist = useSelector(state => state.record.GetList.member);
   const getopponent = useSelector(state => state.record.GetList.opponent);
-  console.log(member, opponent);
+  console.log(member, opponent, getlist, getopponent);
   const [Clicked, setClicked] = useState(false);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
   useEffect(() => {
     const TodayMonth = new Date().getMonth() + 1;
-    dispatch(RecordListAsync(TodayMonth));
-    dispatch(RecordListGet(memberId));
+    dispatch(RecordListAsync(TodayMonth))
+      .unwrap()
+      .then(() => setTimeout(dispatch(RecordListGet(memberId)), 1000));
   }, []);
+  const copydata = [
+    { timeRecord: '00:30:33', volume: '666', date: '2022-11-28' },
+    { timeRecord: '00:40:33', volume: '777', date: '2022-11-29' },
+    { timeRecord: '00:50:33', volume: '888', date: '2022-11-30' },
+    { timeRecord: '00:55:33', volume: '999', date: '2022-12-1' },
+  ];
+  const datelist = copydata.map(data => {
+    return {
+      title: `${data.timeRecord} ${data.volume}kg`,
+      start: data.date,
+      backgroundColor: '#fd8a6a',
+    };
+  });
+  datelist.push(
+    copydata.map(data => {
+      return {
+        title: `${data.timeRecord} ${data.volume}kg`,
+        start: data.date,
+        backgroundColor: '#82cbc4',
+      };
+    }),
+  );
+  console.log(datelist);
   return (
     <>
       <Header />
@@ -70,16 +94,7 @@ function Calendar() {
               contentHeight="600"
               locale="ko"
               events={[
-                {
-                  title: '1:40:30 999kg',
-                  start: '2022-11-14',
-                  backgroundColor: '#82cbc4',
-                },
-                {
-                  title: '1:10:30',
-                  start: '2022-11-14',
-                  backgroundColor: '#fd8a6a',
-                },
+                datelist[0],
                 {
                   title: '승리',
                   start: '2022-11-14',
@@ -109,50 +124,29 @@ function Calendar() {
               <div className="box2">
                 <div className="name1">
                   <img src={crown} alt="승자이미지" />
-                  {getlist && getlist.member.username}
+                  {getlist ? getlist.member.username : null}
                 </div>
-                <button
-                  className="userdata1"
-                  onClick={() => {
-                    navigate(`/detail/${memberId}`);
-                  }}
-                >
-                  <div className="oneday">
-                    <span>날짜 : {getlist && getlist.date.slice(5)}</span>
-                    <span>운동 시간 : {member && member[0].timeRecord}</span>
-                  </div>
-                  {getlist &&
-                    getlist.sports.map((data, idx) => {
-                      return idx < 3 ? (
-                        <div className="dayover">
-                          <span>{data.bodyPart}</span>
-                          <span>{data.name}</span>
-                          <span>
-                            {data.set}세트/{data.count}회
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="dayover">...</div>
-                      );
-                    })}
-                </button>
-              </div>
-              {opponent !== null ? (
-                <div className="box2">
-                  <div className="name2">
-                    {getopponent && getopponent.member.username}
-                  </div>
-                  <button className="userdata2">
+                {member && member !== undefined ? (
+                  <button
+                    className="userdata1"
+                    onClick={() => {
+                      navigate(`/detail/${memberId}`);
+                    }}
+                  >
                     <div className="oneday">
                       <span>
-                        날짜 : {opponent && opponent[0].date.slice(5)}
+                        날짜 :{' '}
+                        {member[0] !== undefined
+                          ? member[0].date.slice(5)
+                          : null}
                       </span>
                       <span>
-                        운동 시간 : {opponent && opponent[0].timeRecord}
+                        운동 시간 :{' '}
+                        {member[0] !== undefined ? member[0].timeRecord : null}
                       </span>
                     </div>
-                    {getopponent &&
-                      getopponent.sports.map((data, idx) => {
+                    {getlist &&
+                      getlist.sports.map((data, idx) => {
                         return idx < 3 ? (
                           <div className="dayover">
                             <span>{data.bodyPart}</span>
@@ -166,6 +160,45 @@ function Calendar() {
                         );
                       })}
                   </button>
+                ) : null}
+              </div>
+              {opponent !== undefined && opponent ? (
+                <div className="box2">
+                  <div className="name2">
+                    {getopponent && getopponent.member.username}
+                  </div>
+                  {opponent ? (
+                    <button className="userdata2">
+                      <div className="oneday">
+                        <span>
+                          날짜 :{' '}
+                          {opponent[0] !== undefined
+                            ? opponent[0].date.slice(5)
+                            : null}
+                        </span>
+                        <span>
+                          운동 시간 :{' '}
+                          {opponent[0] !== undefined
+                            ? opponent[0].timeRecord
+                            : null}
+                        </span>
+                      </div>
+                      {getopponent &&
+                        getopponent.sports.map((data, idx) => {
+                          return idx < 3 ? (
+                            <div className="dayover">
+                              <span>{data.bodyPart}</span>
+                              <span>{data.name}</span>
+                              <span>
+                                {data.set}세트/{data.count}회
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="dayover">...</div>
+                          );
+                        })}
+                    </button>
+                  ) : null}
                 </div>
               ) : null}
             </div>
