@@ -36,12 +36,10 @@ export const MainForm = styled.article`
   display: flex;
   justify-content: center;
   position: relative;
-  /* top: 80px; */
   width: 850px;
   background-color: var(--white);
   border-radius: 5px;
   box-shadow: var(--box-shadow);
-  /* background-color: var(--black-025); */
   padding: 0 2vw;
 `;
 
@@ -62,10 +60,7 @@ export const MainSearch = styled.input`
 `;
 
 export const ContentForm = styled.div`
-  /* position: absolute; */
   margin-top: 180px;
-  /* left: 50px;
-  right: 50px; */
   .cont-picture {
     border-radius: 50%;
   }
@@ -95,14 +90,19 @@ export const Content = styled.div`
     align-items: center;
     justify-content: center;
     background: var(--white);
-    > img {
-      cursor: pointer;
-      width: 110px;
-      height: 110px;
+    > button {
+      background: var(--white);
+      border: none;
       border-radius: 50%;
-      object-fit: cover;
-      /* position: absolute;
-      top: 35px; */
+      display: flex;
+
+      > img {
+        cursor: pointer;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
     }
   }
 
@@ -116,12 +116,6 @@ export const Content = styled.div`
 `;
 
 export const DailyForm = styled.div`
-  /* position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px; */
-
   .list {
     position: relative;
     display: flex;
@@ -233,7 +227,7 @@ export const DailyItem = styled.div`
     height: 550px;
     position: relative;
 
-    .fnCZwB {
+    .bTfhk {
       height: 550px;
     }
   }
@@ -258,7 +252,6 @@ export const DailyItem = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    /* position: relative; */
 
     span {
       margin-right: 20px;
@@ -309,10 +302,6 @@ export const DailyItem = styled.div`
         margin-right: 0px;
       }
     }
-
-    /* @media screen and (max-width: 720px) {
-      font-size: var(--font-11);
-    } */
   }
 `;
 

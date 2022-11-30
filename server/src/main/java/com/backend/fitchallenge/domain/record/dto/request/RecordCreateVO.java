@@ -2,7 +2,9 @@ package com.backend.fitchallenge.domain.record.dto.request;
 
 import com.backend.fitchallenge.domain.sports.dto.SportsRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +16,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RecordCreateVO {
     /**
      * [String 타입의 날짜/시간 정보를 LocalDate/LocalTime 타입의 필드로 변환]
@@ -23,15 +26,15 @@ public class RecordCreateVO {
      * - 초는 제외할 수 있는 방법을 찾으면 추후 반영하겠습니다.
      */
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate start;
 
-    @DateTimeFormat(pattern = "HH:mm:ss")
+//    @DateTimeFormat(pattern = "HH:mm:ss")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
     private LocalTime startTime;
 
-    @DateTimeFormat(pattern = "HH:mm:ss")
+//    @DateTimeFormat(pattern = "HH:mm:ss")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
     private LocalTime endTime;
 
@@ -41,9 +44,6 @@ public class RecordCreateVO {
 
     private List<SportsRequest> sports;
 
-    public RecordCreateVO() {
-
-    }
     public RecordCreateVO(LocalDate start, LocalTime startTime, LocalTime endTime, String startImagePath, String endImagePath, List<SportsRequest> sports) {
         this.start = start;
         this.startTime = startTime;

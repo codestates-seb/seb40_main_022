@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.domain.record.dto.response;
 
+import com.backend.fitchallenge.domain.record.entity.Record;
 import com.backend.fitchallenge.domain.sports.entity.Sports;
 import com.backend.fitchallenge.domain.member.dto.response.extract.MemberResponse;
 import com.querydsl.core.annotations.QueryProjection;
@@ -29,4 +30,8 @@ public class RecordSportsResponse {
         this.count = count;
         this.weight = weight;
     }
+
+//    public RecordSportsResponse of(Record record) {
+//
+//    }
 }

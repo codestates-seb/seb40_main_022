@@ -10,7 +10,6 @@ import Loader from './Loader';
 
 export default function DailyPost() {
   const [postList, setPostList] = useState([]);
-  console.log(postList);
   const lastPost = postList && postList[postList.length - 1];
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -62,7 +61,14 @@ export default function DailyPost() {
             return (
               <Content>
                 <div className="imgprofile">
-                  <img src={el.member.profileImage} alt="userProfile" />
+                  <button
+                    onClick={() => {
+                      navigate(`/members/${el.member.userId}`);
+                    }}
+                    className="top_user"
+                  >
+                    <img src={el.member.profileImage} alt="userProfile" />
+                  </button>
                 </div>
                 <span className="userName">{el.member.username}</span>
               </Content>

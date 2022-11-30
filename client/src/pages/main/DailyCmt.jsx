@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dailyAdd from '../../images/daily_add.svg';
@@ -17,8 +17,6 @@ export default function DailyCmt({ index }) {
   const [cmtList, setCmtList] = useState([]);
   const lookCmt = cmtList && cmtList[cmtList.length - 1];
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
-  const member = useSelector(state => state.mypage.member);
-  console.log(member);
   const navigate = useNavigate();
 
   const handleAnswer = e => {
@@ -130,7 +128,7 @@ export default function DailyCmt({ index }) {
           );
         })}
       <div className="cmtListAdd">
-        {lastCmt && lastCmt.commentId > 1 ? (
+        {lastCmt && lastCmt.commentId > 1 && cmtList[0].length >= 5 ? (
           <button
             onClick={() => {
               plusBut();

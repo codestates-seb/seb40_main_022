@@ -68,7 +68,6 @@ export default function DailyInfo({ el, index }) {
             className="cont-picture"
             onClick={() => {
               navigate(`/members/${el.member.userId}`);
-              console.log(el.member.userId);
             }}
           >
             <img className="user" src={el.member.profileImage} alt="daily" />

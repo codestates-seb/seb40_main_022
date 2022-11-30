@@ -19,5 +19,4 @@ function Loader() {
     </LoaderWrap>
   );
 }
-
 export default memo(Loader);
