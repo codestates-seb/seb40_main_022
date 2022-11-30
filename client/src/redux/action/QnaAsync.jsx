@@ -15,8 +15,7 @@ export const QnaAsynclistPost = createAsyncThunk('qnaask', ({ formdata }) => {
 
 export const QnaAsynclist = createAsyncThunk('list', async () => {
   const result = await axios.get('/questions?page=1').then(res => {
-    console.log(res);
-    return res.data.data;
+    return res.data;
   });
   return result;
 });
@@ -42,7 +41,6 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
   return axios.get(`/questions/${data}`).then(res => {
-    console.log(res);
     return res.data;
   });
 });
@@ -68,7 +66,6 @@ export const QnaDetailCommentAsync = createAsyncThunk('qnaanswer', data => {
 });
 
 export const QnaanswerDetaildelete = createAsyncThunk('delete', async id => {
-  console.log(id);
   axios
     .delete(`/questions/${id[0]}/answers/${id[1]}`, {
       headers: {
@@ -99,7 +96,6 @@ export const QnaanswerAccept = createAsyncThunk('Accepted', id => {
 export const QnaanswerContentUp = createAsyncThunk(
   'ContentUp',
   (id, content) => {
-    console.log(content);
     axios
       .patch(`/questions/${id[0]}/answers/${id[1]}`, content, {
         headers: {
@@ -115,7 +111,6 @@ export const QnaSearchreload = createAsyncThunk('search', data => {
   return axios
     .get(`/questions/search?q=${data[0]}&sort=${data[1]}&page=1`)
     .then(res => {
-      console.log(res);
       return res.data.data;
     });
 });
