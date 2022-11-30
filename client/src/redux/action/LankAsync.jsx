@@ -80,3 +80,17 @@ export const Notificationsallam = createAsyncThunk('allam', id => {
     })
     .then(res => console.log(res));
 });
+
+export const ChallengeSearch = createAsyncThunk('/challenge/search', url => {
+  return axios
+    .get(`/challenge?${url}&page=1`, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => {
+      console.log(res);
+      return res.data;
+    });
+});

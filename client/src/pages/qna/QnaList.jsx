@@ -34,6 +34,7 @@ function QnaList() {
   // const currentPageHandler = p => setCurrentPage(p);
 
   const datasearch = [search, sort];
+
   useEffect(() => {
     dispatch(QnaAsynclist());
   }, []);

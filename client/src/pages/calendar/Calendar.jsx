@@ -1,22 +1,27 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import crown from '../../images/crown.png';
 import { MainBox, CalBox } from './Style';
-import { RecordListAsync, RecordListGet } from '../../redux/action/RecordAsync';
+import {
+  RecordListAsync,
+  RecordListGet,
+  ChallengeDelete,
+} from '../../redux/action/RecordAsync';
 
 function Calendar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const member = useSelector(state => state.record.List.member);
   const opponent = useSelector(state => state.record.List.opponent);
+  const challId = useSelector(state => state.record.List.challengeId);
   const getlist = useSelector(state => state.record.GetList.member);
   const getopponent = useSelector(state => state.record.GetList.opponent);
-  console.log(member, opponent, getlist, getopponent);
+  console.log(member, opponent);
   const [Clicked, setClicked] = useState(false);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
@@ -43,7 +48,12 @@ function Calendar() {
                   하실 수 없습니다.
                 </div>
                 <div className="btns">
-                  <button className="yes">중단</button>
+                  <button
+                    className="yes"
+                    onClick={() => dispatch(ChallengeDelete(challId))}
+                  >
+                    중단
+                  </button>
                   <button className="no" onClick={() => setClicked(!Clicked)}>
                     취소
                   </button>
@@ -87,7 +97,9 @@ function Calendar() {
                 운동 기록
               </button>
               <button
-                onClick={() => setClicked(!Clicked)}
+                onClick={() => {
+                  setClicked(!Clicked);
+                }}
                 className="canclebutton"
               >
                 대결 중단
@@ -99,13 +111,15 @@ function Calendar() {
                   <img src={crown} alt="승자이미지" />
                   {getlist && getlist.member.username}
                 </div>
-                <Link to={`/detail/${memberId}`} className="userdata1">
+                <button
+                  className="userdata1"
+                  onClick={() => {
+                    navigate(`/detail/${memberId}`);
+                  }}
+                >
                   <div className="oneday">
                     <span>날짜 : {getlist && getlist.date.slice(5)}</span>
-                    <span>
-                      운동 시간 : {getlist && getlist.startTime}~{' '}
-                      {getlist && getlist.endTime}
-                    </span>
+                    <span>운동 시간 : {member && member[0].timeRecord}</span>
                   </div>
                   {getlist &&
                     getlist.sports.map((data, idx) => {
@@ -121,7 +135,7 @@ function Calendar() {
                         <div className="dayover">...</div>
                       );
                     })}
-                </Link>
+                </button>
               </div>
               {opponent !== null ? (
                 <div className="box2">
@@ -129,13 +143,26 @@ function Calendar() {
                     {getopponent && getopponent.member.username}
                   </div>
                   <button className="userdata2">
-                    {opponent &&
-                      opponent.map(data => {
-                        return (
-                          <>
-                            <span>날짜 : {data.date}</span>
-                            <span>운동 시간 : {data.timeRecord}</span>
-                          </>
+                    <div className="oneday">
+                      <span>
+                        날짜 : {opponent && opponent[0].date.slice(5)}
+                      </span>
+                      <span>
+                        운동 시간 : {opponent && opponent[0].timeRecord}
+                      </span>
+                    </div>
+                    {getopponent &&
+                      getopponent.sports.map((data, idx) => {
+                        return idx < 3 ? (
+                          <div className="dayover">
+                            <span>{data.bodyPart}</span>
+                            <span>{data.name}</span>
+                            <span>
+                              {data.set}세트/{data.count}회
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="dayover">...</div>
                         );
                       })}
                   </button>

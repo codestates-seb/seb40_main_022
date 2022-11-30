@@ -7,10 +7,10 @@ function Ouaths() {
     // e.preventdefault();
     if (name === 'google') {
       window.location.href =
-        'http://ec2-13-125-169-211.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google';
+        'http://ec2-43-201-64-96.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google';
     } else if (name === 'kakao') {
       window.location.href =
-        'http://ec2-13-125-169-211.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao';
+        'http://ec2-43-201-64-96.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao';
     }
   };
   return (

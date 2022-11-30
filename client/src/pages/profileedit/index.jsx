@@ -162,7 +162,7 @@ function ProfileEdit() {
                       type="radio"
                       name="sex"
                       value="male"
-                      checked="checked"
+                      defaultChecked
                       onChange={e => {
                         // e.preventDefault();
                         setGender(e.target.value);

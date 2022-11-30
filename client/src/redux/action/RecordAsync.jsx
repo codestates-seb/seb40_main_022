@@ -60,7 +60,10 @@ export const RecordListAsync = createAsyncThunk('/recordList', month => {
 });
 
 export const RecordImgUp = createAsyncThunk('Imgup', formdata => {
-  axios.post('/records/pictures', formdata).then(res => console.log(res));
+  return axios.post('/records/pictures', formdata).then(res => {
+    console.log(res);
+    return res.data;
+  });
 });
 
 export const Recorddelete = createAsyncThunk('/record/delete', id => {
@@ -91,4 +94,13 @@ export const RecordListDelete = createAsyncThunk('/record/delete', id => {
       },
     })
     .then(res => console.log(res));
+});
+
+export const ChallengeDelete = createAsyncThunk('/challenge/delete', id => {
+  axios.delete(`/challenge/${id}/suspend`, {
+    headers: {
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });

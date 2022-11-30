@@ -19,16 +19,14 @@ function Detail() {
   const navigate = useNavigate();
   const startphotoUp = useRef();
   const endphotoUp = useRef();
-  const [health, setHealth] = useState(21);
   const [tags, setTags] = useState('등');
+  const [health, setHealth] = useState(taghealth1 && taghealth1[0].sportsId);
   const [set, setSet] = useState(null);
   const [num, setNum] = useState(null);
   const [weight, setWeight] = useState(null);
   const [split, setSplit] = useState([]);
   const [time, setTime] = useState('');
   const [end, setEnd] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
   const today = new Date().toISOString().slice(0, 10);
   const [clicked, setClicked] = useState(false);
   const [addUpdate, setAddUpdate] = useState([]);
@@ -37,6 +35,10 @@ function Detail() {
   const reader = new FileReader();
   const dispatch = useDispatch();
   const formdata = new FormData();
+  const startImagePath = useSelector(state => state.record.Start);
+  const endImagePath = useSelector(state => state.record.End);
+  const [bodyPart, setBodyPart] = useState([]);
+  const [tagname, setTagname] = useState([]);
   const handleStartFile = e => {
     formdata.append('point', 'start');
     formdata.append('file', e.target.files[0]);
@@ -46,7 +48,6 @@ function Detail() {
       const resultImg = reader.result;
       setStartRealImg(resultImg.toString());
     };
-    setStartTime(e.target.files[0]);
   };
   const handleEndFile = e => {
     formdata.append('point', 'end');
@@ -55,11 +56,8 @@ function Detail() {
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
-      console.log(resultImg);
       setEndRealImg(resultImg.toString());
     };
-    setEndTime(e.target.files[0]);
-    console.log(e.target.files[0]);
   };
   const handelClick = name => {
     if (name === 'start') {
@@ -71,16 +69,18 @@ function Detail() {
   const deleteFile = name => {
     if (name === 'start') {
       setStartRealImg('');
-      setStartTime('');
     } else {
       setEndRealImg('');
-      setEndTime('');
     }
   };
-  const tagClick = () => {
-    dispatch(RecordTagAsync(tags));
+  const tagClick = tag => {
+    dispatch(RecordTagAsync(tag));
   };
   const handleAddClick = () => {
+    const Id = taghealth1.filter(list => list.id === health);
+    console.log(Id, bodyPart, tagname);
+    setBodyPart([...bodyPart, Id[0].bodyPart]);
+    setTagname([...tagname, Id[0].name]);
     if (set.length !== 0 && num.length !== 0 && weight.length !== 0) {
       setSplit([...split, { id: health, set, count: num, weight }]);
     } else {
@@ -88,7 +88,7 @@ function Detail() {
     }
   };
   const handleUp = () => {
-    const data = [today, time, end, startTime.name, endTime.name, split];
+    const data = [today, time, end, startImagePath, endImagePath, split];
     dispatch(RecordUpAsync(data));
   };
   useEffect(() => {
@@ -192,7 +192,7 @@ function Detail() {
                       const Id = taghealth1.filter(
                         data => data.name === e.target.value,
                       );
-                      setHealth(Id[0].sportsId);
+                      setHealth([...health, Id[0].sportsId]);
                     }}
                   >
                     {taghealth1 &&
@@ -262,16 +262,13 @@ function Detail() {
         <section className="setInfo">
           {split &&
             split.map((data, index) => {
-              const selectHealth = taghealth1.filter(
-                list => list.sportsId === data.id,
-              );
               if (split.length !== addUpdate.length) {
                 addUpdate.push(false);
               }
               return (
                 <div>
-                  <span>{selectHealth[0].bodyPart}</span>
-                  <span>{selectHealth[0].name}</span>
+                  {/* <span>{bodyPart[index]}</span>
+                  <span>{tagname[index]}</span> */}
                   <span>{data.set}세트</span>
                   <span>{data.count}회</span>
                   <span>{data.weight}kg</span>
