@@ -11,6 +11,7 @@ import SignMain from './SignMain';
 const SignContainer = styled.div`
   width: 100%;
 `;
+
 function SignUp() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');

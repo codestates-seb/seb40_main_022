@@ -70,16 +70,23 @@ const PaginationComponent = styled.div`
 `;
 
 function Pagination({
-  size,
+  // size,
   currentPage,
   currentPageHandler,
-  paginationLength,
+  // paginationLength,
+  items,
 }) {
-  const pagination = Array(Math.ceil(paginationLength / size))
+  const pagination = Array(items.totalPages)
     .fill()
     .map((v, i) => i + 1);
+  const pagePrevBtn = () => {
+    if (currentPage > 1) {
+      currentPageHandler(currentPage - 1);
+    }
+  };
+
   const pageNextBtn = () => {
-    if (currentPage + 1 <= pagination.length) {
+    if (currentPage + 1 <= items.totalPages) {
       currentPageHandler(currentPage + 1);
     }
   };
@@ -88,19 +95,22 @@ function Pagination({
     <PaginationComponent>
       <div className="pagination">
         <div className="page">
+          <button onClick={pagePrevBtn}> prev </button>
           {pagination &&
             pagination.map((v, i) => (
               <button
                 className={
                   currentPage === v ? 'page-items check' : 'page-items'
                 }
-                onClick={() => currentPageHandler(v)}
+                onClick={() => {
+                  currentPageHandler(v);
+                }}
                 key={(v, i)}
               >
                 {v}
               </button>
             ))}
-          <div className="dot">...</div>
+          {/* <div className="dot">...</div> */}
           <button onClick={pageNextBtn}>next</button>
         </div>
       </div>
