@@ -25,6 +25,7 @@ export const PostTitle = styled.section`
   > div {
     > h2 {
       font-size: var(--font-16);
+      margin-bottom: 10px;
     }
     > input {
       width: 520px;
@@ -41,6 +42,7 @@ export const PostContent = styled.section`
   > div {
     > h2 {
       font-size: var(--font-16);
+      margin-bottom: 10px;
     }
     > textarea {
       width: 520px;
@@ -81,7 +83,6 @@ export const PostSubmit = styled.section`
   display: flex;
   height: 100px;
   justify-content: center;
-  margin-top: 30px;
   > :nth-child(1) {
     width: 120px;
     height: 50px;

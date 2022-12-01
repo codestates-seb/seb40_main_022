@@ -62,11 +62,14 @@ export const QnaSearch = styled.div`
   > label {
     display: flex;
     align-items: center;
+  }
+  > button {
     > img {
       width: 28px;
       height: 28px;
       position: absolute;
-      right: 460px;
+      right: 470px;
+      top: 10px;
     }
   }
 `;

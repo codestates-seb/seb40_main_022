@@ -14,27 +14,20 @@ import {
   QnaRadio,
 } from './QnaStyle';
 import { QnaAsynclist, QnaSearchreload } from '../../redux/action/QnaAsync';
-import Pagination from './Pagination';
+// import Pagination from './Pagination';
 
 function QnaList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const list = useSelector(state => state.qnalist.list);
   const questiondata = useSelector(state => state.qnalist.search);
-  const items = useSelector(state => state.qnalist.pageInfo);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);
-  const [size, setSize] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginationLength] = useState(1);
 
   // const [size, setSize] = useState(10);
   // const [currentPage, setCurrentPage] = useState(1);
   // const [paginationLength, setPaginationLength] = useState(3);
-
-  const sizeHandler = per => setSize(per);
-  const currentPageHandler = p => setCurrentPage(p);
 
   // const [page, setPage] = useState(1); //페이지
   // const limit = 10; // posts가 보일 최대한의 갯수
@@ -158,14 +151,7 @@ function QnaList() {
                 );
               })}
         </QnaContent>
-        <Pagination
-          size={size}
-          sizeHandler={sizeHandler}
-          currentPage={currentPage}
-          currentPageHandler={currentPageHandler}
-          paginationLength={paginationLength}
-          items={items}
-        />
+        {/* <Pagination /> */}
       </Qna>
       <Footer />
     </QnABack>
