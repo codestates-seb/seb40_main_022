@@ -43,11 +43,14 @@ export default function DailyPost() {
   useEffect(() => {
     const lastPostId = lastPost && lastPost[lastPost.length - 1].post.postId;
     if (lastPost && lastPostId > 1 && inView) {
+      console.log(lastPost);
+      console.log(postList);
       setIsLoaded(true);
       setTimeout(() => {
         axios.get(`/dailyPosts?lastPostId=${lastPostId}`).then(res => {
           setPostList([...postList, res.data.items]);
           setIsLoaded(false);
+          // if(!res.data.items){setPostList([...postList])}
         });
       }, 1000);
     }
@@ -95,7 +98,7 @@ export default function DailyPost() {
                       </DailyItem>
                     );
                   })}
-                <div ref={ref} />
+                {/* <div ref={ref} /> */}
               </div>
             );
           })}
