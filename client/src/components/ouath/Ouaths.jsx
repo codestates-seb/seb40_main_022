@@ -4,13 +4,10 @@ import Ouathbutton from './Ouathbutton';
 
 function Ouaths() {
   const handleClick = name => {
-    // e.preventdefault();
     if (name === 'google') {
-      window.location.href =
-        'http://ec2-43-201-64-96.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google';
+      window.location.href = `${process.env.REACT_APP_API_URL}/oauth2/authorization/google`;
     } else if (name === 'kakao') {
-      window.location.href =
-        'http://ec2-43-201-64-96.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao';
+      window.location.href = `${process.env.REACT_APP_API_URL}/oauth2/authorization/kakao`;
     }
   };
   return (

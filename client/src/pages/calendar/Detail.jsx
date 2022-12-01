@@ -20,7 +20,7 @@ function Detail() {
   const startphotoUp = useRef();
   const endphotoUp = useRef();
   const [tags, setTags] = useState('등');
-  const [health, setHealth] = useState(taghealth1[0].sportsId);
+  const [health, setHealth] = useState(taghealth1 && taghealth1[0].sportsId);
   const [set, setSet] = useState(null);
   const [num, setNum] = useState(null);
   const [weight, setWeight] = useState(null);

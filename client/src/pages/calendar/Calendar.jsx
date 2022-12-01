@@ -21,7 +21,6 @@ function Calendar() {
   const challId = useSelector(state => state.record.List.challengeId);
   const getlist = useSelector(state => state.record.GetList.member);
   const getopponent = useSelector(state => state.record.GetList.opponent);
-  console.log(member, opponent, getlist, getopponent);
   const [Clicked, setClicked] = useState(false);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
@@ -31,29 +30,34 @@ function Calendar() {
       .unwrap()
       .then(() => setTimeout(dispatch(RecordListGet(memberId)), 1000));
   }, []);
-  const copydata = [
-    { timeRecord: '00:30:33', volume: '666', date: '2022-11-28' },
-    { timeRecord: '00:40:33', volume: '777', date: '2022-11-29' },
-    { timeRecord: '00:50:33', volume: '888', date: '2022-11-30' },
-    { timeRecord: '00:55:33', volume: '999', date: '2022-12-1' },
-  ];
-  const datelist = copydata.map(data => {
-    return {
-      title: `${data.timeRecord} ${data.volume}kg`,
-      start: data.date,
-      backgroundColor: '#fd8a6a',
-    };
-  });
-  datelist.push(
-    copydata.map(data => {
+  const datelist =
+    member &&
+    member.map(data => {
       return {
         title: `${data.timeRecord} ${data.volume}kg`,
         start: data.date,
-        backgroundColor: '#82cbc4',
+        backgroundColor: '#fd8a6a',
       };
-    }),
-  );
-  console.log(datelist);
+    });
+  if (opponent !== null && opponent !== undefined) {
+    opponent.map(data => {
+      return datelist.push({
+        title: `${data.timeRecord} ${data.volume}kg`,
+        start: data.date,
+        backgroundColor: '#82cbc4',
+      });
+    });
+  }
+  if (member !== null && member !== undefined) {
+    member.map(data => {
+      return datelist.push({
+        title: data.result,
+        start: data.date,
+        backgroundColor: '#17a8f1',
+      });
+    });
+  }
+
   return (
     <>
       <Header />
@@ -93,14 +97,7 @@ function Calendar() {
               plugins={[dayGridPlugin]}
               contentHeight="600"
               locale="ko"
-              events={[
-                datelist[0],
-                {
-                  title: '승리',
-                  start: '2022-11-14',
-                  backgroundColor: '#17a8f1',
-                },
-              ]}
+              events={datelist}
             />
           </div>
           <article className="userbox">
