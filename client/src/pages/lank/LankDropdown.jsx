@@ -1,114 +1,123 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import searchIcon from '../../images/searchIcon.png';
 import {
   Dropdown,
   Dropdivi,
   DropHeight,
   DropCareer,
-  DropPoint,
   DropWeight,
 } from './LankDropdownStyle';
-// import { lankActions } from '../../redux/reducer/LankSlice';
-// import { useSelector } from 'react-redux';
+import { url } from '../../redux/reducer/LankSlice';
 
 function LankDropdown() {
-  // const list = [
-  //   {
-  //     분할: ['2분할', '3분할', '4분할', '5분할'],
-  //   },
-  //   { 키: ['181cm이상', '175cm ~ 179cm', '171cm ~ 174cm', '170cm 이하'] },
-  //   {
-  //     몸무게: [
-  //       '120kg이상',
-  //       '101kg ~ 119kg',
-  //       '81kg ~ 100kg',
-  //       '60kg ~ 80kg',
-  //       '40kg ~ 59kg',
-  //       '39kg이하',
-  //     ],
-  //   },
-  //   {
-  //     경력: [
-  //       '20년 이상',
-  //       '15년 ~ 19년',
-  //       '10년 ~ 14년',
-  //       '5년 ~ 9년',
-  //       '4년 이하',
-  //     ],
-  //   },
-  //   {
-  //     점수: ['10000p 이상', '8000p ~ 9999p', '6000p ~ 7999p', '4000p ~ 5999p'],
-  //   },
-  // ];
-  // const listadata1 = useSelector(state => state);
-  // const name = [];
-  // const [names, setNames] = useState(['분할', '키', '몸무게', '경력', '점수']);
-  // const dispatch = useDispatch();
-  // dispatch(SET_LANK);
+  const dispatch = useDispatch();
 
   const [divi, setDivi] = useState('');
+  const [diviurl, setDiviurl] = useState('');
   const [height, setHeight] = useState('');
+  const [heighturl, setHeighturl] = useState('');
   const [weight, setWeight] = useState('');
+  const [weighturl, setWeighturl] = useState('');
   const [career, setCareer] = useState('');
-  const [point, setPoint] = useState('');
-  // const [lankValue, setLankValue] = useState('');
-
-  // const dispatch = useDispatch();
-
-  // const LankInputHandler = e => {
-  //   setLankValue(e.target.value);
-  // };
-
-  // const filterHandler = e => {
-  //   e.preventDefault();
-  //   dispatch(lankActions.SET_LANK(lankValue));
-  //   setLankValue('');
-  //   console.log(lankValue);
-  // };
+  const [careerurl, setCareerurl] = useState('');
+  const handledivi = e => {
+    setDivi(e.target.innerHTML);
+    if (e.target.innerHTML !== '') {
+      setDiviurl(`splitEq=${e.target.innerHTML.slice(0, 1)}`);
+    }
+  };
+  const handleheight = e => {
+    setHeight(e.target.innerHTML);
+    if (e.target.innerHTML !== '') {
+      if (e.target.innerHTML === '190cm 이상') {
+        setHeighturl(`heightGoe=190`);
+      } else if (e.target.innerHTML === '150cm 미만') {
+        setHeighturl(`heightLt=150`);
+      } else {
+        setHeighturl(
+          `heightGoe=${e.target.innerHTML.slice(
+            0,
+            3,
+          )}&heightLt=${e.target.innerHTML.slice(8, 11)}`,
+        );
+      }
+    }
+  };
+  const handleweight = e => {
+    setWeighturl('');
+    setWeight(e.target.innerHTML);
+    if (e.target.innerHTML !== '') {
+      if (e.target.innerHTML === '100kg이상') {
+        setWeighturl(`weightGoe=100`);
+      } else if (e.target.innerHTML === '40kg 미만') {
+        setWeighturl(`weightLt=40`);
+      } else if (e.target.innerHTML.length === 12) {
+        setWeighturl(
+          `weightGoe=${e.target.innerHTML.slice(
+            0,
+            2,
+          )}&weightLt=${e.target.innerHTML.slice(7, 10)}`,
+        );
+      } else {
+        setWeighturl(
+          `weightGoe=${weight.slice(0, 2)}&weightLt=${weight.slice(7, 9)}`,
+        );
+      }
+    }
+  };
+  const handlecareer = e => {
+    setCareerurl('');
+    setCareer(e.target.innerHTML);
+    if (e.target.innerHTML !== '') {
+      if (e.target.innerHTML === '10년 이상') {
+        setCareerurl(`careerGoe=10`);
+      } else if (e.target.innerHTML === '1년 미만') {
+        setCareerurl(`careerLt=1`);
+      } else if (e.target.innerHTML.length === 8) {
+        setCareerurl(
+          `careerGoe=${e.target.innerHTML.slice(
+            0,
+            1,
+          )}&careerLt=${e.target.innerHTML.slice(5, 7)}`,
+        );
+      } else if (e.target.innerHTML.length === 7) {
+        setCareerurl(
+          `careerGoe=${e.target.innerHTML.slice(
+            0,
+            1,
+          )}&careerLt=${e.target.innerHTML.slice(5, 6)}`,
+        );
+      } else {
+        setCareerurl(`careerGoe=${e.target.innerHTML.slice(0, 1)}`);
+      }
+    }
+  };
+  const handleClick = () => {
+    const dataurl =
+      (diviurl !== '' ? `&${diviurl}` : '') +
+      (heighturl !== '' ? `&${heighturl}` : '') +
+      (weighturl.length !== 0 ? `&${weighturl}` : '') +
+      (careerurl.length !== 0 ? `&${careerurl}` : ``);
+    const searchurl = dataurl.slice(1, dataurl.length);
+    console.log(searchurl);
+    dispatch(url(searchurl));
+  };
+  const handleResetClick = () => {
+    setCareer('');
+    setCareerurl('');
+    setDivi('');
+    setDiviurl('');
+    setHeight('');
+    setHeighturl('');
+    setWeight('');
+    setWeighturl('');
+    dispatch(url(''));
+  };
   return (
     <Dropdown>
-      {/* 소프트코딩 */}
-      {/* {listadata1 &&
-        listadata1.map((data, idx) => {
-          name.push(Object.keys(list[idx])[0]);
-          return (
-            <Dropdivi>
-              <div className="container">
-                <input
-                  id={`dropdown${idx}`}
-                  type="checkbox"
-                  className="dropdown"
-                />
-                <label className="dropdownLabel" htmlFor={`dropdown${idx}`}>
-                  <div className="boxname">{data}</div>
-                  <FontAwesomeIcon icon={faCaretDown} className="caretIcon" />
-                </label>
-                <div className="content">
-                  {list[idx][name[idx]] &&
-                    list[idx][name[idx]].map(listdata => {
-                      return (
-                        <button
-                          onClick={e => {
-                            names[idx] = e.target.innerText;
-                            setNames(names);
-                            dispatch(SET_LANK(names));
-                          }}
-                          className={
-                            names[idx] === listdata ? 'backblack' : 'btns'
-                          }
-                        >
-                          {listdata}
-                        </button>
-                      );
-                    })}
-                </div>
-              </div>
-            </Dropdivi>
-          );
-        })} */}
-      {/* 하드코딩 */}
       <Dropdivi>
         <div className="container">
           <div>분할</div>
@@ -120,35 +129,31 @@ function LankDropdown() {
           <div className="content">
             <button
               onClick={e => {
-                e.preventDefault();
-                setDivi(e.target.innerHTML);
+                handledivi(e);
               }}
             >
               2분할
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setDivi(e.target.innerHTML);
+                handledivi(e);
               }}
             >
               3분할
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setDivi(e.target.innerHTML);
+                handledivi(e);
               }}
             >
               4분할
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setDivi(e.target.innerHTML);
+                handledivi(e);
               }}
             >
-              5분할이상
+              5분할
             </button>
           </div>
         </div>
@@ -164,80 +169,70 @@ function LankDropdown() {
           <div className="content2">
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
               190cm 이상
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              185cm ~ 189cm
+              185cm ~ 190cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              180cm ~ 184cm
+              180cm ~ 185cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              175cm ~ 179cm
+              175cm ~ 180cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              170cm ~ 174cm
+              170cm ~ 175cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              165cm ~ 169cm
+              165cm ~ 170cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              160cm ~ 164cm
+              160cm ~ 165cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              155cm ~ 159cm
+              155cm ~ 160cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
-              150cm ~ 154cm
+              150cm ~ 155cm
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setHeight(e.target.innerHTML);
+                handleheight(e);
               }}
             >
               150cm 미만
@@ -256,104 +251,91 @@ function LankDropdown() {
           <div className="content3">
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
               100kg이상
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              90kg ~ 99kg
+              90kg ~ 100kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              85kg ~ 89kg
+              85kg ~ 90kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              80kg ~ 84kg
+              80kg ~ 85kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              75kg ~ 79kg
+              75kg ~ 80kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              70kg ~ 74kg
+              70kg ~ 75kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              65kg ~ 69kg
+              65kg ~ 70kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              60kg ~ 64kg
+              60kg ~ 65kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              55kg ~ 59kg
+              55kg ~ 60kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              50kg ~ 54kg
+              50kg ~ 55kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              45kg ~ 49kg
+              45kg ~ 50kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
-              40kg ~ 44kg
+              40kg ~ 45kg
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setWeight(e.target.innerHTML);
+                handleweight(e);
               }}
             >
               40kg 미만
@@ -372,141 +354,67 @@ function LankDropdown() {
           <div className="content4">
             <button
               onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
+                handlecareer(e);
               }}
             >
               10년 이상
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
+                handlecareer(e);
               }}
             >
               8년 ~ 10년
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
+                handlecareer(e);
               }}
             >
-              5년 ~ 7년
+              6년 ~ 8년
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
+                handlecareer(e);
               }}
             >
-              3년 ~ 5년
+              4년 ~ 6년
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
+                handlecareer(e);
               }}
             >
-              3년 미만
+              3년 이상
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
+                handlecareer(e);
               }}
             >
-              2년 미만
+              2년 이상
             </button>
             <button
               onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
+                handlecareer(e);
+              }}
+            >
+              1년 이상
+            </button>
+            <button
+              onClick={e => {
+                handlecareer(e);
               }}
             >
               1년 미만
             </button>
-            <button
-              onClick={e => {
-                e.preventDefault();
-                setCareer(e.target.innerHTML);
-              }}
-            >
-              6개월 미만
-            </button>
           </div>
         </div>
       </DropCareer>
-      <DropPoint>
-        <div className="container5">
-          <div>포인트</div>
-          <input id="dropdown5" type="checkbox" />
-          <label className="dropdownLabel5" htmlFor="dropdown5">
-            <div>{point}</div>
-            <FontAwesomeIcon icon={faCaretDown} className="caretIcon5" />
-          </label>
-          <div className="content5">
-            <ul>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  setPoint(e.target.innerHTML);
-                }}
-              >
-                10000p 이상
-              </button>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  setPoint(e.target.innerHTML);
-                }}
-              >
-                8000p ~ 9999p
-              </button>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  setPoint(e.target.innerHTML);
-                }}
-              >
-                6000p ~ 7999p
-              </button>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  setPoint(e.target.innerHTML);
-                }}
-              >
-                4000p ~ 5999p
-              </button>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  setPoint(e.target.innerHTML);
-                }}
-              >
-                3000p ~ 3999p
-              </button>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  setPoint(e.target.innerHTML);
-                }}
-              >
-                2000p ~ 2999p
-              </button>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  setPoint(e.target.innerHTML);
-                }}
-              >
-                2000p 미만
-              </button>
-            </ul>
-          </div>
-        </div>
-      </DropPoint>
+      <button onClick={() => handleClick()}>
+        <img src={searchIcon} alt="검색아이콘" className="search" />
+      </button>
+      <button onClick={() => handleResetClick()}>리셋</button>
     </Dropdown>
   );
 }

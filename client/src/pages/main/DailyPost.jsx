@@ -33,7 +33,9 @@ export default function DailyPost() {
 
   useEffect(() => {
     const getPost = async () => {
-      const res = await axios.get(`/dailyPosts`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/dailyPosts`,
+      );
       const post = await res.data.items;
       setPostList([post]);
     };
@@ -41,14 +43,21 @@ export default function DailyPost() {
   }, []);
 
   useEffect(() => {
-    const lastPostId = lastPost && lastPost[lastPost.length - 1].post.postId;
+    const lastPostId =
+      lastPost && lastPost[lastPost.length - 1] !== undefined
+        ? lastPost[lastPost.length - 1].post.postId
+        : null;
     if (lastPost && lastPostId > 1 && inView) {
       setIsLoaded(true);
       setTimeout(() => {
-        axios.get(`/dailyPosts?lastPostId=${lastPostId}`).then(res => {
-          setPostList([...postList, res.data.items]);
-          setIsLoaded(false);
-        });
+        axios
+          .get(
+            `${process.env.REACT_APP_API_URL}/dailyPosts?lastPostId=${lastPostId}`,
+          )
+          .then(res => {
+            setPostList([...postList, res.data.items]);
+            setIsLoaded(false);
+          });
       }, 1000);
     }
   }, [inView]);

@@ -99,4 +99,5 @@ function UserPicture() {
     </Pictures>
   );
 }
+
 export default UserPicture;

@@ -5,7 +5,7 @@ const SignupAsync = createAsyncThunk(
   '/signup',
   async ({ username, email, password }) => {
     await axios.post(
-      '/members/signup',
+      `${process.env.REACT_APP_API_URL}/members/signup`,
       JSON.stringify({ username, email, password }),
       {
         headers: {

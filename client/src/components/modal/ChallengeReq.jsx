@@ -1,5 +1,3 @@
-// import styled from 'styled-components';
-// import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import userProfile from '../../images/daily.jpg';
 import vs from '../../images/vs.svg';
@@ -66,7 +64,12 @@ export default function ChallengeReq(props) {
                 </User>
               </VsInfo>
               <Buttons>
-                <button className="accBut" onClick={() => handleClick()}>
+                <button
+                  className="accBut"
+                  onClick={() => {
+                    handleClick();
+                  }}
+                >
                   대결 신청
                 </button>
               </Buttons>

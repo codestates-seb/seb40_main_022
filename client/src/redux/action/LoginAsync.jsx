@@ -7,7 +7,7 @@ export function Retoken() {
     localStorage.getItem('RefreshToken')
   ) {
     return axios
-      .get('/member/reissue', {
+      .get(`${process.env.REACT_APP_API_URL}/member/reissue`, {
         headers: {
           Authorization: localStorage.getItem('Authorization'),
           RefreshToken: localStorage.getItem('RefreshToken'),
@@ -18,7 +18,6 @@ export function Retoken() {
         localStorage.setItem('Authorization', res.headers.authorization);
         localStorage.setItem('RefreshToken', res.headers.refreshtoken);
         const auth = [res.headers.authorization, res.headers.refreshtoken];
-        console.log(auth);
         setTimeout(Retoken, 600000);
         return auth;
       })
@@ -36,34 +35,35 @@ export function Retoken() {
 export const LoginAsync = createAsyncThunk('login', data => {
   return axios
     .post(
-      '/members/login',
+      `${process.env.REACT_APP_API_URL}/members/login`,
       JSON.stringify({ username: data[0], password: data[1] }),
       {
         headers: {
-          'Content-Type': 'application/json;',
+          'Access-Control-Allow-Origin': '*',
+          'content-type': 'application/application.json',
         },
+        withCredentials: false,
       },
     )
     .then(res => {
+      console.log(res);
       axios.defaults.headers.common.token = res.headers.authorization;
       localStorage.setItem('Authorization', res.headers.authorization);
       localStorage.setItem('RefreshToken', res.headers.refreshtoken);
       const auth = [res.headers.authorization, res.headers.refreshtoken];
-      axios
-        .get('/connect', {
-          headers: {
-            Authorization: res.headers.authorization,
-            RefreshToken: res.headers.refreshtoken,
-          },
-        })
-        .then(response => console.log(response));
+      axios.get(`${process.env.REACT_APP_API_URL}/connect`, {
+        headers: {
+          Authorization: res.headers.authorization,
+          RefreshToken: res.headers.refreshtoken,
+        },
+      });
       setTimeout(Retoken, 870000);
       return auth;
     });
 });
 
 export const LogoutAsync = createAsyncThunk('logout', data => {
-  return axios.delete('/member/logout', {
+  return axios.delete(`${process.env.REACT_APP_API_URL}/member/logout`, {
     headers: {
       Authorization: data[0],
       RefreshToken: data[1],

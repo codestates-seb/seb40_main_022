@@ -77,7 +77,14 @@ export const CalBox = styled.section`
         align-items: center;
         justify-content: center;
       }
+      .box2 {
+        .name2 {
+          margin-top: 30px;
+        }
+      }
+      .box2,
       .box1 {
+        .name2,
         .name1 {
           display: flex;
           flex-direction: column;
@@ -90,13 +97,33 @@ export const CalBox = styled.section`
           }
         }
         .userdata1 {
+          cursor: pointer;
+          background-color: var(--logored);
+          .dayover {
+            background-color: var(--logored);
+          }
+          .oneday {
+            background-color: var(--logored);
+          }
+        }
+        .userdata2 {
+          cursor: pointer;
+          background-color: var(--boxblue);
+          .dayover {
+            background-color: var(--boxblue);
+          }
+          .oneday {
+            background-color: var(--boxblue);
+          }
+        }
+        .userdata2,
+        .userdata1 {
           width: 400px;
           display: flex;
           padding: 30px;
           flex-direction: column;
           align-items: top;
           border: none;
-          background-color: var(--logored);
           color: white;
           border-radius: 5px;
           box-shadow: var(--box-shadow);
@@ -110,25 +137,14 @@ export const CalBox = styled.section`
             font-weight: 600;
             margin: 0 auto;
             border: none;
-            background-color: var(--logored);
-
-            :hover {
-              cursor: pointer;
-              background-color: #fa8a8a;
-            }
           }
           .oneday {
             border: none;
             padding: 3px;
-            background-color: var(--logored);
             width: 100%;
             display: grid;
             grid-template-columns: auto auto;
             text-align: center;
-            :hover {
-              cursor: pointer;
-              background-color: #fa8a8a;
-            }
             > span {
               font-size: var(--font-10);
               font-weight: 600;
