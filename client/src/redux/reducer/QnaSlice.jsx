@@ -16,7 +16,7 @@ const QnaSlice = createSlice({
   reducers: {},
   extraReducers: {
     [QnaAsynclist.fulfilled]: (state, action) => {
-      console.log(state, action);
+      console.log(action);
       state.list = action.payload.data;
       state.pageInfo = action.payload.pageInfo;
     },

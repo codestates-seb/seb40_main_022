@@ -227,7 +227,7 @@ export const DailyItem = styled.div`
     height: 550px;
     position: relative;
 
-    .bTfhk {
+    > article {
       height: 550px;
     }
   }
