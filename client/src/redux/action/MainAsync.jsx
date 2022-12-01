@@ -52,7 +52,6 @@ export const asyncPost = createAsyncThunk('post', () => {
       },
     )
     .then(res => {
-      console.log(res);
       return res.data;
     });
   return data;
@@ -163,7 +162,7 @@ export const asyncPostCmtUp = createAsyncThunk(
         },
       )
       .then(res => {
-        // window.location.reload();
+        window.location.reload();
         console.log(res);
       });
   },

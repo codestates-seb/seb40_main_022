@@ -26,7 +26,6 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-
     @Override
     public Long pagingCount() {
         return jpaQueryFactory

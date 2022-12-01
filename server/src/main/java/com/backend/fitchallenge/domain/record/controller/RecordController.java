@@ -70,7 +70,7 @@ public class RecordController {
 
         List<String> imagePathList = awsS3Service.StoreFile(List.of(timePictureVO.getFile()));
 
-        return ResponseEntity.ok(TimePictureResponse.of(imagePathList.get(0), timePictureVO.getPoint()));
+        return ResponseEntity.ok(TimePictureResponse.of(timePictureVO.getPoint(), imagePathList.get(0)));
     }
 
     @PatchMapping("/records/pictures")
@@ -82,6 +82,6 @@ public class RecordController {
                 List.of(timePictureUpdateVO.getFile())
         );
 
-        return ResponseEntity.ok(TimePictureResponse.of(imagePathList.get(0), timePictureUpdateVO.getPoint()));
+        return ResponseEntity.ok(TimePictureResponse.of(timePictureUpdateVO.getPoint(), imagePathList.get(0)));
     }
 }

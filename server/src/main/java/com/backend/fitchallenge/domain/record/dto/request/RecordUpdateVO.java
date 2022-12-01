@@ -38,18 +38,6 @@ public class RecordUpdateVO {
         this.sports = sports != null ? sports : List.of();
     }
 
-    //service 단에서 어떤 image가 입력됐는지 확인하는 용도입니다.
-    // null로 입력된 필드를 외부에서 get할 수 없기 때문에 메서드로 확인합니다.
-    public boolean includesBothTimes() {
-        return this.startTime != null && this.endTime != null;
-    }
-
-    public boolean includesStartTime() {
-        return this.startTime != null;
-    }
-
-//    public boolean includes
-
     public boolean includesBothImages() {
         return this.startImagePath != null && this.endImagePath != null;
     }

@@ -1,21 +1,27 @@
 import styled from 'styled-components';
 import QnaBanner from '../../images/QnaBanner.jpg';
-import QnAImg from '../../images/qnaImg.jpg';
 
 export const QnABack = styled.main`
   width: 100%;
 `;
 
 export const Qna = styled.main`
-  max-width: 1200px;
+  max-width: 830px;
   width: 100%;
   height: auto;
   margin: 0 auto;
   padding-top: 80px;
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const QnaBan = styled.div`
-  width: 100%;
+  width: 1200px;
+  margin: 0 auto;
   background: url(${QnaBanner});
   height: 150px;
   background-size: cover;
@@ -24,10 +30,11 @@ export const QnaBan = styled.div`
 `;
 
 export const QnaTitle = styled.div`
-  width: 100%;
+  width: 830px;
   display: flex;
   justify-content: space-between;
-  margin-top: 50px;
+  margin: 0px auto;
+  margin-bottom: 50px;
   > h1 {
     font-weight: 600;
   }
@@ -48,11 +55,12 @@ export const QnaTitle = styled.div`
 `;
 
 export const QnaSearch = styled.div`
-  margin-top: 30px;
-  position: relative;
   display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
   #SearchIn {
-    width: 750px;
+    width: 830px;
     padding: 15px;
     border: 1px solid #959595;
     border-radius: 50px;
@@ -64,23 +72,24 @@ export const QnaSearch = styled.div`
     align-items: center;
   }
   > button {
+    border: none;
     > img {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       position: absolute;
-      right: 470px;
-      top: 10px;
+      right: 30px;
+      top: 8px;
+      cursor: pointer;
     }
   }
 `;
 
 export const QnaRadio = styled.div`
-  width: 100%;
+  width: 830px;
   margin: 30px 0;
   font-size: var(--font-23);
   line-height: 2rem;
   padding: 2em 0.4em;
-  vertical-align: middle;
   > label {
     margin-right: 15px;
     > input {
@@ -92,12 +101,15 @@ export const QnaRadio = styled.div`
 `;
 
 export const QnaContent = styled.section`
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
   .qnabox {
     display: flex;
     margin-bottom: 40px;
+    /* width: 68%; */
+    border-bottom: 1px solid var(--black-300);
+    padding: 20px;
     > article {
       width: 70%;
       > div {
@@ -135,15 +147,6 @@ export const QnaContent = styled.section`
           box-shadow: var(--box-shadow);
         }
       }
-    }
-    > span {
-      margin-left: 170px;
-      width: 215px;
-      height: 150px;
-      background-image: url(${QnAImg});
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: 50% 55%;
     }
   }
 `;

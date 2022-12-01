@@ -18,6 +18,7 @@ import com.backend.fitchallenge.domain.calendar.repository.CalendarRepository;
 import com.backend.fitchallenge.domain.record.repository.RecordRepository;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
 import com.backend.fitchallenge.domain.sports.service.SportsService;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.backend.fitchallenge.domain.challenge.entity.QChallenge.challenge;
+import static com.backend.fitchallenge.domain.member.entity.QMember.member;
 
 @Service
 @RequiredArgsConstructor
@@ -80,7 +84,6 @@ public class RecordService {
         log.info("findMember id: {}", findMember.getId());
         Member opponent = memberRepository.findOpponent(memberId);
 
-
         List<RecordSportsResponse> sportsResponses = recordSportsRepository.findRecordSportsResponses(recordId);
 
         if (opponent == null) {
@@ -109,21 +112,23 @@ public class RecordService {
     public SimpleRecordResponse getMonthlyRecordList(Long memberId, int month) {
         log.info("memberId: " + memberId + ", month: " + month);
         Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
-        Member opponent = memberRepository.findOpponent(memberId);
+        Tuple challengeInfo = memberRepository.findOpponentIdAndChallengeId(memberId);
 
         List<PersonalSimpleRecordResponse> recordResponses = recordRepository.findByMemberIdAndMonth(memberId, month);
         log.info("recordResponses: {}", recordResponses.toString());
 
-        if (opponent == null) {
+        if (challengeInfo == null) {
 
             return SimpleRecordResponse.containingOnly(recordResponses);
         }
 
         else {
             List<PersonalSimpleRecordResponse> opRecordResponses =
-                    recordRepository.findByMemberIdAndOpponentId(findMember.getId(), opponent.getId());
+                    recordRepository.findByMemberIdAndOpponentId(
+                            findMember.getId(),
+                            challengeInfo.get(member.id));
 
-            return SimpleRecordResponse.containingBoth(recordResponses, opRecordResponses);
+            return SimpleRecordResponse.containingBoth(recordResponses, opRecordResponses, challengeInfo.get(challenge.id));
         }
     }
 

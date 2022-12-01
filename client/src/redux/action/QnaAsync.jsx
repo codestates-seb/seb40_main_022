@@ -13,8 +13,9 @@ export const QnaAsynclistPost = createAsyncThunk('qnaask', ({ formdata }) => {
     .then(res => console.log(res));
 });
 
-export const QnaAsynclist = createAsyncThunk('list', async () => {
-  const result = await axios.get('/questions?page=1').then(res => {
+export const QnaAsynclist = createAsyncThunk('list', async currentPage => {
+  console.log(currentPage);
+  const result = await axios.get(`/questions?page=${currentPage}`).then(res => {
     return res.data;
   });
   return result;

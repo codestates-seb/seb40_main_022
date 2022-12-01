@@ -36,12 +36,10 @@ export const MainForm = styled.article`
   display: flex;
   justify-content: center;
   position: relative;
-  /* top: 80px; */
   width: 850px;
   background-color: var(--white);
   border-radius: 5px;
   box-shadow: var(--box-shadow);
-  /* background-color: var(--black-025); */
   padding: 0 2vw;
 `;
 
@@ -62,10 +60,10 @@ export const MainSearch = styled.input`
 `;
 
 export const ContentForm = styled.div`
-  /* position: absolute; */
   margin-top: 180px;
-  /* left: 50px;
-  right: 50px; */
+  .cont-picture {
+    border-radius: 50%;
+  }
 `;
 
 export const Top = styled.div`
@@ -92,14 +90,19 @@ export const Content = styled.div`
     align-items: center;
     justify-content: center;
     background: var(--white);
-    > img {
-      cursor: pointer;
-      width: 110px;
-      height: 110px;
+    > button {
+      background: var(--white);
+      border: none;
       border-radius: 50%;
-      object-fit: cover;
-      /* position: absolute;
-      top: 35px; */
+      display: flex;
+
+      > img {
+        cursor: pointer;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
     }
   }
 
@@ -113,12 +116,6 @@ export const Content = styled.div`
 `;
 
 export const DailyForm = styled.div`
-  /* position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px; */
-
   .list {
     position: relative;
     display: flex;
@@ -144,6 +141,28 @@ export const DailyItem = styled.div`
     width: 100%;
     animation: modal-bg-show 0.5s;
 
+    .cmtListAdd {
+      display: flex;
+      justify-content: center;
+      > button {
+        cursor: pointer;
+        color: var(--white);
+        border: none;
+        background-color: var(--white);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        box-shadow: var(--box-shadow);
+
+        .add {
+          width: 50px;
+          height: 50px;
+          &:hover {
+            filter: opacity(0.4) drop-shadow(0 0 0 var(--logored));
+          }
+        }
+      }
+    }
     .comment {
       display: flex;
       justify-content: space-between;
@@ -159,14 +178,22 @@ export const DailyItem = styled.div`
         .content {
           width: 500px;
         }
+
+        .cont-picture {
+          background-color: var(--white);
+          width: 45px;
+          height: 45px;
+          margin-right: 10px;
+        }
       }
+
       img {
         cursor: pointer;
         width: 45px;
         height: 45px;
         border-radius: 50%;
         object-fit: cover;
-        margin-right: 10px;
+        /* margin-right: 10px; */
       }
       .cmtUserName {
         font-weight: bold;
@@ -200,7 +227,7 @@ export const DailyItem = styled.div`
     height: 550px;
     position: relative;
 
-    .fnCZwB {
+    > article {
       height: 550px;
     }
   }
@@ -225,7 +252,6 @@ export const DailyItem = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    /* position: relative; */
 
     span {
       margin-right: 20px;
@@ -276,16 +302,13 @@ export const DailyItem = styled.div`
         margin-right: 0px;
       }
     }
-
-    /* @media screen and (max-width: 720px) {
-      font-size: var(--font-11);
-    } */
   }
 `;
 
 export const AddComment = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 10px;
   margin-bottom: 20px;
   .user {

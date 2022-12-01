@@ -31,6 +31,15 @@ export const PostTitle = styled.section`
       width: 520px;
       height: 34px;
       padding: 10px;
+      border: none;
+      padding: 10px;
+      box-shadow: inset var(--box-shadow);
+      outline: none;
+      border-radius: 5px;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
   }
 `;
@@ -49,6 +58,16 @@ export const PostContent = styled.section`
       height: 220px;
       padding: 10px;
       resize: none;
+      border: none;
+      padding: 10px;
+      height: 200px;
+      box-shadow: inset var(--box-shadow);
+      outline: none;
+      border-radius: 5px;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
   }
 `;

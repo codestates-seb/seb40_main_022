@@ -36,7 +36,7 @@ function LankContent() {
               <h1>{idx + 1}</h1>
               <button
                 onClick={() => {
-                  navigate('/members/:id');
+                  navigate(`/members/${data.memberId}`);
                 }}
                 className="cont-picturebtn"
               >
