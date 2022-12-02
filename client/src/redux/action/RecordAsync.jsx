@@ -70,6 +70,7 @@ export const RecordListGet = createAsyncThunk('/record/idlist', id => {
       },
     })
     .then(res => {
+      console.log(res);
       return res.data;
     });
 });
