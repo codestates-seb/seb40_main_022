@@ -1,4 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useDispatch,
+  //  useSelector
+} from 'react-redux';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
 import {
@@ -9,11 +12,12 @@ import {
   Buttons,
 } from './ChallengeStyle';
 import { LankChallenge } from '../../redux/action/LankAsync';
+import mockupProfile from '../../images/mockupProfile.png';
 
 export default function ChallengeReq(props) {
   const { open, close, id } = props;
   const dispatch = useDispatch();
-  const userdb = useSelector(state => state.challenge.userInfo);
+  // const userdb = useSelector(state => state.challenge.userInfo);
 
   const handleClick = () => {
     dispatch(LankChallenge(id));
@@ -34,7 +38,10 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userdb.applicantImage}
+                      src={
+                        // userdb.applicantImage
+                        mockupProfile
+                      }
                       alt="userProfile"
                     />
                   </span>
@@ -52,7 +59,10 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userdb.applicantImage}
+                      src={
+                        // userdb.applicantImage
+                        mockupProfile
+                      }
                       alt="userProfile"
                     />
                   </span>
