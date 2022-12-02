@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -18,6 +19,7 @@ public interface MemberRepositoryCustom {
     List<RankingDto> rankingList(RankingCondition condition, Pageable pageable);
 
     List<Member> findMemberList(List<Long> memberIds);
+
 
     Member findOpponent(Long memberId);
 
@@ -29,4 +31,5 @@ public interface MemberRepositoryCustom {
 
     List<Tuple> findMemberRecords();
 
+    public Long rankCount(Double point);
 }

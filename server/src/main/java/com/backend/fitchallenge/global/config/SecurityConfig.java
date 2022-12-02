@@ -109,6 +109,11 @@ public class SecurityConfig {
         //여기에 추가설정
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE"));
+        configuration.setAllowedOriginPatterns(Arrays.asList(""));
+        configuration.setAllowedHeaders(Arrays.asList(""));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 해당 인터페이스 구현 객체에 넣어준다.
