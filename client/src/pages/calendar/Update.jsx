@@ -71,6 +71,7 @@ function Update() {
   };
   const handledelete = () => {
     dispatch(RecordListDelete(recordId));
+    navigate('/record');
   };
   const deleteFile = name => {
     if (name === 'start') {

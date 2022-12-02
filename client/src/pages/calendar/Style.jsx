@@ -82,6 +82,11 @@ export const CalBox = styled.section`
           margin-top: 30px;
         }
       }
+      .box1 {
+        .name1 {
+          margin-top: 33px;
+        }
+      }
       .box2,
       .box1 {
         .name2,

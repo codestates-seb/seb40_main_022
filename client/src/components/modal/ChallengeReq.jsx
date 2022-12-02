@@ -17,6 +17,7 @@ export default function ChallengeReq(props) {
 
   const handleClick = () => {
     dispatch(LankChallenge(id));
+    close();
   };
   return (
     <Wrapper>
@@ -69,7 +70,6 @@ export default function ChallengeReq(props) {
                   className="accBut"
                   onClick={() => {
                     handleClick();
-                    close();
                   }}
                 >
                   대결 신청
