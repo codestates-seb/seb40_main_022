@@ -1,15 +1,15 @@
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+// import { Link } from 'react-router-dom';
+// import { useDispatch } from 'react-redux';
 import ImageSlider, { Slide } from 'react-auto-image-slider';
-import { asyncPostDel } from '../../redux/action/MainAsync';
+// import { asyncPostDel } from '../../redux/action/MainAsync';
 
 export default function DailyImg({ el }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const handleDelPost = id => {
-    dispatch(asyncPostDel(id));
-    window.location.reload();
-  };
+  // const handleDelPost = id => {
+  //   dispatch(asyncPostDel(id));
+  //   window.location.reload();
+  // };
 
   return (
     <div>
@@ -25,7 +25,7 @@ export default function DailyImg({ el }) {
             })}
         </ImageSlider>
       </article>
-      <div>
+      {/* <div>
         <Link to={`/dailypost/edit/${el.post.postId}`} className="buttons">
           수정
         </Link>
@@ -36,7 +36,7 @@ export default function DailyImg({ el }) {
         >
           삭제
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

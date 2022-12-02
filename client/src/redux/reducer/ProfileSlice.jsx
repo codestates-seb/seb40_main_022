@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { MypageGet } from '../action/MypageAsync';
+import { UserProfileGet } from '../action/ProfileAsync';
 
-const MypageSlice = createSlice({
-  name: 'mypage',
+const ProfileSlice = createSlice({
+  name: 'profile',
   initialState: {
     member: [],
     dailyPosts: [],
@@ -11,7 +11,7 @@ const MypageSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [MypageGet.fulfilled]: (state, action) => {
+    [UserProfileGet.fulfilled]: (state, action) => {
       state.dailyPosts = action.payload.dailyPosts;
       state.activity = action.payload.activity;
       state.member = action.payload.member;
@@ -20,6 +20,6 @@ const MypageSlice = createSlice({
   },
 });
 
-export const mypageActions = MypageSlice.actions;
+export const profileActions = ProfileSlice.actions;
 
-export default MypageSlice.reducer;
+export default ProfileSlice.reducer;

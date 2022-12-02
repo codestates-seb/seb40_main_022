@@ -1,65 +1,121 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-const Paging = styled.div``;
+const PaginationComponent = styled.div`
+  .pagination {
+    width: 100%;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.8rem;
+    .page {
+      display: flex;
+      .dot {
+        padding: 0.5rem 0.8rem;
+      }
+      button {
+        box-shadow: 0;
+        border: 1px solid #d9d9d9;
+        background: #fff;
+        border-radius: 5px;
+        :hover {
+          background-color: #d9d9d9;
+        }
+      }
+      .page-items {
+        border: 1px solid #d9d9d9;
+        width: 23px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        margin: 3px;
+        :not(&.check) {
+          cursor: pointer;
+        }
 
-// const PageNumber = styled.ul`
-//   display: flex;
-//   text-decoration: none;
-//   list-style: none;
-//   width: 1200px;
-//   margin: 0 auto;
-//   border: 1px solid red;
-//   justify-content: center;
-//   > li {
-//     margin: 15px;
-//   }
-// `;
-function PagiNation() {
-  const [pages, setPages] = React.useState([]);
-  const [size, setSize] = React.useState(10);
-  const [totalElements] = React.useState(20);
-  const [totalPages, setTotalPages] = React.useState(5);
-  //  page
-  //  size
-  //  totalElements
-  //  totalPages
-  const items = useSelector(state => state.qnalist.pageInfo);
-  const pers = [10, 20, 30];
-  const pagination = Array(Math.ceil(totalPages / size));
+        :hover:not(&.check) {
+          background-color: #d9d9d9;
+        }
+      }
+    }
 
-  const setSizes = e => {
-    setSize(e);
+    .per {
+      display: flex;
+      align-items: center;
+      .per-items {
+        width: 30px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        margin-right: 5px;
+        border: 1px solid #d9d9d9;
+        :not(&.check) {
+          cursor: pointer;
+        }
+
+        :hover:not(&.check) {
+          background-color: #d9d9d9;
+        }
+      }
+    }
+    .check {
+      background: rgb(244, 130, 37);
+      color: #fff;
+    }
+  }
+`;
+
+function Pagination({
+  // size,
+  currentPage,
+  currentPageHandler,
+  // paginationLength,
+  items,
+}) {
+  const pagination = Array(items.totalPages)
+    .fill()
+    .map((v, i) => i + 1);
+  const pagePrevBtn = () => {
+    if (currentPage > 1) {
+      currentPageHandler(currentPage - 1);
+    }
   };
-  console.log(pers);
-  console.log(items);
-  console.log(pagination);
-  console.log(totalPages);
+
+  const pageNextBtn = () => {
+    if (currentPage + 1 <= items.totalPages) {
+      currentPageHandler(currentPage + 1);
+    }
+  };
 
   return (
-    <>
-      {pagination && items.length === 1 ? (
-        pagination.map(item => (
-          <>
-            <h3>{item.totalElements}</h3>
-            <h3>{item.totalPages}</h3>
-            <h3>{item.page}</h3>
-            <h3>{item.size}</h3>
-          </>
-        ))
-      ) : (
-        <h3>1</h3>
-      )}
-      <Paging
-        page={setPages}
-        pages={pages}
-        totalPages={setTotalPages}
-        totalElements={totalElements}
-        size={setSizes}
-      />
-    </>
+    <PaginationComponent>
+      <div className="pagination">
+        <div className="page">
+          <button onClick={pagePrevBtn}> prev </button>
+          {pagination &&
+            pagination.map((v, i) => (
+              <button
+                className={
+                  currentPage === v ? 'page-items check' : 'page-items'
+                }
+                onClick={() => {
+                  currentPageHandler(v);
+                }}
+                key={(v, i)}
+              >
+                {v}
+              </button>
+            ))}
+          {/* <div className="dot">...</div> */}
+          <button onClick={pageNextBtn}>next</button>
+        </div>
+      </div>
+    </PaginationComponent>
   );
 }
 
-export default PagiNation;
+export default Pagination;

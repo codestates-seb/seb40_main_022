@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const MypageEditGet = createAsyncThunk('/mypage/edit', () => {
   const Mylist = axios
-    .get('/members/myPage', {
+    .get(`${process.env.REACT_APP_API_URL}/members/myPage`, {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
@@ -17,13 +17,11 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', () => {
 });
 
 export const MypagePost = createAsyncThunk('/myPage/edit', data => {
-  axios
-    .post('/members/myPage', data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
-    })
-    .then(res => console.log(res));
+  axios.post(`${process.env.REACT_APP_API_URL}/members/myPage`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });

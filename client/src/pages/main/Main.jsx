@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Footer from '../../components/footer/Footer';
 import Head from '../../components/header/Header';
-import MainInside from '../../components/main/MainInside';
+import MainInside from './MainInside';
+import { ReLodingLogin } from '../../redux/action/LoginAsync';
 
 const Maincontainer = styled.main`
   width: 100%;
@@ -14,13 +15,17 @@ const Maincontainer = styled.main`
 function Main() {
   const data1 = new URL(window.location.href).searchParams.get('access_token');
   const data2 = new URL(window.location.href).searchParams.get('refresh_token');
-  const navigate = useNavigate();
+  const loginboolean = useSelector(state => state.authToken.isLogin);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (data1 !== null && data2 !== null) {
       window.localStorage.setItem('Authorization', `Bearer ${data1}`);
       window.localStorage.setItem('RefreshToken', `${data2}`);
-      navigate('/');
+      if (loginboolean === false) {
+        dispatch(ReLodingLogin());
+        window.location.reload();
+      }
     }
   }, []);
   return (

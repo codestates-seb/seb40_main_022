@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
+import comment from '../../images/comment.svg';
 import {
   asyncLike,
   asyncLikeundo,
@@ -10,6 +12,7 @@ import {
 import DailyCmt from './DailyCmt';
 
 export default function DailyInfo({ el, index }) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
   const [isComment, setIsComment] = useState(false);
@@ -36,8 +39,8 @@ export default function DailyInfo({ el, index }) {
                 }}
                 className="comments"
               >
-                댓글
-                {el.post.commentCount ? el.post.commentCount : 0}개
+                <img className="commentIcon" src={comment} alt="comment" />
+                {el.post.commentCount ? el.post.commentCount : 0}
               </button>
             </span>
             <span className="favorite">
@@ -62,7 +65,14 @@ export default function DailyInfo({ el, index }) {
           </div>
         </div>
         <div className="userInfo">
-          <img className="user" src={el.member.profileImage} alt="daily" />
+          <button
+            className="cont-picture"
+            onClick={() => {
+              navigate(`/members/${el.member.userId}`);
+            }}
+          >
+            <img className="user" src={el.member.profileImage} alt="daily" />
+          </button>
           <span>{el.member.username ? el.member.username : null}</span>
         </div>
       </article>
