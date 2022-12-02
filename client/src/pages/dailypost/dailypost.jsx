@@ -164,6 +164,7 @@ const dailypost = () => {
             {tagList.length <= 3 ? (
               <input
                 className="tagbox"
+                maxLength={6}
                 value={tags}
                 onChange={e => {
                   setTags(e.target.value);

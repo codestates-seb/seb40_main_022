@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
-import logo from '../../images/logo.png';
+import Logo from '../../images/Logo.svg';
+import LogoText from '../../images/LogoText.svg';
 import sidebar from '../../images/sidebar.png';
 import Sidebar from '../sidebar/Sidebar';
 import Head from './Head';
@@ -41,8 +42,8 @@ function Header() {
     <Head>
       <div className="mainHead">
         <Link to="/" className="logo">
-          <img src={logo} alt="logo" />
-          <span className="logoname">Fit Challenge</span>
+          <img src={Logo} alt="logo" />
+          <img className="logoname" src={LogoText} alt="logo" />
         </Link>
         {IsLogin ? (
           <div className="Rightheader">

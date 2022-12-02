@@ -13,6 +13,7 @@ const LankSlice = createSlice({
     data: [],
     userInfo: [],
     items: [],
+    pageInfo: [],
     url: '',
   },
   reducers: {
@@ -22,7 +23,9 @@ const LankSlice = createSlice({
   },
   extraReducers: {
     [LankProfileGet.fulfilled]: (state, action) => {
+      console.log(action);
       state.member = action.payload;
+      state.pageInfo = action.payload;
     },
     [Notifications.fulfilled]: (state, action) => {
       state.data = action.payload;
@@ -33,6 +36,7 @@ const LankSlice = createSlice({
     [ChallengeSearch.fulfilled]: (state, action) => {
       console.log(action);
       state.items = action.payload;
+      state.pageInfo = action.payload;
     },
   },
 });

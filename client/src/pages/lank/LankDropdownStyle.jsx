@@ -2,7 +2,29 @@ import styled from 'styled-components';
 
 export const Dropdown = styled.main`
   display: flex;
-  margin-right: 20px;
+  position: absolute;
+  top: 120px;
+  right: 0;
+  .searchbutton {
+    border: none;
+    background-color: white;
+    > img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      margin-left: 30px;
+    }
+  }
+  .reset {
+    border: none;
+    background-color: white;
+    > img {
+      width: 20px;
+      height: 20px;
+      margin-left: 30px;
+      cursor: pointer;
+    }
+  }
 `;
 export const Dropdivi = styled.div`
   .container {

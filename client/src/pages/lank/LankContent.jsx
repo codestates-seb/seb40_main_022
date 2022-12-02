@@ -15,19 +15,23 @@ function LankContent() {
   const lanklist = useSelector(state => state.challenge.member.responses);
   const url = useSelector(state => state.challenge.url);
   const searchList = useSelector(state => state.challenge.items.responses);
+  const list = useSelector(state => state.challenge.pageInfo);
+
   useEffect(() => {
     dispatch(ChallengeSearch(url));
     dispatch(LankProfileGet());
   }, [url]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(useSelector(state => state.qnalist.list));
 
   const currentPageHandler = p => {
     setCurrentPage(p);
-    console.log(currentPage);
     dispatch(LankProfileGet(p));
+    dispatch(ChallengeSearch(p));
   };
+
+  console.log(list);
+  console.log(lanklist);
 
   return (
     <LankBody>
@@ -106,12 +110,9 @@ function LankContent() {
             );
           })}
       <Pagination
-        // size={size}
-        // sizeHandler={sizeHandler}
         currentPage={currentPage}
         currentPageHandler={currentPageHandler}
-        // paginationLength={paginationLength}
-        lanklist={lanklist}
+        list={list}
       />
     </LankBody>
   );
