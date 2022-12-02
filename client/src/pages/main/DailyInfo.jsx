@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
+import comment from '../../images/comment.svg';
 import {
   asyncLike,
   asyncLikeundo,
@@ -38,8 +39,8 @@ export default function DailyInfo({ el, index }) {
                 }}
                 className="comments"
               >
-                댓글
-                {el.post.commentCount ? el.post.commentCount : 0}개
+                <img className="commentIcon" src={comment} alt="comment" />
+                {el.post.commentCount ? el.post.commentCount : 0}
               </button>
             </span>
             <span className="favorite">

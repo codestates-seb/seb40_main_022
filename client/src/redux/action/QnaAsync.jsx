@@ -11,9 +11,9 @@ export const QnaAsynclistPost = createAsyncThunk('qnaask', ({ formdata }) => {
   });
 });
 
-export const QnaAsynclist = createAsyncThunk('list', async () => {
+export const QnaAsynclist = createAsyncThunk('list', async p => {
   const result = await axios
-    .get(`${process.env.REACT_APP_API_URL}/questions?page=1`)
+    .get(`${process.env.REACT_APP_API_URL}/questions?page=${p}`)
     .then(res => {
       return res.data;
     });

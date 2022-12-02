@@ -127,7 +127,8 @@ export const DailyForm = styled.div`
 `;
 
 export const DailyItem = styled.div`
-  background-color: var(--black-050);
+  background-color: var(--white);
+  box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   padding: 2%;
   margin: 5% 10px;
@@ -238,21 +239,26 @@ export const DailyItem = styled.div`
     height: 550px;
   }
 
-  .favorite {
-    cursor: pointer;
-    .heart {
-      width: 18px;
-      height: 18px;
-      padding: 3px 3px 0 0;
-    }
-  }
-
   .DailyInfo {
     margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+
+    .act {
+      > span {
+        > button {
+          background-color: var(--white);
+
+          > Img {
+            width: 18px;
+            height: 18px;
+            padding: 3px 3px 0 0;
+          }
+        }
+      }
+    }
 
     span {
       margin-right: 20px;
@@ -274,6 +280,7 @@ export const DailyItem = styled.div`
       width: 500px;
       overflow: hidden;
       word-wrap: break-word;
+      margin: 30px 0;
     }
 
     .date {
