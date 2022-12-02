@@ -92,7 +92,7 @@ function Detail() {
     dispatch(RecordUpAsync(data))
       .unwrap()
       .then(() => {
-        // window.location.href = '/record';
+        window.location.href = '/record';
       });
   };
   useEffect(() => {

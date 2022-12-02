@@ -22,14 +22,14 @@ function Calendar() {
   const getlist = useSelector(state => state.record.GetList.member);
   const getopponent = useSelector(state => state.record.GetList.opponent);
   const [Clicked, setClicked] = useState(false);
-  console.log(opponent);
+  console.log(member, opponent, challId, challId);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
   useEffect(() => {
     const TodayMonth = new Date().getMonth() + 1;
     dispatch(RecordListAsync(TodayMonth));
     dispatch(RecordListGet(memberId));
-  }, []);
+  }, [memberId]);
   const datelist =
     member &&
     member.map(data => {
