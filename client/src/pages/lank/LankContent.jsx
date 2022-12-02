@@ -41,7 +41,7 @@ function LankContent() {
           searchList.map((data, idx) => {
             return (
               <Lankcontents>
-                <h1>{idx + 1}</h1>
+                <h1>{(currentPage - 1) * 10 + idx + 1}</h1>
                 <button
                   onClick={() => {
                     navigate(`/members/${data.memberId}`);
@@ -58,7 +58,9 @@ function LankContent() {
                 <h4 className="cont-height">신장 : {data.height}</h4>
                 <h4 className="cont-weight">몸무게 : {data.weight}</h4>
                 <h4 className="cont-exp">경력 : {data.period}</h4>
-                <h4 className="cont-point">포인트 : {data.point}</h4>
+                <h4 className="cont-point">
+                  포인트 : {Math.round(data.point)}
+                </h4>
                 {data.challengeStatus ? (
                   <button
                     disabled={data.challengeStatus}
@@ -84,7 +86,7 @@ function LankContent() {
           lanklist.map((data, idx) => {
             return (
               <Lankcontents>
-                <h1>{idx + 1}</h1>
+                <h1>{(currentPage - 1) * 10 + idx + 1}</h1>
                 <button
                   onClick={() => {
                     navigate('/members/:id');
@@ -101,7 +103,9 @@ function LankContent() {
                 <h4 className="cont-height">신장 : {data.height}</h4>
                 <h4 className="cont-weight">몸무게 : {data.weight}</h4>
                 <h4 className="cont-exp">경력 : {data.period}</h4>
-                <h4 className="cont-point">포인트 : {data.point}</h4>
+                <h4 className="cont-point">
+                  포인트 : {Math.round(data.point)}
+                </h4>
                 {data.challengeStatus ? (
                   <button
                     disabled={data.challengeStatus}
