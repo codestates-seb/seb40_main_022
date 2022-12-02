@@ -62,7 +62,7 @@ export function PictureBox() {
   useEffect(() => {
     const getPost = async () => {
       axios
-        .get('/members/myPage', {
+        .get(`${process.env.REACT_APP_API_URL}/members/myPage`, {
           headers: {
             Authorization: localStorage.getItem('Authorization'),
             RefreshToken: localStorage.getItem('RefreshToken'),
@@ -82,12 +82,15 @@ export function PictureBox() {
       setIsLoaded(true);
       setTimeout(() => {
         axios
-          .get(`/members/myPage?lastPostId=${lastPostId}`, {
-            headers: {
-              Authorization: localStorage.getItem('Authorization'),
-              RefreshToken: localStorage.getItem('RefreshToken'),
+          .get(
+            `${process.env.REACT_APP_API_URL}/members/myPage?lastPostId=${lastPostId}`,
+            {
+              headers: {
+                Authorization: localStorage.getItem('Authorization'),
+                RefreshToken: localStorage.getItem('RefreshToken'),
+              },
             },
-          })
+          )
           .then(res => {
             const newPost = res.data.dailyPosts.items;
             setPostList([...postList, newPost]);

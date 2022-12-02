@@ -3,14 +3,13 @@ import axios from 'axios';
 
 export const MypageGet = createAsyncThunk('/mypage', () => {
   const data = axios
-    .get('/members/myPage', {
+    .get(`${process.env.REACT_APP_API_URL}/members/myPage`, {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
       },
     })
     .then(res => {
-      console.log(res);
       return res.data;
     });
 
@@ -18,16 +17,17 @@ export const MypageGet = createAsyncThunk('/mypage', () => {
 });
 
 export const MypageScroll = createAsyncThunk('/mypage', lastPostId => {
-  console.log(lastPostId);
   const data = axios
-    .get(`/members/myPage?lastPostId=${lastPostId}`, {
-      headers: {
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
+    .get(
+      `${process.env.REACT_APP_API_URL}/members/myPage?lastPostId=${lastPostId}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
       },
-    })
+    )
     .then(res => {
-      console.log(res);
       return res.data;
     });
 
@@ -36,7 +36,7 @@ export const MypageScroll = createAsyncThunk('/mypage', lastPostId => {
 
 export const MyIdDelete = createAsyncThunk('/member/mypage', () => {
   axios
-    .delete(`/members/myPage/delete`, {
+    .delete(`${process.env.REACT_APP_API_URL}/members/myPage/delete`, {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
