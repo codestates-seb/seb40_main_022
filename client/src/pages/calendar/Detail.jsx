@@ -20,7 +20,9 @@ function Detail() {
   const startphotoUp = useRef();
   const endphotoUp = useRef();
   const [tags, setTags] = useState('등');
-  const [health, setHealth] = useState(taghealth1 && taghealth1[0].sportsId);
+  const [health, setHealth] = useState(
+    taghealth1 ? taghealth1[0].sportsId : 21,
+  );
   const [set, setSet] = useState(null);
   const [num, setNum] = useState(null);
   const [weight, setWeight] = useState(null);
@@ -83,7 +85,11 @@ function Detail() {
   };
   const handleUp = () => {
     const data = [today, time, end, startImagePath, endImagePath, split];
-    dispatch(RecordUpAsync(data));
+    dispatch(RecordUpAsync(data))
+      .unwrap()
+      .then(() => {
+        window.location.href = '/record';
+      });
   };
   useEffect(() => {
     dispatch(RecordTagAsync(tags));
@@ -261,8 +267,6 @@ function Detail() {
               }
               return (
                 <div>
-                  {/* <span>{bodyPart[index]}</span>
-                  <span>{tagname[index]}</span> */}
                   <span>{data.set}세트</span>
                   <span>{data.count}회</span>
                   <span>{data.weight}kg</span>

@@ -10,10 +10,10 @@ function LankContent() {
   const [challengeReq, setChallengeReq] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const lanklist = useSelector(state => state.challenge.member.responses);
   const url = useSelector(state => state.challenge.url);
   const searchList = useSelector(state => state.challenge.items.responses);
+
   useEffect(() => {
     dispatch(ChallengeSearch(url));
     dispatch(LankProfileGet());

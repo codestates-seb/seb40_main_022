@@ -42,7 +42,7 @@ export const LoginAsync = createAsyncThunk('login', data => {
           'Access-Control-Allow-Origin': '*',
           'content-type': 'application/application.json',
         },
-        withCredentials: false,
+        // withCredentials: false,
       },
     )
     .then(res => {
@@ -57,7 +57,15 @@ export const LoginAsync = createAsyncThunk('login', data => {
         },
       });
       setTimeout(Retoken, 870000);
+      window.location.href = '/';
       return auth;
+    })
+    .catch(err => {
+      if (err.response.status === 401) {
+        alert('아이디(로그인 전용 아이디) 또는 비밀번호를 잘못 입력했습니다.');
+      } else if (err.response.status === 500) {
+        alert('로그인이 되어있습니다.');
+      }
     });
 });
 

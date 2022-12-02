@@ -5,7 +5,6 @@ export const Inside = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   .searchInput {
     display: flex;
     justify-content: center;
