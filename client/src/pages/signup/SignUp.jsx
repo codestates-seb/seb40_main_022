@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/footer/Footer';
@@ -20,7 +19,6 @@ function SignUp() {
   const PWDTest = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
   const EMTest = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleClick = () => {
     if (!EMTest.test(email)) {
@@ -32,12 +30,7 @@ function SignUp() {
     } else if (password !== repassword) {
       alert('비밀번호 서로 다릅니다.');
     } else {
-      dispatch(SignupAsync({ username, email, password }))
-        .unwrap()
-        .then(() => {
-          alert('회원가입을 축하드립니다.');
-          navigate('/login');
-        });
+      dispatch(SignupAsync({ username, email, password }));
     }
   };
 
