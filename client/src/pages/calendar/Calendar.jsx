@@ -22,6 +22,7 @@ function Calendar() {
   const getlist = useSelector(state => state.record.GetList.member);
   const getopponent = useSelector(state => state.record.GetList.opponent);
   const [Clicked, setClicked] = useState(false);
+  console.log(opponent);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
   useEffect(() => {
@@ -124,11 +125,13 @@ function Calendar() {
             </div>
             <div
               className={
-                member && member.length !== 0 ? 'userInfoBox2' : 'userInfoBox'
+                getlist && getlist && getopponent
+                  ? 'userInfoBox'
+                  : 'userInfoBox2'
               }
             >
-              {member && member ? (
-                <div className={member && member ? 'box2' : 'nobox'}>
+              {getlist && getlist ? (
+                <div className={member && member ? 'box1' : 'nobox'}>
                   <div
                     className={
                       member && member !== undefined ? 'name1' : 'noname'
@@ -178,7 +181,7 @@ function Calendar() {
                   ) : null}
                 </div>
               ) : null}
-              {opponent && opponent !== undefined ? (
+              {getopponent && getopponent !== undefined ? (
                 <div className="box2">
                   <div className="name2">
                     {getopponent && getopponent.member.username}

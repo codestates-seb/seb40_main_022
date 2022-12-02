@@ -25,7 +25,7 @@ function QnaList() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);
-
+  console.log(list, questiondata, items);
   const [currentPage, setCurrentPage] = useState(1);
   const currentPageHandler = p => {
     setCurrentPage(p);

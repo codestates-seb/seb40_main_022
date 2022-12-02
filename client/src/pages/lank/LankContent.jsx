@@ -16,7 +16,6 @@ function LankContent() {
   const searchList = useSelector(state => state.challenge.items.responses);
   const list = useSelector(state => state.challenge.pageInfo);
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(searchList, url);
 
   useEffect(() => {
     dispatch(ChallengeSearch(url));
