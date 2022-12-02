@@ -25,11 +25,21 @@ export const PostTitle = styled.section`
   > div {
     > h2 {
       font-size: var(--font-16);
+      margin-bottom: 10px;
     }
     > input {
       width: 520px;
       height: 34px;
       padding: 10px;
+      border: none;
+      padding: 10px;
+      box-shadow: inset var(--box-shadow);
+      outline: none;
+      border-radius: 5px;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
   }
 `;
@@ -41,12 +51,23 @@ export const PostContent = styled.section`
   > div {
     > h2 {
       font-size: var(--font-16);
+      margin-bottom: 10px;
     }
     > textarea {
       width: 520px;
       height: 220px;
       padding: 10px;
       resize: none;
+      border: none;
+      padding: 10px;
+      height: 200px;
+      box-shadow: inset var(--box-shadow);
+      outline: none;
+      border-radius: 5px;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
   }
 `;
@@ -81,7 +102,6 @@ export const PostSubmit = styled.section`
   display: flex;
   height: 100px;
   justify-content: center;
-  margin-top: 30px;
   > :nth-child(1) {
     width: 120px;
     height: 50px;

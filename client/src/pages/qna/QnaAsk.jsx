@@ -35,9 +35,7 @@ function QnaAsk() {
       <QnaPost>
         <PostTitle>
           <div>
-            <label htmlFor="titleId">
-              <h2>제목</h2>
-            </label>
+            <h2>제목</h2>
             <input
               value={title}
               placeholder="제목을 입력하세요."

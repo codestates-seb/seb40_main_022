@@ -19,7 +19,6 @@ export default function DailyCmt({ index }) {
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   const navigate = useNavigate();
 
-  console.log(cmtList);
   const handleAnswer = e => {
     e.preventDefault();
     if (!ac) {
