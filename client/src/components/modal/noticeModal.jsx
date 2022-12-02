@@ -35,7 +35,8 @@ function Modal() {
         <ModalMain>
           {notification &&
             notification.map(data => {
-              return (
+              console.log(data.read);
+              return data.read ? null : (
                 <ModalList
                   onClick={() => {
                     setChallenge(true);

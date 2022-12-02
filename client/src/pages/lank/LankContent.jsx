@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ChallengeReq from '../../components/modal/ChallengeReq';
 import { LankBody, Lankcontents } from './LankContentstyle';
-import { LankProfileGet, ChallengeSearch } from '../../redux/action/LankAsync';
+import { ChallengeSearch } from '../../redux/action/LankAsync';
 import Pagination from './Pagination';
 
 function LankContent() {
@@ -16,17 +16,14 @@ function LankContent() {
   const searchList = useSelector(state => state.challenge.items.responses);
   const list = useSelector(state => state.challenge.pageInfo);
   const [currentPage, setCurrentPage] = useState(1);
-  // const SearchPagingdata = [url, currentPage];
+  const SearchPaingdata = [url, currentPage];
   useEffect(() => {
-    dispatch(ChallengeSearch(url));
-    dispatch(LankProfileGet());
-    dispatch(LankProfileGet(currentPage));
+    dispatch(ChallengeSearch(SearchPaingdata));
   }, [url]);
 
   const currentPageHandler = page => {
     setCurrentPage(page);
-    // dispatch(LankProfileGet(page));
-    // dispatch(ChallengeSearch(SearchPagingdata));
+    dispatch(ChallengeSearch(url));
   };
 
   return (
