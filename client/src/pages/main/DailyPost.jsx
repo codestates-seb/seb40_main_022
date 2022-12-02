@@ -47,7 +47,7 @@ export default function DailyPost() {
       lastPost && lastPost[lastPost.length - 1] !== undefined
         ? lastPost[lastPost.length - 1].post.postId
         : null;
-    if (lastPost && lastPostId > 1 && inView) {
+    if (lastPost && lastPostId > 1 && lastPost.length >= 4 && inView) {
       setIsLoaded(true);
       setTimeout(() => {
         axios
@@ -104,7 +104,7 @@ export default function DailyPost() {
                       </DailyItem>
                     );
                   })}
-                <div ref={ref} />
+                {/* <div ref={ref} /> */}
               </div>
             );
           })}

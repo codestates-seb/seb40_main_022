@@ -101,7 +101,8 @@ export const QnaContent = styled.section`
     display: flex;
     margin-bottom: 40px;
     /* width: 68%; */
-    background-color: var(--black-025);
+    /* background-color: var(--black-025); */
+    border-bottom: 1px solid var(--black-300);
     padding: 20px;
     > article {
       width: 70%;
