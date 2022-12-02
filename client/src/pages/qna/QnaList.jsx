@@ -22,7 +22,6 @@ function QnaList() {
   const list = useSelector(state => state.qnalist.list);
   const questiondata = useSelector(state => state.qnalist.search);
   const items = useSelector(state => state.qnalist.pageInfo);
-  console.log(items);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);
@@ -30,7 +29,6 @@ function QnaList() {
   // const [size, setSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   // const [paginationLength] = useState(1);
-  console.log(useSelector(state => state.qnalist.list));
 
   // const [size, setSize] = useState(10);
   // const [paginationLength, setPaginationLength] = useState(3);
@@ -38,7 +36,6 @@ function QnaList() {
   // const sizeHandler = per => setSize(per);
   const currentPageHandler = p => {
     setCurrentPage(p);
-    console.log(currentPage);
     dispatch(QnaAsynclist(p));
   };
 

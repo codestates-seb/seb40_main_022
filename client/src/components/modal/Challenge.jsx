@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import vs from '../../images/vs.svg';
+import Profile from '../../images/Profile.png';
 import { Wrapper, ModalSection } from './modalstyle';
 import {
   ModalHeader,
@@ -27,7 +28,6 @@ export default function Challenge(props) {
   if (userdata !== undefined && userdb !== undefined) {
     // userdata[id].filter(data => console.log(data));
   }
-  console.log(userdata, userdb, id);
 
   const handledelete = () => {
     close();
@@ -52,7 +52,11 @@ export default function Challenge(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userdb.counterpartImage}
+                      src={
+                        userdb.counterpartImage
+                          ? userdb.counterpartImage
+                          : Profile
+                      }
                       alt="userProfile"
                     />
                   </span>
@@ -70,7 +74,9 @@ export default function Challenge(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userdb.applicantImage}
+                      src={
+                        userdb.applicantImage ? userdb.applicantImage : Profile
+                      }
                       alt="userProfile"
                     />
                   </span>

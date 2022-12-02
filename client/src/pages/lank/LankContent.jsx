@@ -13,7 +13,7 @@ function LankContent() {
   const lanklist = useSelector(state => state.challenge.member.responses);
   const url = useSelector(state => state.challenge.url);
   const searchList = useSelector(state => state.challenge.items.responses);
-
+  console.log(searchList);
   useEffect(() => {
     dispatch(ChallengeSearch(url));
     dispatch(LankProfileGet());
@@ -33,7 +33,7 @@ function LankContent() {
                 <h1>{idx + 1}</h1>
                 <button
                   onClick={() => {
-                    navigate('/members/:id');
+                    navigate(`/members/${data.memberId}`);
                   }}
                   className="cont-picturebtn"
                 >
@@ -48,15 +48,24 @@ function LankContent() {
                 <h4 className="cont-weight">몸무게 : {data.weight}</h4>
                 <h4 className="cont-exp">경력 : {data.period}</h4>
                 <h4 className="cont-point">포인트 : {data.point}</h4>
-                <button
-                  onClick={() => {
-                    setId(data.memberId);
-                    setChallengeReq(true);
-                  }}
-                  className="challenge"
-                >
-                  대결신청
-                </button>
+                {data.challengeStatus ? (
+                  <button
+                    disabled={data.challengeStatus}
+                    className="challenging"
+                  >
+                    대결중
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setId(data.memberId);
+                      setChallengeReq(true);
+                    }}
+                    className="challenge"
+                  >
+                    대결신청
+                  </button>
+                )}
               </Lankcontents>
             );
           })

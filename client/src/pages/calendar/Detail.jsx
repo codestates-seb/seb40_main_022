@@ -29,7 +29,11 @@ function Detail() {
   const [split, setSplit] = useState([]);
   const [time, setTime] = useState('');
   const [end, setEnd] = useState('');
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = `0${today.getMonth() + 1}`.slice(-2);
+  const day = `0${today.getDate()}`.slice(-2);
+  const dateString = `${year}-${month}-${day}`;
   const [clicked, setClicked] = useState(false);
   const [addUpdate, setAddUpdate] = useState([]);
   const [startrealImg, setStartRealImg] = useState('');
@@ -84,11 +88,11 @@ function Detail() {
     }
   };
   const handleUp = () => {
-    const data = [today, time, end, startImagePath, endImagePath, split];
+    const data = [dateString, time, end, startImagePath, endImagePath, split];
     dispatch(RecordUpAsync(data))
       .unwrap()
       .then(() => {
-        window.location.href = '/record';
+        // window.location.href = '/record';
       });
   };
   useEffect(() => {

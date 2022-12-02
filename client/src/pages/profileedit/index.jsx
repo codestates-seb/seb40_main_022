@@ -21,7 +21,6 @@ import {
 function ProfileEdit() {
   const navigate = useNavigate();
   const userdata = useSelector(state => state.mypage);
-  console.log(userdata);
   // const list = userdata.filter(postdata => postdata.post.postId === +Id.id);
   const [username, setUsername] = useState(userdata.member.userName);
   const [password, setPassword] = useState('');
@@ -87,9 +86,6 @@ function ProfileEdit() {
     formData.append('kilogram', kilogram);
     formData.append('period', period);
     formData.append('profileImage', profileImage);
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
-    }
     dispatch(MypagePost(formData));
   };
   return (

@@ -102,7 +102,6 @@ function LankDropdown() {
       (weighturl.length !== 0 ? `&${weighturl}` : '') +
       (careerurl.length !== 0 ? `&${careerurl}` : ``);
     const searchurl = dataurl.slice(1, dataurl.length);
-    console.log(searchurl);
     dispatch(url(searchurl));
   };
   const handleResetClick = () => {

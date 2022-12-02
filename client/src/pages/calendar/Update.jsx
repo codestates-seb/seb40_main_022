@@ -18,7 +18,6 @@ function Update() {
   const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
   const taghealth1 = useSelector(state => state.record.data.data);
   const ListupGet = useSelector(state => state.record.GetList.member.sports);
-  console.log(ListupGet);
   const navigate = useNavigate();
   const startphotoUp = useRef();
   const endphotoUp = useRef();

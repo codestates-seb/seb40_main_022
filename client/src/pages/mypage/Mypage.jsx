@@ -27,7 +27,6 @@ function Mypage() {
   const data = useSelector(state => state.mypage);
   const member = useSelector(state => state.mypage.member);
   const activity = useSelector(state => state.mypage.activity);
-
   return (
     <Wrapper>
       <Header />

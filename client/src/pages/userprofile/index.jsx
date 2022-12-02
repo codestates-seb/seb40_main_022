@@ -21,7 +21,6 @@ function UserProfile() {
   }, []);
 
   const data = useSelector(state => state.profile);
-  console.log(data);
   const member = useSelector(state => state.profile.member);
   const activity = useSelector(state => state.profile.activity);
 
