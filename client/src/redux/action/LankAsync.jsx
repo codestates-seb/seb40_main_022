@@ -33,6 +33,7 @@ export const Notifications = createAsyncThunk('notifications', () => {
       },
     })
     .then(res => {
+      console.log(res);
       return res.data;
     });
 });
@@ -69,30 +70,29 @@ export const EnemyUserInfo = createAsyncThunk('userInfo', () => {
 });
 
 export const Notificationsallam = createAsyncThunk('allam', id => {
-  return axios.patch(
-    `${process.env.REACT_APP_API_URL}/notifications/${id}`,
-    id,
-    {
+  return axios
+    .patch(`${process.env.REACT_APP_API_URL}/notifications/${id}`, id, {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
       },
-    },
-  );
+    })
+    .then(res => console.log(res));
 });
 
-export const ChallengeSearch = createAsyncThunk(
-  '/challenge/search',
-  (url, page) => {
-    return axios
-      .get(`${process.env.REACT_APP_API_URL}/challenge?${url}&page=${page}`, {
+export const ChallengeSearch = createAsyncThunk('/challenge/search', data => {
+  return axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/challenge?${data[0]}&page=${data[1]}`,
+      {
         headers: {
           Authorization: localStorage.getItem('Authorization'),
           RefreshToken: localStorage.getItem('RefreshToken'),
         },
-      })
-      .then(res => {
-        return res.data;
-      });
-  },
-);
+      },
+    )
+    .then(res => {
+      console.log(res);
+      return res.data;
+    });
+});
