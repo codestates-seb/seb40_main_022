@@ -46,7 +46,6 @@ export const LoginAsync = createAsyncThunk('login', data => {
       },
     )
     .then(res => {
-      console.log(res);
       axios.defaults.headers.common.token = res.headers.authorization;
       localStorage.setItem('Authorization', res.headers.authorization);
       localStorage.setItem('RefreshToken', res.headers.refreshtoken);

@@ -88,7 +88,7 @@ function UserPicture() {
       {postList &&
         postList.map(list => {
           return (
-            <div>
+            <div className="postList">
               {list &&
                 list
                   .filter(el => el.image !== null)

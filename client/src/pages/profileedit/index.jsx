@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faGear } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
@@ -14,15 +14,13 @@ import {
   ProfileInputTop,
   ProfileInputDown,
   ProfileInputBox,
-  // ErrorP,
   BtnBox,
+  ErrorP,
 } from './style';
 
 function ProfileEdit() {
   const navigate = useNavigate();
   const userdata = useSelector(state => state.mypage);
-  console.log(userdata);
-  // const list = userdata.filter(postdata => postdata.post.postId === +Id.id);
   const [username, setUsername] = useState(userdata.member.userName);
   const [password, setPassword] = useState('');
   const [job, setJob] = useState('');
@@ -38,10 +36,10 @@ function ProfileEdit() {
   const [profileImage, setProfileImage] = useState(
     userdata.member.profileImage,
   );
-  // const [nameError, setNameError] = useState({ display: 'none' });
-  // const [passwordError, setPasswordError] = useState({ display: 'none' });
+  const [nameError, setNameError] = useState({ display: 'none' });
+  const [passwordError, setPasswordError] = useState({ display: 'none' });
   const photoUp = useRef();
-  // const PWDTest = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
+  const PWDTest = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
 
   const dispatch = useDispatch();
 
@@ -58,20 +56,20 @@ function ProfileEdit() {
     photoUp.current.click();
   };
 
-  // useEffect(() => {
-  //   if (username.length === 0) {
-  //     setNameError({ display: 'block' });
-  //   }
-  //   if (username.length > 0) {
-  //     setNameError({ display: 'none' });
-  //   }
-  //   if (!PWDTest.test(password)) {
-  //     setPasswordError({ display: 'block' });
-  //   }
-  //   if (PWDTest.test(password)) {
-  //     setPasswordError({ display: 'none' });
-  //   }
-  // }, [username, password]);
+  useEffect(() => {
+    if (username.length === 0) {
+      setNameError({ display: 'block' });
+    }
+    if (username.length > 0) {
+      setNameError({ display: 'none' });
+    }
+    if (!PWDTest.test(password)) {
+      setPasswordError({ display: 'block' });
+    }
+    if (PWDTest.test(password)) {
+      setPasswordError({ display: 'none' });
+    }
+  }, [username, password]);
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -87,9 +85,6 @@ function ProfileEdit() {
     formData.append('kilogram', kilogram);
     formData.append('period', period);
     formData.append('profileImage', profileImage);
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
-    }
     dispatch(MypagePost(formData));
   };
   return (
@@ -122,9 +117,9 @@ function ProfileEdit() {
                 setUsername(e.target.value);
               }}
             />
-            {/* <ErrorP style={nameError} className="errormsg">
+            <ErrorP style={nameError} className="errormsg">
               이름은 1글자 이상이어야 합니다.
-            </ErrorP> */}
+            </ErrorP>
             <div className="boxname">비밀번호*</div>
             <ProfileInputTop
               value={password}
@@ -134,9 +129,9 @@ function ProfileEdit() {
                 setPassword(e.target.value);
               }}
             />
-            {/* <ErrorP style={passwordError} className="errormsg">
+            <ErrorP style={passwordError} className="errormsg">
               비밀번호는 숫자, 영문 포함 8자 이상이어야 합니다.
-            </ErrorP> */}
+            </ErrorP>
             <div className="boxname">직업</div>
             <ProfileInputTop
               value={job}
@@ -164,7 +159,6 @@ function ProfileEdit() {
                       value="male"
                       defaultChecked
                       onChange={e => {
-                        // e.preventDefault();
                         setGender(e.target.value);
                       }}
                     />
@@ -176,7 +170,6 @@ function ProfileEdit() {
                       name="sex"
                       value="female"
                       onChange={e => {
-                        // e.preventDefault();
                         setGender(e.target.value);
                       }}
                     />
