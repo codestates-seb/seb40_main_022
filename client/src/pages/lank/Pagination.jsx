@@ -7,7 +7,7 @@ const PaginationComponent = styled.div`
     width: 100%;
     margin-top: 2rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 1.8rem;
     margin-bottom: 30px;
     .page {
@@ -68,14 +68,8 @@ const PaginationComponent = styled.div`
   }
 `;
 
-function Pagination({
-  // size,
-  currentPage,
-  currentPageHandler,
-  // paginationLength,
-  items,
-}) {
-  const pagination = Array(items.totalPages)
+function Pagination({ currentPage, currentPageHandler, list }) {
+  const pagination = Array(list.totalPages)
     .fill()
     .map((v, i) => i + 1);
   const pagePrevBtn = () => {
@@ -85,7 +79,7 @@ function Pagination({
   };
 
   const pageNextBtn = () => {
-    if (currentPage + 1 <= items.totalPages) {
+    if (currentPage + 1 <= list.totalPages) {
       currentPageHandler(currentPage + 1);
     }
   };

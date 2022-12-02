@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 import searchIcon from '../../images/searchIcon.png';
+import resetIcon from '../../images/Vector.png';
 import {
   Dropdown,
   Dropdivi,
@@ -101,7 +102,6 @@ function LankDropdown() {
       (weighturl.length !== 0 ? `&${weighturl}` : '') +
       (careerurl.length !== 0 ? `&${careerurl}` : ``);
     const searchurl = dataurl.slice(1, dataurl.length);
-    console.log(searchurl);
     dispatch(url(searchurl));
   };
   const handleResetClick = () => {
@@ -418,10 +418,12 @@ function LankDropdown() {
           )}
         </div>
       </DropCareer>
-      <button onClick={() => handleClick()}>
+      <button onClick={() => handleClick()} className="searchbutton">
         <img src={searchIcon} alt="검색아이콘" className="search" />
       </button>
-      <button onClick={() => handleResetClick()}>리셋</button>
+      <button onClick={() => handleResetClick()} className="reset">
+        <img src={resetIcon} alt="리셋아이콘" className="resetIcon" />
+      </button>
     </Dropdown>
   );
 }

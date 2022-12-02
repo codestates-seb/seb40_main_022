@@ -10,6 +10,7 @@ export const LankMain = styled.main`
   height: auto;
   padding-top: 60px;
   margin-bottom: 100px;
+  position: relative;
   .lankhead {
     display: flex;
     justify-content: space-between;

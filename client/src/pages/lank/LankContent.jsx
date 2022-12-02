@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ChallengeReq from '../../components/modal/ChallengeReq';
 import { LankBody, Lankcontents } from './LankContentstyle';
 import { LankProfileGet, ChallengeSearch } from '../../redux/action/LankAsync';
+import Pagination from './Pagination';
 
 function LankContent() {
   const [id, setId] = useState(null);
@@ -13,11 +14,21 @@ function LankContent() {
   const lanklist = useSelector(state => state.challenge.member.responses);
   const url = useSelector(state => state.challenge.url);
   const searchList = useSelector(state => state.challenge.items.responses);
+  const list = useSelector(state => state.challenge.pageInfo);
 
   useEffect(() => {
     dispatch(ChallengeSearch(url));
     dispatch(LankProfileGet());
   }, [url]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentPageHandler = page => {
+    setCurrentPage(page);
+    dispatch(LankProfileGet(page));
+    dispatch(ChallengeSearch(page));
+  };
+
   return (
     <LankBody>
       <ChallengeReq
@@ -94,6 +105,11 @@ function LankContent() {
               </Lankcontents>
             );
           })}
+      <Pagination
+        currentPage={currentPage}
+        currentPageHandler={currentPageHandler}
+        list={list}
+      />
     </LankBody>
   );
 }
