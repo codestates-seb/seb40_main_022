@@ -9,7 +9,6 @@ import MypageEditSlice from '../reducer/MypageEditSlice';
 import RecordSlice from '../reducer/RecordSlice';
 import ProfileSlice from '../reducer/ProfileSlice';
 
-// Slice Append Here
 const reducer = {
   signup: SignupSlice,
   authToken: tokenReducer,

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faDumbbell,
   faTrophy,
-  faPersonRunning,
+  faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons';
 import { PictureBox } from './PictureBox';
 import { MypageGet, MyIdDelete } from '../../redux/action/MypageAsync';
@@ -16,39 +16,18 @@ import { Wrapper, ProfileBox, NameBox, FollowBox, RecordBox } from './style';
 function Mypage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const data = useSelector(state => state.mypage);
+  const member = useSelector(state => state.mypage.member);
+  const activity = useSelector(state => state.mypage.activity);
+  const [btnClick, setBtnClick] = useState(false);
 
   useEffect(() => {
     dispatch(MypageGet());
   }, []);
 
-  // const [Clicked, setClicked] = useState(false);
-  const [btnClick, setBtnClick] = useState(false);
-
-  const data = useSelector(state => state.mypage);
-  const member = useSelector(state => state.mypage.member);
-  const activity = useSelector(state => state.mypage.activity);
-
   return (
     <Wrapper>
       <Header />
-      {/* {Clicked ? (
-        <div className="delmodal">
-          <div className="contentbox">게시글을 삭제하시겠습니까?</div>
-          <div className="btns">
-            <button
-              className="yes"
-              onClick={() => {
-                handleDelPost(list.post.postId);
-              }}
-            >
-              예
-            </button>
-            <button className="no" onClick={() => setClicked(!Clicked)}>
-              아니요
-            </button>
-          </div>
-        </div>
-      ) : null} */}
       {btnClick ? (
         <div className="delmodal">
           <div className="contentbox">정말 탈퇴하시겠습니까?</div>
@@ -94,12 +73,16 @@ function Mypage() {
               {activity.kilogram ? activity.kilogram : 0}kg
             </div>
             <div className="box">
-              <FontAwesomeIcon icon={faTrophy} />
-              {activity.point ? activity.point : 0}점 73위
+              <FontAwesomeIcon icon={faCalendarDays} />
+              {activity.dayCount ? activity.dayCount : 0}일
             </div>
             <div className="box">
-              <FontAwesomeIcon icon={faPersonRunning} />
-              {activity.dayCount ? activity.dayCount : 0}일
+              <FontAwesomeIcon icon={faTrophy} />
+              {activity.point ? activity.point : 0}등
+            </div>
+            <div className="box">
+              <div>Point</div>
+              {activity.point ? activity.point : 0}점
             </div>
           </div>
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
