@@ -24,14 +24,6 @@ function Mypage() {
   useEffect(() => {
     dispatch(MypageGet());
   }, []);
-
-  // const [Clicked, setClicked] = useState(false);
-  const [btnClick, setBtnClick] = useState(false);
-
-  const data = useSelector(state => state.mypage);
-  const member = useSelector(state => state.mypage.member);
-  const activity = useSelector(state => state.mypage.activity);
-
   return (
     <Wrapper>
       <Header />

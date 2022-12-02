@@ -15,13 +15,14 @@ function LankContent() {
   const url = useSelector(state => state.challenge.url);
   const searchList = useSelector(state => state.challenge.items.responses);
   const list = useSelector(state => state.challenge.pageInfo);
+  const [currentPage, setCurrentPage] = useState(1);
+  console.log(searchList, url);
 
   useEffect(() => {
     dispatch(ChallengeSearch(url));
     dispatch(LankProfileGet());
+    dispatch(LankProfileGet(currentPage));
   }, [url]);
-
-  const [currentPage, setCurrentPage] = useState(1);
 
   const currentPageHandler = page => {
     setCurrentPage(page);
@@ -102,15 +103,24 @@ function LankContent() {
                 <h4 className="cont-weight">몸무게 : {data.weight}</h4>
                 <h4 className="cont-exp">경력 : {data.period}</h4>
                 <h4 className="cont-point">포인트 : {data.point}</h4>
-                <button
-                  onClick={() => {
-                    setId(data.memberId);
-                    setChallengeReq(true);
-                  }}
-                  className="challenge"
-                >
-                  대결신청
-                </button>
+                {data.challengeStatus ? (
+                  <button
+                    disabled={data.challengeStatus}
+                    className="challenging"
+                  >
+                    대결중
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setId(data.memberId);
+                      setChallengeReq(true);
+                    }}
+                    className="challenge"
+                  >
+                    대결신청
+                  </button>
+                )}
               </Lankcontents>
             );
           })}
