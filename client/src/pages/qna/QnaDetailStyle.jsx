@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import QnAImg from '../../images/qnaImg.jpg';
 
 export const Detail = styled.div`
   width: 100%;
@@ -30,7 +29,6 @@ export const DetailTitle = styled.section`
     font-weight: 500;
   }
   > div {
-    background-image: url(${QnAImg});
     background-size: cover;
     width: 215px;
     height: 150px;
@@ -122,6 +120,7 @@ export const DetailAnswer = styled.div`
   padding-top: 40px;
   > h2 {
     font-size: var(--font-20);
+    margin-bottom: 30px;
   }
   > h3 {
     margin: 40px 0;
@@ -129,6 +128,39 @@ export const DetailAnswer = styled.div`
     line-height: 1.7rem;
     opacity: 0.7;
     font-weight: 500;
+  }
+  > h4 {
+    margin-bottom: 30px;
+  }
+  .check {
+    width: 50px;
+    height: 30px;
+    border: none;
+    border-radius: 10px;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+  .update {
+    width: 50px;
+    height: 30px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    background-color: var(--logored);
+    border-radius: 10px;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+  .delete {
+    width: 50px;
+    height: 30px;
+    border: none;
+    color: black;
+    font-weight: bold;
+    background-color: var(--buttongray);
+    border-radius: 10px;
+    margin-right: 15px;
+    cursor: pointer;
   }
 `;
 

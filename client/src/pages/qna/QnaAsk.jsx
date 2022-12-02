@@ -64,7 +64,7 @@ function QnaAsk() {
               taglist.map(data => {
                 return (
                   <button
-                    className="tags"
+                    className={tag === data ? 'oneButton' : null}
                     onClick={e => {
                       setTag(e.target.textContent);
                     }}
@@ -74,7 +74,7 @@ function QnaAsk() {
                 );
               })}
           </div>
-          {tag ? (
+          {/* {tag ? (
             <ul className="taglist">
               <li className="taglist-container">
                 <div className="tagname">{tag}</div>
@@ -88,7 +88,7 @@ function QnaAsk() {
                 </button>
               </li>
             </ul>
-          ) : null}
+          ) : null} */}
         </PostTag>
         <PostSubmit>
           <button

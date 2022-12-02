@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -33,7 +33,7 @@ function QnaDetail() {
   const data = list[+Id.id].questionId;
   const dispatch = useDispatch();
   const Upanswer = [data, content];
-
+  const navigate = useNavigate();
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -72,7 +72,7 @@ function QnaDetail() {
       <DetailBack>
         <DetailTitle>
           <h2>{list[+Id.id].title}</h2>
-          <h3>{list[+Id.id].title}</h3>
+          <h3>{list[+Id.id].summary}</h3>
           <div />
           <section>
             <DetailNDB>
@@ -120,6 +120,7 @@ function QnaDetail() {
                       </h4>
                     </div>
                     <button
+                      className="check"
                       onClick={() => {
                         handleAccept(AcId);
                       }}
@@ -127,10 +128,14 @@ function QnaDetail() {
                       {ansdata.accepted ? 'V' : '채택'}
                     </button>
                     <div>
-                      <button onClick={() => {}}>수정</button>
+                      <button className="update" onClick={() => {}}>
+                        수정
+                      </button>
                       <button
+                        className="delete"
                         onClick={() => {
                           handleDelete(AcId);
+                          navigate('/qna');
                         }}
                       >
                         삭제
@@ -155,6 +160,7 @@ function QnaDetail() {
         <DetailSubmit
           onClick={() => {
             handleAnswer();
+            navigate('/qna');
           }}
         >
           등록
