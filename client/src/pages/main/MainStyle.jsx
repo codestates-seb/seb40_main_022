@@ -129,7 +129,7 @@ export const DailyForm = styled.div`
 export const DailyItem = styled.div`
   background-color: var(--white);
   box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.15);
-  border-radius: 5px;
+  /* border-radius: 5px; */
   padding: 2%;
   margin: 5% 10px;
 
