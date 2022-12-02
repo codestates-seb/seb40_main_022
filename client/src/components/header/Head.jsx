@@ -17,7 +17,6 @@ const Head = styled.header`
     justify-content: space-between;
     position: relative;
     .logo {
-      /* text-decoration: none; */
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -27,11 +26,6 @@ const Head = styled.header`
         height: 50px;
       }
       .logoname {
-        /* margin-left: 20px;
-        font-size: var(--font-27);
-        color: var(--logored);
-        font-style: 'League Spartan';
-        font-weight: 600; */
         width: 200px;
         height: 50px;
       }

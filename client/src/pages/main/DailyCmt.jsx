@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dailyAdd from '../../images/daily_add.svg';
@@ -7,6 +7,7 @@ import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
 import { AddComment, CommentInput } from './MainStyle';
 import { asyncPostCmtUp, asyncPostCmtDel } from '../../redux/action/MainAsync';
+import { MypageGet } from '../../redux/action/MypageAsync';
 
 export default function DailyCmt({ index }) {
   const dispatch = useDispatch();
@@ -18,6 +19,9 @@ export default function DailyCmt({ index }) {
   const lookCmt = cmtList && cmtList[cmtList.length - 1];
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   const navigate = useNavigate();
+
+  dispatch(MypageGet());
+  const cmtUserId = useSelector(state => state.mypage.member.userName);
 
   const handleAnswer = e => {
     e.preventDefault();
@@ -57,7 +61,9 @@ export default function DailyCmt({ index }) {
         `${process.env.REACT_APP_API_URL}/dailyPosts/${listUp[0]}/comments?lastCommentId=${listUp[1]}`,
       )
       .then(res => {
-        setCmtList([...cmtList, res.data.items]);
+        if (res.data.items !== undefined) {
+          setCmtList([...cmtList, res.data.items]);
+        }
       });
   };
 
@@ -115,16 +121,18 @@ export default function DailyCmt({ index }) {
                           </div>
                         </div>
                       </div>
-                      <div className="buttons">
-                        <button onClick={() => setCmtEditBut(!cmtEditBut)}>
-                          <img className="edit" src={edit} alt="edit" />
-                        </button>
-                        <button
-                          onClick={() => handleCmtDel(all.commentId, index)}
-                        >
-                          <img className="delete" src={del} alt="delete" />
-                        </button>
-                      </div>
+                      {all.userName === cmtUserId ? (
+                        <div className="buttons">
+                          <button onClick={() => setCmtEditBut(!cmtEditBut)}>
+                            <img className="edit" src={edit} alt="edit" />
+                          </button>
+                          <button
+                            onClick={() => handleCmtDel(all.commentId, index)}
+                          >
+                            <img className="delete" src={del} alt="delete" />
+                          </button>
+                        </div>
+                      ) : null}
                     </div>
                   );
                 })}
