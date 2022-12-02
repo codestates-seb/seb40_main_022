@@ -140,7 +140,7 @@ export default function DailyCmt({ index }) {
           );
         })}
       <div className="cmtListAdd">
-        {lastCmt && lastCmt.commentId > 1 && cmtList[0].length >= 5 ? (
+        {lastCmt && lastCmt.commentId > 1 && cmtList[0].length >= 10 ? (
           <button
             onClick={() => {
               plusBut();
