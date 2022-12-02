@@ -2,7 +2,6 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import LankContent from './LankContent';
 import LankDropdown from './LankDropdown';
-import searchIcon from '../../images/searchIcon.png';
 import { LankBox, LankMain } from './Lankstyle';
 
 function Lank() {
@@ -14,9 +13,6 @@ function Lank() {
           <h2>종합 랭킹</h2>
           <div>
             <LankDropdown />
-            <button>
-              <img src={searchIcon} alt="검색아이콘" className="search" />
-            </button>
           </div>
         </div>
         <LankContent />

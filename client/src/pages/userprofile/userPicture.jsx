@@ -54,7 +54,7 @@ function UserPicture() {
 
   useEffect(() => {
     const getPost = async () => {
-      axios.get(`/members/${Id}`).then(res => {
+      axios.get(`${process.env.REACT_APP_API_URL}/members/${Id}`).then(res => {
         const post = res.data.dailyPosts.items;
         setPostList([post]);
       });
@@ -68,11 +68,15 @@ function UserPicture() {
     if (lastPost && lastPostId > 1 && inView) {
       setIsLoaded(true);
       setTimeout(() => {
-        axios.get(`/members/${lastId[0]}?lastPostId=${lastId[1]}`).then(res => {
-          const newPost = res.data.dailyPosts.items;
-          setPostList([...postList, newPost]);
-          setIsLoaded(false);
-        });
+        axios
+          .get(
+            `${process.env.REACT_APP_API_URL}/members/${lastId[0]}?lastPostId=${lastId[1]}`,
+          )
+          .then(res => {
+            const newPost = res.data.dailyPosts.items;
+            setPostList([...postList, newPost]);
+            setIsLoaded(false);
+          });
       }, 1000);
     }
   }, [inView]);
@@ -99,4 +103,5 @@ function UserPicture() {
     </Pictures>
   );
 }
+
 export default UserPicture;

@@ -19,6 +19,7 @@ export default function DailyCmt({ index }) {
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   const navigate = useNavigate();
 
+  console.log(cmtList);
   const handleAnswer = e => {
     e.preventDefault();
     if (!ac) {
@@ -41,17 +42,21 @@ export default function DailyCmt({ index }) {
 
   useEffect(() => {
     const getPostCmt = async () => {
-      const res = await axios.get(`/dailyPosts/${index}/comments`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments`,
+      );
       const cmt = await res.data.items;
       setCmtList([cmt]);
     };
     getPostCmt();
   }, []);
 
-  const plusBut = () => {
+  const plusBut = async () => {
     const listUp = [index, lastCmt.commentId];
-    axios
-      .get(`/dailyPosts/${listUp[0]}/comments?lastCommentId=${listUp[1]}`)
+    await axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/dailyPosts/${listUp[0]}/comments?lastCommentId=${listUp[1]}`,
+      )
       .then(res => {
         setCmtList([...cmtList, res.data.items]);
       });

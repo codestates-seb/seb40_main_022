@@ -2,27 +2,26 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const QnaAsynclistPost = createAsyncThunk('qnaask', ({ formdata }) => {
-  axios
-    .post('/questions', formdata, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
-    })
-    .then(res => console.log(res));
+  axios.post(`${process.env.REACT_APP_API_URL}/questions`, formdata, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });
 
-export const QnaAsynclist = createAsyncThunk('list', async currentPage => {
-  console.log(currentPage);
-  const result = await axios.get(`/questions?page=${currentPage}`).then(res => {
-    return res.data;
-  });
+export const QnaAsynclist = createAsyncThunk('list', async p => {
+  const result = await axios
+    .get(`${process.env.REACT_APP_API_URL}/questions?page=${p}`)
+    .then(res => {
+      return res.data;
+    });
   return result;
 });
 
 export const QnaDetaillistdelete = createAsyncThunk('delete', async data => {
-  axios.delete(`/questions/${data}`, {
+  axios.delete(`${process.env.REACT_APP_API_URL}/questions/${data}`, {
     headers: {
       Authorization: localStorage.getItem('Authorization'),
       RefreshToken: localStorage.getItem('RefreshToken'),
@@ -31,7 +30,7 @@ export const QnaDetaillistdelete = createAsyncThunk('delete', async data => {
 });
 
 export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
-  axios.post(`/questions/${data[1]}`, data[0], {
+  axios.post(`${process.env.REACT_APP_API_URL}/questions/${data[1]}`, data[0], {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: localStorage.getItem('Authorization'),
@@ -41,53 +40,56 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
 });
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
-  return axios.get(`/questions/${data}`).then(res => {
-    return res.data;
-  });
+  return axios
+    .get(`${process.env.REACT_APP_API_URL}/questions/${data}`)
+    .then(res => {
+      return res.data;
+    });
 });
 
 export const QnaDetailCommentAsync = createAsyncThunk('qnaanswer', data => {
   if (data.length !== 0) {
-    axios
-      .post(
-        `/questions/${data[0]}/answers`,
-        JSON.stringify({
-          content: data[1],
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json;',
-            Authorization: localStorage.getItem('Authorization'),
-            RefreshToken: localStorage.getItem('RefreshToken'),
-          },
+    axios.post(
+      `${process.env.REACT_APP_API_URL}/questions/${data[0]}/answers`,
+      JSON.stringify({
+        content: data[1],
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json;',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
         },
-      )
-      .then(res => console.log(res));
+      },
+    );
   }
 });
 
 export const QnaanswerDetaildelete = createAsyncThunk('delete', async id => {
-  axios
-    .delete(`/questions/${id[0]}/answers/${id[1]}`, {
+  axios.delete(
+    `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}`,
+    {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
       },
-    })
-    .then(res => console.log(res));
+    },
+  );
 });
 
 export const QnaanswerAccept = createAsyncThunk('Accepted', id => {
   axios
-    .post(`/questions/${id[0]}/answers/${id[1]}/accept`, id, {
-      headers: {
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
+    .post(
+      `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}/accept`,
+      id,
+      {
+        headers: {
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
       },
-    })
-    .then(res => console.log(res))
+    )
     .catch(err => {
-      console.log(err);
       if (err.response.status === 400) {
         alert('질문의 작성자가 아닙니다.');
       }
@@ -97,20 +99,24 @@ export const QnaanswerAccept = createAsyncThunk('Accepted', id => {
 export const QnaanswerContentUp = createAsyncThunk(
   'ContentUp',
   (id, content) => {
-    axios
-      .patch(`/questions/${id[0]}/answers/${id[1]}`, content, {
+    axios.patch(
+      `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}`,
+      content,
+      {
         headers: {
           Authorization: localStorage.getItem('Authorization'),
           RefreshToken: localStorage.getItem('RefreshToken'),
         },
-      })
-      .then(res => console.log(res));
+      },
+    );
   },
 );
 
 export const QnaSearchreload = createAsyncThunk('search', data => {
   return axios
-    .get(`/questions/search?q=${data[0]}&sort=${data[1]}&page=1`)
+    .get(
+      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=1`,
+    )
     .then(res => {
       return res.data.data;
     });
