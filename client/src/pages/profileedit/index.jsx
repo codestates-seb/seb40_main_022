@@ -21,6 +21,7 @@ import {
 function ProfileEdit() {
   const navigate = useNavigate();
   const userdata = useSelector(state => state.mypage);
+
   const [username, setUsername] = useState(userdata.member.userName);
   const [password, setPassword] = useState('');
   const [job, setJob] = useState('');
