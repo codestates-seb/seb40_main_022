@@ -19,11 +19,7 @@ import {
 export default function Challenge(props) {
   const { open, close, id } = props;
   const dispatch = useDispatch();
-  const userdata = useSelector(
-    state => state.challenge.data.notificationResponses,
-  );
-  // const [userId, setUserId] = useState(7);
-  // const dataId = userdata[0].id;
+
   const userdb = useSelector(state => state.challenge.userInfo);
   if (userdata !== undefined && userdb !== undefined) {
     // userdata[id].filter(data => console.log(data));
@@ -91,7 +87,10 @@ export default function Challenge(props) {
               <Buttons>
                 <button
                   className="accBut"
-                  onClick={() => dispatch(ChallengeAccept(id))}
+                  onClick={() => {
+                    dispatch(ChallengeAccept(id));
+                    close();
+                  }}
                 >
                   대결 수락
                 </button>

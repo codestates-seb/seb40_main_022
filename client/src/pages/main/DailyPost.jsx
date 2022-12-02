@@ -12,7 +12,6 @@ export default function DailyPost() {
   const [postList, setPostList] = useState([]);
   const lastPost = postList && postList[postList.length - 1];
   const [isLoaded, setIsLoaded] = useState(false);
-
   // const [bol, setBol] = useState(true);
 
   // const handleansbol = () => {
@@ -21,12 +20,13 @@ export default function DailyPost() {
   // };
 
   const navigate = useNavigate();
+
   const newPost = () => {
-    // if (!ac) {
-    //   alert('로그인 후 이용할 수 있습니다.');
-    // } else {
-    navigate('/dailypost');
-    // }
+    if (!localStorage.getItem('Authorization')) {
+      alert('로그인 후 이용할 수 있습니다.');
+    } else {
+      navigate('/dailypost');
+    }
   };
 
   const [ref, inView] = useInView();
@@ -47,7 +47,7 @@ export default function DailyPost() {
       lastPost && lastPost[lastPost.length - 1] !== undefined
         ? lastPost[lastPost.length - 1].post.postId
         : null;
-    if (lastPost && lastPostId > 1 && inView) {
+    if (lastPost && lastPostId > 1 && lastPost.length >= 4 && inView) {
       setIsLoaded(true);
       setTimeout(() => {
         axios
@@ -55,8 +55,10 @@ export default function DailyPost() {
             `${process.env.REACT_APP_API_URL}/dailyPosts?lastPostId=${lastPostId}`,
           )
           .then(res => {
-            setPostList([...postList, res.data.items]);
-            setIsLoaded(false);
+            if (res.data.items !== undefined) {
+              setPostList([...postList, res.data.items]);
+              setIsLoaded(false);
+            }
           });
       }, 1000);
     }
@@ -104,7 +106,6 @@ export default function DailyPost() {
                       </DailyItem>
                     );
                   })}
-                <div ref={ref} />
               </div>
             );
           })}

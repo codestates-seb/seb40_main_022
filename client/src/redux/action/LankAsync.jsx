@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const LankProfileGet = createAsyncThunk('challenge', async () => {
+export const LankProfileGet = createAsyncThunk('challenge', async page => {
   const lank = await axios
-    .get(`${process.env.REACT_APP_API_URL}/challenge?page=1`)
+    .get(`${process.env.REACT_APP_API_URL}/challenge?page=${page}`)
     .then(res => {
       return res.data;
     });
@@ -81,15 +81,18 @@ export const Notificationsallam = createAsyncThunk('allam', id => {
   );
 });
 
-export const ChallengeSearch = createAsyncThunk('/challenge/search', url => {
-  return axios
-    .get(`${process.env.REACT_APP_API_URL}/challenge?${url}&page=1`, {
-      headers: {
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
-    })
-    .then(res => {
-      return res.data;
-    });
-});
+export const ChallengeSearch = createAsyncThunk(
+  '/challenge/search',
+  (url, page) => {
+    return axios
+      .get(`${process.env.REACT_APP_API_URL}/challenge?${url}&page=${page}`, {
+        headers: {
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
+      })
+      .then(res => {
+        return res.data;
+      });
+  },
+);

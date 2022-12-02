@@ -17,16 +17,17 @@ const Head = styled.header`
     justify-content: space-between;
     position: relative;
     .logo {
-      text-decoration: none;
       cursor: pointer;
       display: flex;
       align-items: center;
+      > img {
+        padding: 10px;
+        width: 90px;
+        height: 50px;
+      }
       .logoname {
-        margin-left: 20px;
-        font-size: var(--font-27);
-        color: var(--logored);
-        font-style: italic;
-        font-weight: 600;
+        width: 200px;
+        height: 50px;
       }
     }
     .Rightheader {

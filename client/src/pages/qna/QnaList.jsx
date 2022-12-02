@@ -26,29 +26,11 @@ function QnaList() {
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);
 
-  // const [size, setSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [paginationLength] = useState(1);
-
-  // const [size, setSize] = useState(10);
-  // const [paginationLength, setPaginationLength] = useState(3);
-
-  // const sizeHandler = per => setSize(per);
   const currentPageHandler = p => {
     setCurrentPage(p);
     dispatch(QnaAsynclist(p));
   };
-
-  // const [page, setPage] = useState(1); //페이지
-  // const limit = 10; // posts가 보일 최대한의 갯수
-  // const offset = (page - 1) * limit; // 시작점과 끝점을 구하는 offset
-
-  // const pagesData = posts => {
-  //   if (posts) {
-  //     let result = posts.slice(offset, offset + limit);
-  //     return result;
-  //   }
-  // };
 
   const datasearch = [search, sort];
 
@@ -65,11 +47,27 @@ function QnaList() {
     dispatch(QnaSearchreload(datasearch));
   };
 
+  // 날짜 바꾸기
+  function leftPad(value) {
+    if (value >= 10) {
+      return value;
+    }
+    return `0${value}`;
+  }
+
+  function toStringByFormatting(source, delimiter = '-') {
+    const year = source.getFullYear();
+    const month = leftPad(source.getMonth() + 1);
+    const day = leftPad(source.getDate());
+
+    return [year, month, day].join(delimiter);
+  }
+
   return (
     <QnABack>
       <Header />
+      <QnaBan />
       <Qna>
-        <QnaBan />
         <QnaTitle>
           <h1>QnA</h1>
           <button
@@ -80,18 +78,18 @@ function QnaList() {
             질문
           </button>
         </QnaTitle>
+        <QnaSearch>
+          <input
+            id="SearchIn"
+            type="text"
+            placeholder="찾으시는 질문이 있으신가요?"
+            onChange={e => setSearch(e.target.value)}
+          />
+          <button onClick={() => handleSearch()}>
+            <img src={searchIcon} alt="검색아이콘" className="search" />
+          </button>
+        </QnaSearch>
         <div className="content">
-          <QnaSearch>
-            <input
-              id="SearchIn"
-              type="text"
-              placeholder="찾으시는 질문이 있으신가요?"
-              onChange={e => setSearch(e.target.value)}
-            />
-            <button onClick={() => handleSearch()}>
-              <img src={searchIcon} alt="검색아이콘" className="search" />
-            </button>
-          </QnaSearch>
           <QnaRadio>
             <label>
               <input
@@ -162,7 +160,10 @@ function QnaList() {
                             답변 : {data.answerCount}
                           </h3>
                           <h3>{data.member.username}</h3>
-                          <h3>{data.createdAt}</h3>
+                          <h3>
+                            {' '}
+                            {toStringByFormatting(new Date(data.createdAt))}
+                          </h3>
                           <button>{data.tag}</button>
                         </span>
                       </article>
