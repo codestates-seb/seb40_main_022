@@ -112,7 +112,7 @@ public class Question extends Auditable {
             throw new QuestionTagNotValid();
         }
 
-        public static String fromQuery(String value) {
+        public static String valueToConstant(String value) {
             for (QuestionTag tag : QuestionTag.values()) {
                 if (tag.getValue().equals(value))
                     return tag.toString();

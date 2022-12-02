@@ -2,8 +2,6 @@ package com.backend.fitchallenge.domain.question.dto.request;
 
 import com.backend.fitchallenge.domain.question.entity.Question;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +28,24 @@ public class QuestionSearchQuery {
 
         String noTagOneSpaceString = m.replaceAll("").replaceAll("\\s+", " ");
 
-        return QuestionSearch.of(noTagOneSpaceString, Question.QuestionTag.fromQuery(tagName));
+        return QuestionSearch.of(noTagOneSpaceString, Question.QuestionTag.valueToConstant(tagName));
+    }
+
+    public QuestionSearch elasticQueryParsing() {
+
+        Pattern p = Pattern.compile("\\#([ㄱ-ㅎ가-힣]*)");
+
+        // 검색할 문자열 패턴 : 숫자
+        Matcher m = p.matcher(q);// 문자열 설정
+
+        String tagName = "";
+
+        while (m.find()) {
+            tagName = m.group().substring(1);
+        }
+
+        String noTagOneSpaceString = m.replaceAll("").replaceAll("\\s+", " ");
+
+        return QuestionSearch.of(noTagOneSpaceString, tagName);
     }
 }

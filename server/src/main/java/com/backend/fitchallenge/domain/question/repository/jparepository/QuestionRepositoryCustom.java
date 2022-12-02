@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.domain.question.repository;
+package com.backend.fitchallenge.domain.question.repository.jparepository;
 
 import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.entity.Question;
@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface QuestionRepositoryCustom {
 
     Long pagingCount();
+
+    Long pagingCount(QuestionSearch questionSearch);
 
     Optional<Question> findQuestionWithWriter(Long id);
 

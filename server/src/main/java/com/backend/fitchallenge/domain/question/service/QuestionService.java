@@ -16,25 +16,39 @@ import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.dto.response.SimpleQuestionResponse;
 import com.backend.fitchallenge.domain.question.entity.Question;
+import com.backend.fitchallenge.domain.question.entity.QuestionDocument;
 import com.backend.fitchallenge.domain.question.entity.QuestionPicture;
 import com.backend.fitchallenge.domain.question.exception.NotQuestionWriter;
 import com.backend.fitchallenge.domain.question.exception.QuestionNotFound;
-import com.backend.fitchallenge.domain.question.repository.QuestionRepository;
+import com.backend.fitchallenge.domain.question.repository.elasticsearchrepository.QuestionSearchRepository;
+import com.backend.fitchallenge.domain.question.repository.jparepository.QuestionRepository;
 import com.backend.fitchallenge.domain.question.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHitSupport;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.backend.fitchallenge.domain.question.entity.QQuestion.question;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +57,7 @@ import static com.backend.fitchallenge.domain.question.entity.QQuestion.question
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final QuestionSearchRepository questionSearchRepository;
     private final MemberRepository memberRepository;
     private final QueryAnswerRepository queryAnswerRepository;
     private final AwsS3Service awsS3Service;
@@ -51,16 +66,21 @@ public class QuestionService {
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Question question = Question.create(questionCreateVO, member, imagePathList);
+        Question savedQuestion = questionRepository.save(question);
 
-        return questionRepository.save(question).getId();
+        questionSearchRepository.save(QuestionDocument.from(savedQuestion));
+
+        return savedQuestion.getId();
     }
 
 
-    public DetailQuestionResponse getQuestion(Long id) {
+    public DetailQuestionResponse getQuestion(Long id) throws IOException {
 
         //질문 조회수 증가
         Question findQuestion = questionRepository.findQuestionWithWriter(id).orElseThrow(QuestionNotFound::new);
+        questionSearchRepository.findById(id).orElseThrow(QuestionNotFound::new);
         findQuestion.addView();
+        questionSearchRepository.updateView(findQuestion.getId(), findQuestion.getView());
 
         //해당 질문 작성자 community point 증가
         Member questionWriter = findQuestion.getMember();
@@ -84,35 +104,52 @@ public class QuestionService {
         Long total = questionRepository.pagingCount();
 
         Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable).stream()
-                .map(questionTuple -> SimpleQuestionResponse.builder()
-                        .question(Objects.requireNonNull(questionTuple.get(question)))
-                        .picture(questionTuple.get(question).getQuestionPictures().stream().findFirst()
-                                .orElse(QuestionPicture.createWithEmptyPath()).getPath())
-                        .member(MemberResponse.of(questionTuple.get(question).getMember()))
-                        .answerCount(questionTuple.get(question.answers.size()))
-                        .build()).collect(Collectors.toList()), pageable.of(), total);
+                .map(questionTuple -> SimpleQuestionResponse.of(
+                        Objects.requireNonNull(questionTuple.get(question)),
+                        questionTuple.get(question.answers.size()),
+                        Objects.requireNonNull(questionTuple.get(question)).getQuestionPictures().stream().findFirst()
+                            .orElse(QuestionPicture.createWithEmptyPath()).getPath(),
+                        MemberResponse.of(Objects.requireNonNull(questionTuple.get(question)).getMember()))
+                ).collect(Collectors.toList()), pageable.of(), total);
+
+        return MultiResponse.of(questionResponses);
+    }
+
+    @Transactional(readOnly = true)
+    public MultiResponse<?> getQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
+
+        Long total = questionRepository.pagingCount(questionSearch);
+
+        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, questionSearch).stream()
+                .map(questionTuple -> SimpleQuestionResponse.of(
+                        Objects.requireNonNull(questionTuple.get(question)),
+                        questionTuple.get(question.answers.size()),
+                        Objects.requireNonNull(questionTuple.get(question)).getQuestionPictures().stream().findFirst()
+                                .orElse(QuestionPicture.createWithEmptyPath()).getPath(),
+                        MemberResponse.of(Objects.requireNonNull(questionTuple.get(question)).getMember()))
+                ).collect(Collectors.toList()), pageable.of(), total);
 
         return MultiResponse.of(questionResponses);
     }
 
 
     @Transactional(readOnly = true)
-    public MultiResponse<?> getQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
-        log.info("repository query: {}", questionSearch.getQuery());
-        Long total = questionRepository.pagingCount();
+    public MultiResponse<?> searchQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
 
-        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, questionSearch).stream()
-                .map(questionTuple -> SimpleQuestionResponse.builder()
-                        .question(Objects.requireNonNull(questionTuple.get(question)))
-                        .member(MemberResponse.of(questionTuple.get(question).getMember()))
-                        .answerCount(questionTuple.get(question.answers.size()))
-                        .build()).collect(Collectors.toList()), pageable.of(), total);
+        List<QuestionDocument> documentList = questionSearchRepository.searchByQuery(pageable, questionSearch);
+
+        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(documentList.stream()
+                .map(questionDocument -> SimpleQuestionResponse.of(
+                        questionDocument,
+                        new MemberResponse(questionDocument.getMemberId(),
+                                        questionDocument.getUsername(),
+                                        questionDocument.getProfileImage()))
+                ).collect(Collectors.toList()), pageable.of(), documentList.size());
 
         return MultiResponse.of(questionResponses);
     }
 
-
-    public Long updateQuestion(Long memberId, Long id, QuestionUpdateVO questionUpdateVO) {
+    public Long updateQuestion(Long memberId, Long id, QuestionUpdateVO questionUpdateVO) throws IOException {
 
         Question findQuestion = findQuestion(id);
 
@@ -129,12 +166,13 @@ public class QuestionService {
         }
 
         findQuestion.update(questionUpdateVO);
+        questionSearchRepository.updateQuestion(id, findQuestion);
 
         return questionRepository.save(findQuestion).getId();
     }
 
 
-    public Long deleteQuestion(Long memberId, Long id) {
+    public Long deleteQuestion(Long memberId, Long id) throws IOException {
 
         Question findQuestion = findQuestion(id);
 
@@ -151,7 +189,7 @@ public class QuestionService {
         }
 
         questionRepository.delete(findQuestion);
-
+        questionSearchRepository.deleteQuestion(id);
         return id;
     }
 

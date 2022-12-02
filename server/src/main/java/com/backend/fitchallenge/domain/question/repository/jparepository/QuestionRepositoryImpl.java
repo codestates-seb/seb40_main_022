@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.domain.question.repository;
+package com.backend.fitchallenge.domain.question.repository.jparepository;
 
 import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.entity.Question;
@@ -35,6 +35,15 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     }
 
     @Override
+    public Long pagingCount(QuestionSearch questionSearch) {
+        return jpaQueryFactory
+                .select(question.count())
+                .from(question)
+                .where()
+                .fetchOne();
+    }
+
+    @Override
     public Optional<Question> findQuestionWithWriter(Long id) {
         return Optional.ofNullable(
                 jpaQueryFactory
@@ -60,8 +69,6 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     @Override
     public List<Tuple> findList(PageRequest pageable, QuestionSearch questionSearch) {
 
-        log.info("repository findList query: {}", questionSearch.getQuery());
-        log.info("repository findList tag: {}", questionSearch.getTag().toString());
         return jpaQueryFactory
                 .select(question, question.answers.size())
                 .from(question)

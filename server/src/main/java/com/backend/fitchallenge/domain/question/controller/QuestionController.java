@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public ResponseEntity<DetailQuestionResponse> details(@PathVariable Long id) {
+    public ResponseEntity<DetailQuestionResponse> details(@PathVariable Long id) throws IOException {
 
         return ResponseEntity.ok(questionService.getQuestion(id));
     }
@@ -57,23 +58,30 @@ public class QuestionController {
                                                        @ModelAttribute QuestionSearchQuery questionSearchQuery) {
 
         QuestionSearch questionSearch = questionSearchQuery.queryParsing();
-        log.info("query: {}", questionSearch.getQuery());
-        log.info("tag: {}", questionSearch.getTag());
 
         return ResponseEntity.ok(questionService.getQuestionList(pageable, questionSearch));
+    }
+
+    @GetMapping("/questions/correctSearch")
+    public ResponseEntity<MultiResponse<?>> correctSearchList(PageRequest pageable,
+                                                              @ModelAttribute QuestionSearchQuery questionSearchQuery) {
+
+        QuestionSearch questionSearch = questionSearchQuery.elasticQueryParsing();
+
+        return ResponseEntity.ok(questionService.searchQuestionList(pageable, questionSearch));
     }
 
     @PostMapping("/questions/{id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable Long id,
-                                       QuestionUpdateVO questionUpdateVO) {
+                                       QuestionUpdateVO questionUpdateVO) throws IOException {
 
         return ResponseEntity.ok(questionService.updateQuestion(memberDetails.getMemberId(), id, questionUpdateVO));
     }
 
     @DeleteMapping("/questions/{id}")
     public ResponseEntity<Long> delete(@AuthMember MemberDetails memberDetails,
-                                       @PathVariable Long id) {
+                                       @PathVariable Long id) throws IOException {
 
         return ResponseEntity.ok(questionService.deleteQuestion(memberDetails.getMemberId(), id));
     }
