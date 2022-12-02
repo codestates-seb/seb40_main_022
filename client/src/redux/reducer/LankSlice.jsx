@@ -31,7 +31,6 @@ const LankSlice = createSlice({
       state.userInfo = action.payload;
     },
     [ChallengeSearch.fulfilled]: (state, action) => {
-      console.log(action);
       state.items = action.payload;
     },
   },

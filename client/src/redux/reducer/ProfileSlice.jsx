@@ -8,12 +8,10 @@ const ProfileSlice = createSlice({
     dailyPosts: [],
     activity: [],
     postCounts: 0,
-    // data: [],
   },
   reducers: {},
   extraReducers: {
     [UserProfileGet.fulfilled]: (state, action) => {
-      console.log(state, action);
       state.dailyPosts = action.payload.dailyPosts;
       state.activity = action.payload.activity;
       state.member = action.payload.member;
