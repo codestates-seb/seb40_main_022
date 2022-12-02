@@ -22,15 +22,12 @@ const RecordSlice = createSlice({
       state.data = action.payload;
     },
     [RecordListAsync.fulfilled]: (state, action) => {
-      console.log(action);
       state.List = action.payload;
     },
     [RecordListGet.fulfilled]: (state, action) => {
-      console.log(action);
       state.GetList = action.payload;
     },
     [RecordImgUp.fulfilled]: (state, action) => {
-      console.log(action);
       if (action.payload.point === 'start') {
         state.Start = action.payload.imagePath;
       } else {

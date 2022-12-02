@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faDumbbell,
   faTrophy,
-  faPersonRunning,
+  faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons';
 import { UserProfileGet } from '../../redux/action/ProfileAsync';
 import Footer from '../../components/footer/Footer';
@@ -21,7 +21,6 @@ function UserProfile() {
   }, []);
 
   const data = useSelector(state => state.profile);
-  console.log(data);
   const member = useSelector(state => state.profile.member);
   const activity = useSelector(state => state.profile.activity);
 
@@ -46,15 +45,19 @@ function UserProfile() {
           <div className="boxs">
             <div className="box">
               <FontAwesomeIcon icon={faDumbbell} />
-              {activity.kilogram}kg
+              {activity.kilogram ? activity.kilogram : 0}kg
+            </div>
+            <div className="box">
+              <FontAwesomeIcon icon={faCalendarDays} />
+              {activity.dayCount ? activity.dayCount : 0}일
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
-              {activity.point ? activity.point : 0}점 73위
+              {activity.point ? activity.point : 0}등
             </div>
             <div className="box">
-              <FontAwesomeIcon icon={faPersonRunning} />
-              {activity.dayCount ? activity.dayCount : 0}일
+              <div>Point</div>
+              {activity.point ? activity.point : 0}점
             </div>
           </div>
         </RecordBox>

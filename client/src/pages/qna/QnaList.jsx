@@ -110,6 +110,15 @@ function QnaList() {
               />
               <span>인기 순</span>
             </label>
+            {/* <label>
+              <input
+                type="radio"
+                id="popularity"
+                name="contact"
+                onClick={() => setSort('')}
+              />
+              <span>정혹도순</span>
+            </label> */}
           </QnaRadio>
           <QnaContent>
             {result

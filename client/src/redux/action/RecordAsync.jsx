@@ -10,8 +10,8 @@ export const RecordTagAsync = createAsyncThunk('/recordtag', tag => {
 });
 
 export const RecordUpAsync = createAsyncThunk('/recordup', data => {
-  axios
-    .post(
+  try {
+    axios.post(
       `${process.env.REACT_APP_API_URL}/records`,
       JSON.stringify({
         start: data[0],
@@ -28,10 +28,12 @@ export const RecordUpAsync = createAsyncThunk('/recordup', data => {
           RefreshToken: localStorage.getItem('RefreshToken'),
         },
       },
-    )
-    .then(res => {
-      return res;
-    });
+    );
+  } catch (err) {
+    if (err.response.status === 400) {
+      alert('입력값이 잘못되었습니다!');
+    }
+  }
 });
 
 export const RecordListAsync = createAsyncThunk('/recordList', month => {

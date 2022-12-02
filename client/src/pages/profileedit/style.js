@@ -46,7 +46,6 @@ export const ProfileBox = styled.div`
   width: 450px;
   height: 650px;
 
-  // 라디오 버튼
   .checkbox {
     display: flex;
     justify-content: space-between;
@@ -94,7 +93,6 @@ export const ProfileBox = styled.div`
     cursor: pointer;
   }
 
-  // 드롭다운
   .container {
     width: 100px;
     box-shadow: 0 4px 5px 0 #00000026;

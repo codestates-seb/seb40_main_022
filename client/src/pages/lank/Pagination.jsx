@@ -7,7 +7,7 @@ const PaginationComponent = styled.div`
     width: 100%;
     margin-top: 2rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 1.8rem;
     margin-bottom: 30px;
     .page {

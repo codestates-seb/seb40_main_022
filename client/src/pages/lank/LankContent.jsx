@@ -11,7 +11,6 @@ function LankContent() {
   const [challengeReq, setChallengeReq] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const lanklist = useSelector(state => state.challenge.member.responses);
   const url = useSelector(state => state.challenge.url);
   const searchList = useSelector(state => state.challenge.items.responses);
@@ -24,14 +23,11 @@ function LankContent() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const currentPageHandler = p => {
-    setCurrentPage(p);
-    dispatch(LankProfileGet(p));
-    dispatch(ChallengeSearch(p));
+  const currentPageHandler = page => {
+    setCurrentPage(page);
+    dispatch(LankProfileGet(page));
+    dispatch(ChallengeSearch(page));
   };
-
-  console.log(list);
-  console.log(lanklist);
 
   return (
     <LankBody>
@@ -48,7 +44,7 @@ function LankContent() {
                 <h1>{idx + 1}</h1>
                 <button
                   onClick={() => {
-                    navigate('/members/:id');
+                    navigate(`/members/${data.memberId}`);
                   }}
                   className="cont-picturebtn"
                 >

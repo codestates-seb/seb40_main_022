@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import del from '../../images/delete.svg';
 import Loader from '../main/Loader';
 import { asyncPostDel } from '../../redux/action/MainAsync';
 
-export const Pictures = styled.div`
+const Pictures = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,6 +16,7 @@ export const Pictures = styled.div`
   .postList {
     display: flex;
     align-items: center;
+    width: 1215px;
     margin: 100px 0 100px 0;
   }
   .imgbox {
@@ -77,7 +76,10 @@ export function PictureBox() {
   }, []);
 
   useEffect(() => {
-    const lastPostId = lastPost && lastPost[lastPost.length - 1].postId;
+    const lastPostId =
+      lastPost && lastPost[lastPost.length - 1] !== undefined
+        ? lastPost[lastPost.length - 1].postId
+        : null;
     if (lastPost && lastPostId > 1 && inView) {
       setIsLoaded(true);
       setTimeout(() => {
@@ -107,13 +109,13 @@ export function PictureBox() {
   return (
     <Pictures>
       {postList &&
-        postList
-          // .filter(el => typeof el.image === 'string')
-          .map(list => {
-            return (
-              <div className="postList">
-                {list &&
-                  list.map(el => {
+        postList.map(list => {
+          return (
+            <div className="postList">
+              {list &&
+                list
+                  .filter(el => el.image !== null)
+                  .map(el => {
                     return (
                       <div key={el.postId} className="imgbox">
                         <img src={el.image} alt="" />
@@ -127,11 +129,12 @@ export function PictureBox() {
                       </div>
                     );
                   })}
-                {/* <div ref={ref} /> */}
-              </div>
-            );
-          })}
+            </div>
+          );
+        })}
       <div ref={ref}>{isLoaded && <Loader />}</div>
     </Pictures>
   );
 }
+
+export default PictureBox;
