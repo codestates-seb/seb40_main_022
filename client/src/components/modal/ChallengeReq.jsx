@@ -1,5 +1,4 @@
-import { useDispatch } from 'react-redux';
-import userProfile from '../../images/daily.jpg';
+import { useDispatch, useSelector } from 'react-redux';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
 import {
@@ -14,6 +13,8 @@ import { LankChallenge } from '../../redux/action/LankAsync';
 export default function ChallengeReq(props) {
   const { open, close, id } = props;
   const dispatch = useDispatch();
+  const userdb = useSelector(state => state.challenge.userInfo);
+
   const handleClick = () => {
     dispatch(LankChallenge(id));
   };
@@ -33,7 +34,7 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userProfile}
+                      src={userdb.applicantImage}
                       alt="userProfile"
                     />
                   </span>
@@ -51,7 +52,7 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={userProfile}
+                      src={userdb.applicantImage}
                       alt="userProfile"
                     />
                   </span>
@@ -68,6 +69,7 @@ export default function ChallengeReq(props) {
                   className="accBut"
                   onClick={() => {
                     handleClick();
+                    close();
                   }}
                 >
                   대결 신청

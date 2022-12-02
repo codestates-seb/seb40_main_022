@@ -106,7 +106,6 @@ export default function DailyPost() {
                       </DailyItem>
                     );
                   })}
-                {/* <div ref={ref} /> */}
               </div>
             );
           })}
