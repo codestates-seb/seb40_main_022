@@ -25,15 +25,15 @@ function QnaList() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);
-  console.log(list, questiondata, items);
   const [currentPage, setCurrentPage] = useState(1);
+  const datasearch = [search, sort, currentPage];
+
   const currentPageHandler = p => {
     setCurrentPage(p);
     dispatch(QnaAsynclist(p));
+    const searchlist = [search, sort, p];
+    dispatch(QnaSearchreload(searchlist));
   };
-
-  const datasearch = [search, sort];
-
   useEffect(() => {
     dispatch(QnaAsynclist(currentPage));
   }, []);

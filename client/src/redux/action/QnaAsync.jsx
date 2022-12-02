@@ -116,11 +116,13 @@ export const QnaanswerContentUp = createAsyncThunk(
 );
 
 export const QnaSearchreload = createAsyncThunk('search', data => {
+  console.log(data);
   return axios
     .get(
-      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=1`,
+      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=${data[2]}`,
     )
     .then(res => {
+      console.log(res);
       return res.data.data;
     });
 });
