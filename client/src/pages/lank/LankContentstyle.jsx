@@ -29,6 +29,7 @@ export const Lankcontents = styled.section`
     background-repeat: no-repeat;
     background-position: 80% 100%;
     margin-right: 20px;
+    cursor: pointer;
   }
   .challenge {
     width: 100px;
