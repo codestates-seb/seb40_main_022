@@ -81,6 +81,21 @@ export const Content = styled.div`
   align-items: center;
   font-weight: bold;
 
+  .mockup {
+    display: flex;
+
+    .mockupImg {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* margin: 10px; */
+    }
+
+    .mockupImg.mock {
+      margin-right: 20px;
+    }
+  }
+
   .imgprofile {
     width: 130px;
     height: 130px;
