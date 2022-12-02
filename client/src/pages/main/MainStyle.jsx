@@ -5,7 +5,6 @@ export const Inside = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   .searchInput {
     display: flex;
     justify-content: center;
@@ -37,6 +36,7 @@ export const MainForm = styled.article`
   justify-content: center;
   position: relative;
   width: 850px;
+  min-height: 800px;
   background-color: var(--white);
   border-radius: 5px;
   box-shadow: var(--box-shadow);

@@ -159,6 +159,9 @@ export const CalBox = styled.section`
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      .nobox {
+        display: none;
+      }
       .box1,
       .box2 {
         .name1 {
@@ -171,6 +174,9 @@ export const CalBox = styled.section`
             margin: 0 auto;
             width: 30px;
           }
+        }
+        .noname {
+          display: none;
         }
         .name2 {
           text-align: center;
@@ -453,6 +459,17 @@ export const DetailMain = styled.main`
       background-color: var(--logored);
       color: white;
       font-weight: 600;
+      > button {
+        cursor: pointer;
+        border: none;
+        background-color: var(--logored);
+        color: white;
+        font-size: var(--font-16);
+        font-weight: 600;
+        :hover {
+          background-color: #fa8a8a;
+        }
+      }
     }
   }
   .subcan {

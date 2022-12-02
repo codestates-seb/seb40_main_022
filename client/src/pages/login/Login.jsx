@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import Ouaths from '../../components/ouath/Ouaths';
@@ -11,7 +10,6 @@ function Login() {
   const [Evalue, setEvalue] = useState('');
   const [pwd, setPwd] = useState('');
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleClick = () => {
     const data = [Evalue, pwd];
@@ -21,7 +19,6 @@ function Login() {
       alert('비밀번호가 비어있습니다.');
     } else {
       dispatch(LoginAsync(data));
-      navigate('/');
     }
   };
 
