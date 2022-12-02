@@ -33,6 +33,7 @@ function QnaDetail() {
   const data = list[+Id.id].questionId;
   const dispatch = useDispatch();
   const Upanswer = [data, content];
+  const detaillist = useSelector(state => state.qnalist.detail);
 
   // 날짜 바꾸기
   function leftPad(value) {
@@ -71,16 +72,20 @@ function QnaDetail() {
       </Headerwrap>
       <DetailBack>
         <DetailTitle>
-          <h2>{list[+Id.id].title}</h2>
-          <h3>{list[+Id.id].title}</h3>
+          <h2>{detaillist && detaillist.title}</h2>
+          <h3>{detaillist && detaillist.content}</h3>
           <div />
           <section>
             <DetailNDB>
               <div>
-                <h4>{list[+Id.id].member.username}</h4>
-                <h4>{list[+Id.id].createdAt}</h4>
+                <h4>
+                  {detaillist && detaillist.questionWriter !== undefined
+                    ? detaillist.questionWriter.username
+                    : null}
+                </h4>
+                <h4>{detaillist && detaillist.createdAt}</h4>
               </div>
-              <button>{list[+Id.id].tag}</button>
+              <button>{detaillist && detaillist.tag}</button>
             </DetailNDB>
             <DetailButton>
               <DetailUpdate>

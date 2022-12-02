@@ -30,19 +30,22 @@ export const QnaDetaillistdelete = createAsyncThunk('delete', async data => {
 });
 
 export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
-  axios.post(`${process.env.REACT_APP_API_URL}/questions/${data[1]}`, data[0], {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: localStorage.getItem('Authorization'),
-      RefreshToken: localStorage.getItem('RefreshToken'),
-    },
-  });
+  axios
+    .post(`${process.env.REACT_APP_API_URL}/questions/${data[1]}`, data[0], {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => console.log(res));
 });
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
   return axios
     .get(`${process.env.REACT_APP_API_URL}/questions/${data}`)
     .then(res => {
+      console.log(res);
       return res.data;
     });
 });
@@ -113,11 +116,13 @@ export const QnaanswerContentUp = createAsyncThunk(
 );
 
 export const QnaSearchreload = createAsyncThunk('search', data => {
+  console.log(data);
   return axios
     .get(
-      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=1`,
+      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=${data[2]}`,
     )
     .then(res => {
+      console.log(res);
       return res.data.data;
     });
 });
