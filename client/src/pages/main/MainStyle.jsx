@@ -37,6 +37,7 @@ export const MainForm = styled.article`
   justify-content: center;
   position: relative;
   width: 850px;
+  min-height: 800px;
   background-color: var(--white);
   border-radius: 5px;
   box-shadow: var(--box-shadow);
