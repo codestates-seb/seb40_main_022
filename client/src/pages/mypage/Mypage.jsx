@@ -81,7 +81,7 @@ function Mypage() {
             </div>
             <div className="box">
               <div>Point</div>
-              {activity.point ? activity.point : 0}점
+              {Math.round(activity.point) ? Math.round(activity.point) : 0}점
             </div>
           </div>
           <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
