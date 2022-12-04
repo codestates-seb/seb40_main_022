@@ -281,16 +281,11 @@ function Update() {
             })}
           {split &&
             split.map((data, index) => {
-              const selectHealth = taghealth1.filter(
-                list => list.sportsId === data.id,
-              );
               if (split.length !== addUpdate.length) {
                 addUpdate.push(false);
               }
               return (
                 <div key={uuidv4}>
-                  <span>{selectHealth[0].bodyPart}</span>
-                  <span>{selectHealth[0].name}</span>
                   <span>{data.set}세트</span>
                   <span>{data.count}회</span>
                   <span>{data.weight}kg</span>
