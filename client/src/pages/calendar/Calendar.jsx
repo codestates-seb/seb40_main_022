@@ -25,7 +25,6 @@ function Calendar() {
   const [Clicked, setClicked] = useState(false);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
-  console.log(getlist, getopponent, member, opponent);
   useEffect(() => {
     const TodayMonth = new Date().getMonth() + 1;
     dispatch(RecordListAsync(TodayMonth));

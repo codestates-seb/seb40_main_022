@@ -24,18 +24,23 @@ import {
   QnaDetailAsync,
   QnaanswerDetaildelete,
   QnaanswerAccept,
+  QnaanswerContentUp,
 } from '../../redux/action/QnaAsync';
 
 function QnaDetail() {
   const list = useSelector(state => state.qnalist.list);
-  const answer = useSelector(state => state.qnalist.answers.answers);
+  const answer = useSelector(state => state.qnalist.detail.answers);
   const [content, setContent] = useState('');
+  const [update, setUpdate] = useState('');
   const Id = useParams();
   const data = list[+Id.id].questionId;
   const dispatch = useDispatch();
   const Upanswer = [data, content];
   const detaillist = useSelector(state => state.qnalist.detail);
-
+  const [select, setSelect] = useState(false);
+  const [answerup, setAnswerup] = useState(
+    Array(detaillist.answerCount).fill(false),
+  );
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -55,16 +60,26 @@ function QnaDetail() {
   const handleAnswer = () => {
     dispatch(QnaDetailCommentAsync(Upanswer));
     setContent('');
+    setSelect(true);
+  };
+  const handleAnswerUp = idx => {
+    answerup[idx] = !answerup[idx];
+    setAnswerup(answerup);
+    dispatch(QnaanswerContentUp());
+    setSelect(true);
   };
   const handleAccept = id => {
     dispatch(QnaanswerAccept(id));
+    setSelect(true);
   };
   const handleDelete = id => {
     dispatch(QnaanswerDetaildelete(id));
+    setSelect(true);
   };
   useEffect(() => {
     dispatch(QnaDetailAsync({ data }));
-  }, []);
+    setSelect(false);
+  }, [select]);
 
   return (
     <Detail>
@@ -110,13 +125,21 @@ function QnaDetail() {
         </DetailTitle>
         <DetailAnswer>
           {answer &&
-            answer.map(ansdata => {
+            answer.map((ansdata, idx) => {
               const AcId = [data, ansdata.answerId];
               return (
                 <div key={uuidv4()}>
                   <h2>답변 {ansdata.length}</h2>
-
-                  <h4>{ansdata.content}</h4>
+                  {answerup[idx] ? (
+                    <input
+                      value={update || ansdata.content}
+                      onChange={e => {
+                        setUpdate(e.target.value);
+                      }}
+                    />
+                  ) : (
+                    <h4>{ansdata.content}</h4>
+                  )}
                   <AnswerNDB>
                     <div>
                       <h4>{ansdata.answerWriter.username}</h4>
@@ -132,7 +155,13 @@ function QnaDetail() {
                       {ansdata.accepted ? 'V' : '채택'}
                     </button>
                     <div>
-                      <button onClick={() => {}}>수정</button>
+                      <button
+                        onClick={() => {
+                          handleAnswerUp(idx);
+                        }}
+                      >
+                        수정
+                      </button>
                       <button
                         onClick={() => {
                           handleDelete(AcId);
