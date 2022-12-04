@@ -17,6 +17,7 @@ export default function DailyCmt({ index }) {
   // const [editAnwer, setEditAnswer] = useState('');
   const ac = localStorage.getItem('Authorization');
   const [cmtList, setCmtList] = useState([]);
+  const [cmtSelect, setCmtSelect] = useState(false);
   const lookCmt = cmtList && cmtList[cmtList.length - 1];
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function DailyCmt({ index }) {
     } else if (ac && answervalue.length >= 5) {
       dispatch(asyncPostCmtUp({ answervalue, index }));
       setAnswervalue('');
+      setCmtSelect(true);
     }
   };
 
@@ -53,7 +55,8 @@ export default function DailyCmt({ index }) {
       setCmtList([cmt]);
     };
     getPostCmt();
-  }, []);
+    setCmtSelect(false);
+  }, [cmtSelect]);
 
   const plusBut = async () => {
     const listUp = [index, lastCmt.commentId];

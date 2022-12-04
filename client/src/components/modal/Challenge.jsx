@@ -21,6 +21,7 @@ export default function Challenge(props) {
   const dispatch = useDispatch();
 
   const userdb = useSelector(state => state.challenge.userInfo);
+  console.log(userdb);
 
   const handledelete = () => {
     close();
