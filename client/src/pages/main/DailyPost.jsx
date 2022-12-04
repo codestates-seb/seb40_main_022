@@ -97,7 +97,7 @@ export default function DailyPost() {
         {postList &&
           postList.map(all => {
             return (
-              <div className="list" key={uuidv4()}>
+              <div className="list" key={uuidv4}>
                 {all &&
                   all.map(list => {
                     return (

@@ -1,7 +1,4 @@
-import {
-  useDispatch,
-  //  useSelector
-} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
 import {
@@ -12,13 +9,12 @@ import {
   Buttons,
 } from './ChallengeStyle';
 import { LankChallenge } from '../../redux/action/LankAsync';
-import mockupProfile from '../../images/mockupProfile.png';
+import Profile from '../../images/Profile.png';
 
 export default function ChallengeReq(props) {
   const { open, close, id } = props;
   const dispatch = useDispatch();
-  // const userdb = useSelector(state => state.challenge.userInfo);
-
+  const userdb = useSelector(state => state);
   const handleClick = () => {
     dispatch(LankChallenge(id));
     close();
@@ -40,17 +36,16 @@ export default function ChallengeReq(props) {
                     <img
                       className="userProfile"
                       src={
-                        // userdb.applicantImage
-                        mockupProfile
+                        userdb.applicantImage ? userdb.applicantImage : Profile
                       }
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">운동인1</span>
+                  <span className="userName">{userdb.applicantName}</span>
                   <span className="userInfo">
-                    <div>신장 178cm</div>
-                    <div>몸무게 87kg</div>
-                    <div>중량 350kg</div>
+                    <div>신장 {userdb.applicantHeight}cm</div>
+                    <div>몸무게 {userdb.applicantWeight}kg</div>
+                    <div>중량 {userdb.applicantWeight}kg</div>
                   </span>
                 </User>
                 <span className="vsIcon">
@@ -61,17 +56,16 @@ export default function ChallengeReq(props) {
                     <img
                       className="userProfile"
                       src={
-                        // userdb.applicantImage
-                        mockupProfile
+                        userdb.applicantImage ? userdb.applicantImage : Profile
                       }
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">운동인2</span>
+                  <span className="userName">{userdb.applicantName}</span>
                   <span className="userInfo">
-                    <div>신장 183cm</div>
-                    <div>몸무게 91kg</div>
-                    <div>중량 410kg</div>
+                    <div>신장 {userdb.applicantHeight}cm</div>
+                    <div>몸무게 {userdb.applicantWeight}kg</div>
+                    <div>중량 {userdb.applicantWeight}kg</div>
                   </span>
                 </User>
               </VsInfo>

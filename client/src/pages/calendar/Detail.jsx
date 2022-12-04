@@ -185,7 +185,7 @@ function Detail() {
                 >
                   {btns &&
                     btns.map(data => {
-                      return <option key={uuidv4()}>{data}</option>;
+                      return <option key={uuidv4}>{data}</option>;
                     })}
                 </select>
               </div>
@@ -202,7 +202,7 @@ function Detail() {
                   >
                     {taghealth1 &&
                       taghealth1.map(data => {
-                        return <option key={uuidv4()}>{data.name}</option>;
+                        return <option key={uuidv4}>{data.name}</option>;
                       })}
                   </select>
                 </div>
@@ -271,7 +271,7 @@ function Detail() {
                 addUpdate.push(false);
               }
               return (
-                <div key={uuidv4()}>
+                <div key={uuidv4}>
                   <span>{data.set}세트</span>
                   <span>{data.count}회</span>
                   <span>{data.weight}kg</span>

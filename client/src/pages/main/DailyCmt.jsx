@@ -7,16 +7,21 @@ import dailyAdd from '../../images/daily_add.svg';
 import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
 import { AddComment, CommentInput } from './MainStyle';
-import { asyncPostCmtUp, asyncPostCmtDel } from '../../redux/action/MainAsync';
+import {
+  asyncPostCmtUp,
+  asyncPostCmtDel,
+  asyncPostCmtEdit,
+} from '../../redux/action/MainAsync';
 import { MypageGet } from '../../redux/action/MypageAsync';
 
 export default function DailyCmt({ index }) {
   const dispatch = useDispatch();
   const [answervalue, setAnswervalue] = useState('');
   const [cmtEditBut, setCmtEditBut] = useState(false);
-  // const [editAnwer, setEditAnswer] = useState('');
+  const [editAnswer, setEditAnswer] = useState('');
   const ac = localStorage.getItem('Authorization');
   const [cmtList, setCmtList] = useState([]);
+  const [cmtSelect, setCmtSelect] = useState(false);
   const lookCmt = cmtList && cmtList[cmtList.length - 1];
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   const navigate = useNavigate();
@@ -31,11 +36,19 @@ export default function DailyCmt({ index }) {
     } else if (ac && answervalue.length >= 5) {
       dispatch(asyncPostCmtUp({ answervalue, index }));
       setAnswervalue('');
+      setCmtSelect(true);
     }
+  };
+
+  const handleEditAnswer = commentId => {
+    setCmtEditBut(!cmtEditBut);
+    dispatch(asyncPostCmtEdit(index, commentId, editAnswer));
+    setCmtSelect(true);
   };
 
   const handleCmtDel = commentId => {
     dispatch(asyncPostCmtDel({ index, commentId }));
+    setCmtSelect(true);
   };
 
   const handleans = e => {
@@ -53,7 +66,8 @@ export default function DailyCmt({ index }) {
       setCmtList([cmt]);
     };
     getPostCmt();
-  }, []);
+    setCmtSelect(false);
+  }, [cmtSelect]);
 
   const plusBut = async () => {
     const listUp = [index, lastCmt.commentId];
@@ -88,7 +102,7 @@ export default function DailyCmt({ index }) {
       {cmtList &&
         cmtList.map(comment => {
           return (
-            <div key={uuidv4()}>
+            <div key={uuidv4}>
               {comment &&
                 comment.map(all => {
                   return (
@@ -113,8 +127,10 @@ export default function DailyCmt({ index }) {
                           <div className="content">
                             {all.content && cmtEditBut ? (
                               <input
-                                value={all.content}
-                                // onChange={e => setEditAnswer(e.target.value)}
+                                value={editAnswer || all.content}
+                                onChange={e => {
+                                  setEditAnswer(e.target.value);
+                                }}
                               />
                             ) : (
                               all.content
@@ -124,7 +140,11 @@ export default function DailyCmt({ index }) {
                       </div>
                       {all.userName === cmtUserId ? (
                         <div className="buttons">
-                          <button onClick={() => setCmtEditBut(!cmtEditBut)}>
+                          <button
+                            onClick={() => {
+                              handleEditAnswer(all.commentId);
+                            }}
+                          >
                             <img className="edit" src={edit} alt="edit" />
                           </button>
                           <button
@@ -146,7 +166,7 @@ export default function DailyCmt({ index }) {
             onClick={() => {
               plusBut();
             }}
-            key={uuidv4()}
+            key={uuidv4}
           >
             <img className="add" src={dailyAdd} alt="dailyAdd" />
           </button>
