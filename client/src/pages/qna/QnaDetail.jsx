@@ -113,7 +113,7 @@ function QnaDetail() {
             answer.map(ansdata => {
               const AcId = [data, ansdata.answerId];
               return (
-                <div key={uuidv4()}>
+                <div key={uuidv4}>
                   <h2>답변 {ansdata.length}</h2>
 
                   <h4>{ansdata.content}</h4>

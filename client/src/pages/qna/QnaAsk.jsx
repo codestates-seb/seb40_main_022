@@ -65,32 +65,17 @@ function QnaAsk() {
               taglist.map(data => {
                 return (
                   <button
-                    className="tags"
+                    className={tag === data ? 'oneButton' : null}
                     onClick={e => {
                       setTag(e.target.textContent);
                     }}
-                    key={uuidv4()}
+                    key={uuidv4}
                   >
                     {data}
                   </button>
                 );
               })}
           </div>
-          {tag ? (
-            <ul className="taglist">
-              <li className="taglist-container">
-                <div className="tagname">{tag}</div>
-                <button
-                  className="tagdelete"
-                  onClick={() => {
-                    setTag('');
-                  }}
-                >
-                  x
-                </button>
-              </li>
-            </ul>
-          ) : null}
         </PostTag>
         <PostSubmit>
           <button

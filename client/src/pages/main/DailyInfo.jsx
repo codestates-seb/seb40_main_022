@@ -25,7 +25,7 @@ export default function DailyInfo({ el, index }) {
           <div className="DailyTags">
             {el.tags &&
               el.tags.map(tag => {
-                return <span key={uuidv4()}>{`#${tag}`}</span>;
+                return <span key={uuidv4}>{`#${tag}`}</span>;
               })}
           </div>
           <div className="DailyMemo">

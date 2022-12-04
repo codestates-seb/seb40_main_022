@@ -88,7 +88,7 @@ export default function DailyCmt({ index }) {
       {cmtList &&
         cmtList.map(comment => {
           return (
-            <div key={uuidv4()}>
+            <div key={uuidv4}>
               {comment &&
                 comment.map(all => {
                   return (
@@ -146,7 +146,7 @@ export default function DailyCmt({ index }) {
             onClick={() => {
               plusBut();
             }}
-            key={uuidv4()}
+            key={uuidv4}
           >
             <img className="add" src={dailyAdd} alt="dailyAdd" />
           </button>
