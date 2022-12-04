@@ -112,7 +112,7 @@ export function PictureBox() {
       {postList &&
         postList.map(list => {
           return (
-            <div className="postList" key={uuidv4()}>
+            <div className="postList" key={uuidv4}>
               {list &&
                 list
                   .filter(el => el.image !== null)

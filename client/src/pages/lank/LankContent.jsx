@@ -38,7 +38,7 @@ function LankContent() {
         ? searchList &&
           searchList.map((data, idx) => {
             return (
-              <Lankcontents key={uuidv4()}>
+              <Lankcontents key={uuidv4}>
                 <h1>{(currentPage - 1) * 10 + idx + 1}</h1>
                 <button
                   onClick={() => {
@@ -83,7 +83,7 @@ function LankContent() {
         : lanklist &&
           lanklist.map((data, idx) => {
             return (
-              <Lankcontents key={uuidv4()}>
+              <Lankcontents key={uuidv4}>
                 <h1>{(currentPage - 1) * 10 + idx + 1}</h1>
                 <button
                   onClick={() => {

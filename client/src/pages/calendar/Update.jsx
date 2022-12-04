@@ -42,7 +42,6 @@ function Update() {
   const dispatch = useDispatch();
   const formdata = new FormData();
   const recordId = +useParams().id;
-  console.log(ListupGet);
   const handleStartFile = e => {
     formdata.append('point', 'start');
     formdata.append('filePath', member.startPicture);

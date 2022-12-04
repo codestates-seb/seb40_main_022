@@ -42,7 +42,6 @@ function QnaDetail() {
   );
   const [update, setUpdate] = useState('');
   const ac = localStorage.getItem('Authorization');
-
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -146,7 +145,7 @@ function QnaDetail() {
             answer.map((ansdata, idx) => {
               const AcId = [data, ansdata.answerId];
               return (
-                <div key={uuidv4()}>
+                <div key={uuidv4}>
                   <h2>답변 {ansdata.length}</h2>
                   {answerup[idx] ? (
                     <input
