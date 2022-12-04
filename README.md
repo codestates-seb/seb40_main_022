@@ -48,17 +48,14 @@
 <summary>회원가입</summary>
 <div markdown="1">
 
-<details>
-<summary>각 요소별 유효성 검사</summary>
-<div markdown="1">       
-</div>
-</details>
 
-<details>
-<summary>회원가입 성공</summary>
-<div markdown="1">       
-</div>
-</details>
+-각 요소별 유효성 검사  
+![회원가입](https://user-images.githubusercontent.com/107971188/205498035-b43156b0-2be1-4dd9-92a9-562ff73f774b.gif)
+
+
+-회원가입 성공  
+![유효성검사없이 회원가입](https://user-images.githubusercontent.com/107971188/205498039-b5fa9d46-4ead-4b6c-88a5-66676ef43724.gif)
+
 
 </div>
 </details>
@@ -70,36 +67,25 @@
 <summary>로그인</summary>
 <div markdown="1">   
 
+-일반 로그인  
+![일반로그인 (1)](https://user-images.githubusercontent.com/107971188/205498048-756b1d25-1a1d-403e-9d16-38142c904981.gif)
 
-<details>
-<summary>일반 로그인</summary>
-<div markdown="1">   
-</div>
-</details>
 
-<details>
-<summary>로그인시 로컬스토리지에 토큰 저장</summary>
-<div markdown="1">   
-</div>
-</details>
+-로그인시 로컬스토리지에 토큰 저장  
+![로그인 후 토큰발급](https://user-images.githubusercontent.com/107971188/205498096-8e9f7061-a68d-4362-a5ed-e594dcb9e8d8.gif)
 
-<details>
-<summary>일정시간마다 토큰 재발급</summary>
-<div markdown="1">   
-</div>
-</details>
 
-<details>
-<summary>새로고침시 토큰 사라지지 않게 하기</summary>
-<div markdown="1">   
-</div>
-</details>
+-일정시간마다 토큰 재발급  
+![토큰재발급](https://user-images.githubusercontent.com/107971188/205498063-da1fd13b-b6bf-42f3-90b0-ec82e92f8e76.gif)
 
-<details>
-<summary>Oauth2.0 로그인</summary>
-<div markdown="1">   
-</div>
-</details>
+
+-새로고침시 토큰 사라지지 않게 하기  
+![새로고침 토큰](https://user-images.githubusercontent.com/107971188/205498068-91eed785-4ecc-472e-9d7a-e5e5414c307d.gif)
+
+
+-Oauth2.0 로그인  
+![카카오 로그인](https://user-images.githubusercontent.com/107971188/205498085-bf7fdfa9-f557-4150-8993-789a86f02bcb.gif)
+
 
 </div>
 </details>
@@ -111,23 +97,17 @@
 <summary>마이 페이지</summary>
 <div markdown="1">      
 
-<details>
-<summary>특정 유저 정보 페이지, 무한 스크롤</summary>
-<div markdown="1">       
-</div>
-</details>
+-특정 유저 정보 페이지, 무한 스크롤   
+![유저페이지 및 마이페이지 무한스크롤](https://user-images.githubusercontent.com/107971188/205498116-8dd8dcf1-ddf5-42a1-aecd-55acd7fbd594.gif)
 
-<details>
-<summary>프로필 수정 기능</summary>
-<div markdown="1">       
-</div>
-</details>
 
-<details>
-<summary>회원 탈퇴 기능</summary>
-<div markdown="1">       
-</div>
-</details>
+-프로필 수정 기능  
+![마이페이지 수정](https://user-images.githubusercontent.com/107971188/205498102-564731f5-b242-4727-ade1-cb1e98f5dd18.gif)
+
+
+-회원 탈퇴 기능  
+![회원탈퇴](https://user-images.githubusercontent.com/107971188/205498108-510353f2-e845-4548-b708-9bad131262f6.gif)
+
 
 </div>
 </details>
@@ -138,35 +118,20 @@
 <summary>메인페이지</summary>
 <div markdown="1">
 
-<details>
-<summary>메인 포스트 작성 / 최근 게시글을 업로드한 유저 확인</summary>
-<div markdown="1">
-</div>
-</details>
+-메인 포스트 작성 / 최근 게시글을 업로드한 유저 확인  
+![메인 포스트 작성 및 최근게시물작성 유저확인](https://user-images.githubusercontent.com/107971188/205497454-26f746c4-1c23-4351-a90e-e64a8cc3d83a.gif)
 
-<details>
-<summary>이미지 캐러셀</summary>
-<div markdown="1">
-</div>
-</details>
+-이미지 캐러셀  
+![메인 캐러셀](https://user-images.githubusercontent.com/107971188/205497438-aac93ac3-20b8-4def-8d12-5dabcf2da1b3.gif)
 
-<details>
-<summary>메인 포스트 삭제</summary>
-<div markdown="1">
-</div>
-</details>
+-메인 포스트 삭제  
+![메인 게시물포스트 삭제](https://user-images.githubusercontent.com/107971188/205497410-6547a1a7-6584-4747-999f-86bd2bc3d8dc.gif)
 
-<details>
-<summary>메인 화면 무한 스크롤</summary>
-<div markdown="1">
-</div>
-</details>
+-메인 화면 무한 스크롤  
+![메인 무한스크롤](https://user-images.githubusercontent.com/107971188/205497470-a66af67e-bc12-480e-b3ce-253c2e4a1969.gif)
 
-<details>
-<summary>댓글 작성 / 댓글 더보기</summary>
-<div markdown="1">
-</div>
-</details>
+-댓글 작성 / 댓글 더보기  
+![메인 댓글 기능](https://user-images.githubusercontent.com/107971188/205497456-236c706c-1f3e-40f4-97dd-a465cb93b676.gif)
 
 </div>
 </details>
@@ -178,11 +143,8 @@
 <summary>랭킹 페이지</summary>
 <div markdown="1">     
 
-<details>
-<summary>랭킹 Search </summary>
-<div markdown="1">       
-</div>
-</details>
+-랭킹 Search  
+![랭킹 검색기능](https://user-images.githubusercontent.com/107971188/205497695-a3c6aa38-66d6-45ca-a864-9d3ec24c9caa.gif)
 
 </div>
 </details>
@@ -194,17 +156,11 @@
 <summary>알림 전송</summary>
 <div markdown="1">
 
-<details>
-<summary>상대방 수락 및 거절</summary>
-<div markdown="1">       
-</div>
-</details>
+-상대방 수락 및 거절  
+![알림수락](https://user-images.githubusercontent.com/107971188/205497708-cd3b0cc2-0f55-4d6c-ac9b-bf1c2cc5c45c.gif)
 
-<details>
-<summary>상대방 중단</summary>
-<div markdown="1">       
-</div>
-</details>
+-상대방 중단  
+![대결중단](https://user-images.githubusercontent.com/107971188/205497714-c7eaccae-9bef-4daa-83ab-b8343134b700.gif)
 
 </div>
 </details>
@@ -216,29 +172,17 @@
 <summary>Q&A 게시판</summary>
 <div markdown="1">
 
-<details>
-<summary>QnA 검색기능</summary>
-<div markdown="1">       
-</div>
-</details>
+-QnA 검색기능  
+![QnA 검색](https://user-images.githubusercontent.com/107971188/205497888-7f23e754-cd78-4092-abb8-5a1d38b57402.gif)
 
-<details>
-<summary>글 작성/디테일/작성한 글 수정기능</summary>
-<div markdown="1">       
-</div>
-</details>
+-글 작성/디테일/작성한 글 수정기능  
+![QnA 작성 및 수정](https://user-images.githubusercontent.com/107971188/205497893-a1849f95-83f1-413d-92f9-6518a1a043c9.gif)
 
-<details>
-<summary>댓글 기능</summary>
-<div markdown="1">       
-</div>
-</details>
+-댓글 기능  
+![QnA 댓글 작성 삭제](https://user-images.githubusercontent.com/107971188/205497905-b1a40789-f5cc-48af-801c-ec737a784183.gif)
 
-<details>
-<summary>페이지네이션</summary>
-<div markdown="1">       
-</div>
-</details>
+-페이지네이션  
+![QnA페이지네이션](https://user-images.githubusercontent.com/107971188/205497912-65d1ea9b-d3a9-4496-8cc2-0a45fc47f214.gif)
 
 </div>
 </details>
@@ -250,17 +194,11 @@
 <summary>캘린더 페이지</summary>
 <div markdown="1">  
 
-<details>
-<summary>실시간 FullCalendar업데이트</summary>
-<div markdown="1">       
-</div>
-</details>
+-실시간 FullCalendar업데이트  
+![FullCalendar](https://user-images.githubusercontent.com/107971188/205497920-82c9df6b-d6a0-4627-abec-c28f25b7524d.gif)
 
-<details>
-<summary>상대방 운동 등록시 화면에 나옴 + 본인도</summary>
-<div markdown="1">       
-</div>
-</details>
+-상대방 운동 등록시 화면에 나옴 + 본인도  
+![캘린더 승부 페이지](https://user-images.githubusercontent.com/107971188/205497926-f25de407-ff23-49ca-a406-9b72b58f7cb2.gif)
 
 </div>
 </details>
