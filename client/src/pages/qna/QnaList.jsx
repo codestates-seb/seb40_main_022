@@ -165,11 +165,8 @@ function QnaList() {
                 })}
           </QnaContent>
           <Pagination
-            // size={size}
-            // sizeHandler={sizeHandler}
             currentPage={currentPage}
             currentPageHandler={currentPageHandler}
-            // paginationLength={paginationLength}
             items={items}
           />
         </div>

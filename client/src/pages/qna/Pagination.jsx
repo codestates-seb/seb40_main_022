@@ -68,13 +68,7 @@ const PaginationComponent = styled.div`
   }
 `;
 
-function Pagination({
-  // size,
-  currentPage,
-  currentPageHandler,
-  // paginationLength,
-  items,
-}) {
+function Pagination({ currentPage, currentPageHandler, items }) {
   const pagination = Array(items.totalPages)
     .fill()
     .map((v, i) => i + 1);
@@ -111,7 +105,6 @@ function Pagination({
                 {v}
               </button>
             ))}
-          {/* <div className="dot">...</div> */}
           <button onClick={pageNextBtn} className="nextbutton">
             <img src={prevIcon} alt="페이지이동" className="next" />
           </button>
