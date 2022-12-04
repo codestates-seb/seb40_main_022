@@ -38,6 +38,7 @@ export default function DailyCmt({ index }) {
 
   const handleCmtDel = commentId => {
     dispatch(asyncPostCmtDel({ index, commentId }));
+    setCmtSelect(true);
   };
 
   const handleans = e => {

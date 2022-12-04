@@ -132,42 +132,34 @@ export const asynCmtScroll = createAsyncThunk('comment', listUp => {
 export const asyncPostCmtUp = createAsyncThunk(
   'post/up',
   ({ answervalue, index }) => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments`,
-        JSON.stringify({
-          content: answervalue,
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: localStorage.getItem('Authorization'),
-            RefreshToken: localStorage.getItem('RefreshToken'),
-          },
+    axios.post(
+      `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments`,
+      JSON.stringify({
+        content: answervalue,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
         },
-      )
-      .then(() => {
-        window.location.reload();
-      });
+      },
+    );
   },
 );
 
 export const asyncPostCmtDel = createAsyncThunk(
   'post/del',
   ({ index, commentId }) => {
-    axios
-      .delete(
-        `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments/${commentId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem('Authorization'),
-            RefreshToken: localStorage.getItem('RefreshToken'),
-          },
+    axios.delete(
+      `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments/${commentId}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
         },
-      )
-      .then(() => {
-        window.location.reload();
-      });
+      },
+    );
   },
 );
 
