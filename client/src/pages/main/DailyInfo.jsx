@@ -17,9 +17,10 @@ export default function DailyInfo({ el, index }) {
   const dispatch = useDispatch();
   const [fav, setFav] = useState(el.likeSate);
   const [isComment, setIsComment] = useState(false);
+
   const handleFavorite = () => {
     setFav(!fav);
-    // console.log(fav);
+    console.log(fav);
     if (fav === true) {
       dispatch(asyncLike(el.post.postId));
     } else {
