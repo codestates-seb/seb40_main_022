@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -112,7 +113,7 @@ function QnaDetail() {
             answer.map(ansdata => {
               const AcId = [data, ansdata.answerId];
               return (
-                <>
+                <div key={uuidv4()}>
                   <h2>답변 {ansdata.length}</h2>
 
                   <h4>{ansdata.content}</h4>
@@ -142,7 +143,7 @@ function QnaDetail() {
                       </button>
                     </div>
                   </AnswerNDB>
-                </>
+                </div>
               );
             })}
         </DetailAnswer>

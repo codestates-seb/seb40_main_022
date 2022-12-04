@@ -3,6 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import crown from '../../images/crown.png';
@@ -22,7 +23,6 @@ function Calendar() {
   const getlist = useSelector(state => state.record.GetList.member);
   const getopponent = useSelector(state => state.record.GetList.opponent);
   const [Clicked, setClicked] = useState(false);
-  console.log(member, opponent, challId, challId);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
   useEffect(() => {
@@ -166,7 +166,7 @@ function Calendar() {
                       {getlist &&
                         getlist.sports.map((data, idx) => {
                           return idx < 3 ? (
-                            <div className="dayover">
+                            <div className="dayover" key={uuidv4()}>
                               <span>{data.bodyPart}</span>
                               <span>{data.name}</span>
                               <span>
@@ -184,6 +184,9 @@ function Calendar() {
               {getopponent && getopponent !== undefined ? (
                 <div className="box2">
                   <div className="name2">
+                    {getopponent && getopponent.result === 'WIN' ? (
+                      <img src={crown} alt="승자이미지" />
+                    ) : null}
                     {getopponent && getopponent.member.username}
                   </div>
                   {opponent ? (
@@ -205,7 +208,7 @@ function Calendar() {
                       {getopponent &&
                         getopponent.sports.map((data, idx) => {
                           return idx < 3 ? (
-                            <div className="dayover">
+                            <div className="dayover" key={uuidv4()}>
                               <span>{data.bodyPart}</span>
                               <span>{data.name}</span>
                               <span>

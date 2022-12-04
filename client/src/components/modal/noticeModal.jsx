@@ -35,7 +35,6 @@ function Modal() {
         <ModalMain>
           {notification &&
             notification.map(data => {
-              console.log(data.read);
               return data.read ? null : (
                 <ModalList
                   onClick={() => {
@@ -52,7 +51,7 @@ function Modal() {
                   <div className="content">
                     <div className="fightday">
                       <h3>대결 신청</h3>
-                      <span>{data.createdAt}</span>
+                      <span>{data.createdAt.slice(0, 10)}</span>
                     </div>
                     <div>{data.content}</div>
                   </div>
