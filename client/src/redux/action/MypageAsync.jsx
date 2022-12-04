@@ -10,7 +10,6 @@ export const MypageGet = createAsyncThunk('/mypage', () => {
       },
     })
     .then(res => {
-      console.log(res);
       return res.data;
     });
 

@@ -86,7 +86,12 @@ function ProfileEdit() {
     formData.append('kilogram', kilogram);
     formData.append('period', period);
     formData.append('profileImage', profileImage);
-    dispatch(MypagePost(formData));
+    dispatch(MypagePost(formData))
+      .unwrap()
+      .then(() => {
+        navigate('/mypage');
+        window.location.reload();
+      });
   };
   return (
     <Wrapper>

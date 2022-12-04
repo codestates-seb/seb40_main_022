@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import uuidv4 from 'react-uuid';
 import dailyAdd from '../../images/daily_add.svg';
 import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
@@ -87,7 +88,7 @@ export default function DailyCmt({ index }) {
       {cmtList &&
         cmtList.map(comment => {
           return (
-            <div>
+            <div key={uuidv4()}>
               {comment &&
                 comment.map(all => {
                   return (
@@ -145,6 +146,7 @@ export default function DailyCmt({ index }) {
             onClick={() => {
               plusBut();
             }}
+            key={uuidv4()}
           >
             <img className="add" src={dailyAdd} alt="dailyAdd" />
           </button>

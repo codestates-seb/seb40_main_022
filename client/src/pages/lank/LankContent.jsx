@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import uuidv4 from 'react-uuid';
 import ChallengeReq from '../../components/modal/ChallengeReq';
 import { LankBody, Lankcontents } from './LankContentstyle';
 import { ChallengeSearch } from '../../redux/action/LankAsync';
@@ -37,7 +38,7 @@ function LankContent() {
         ? searchList &&
           searchList.map((data, idx) => {
             return (
-              <Lankcontents>
+              <Lankcontents key={uuidv4()}>
                 <h1>{(currentPage - 1) * 10 + idx + 1}</h1>
                 <button
                   onClick={() => {
@@ -82,7 +83,7 @@ function LankContent() {
         : lanklist &&
           lanklist.map((data, idx) => {
             return (
-              <Lankcontents>
+              <Lankcontents key={uuidv4()}>
                 <h1>{(currentPage - 1) * 10 + idx + 1}</h1>
                 <button
                   onClick={() => {

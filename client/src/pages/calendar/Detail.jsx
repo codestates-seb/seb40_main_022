@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
@@ -184,7 +185,7 @@ function Detail() {
                 >
                   {btns &&
                     btns.map(data => {
-                      return <option>{data}</option>;
+                      return <option key={uuidv4()}>{data}</option>;
                     })}
                 </select>
               </div>
@@ -201,7 +202,7 @@ function Detail() {
                   >
                     {taghealth1 &&
                       taghealth1.map(data => {
-                        return <option>{data.name}</option>;
+                        return <option key={uuidv4()}>{data.name}</option>;
                       })}
                   </select>
                 </div>
@@ -270,7 +271,7 @@ function Detail() {
                 addUpdate.push(false);
               }
               return (
-                <div>
+                <div key={uuidv4()}>
                   <span>{data.set}세트</span>
                   <span>{data.count}회</span>
                   <span>{data.weight}kg</span>

@@ -69,16 +69,12 @@ export const EnemyUserInfo = createAsyncThunk('userInfo', () => {
 });
 
 export const Notificationsallam = createAsyncThunk('allam', id => {
-  return axios.patch(
-    `${process.env.REACT_APP_API_URL}/notifications/${id}`,
-    id,
-    {
-      headers: {
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
+  axios.patch(`${process.env.REACT_APP_API_URL}/notifications/${id}`, id, {
+    headers: {
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
     },
-  );
+  });
 });
 
 export const ChallengeSearch = createAsyncThunk('/challenge/search', data => {
