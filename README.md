@@ -21,6 +21,8 @@
 
 
 ## 👩‍💻 Used Stacks
+<img src="https://user-images.githubusercontent.com/107971188/205494255-8aaf2ca5-6787-473e-ab7d-cbcdafed4129.png" width="60%" height="40%" alt="tech stack"></img>
+
 
 ### Front-End
 <img src = "https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-00A7E2?style=for-the-badge&logo=css3&logoColor=white"/> <img src = "https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src = "https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src = "https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"> <img src = "https://img.shields.io/badge/Axios-181717?style=for-the-badge&logo=Axios&logoColor=white"> <img src = "https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white"> <img src="https://img.shields.io/badge/AmazonS3-339933?style=for-the-badge&logo=AmazonS3&logoColor=white">
@@ -43,60 +45,226 @@
 </br>
 
 <details>
-<summary>메인페이지</summary>
+<summary>회원가입</summary>
 <div markdown="1">
-<img width="711" alt="스크린샷 2022-12-04 18 29 26" src="https://user-images.githubusercontent.com/107971188/205483601-a41f7533-8711-465d-969c-a003525447dc.png">
+
+<details>
+<summary>각 요소별 유효성 검사</summary>
+<div markdown="1">       
 </div>
 </details>
 
 <details>
-<summary>회원가입</summary>
+<summary>회원가입 성공</summary>
 <div markdown="1">       
-<img width="710" alt="스크린샷 2022-12-04 18 32 09" src="https://user-images.githubusercontent.com/107971188/205483640-7c84164c-a9e8-4fc7-92ac-d968d8108948.png">
 </div>
 </details>
+
+</div>
+</details>
+
+
+
 
 <details>
 <summary>로그인</summary>
-<div markdown="1">      
-<img width="711" alt="스크린샷 2022-12-04 18 33 02" src="https://user-images.githubusercontent.com/107971188/205483874-ef56d8f1-0c74-425c-ac9b-4e79cbd824bc.png">
+<div markdown="1">   
+
+
+<details>
+<summary>일반 로그인</summary>
+<div markdown="1">   
 </div>
 </details>
+
+<details>
+<summary>로그인시 로컬스토리지에 토큰 저장</summary>
+<div markdown="1">   
+</div>
+</details>
+
+<details>
+<summary>일정시간마다 토큰 재발급</summary>
+<div markdown="1">   
+</div>
+</details>
+
+<details>
+<summary>새로고침시 토큰 사라지지 않게 하기</summary>
+<div markdown="1">   
+</div>
+</details>
+
+<details>
+<summary>Oauth2.0 로그인</summary>
+<div markdown="1">   
+</div>
+</details>
+
+</div>
+</details>
+
+
+
 
 <details>
 <summary>마이 페이지</summary>
+<div markdown="1">      
+
+<details>
+<summary>특정 유저 정보 페이지, 무한 스크롤</summary>
 <div markdown="1">       
-<img width="717" alt="스크린샷 2022-12-04 18 39 58" src="https://user-images.githubusercontent.com/107971188/205484033-5920f200-6023-4139-95ae-f58f700fce9c.png">
 </div>
 </details>
 
 <details>
-<summary>Q&A 게시판</summary>
+<summary>프로필 수정 기능</summary>
 <div markdown="1">       
-<img width="713" alt="스크린샷 2022-12-04 18 40 45" src="https://user-images.githubusercontent.com/107971188/205484025-d8fb091a-6621-4dfe-839a-a896b9d8d616.png">
 </div>
 </details>
 
 <details>
-<summary>캘린더 페이지</summary>
+<summary>회원 탈퇴 기능</summary>
 <div markdown="1">       
-<img width="717" alt="스크린샷 2022-12-04 18 41 27" src="https://user-images.githubusercontent.com/107971188/205484020-b7a8730c-f4bb-42ea-bcf5-1130436cd4d1.png">
 </div>
 </details>
+
+</div>
+</details>
+
+
+
+<details>
+<summary>메인페이지</summary>
+<div markdown="1">
+
+<details>
+<summary>메인 포스트 작성 / 최근 게시글을 업로드한 유저 확인</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>이미지 캐러셀</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>메인 포스트 삭제</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>메인 화면 무한 스크롤</summary>
+<div markdown="1">
+</div>
+</details>
+
+<details>
+<summary>댓글 작성 / 댓글 더보기</summary>
+<div markdown="1">
+</div>
+</details>
+
+</div>
+</details>
+
+
+
 
 <details>
 <summary>랭킹 페이지</summary>
+<div markdown="1">     
+
+<details>
+<summary>랭킹 Search </summary>
 <div markdown="1">       
-<img width="717" alt="스크린샷 2022-12-04 18 42 59" src="https://user-images.githubusercontent.com/107971188/205484060-8a3d0810-c121-4837-8a47-c905c627d8be.png">
+</div>
+</details>
+
+</div>
+</details>
+
+
+
+
+<details>
+<summary>알림 전송</summary>
+<div markdown="1">
+
+<details>
+<summary>상대방 수락 및 거절</summary>
+<div markdown="1">       
 </div>
 </details>
 
 <details>
-<summary>알림 전송</summary>
+<summary>상대방 중단</summary>
 <div markdown="1">       
-<img width="715" alt="스크린샷 2022-12-04 18 43 38" src="https://user-images.githubusercontent.com/107971188/205484074-5da04dee-8128-4c06-b1f1-7c187a3d7c06.png">
 </div>
 </details>
+
+</div>
+</details>
+
+
+
+
+<details>
+<summary>Q&A 게시판</summary>
+<div markdown="1">
+
+<details>
+<summary>QnA 검색기능</summary>
+<div markdown="1">       
+</div>
+</details>
+
+<details>
+<summary>글 작성/디테일/작성한 글 수정기능</summary>
+<div markdown="1">       
+</div>
+</details>
+
+<details>
+<summary>댓글 기능</summary>
+<div markdown="1">       
+</div>
+</details>
+
+<details>
+<summary>페이지네이션</summary>
+<div markdown="1">       
+</div>
+</details>
+
+</div>
+</details>
+
+
+
+
+<details>
+<summary>캘린더 페이지</summary>
+<div markdown="1">  
+
+<details>
+<summary>실시간 FullCalendar업데이트</summary>
+<div markdown="1">       
+</div>
+</details>
+
+<details>
+<summary>상대방 운동 등록시 화면에 나옴 + 본인도</summary>
+<div markdown="1">       
+</div>
+</details>
+
+</div>
+</details>
+
 
 </br>
 
