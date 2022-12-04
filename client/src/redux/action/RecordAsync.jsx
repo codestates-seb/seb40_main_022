@@ -5,6 +5,7 @@ export const RecordTagAsync = createAsyncThunk('/recordtag', tag => {
   return axios
     .get(`${process.env.REACT_APP_API_URL}/sports/detail?bodyPart=${tag}`)
     .then(res => {
+      console.log(res);
       return res.data;
     });
 });

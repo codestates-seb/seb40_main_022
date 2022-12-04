@@ -15,7 +15,7 @@ import {
 } from '../../redux/action/RecordAsync';
 
 function Detail() {
-  const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
+  const btns = ['등', '가슴', '어깨', '하체', '팔', '유산소', '기타'];
   const taghealth1 = useSelector(state => state.record.data.data);
   const navigate = useNavigate();
   const startphotoUp = useRef();
@@ -93,12 +93,13 @@ function Detail() {
     dispatch(RecordUpAsync(data))
       .unwrap()
       .then(() => {
-        window.location.href = '/record';
+        // window.location.href = '/record';
       });
   };
   useEffect(() => {
     dispatch(RecordTagAsync(tags));
   }, []);
+
   return (
     <DetailBox>
       <Header />
