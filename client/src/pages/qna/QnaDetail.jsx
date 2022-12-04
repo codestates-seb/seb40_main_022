@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -34,7 +34,8 @@ function QnaDetail() {
   const dispatch = useDispatch();
   const Upanswer = [data, content];
   const detaillist = useSelector(state => state.qnalist.detail);
-
+  const ac = localStorage.getItem('Authorization');
+  const navigate = useNavigate();
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -52,8 +53,15 @@ function QnaDetail() {
   }
 
   const handleAnswer = () => {
-    dispatch(QnaDetailCommentAsync(Upanswer));
-    setContent('');
+    if (!ac) {
+      alert('로그인 후 이용할 수 있습니다.');
+    } else if (ac && content.length <= 4) {
+      alert('내용을 5글자 이상 입력해 주세요');
+    } else {
+      dispatch(QnaDetailCommentAsync(Upanswer));
+      setContent('');
+      navigate('/qna');
+    }
   };
   const handleAccept = id => {
     dispatch(QnaanswerAccept(id));

@@ -81,18 +81,18 @@ export const Notificationsallam = createAsyncThunk('allam', id => {
   );
 });
 
-export const ChallengeSearch = createAsyncThunk(
-  '/challenge/search',
-  (url, page) => {
-    return axios
-      .get(`${process.env.REACT_APP_API_URL}/challenge?${url}&page=${page}`, {
+export const ChallengeSearch = createAsyncThunk('/challenge/search', data => {
+  return axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/challenge?${data[0]}&page=${data[1]}`,
+      {
         headers: {
           Authorization: localStorage.getItem('Authorization'),
           RefreshToken: localStorage.getItem('RefreshToken'),
         },
-      })
-      .then(res => {
-        return res.data;
-      });
-  },
-);
+      },
+    )
+    .then(res => {
+      return res.data;
+    });
+});
