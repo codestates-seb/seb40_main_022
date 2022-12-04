@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import uuidv4 from 'react-uuid';
 import Header from '../../components/header/Header';
@@ -42,7 +42,6 @@ function QnaDetail() {
   );
   const [update, setUpdate] = useState('');
   const ac = localStorage.getItem('Authorization');
-  const navigate = useNavigate();
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -68,7 +67,6 @@ function QnaDetail() {
       dispatch(QnaDetailCommentAsync(Upanswer));
       setContent('');
       setSelect(true);
-      navigate('/qna');
     }
   };
 
