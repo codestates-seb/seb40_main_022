@@ -45,7 +45,6 @@ function QnaDetail() {
   const ac = localStorage.getItem('Authorization');
   const userdata = useSelector(state => state.mypage.member.userName);
 
-  // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
       return value;
@@ -79,10 +78,14 @@ function QnaDetail() {
     }
   };
   const handleAnswerUp = (idx, id) => {
-    dispatch(QnaanswerContentUp(id));
-    answerup[idx] = !answerup[idx];
-    setAnswerup(answerup);
-    setSelect(true);
+    if (id[2].length >= 5) {
+      dispatch(QnaanswerContentUp(id));
+      answerup[idx] = !answerup[idx];
+      setAnswerup(answerup);
+      setSelect(true);
+    } else {
+      alert('5글자 이상 적어주세요.');
+    }
   };
   const handleAccept = id => {
     dispatch(QnaanswerAccept(id));
@@ -184,36 +187,44 @@ function QnaDetail() {
                     >
                       {ansdata.accepted ? 'V' : '채택'}
                     </button>
-                    <div>
-                      {answerup[idx] ? (
+                    {ansdata &&
+                    userdata !== undefined &&
+                    (ansdata.answerWriter !== undefined
+                      ? ansdata.answerWriter.username
+                      : null) === userdata ? (
+                      <div>
+                        {answerup[idx] ? (
+                          <button
+                            onClick={() => {
+                              const Iddata = [AcId[0], AcId[1], update];
+                              handleAnswerUp(idx, Iddata);
+                            }}
+                            className="update"
+                          >
+                            완료
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              answerup[idx] = !answerup[idx];
+                              setAnswerup(answerup);
+                              setSelect(true);
+                            }}
+                            className="update"
+                          >
+                            수정
+                          </button>
+                        )}
                         <button
+                          className="delete"
                           onClick={() => {
-                            const Iddata = [AcId[0], AcId[1], update];
-                            handleAnswerUp(idx, Iddata);
+                            handleDelete(AcId);
                           }}
                         >
-                          완료
+                          삭제
                         </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            answerup[idx] = !answerup[idx];
-                            setAnswerup(answerup);
-                            setSelect(true);
-                          }}
-                        >
-                          수정
-                        </button>
-                      )}
-                      <button
-                        className="delete"
-                        onClick={() => {
-                          handleDelete(AcId);
-                        }}
-                      >
-                        삭제
-                      </button>
-                    </div>
+                      </div>
+                    ) : null}
                   </AnswerNDB>
                 </div>
               );
