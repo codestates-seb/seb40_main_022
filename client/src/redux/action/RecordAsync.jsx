@@ -56,7 +56,24 @@ export const RecordImgUp = createAsyncThunk('Imgup', formdata => {
       return res.data;
     });
 });
-
+export const RecordImgReUp = createAsyncThunk('Imgup', formdata => {
+  axios
+    .post(
+      `${process.env.REACT_APP_API_URL}/records/pictures/update`,
+      formdata,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
+      },
+    )
+    .then(res => {
+      console.log(res);
+      return res.data;
+    });
+});
 export const Recorddelete = createAsyncThunk('/record/delete', id => {
   axios.delete(`${process.env.REACT_APP_API_URL}/records/${id}`);
 });

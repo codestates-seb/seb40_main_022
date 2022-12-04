@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import userProfile from '../../images/daily.jpg';
+import mockupProfile from '../../images/mockupProfile.png';
 import {
   Notice,
   NoticeSection,
@@ -45,7 +45,7 @@ function Modal() {
                 >
                   <img
                     className="userProfile"
-                    src={userProfile}
+                    src={mockupProfile}
                     alt="userProfile"
                   />
                   <div className="content">
