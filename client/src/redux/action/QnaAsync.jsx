@@ -41,7 +41,13 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
   return axios
-    .get(`${process.env.REACT_APP_API_URL}/questions/${data}`)
+    .get(`${process.env.REACT_APP_API_URL}/questions/${data}`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
     .then(res => {
       return res.data;
     });
