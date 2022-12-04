@@ -300,7 +300,8 @@ function ProfileEdit() {
                   alert('이미지를 업로드해주세요');
                 else if (username.length < 1)
                   alert('이름은 1자 이상 입력해주세요');
-                else if (!PWDTest.test(password)) alert('태그를 입력해주세요');
+                else if (!PWDTest.test(password))
+                  alert('비밀번호는 숫자, 영문 포함 8자 이상이어야 합니다.');
               }}
             >
               완료
