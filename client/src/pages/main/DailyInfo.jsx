@@ -22,8 +22,10 @@ export default function DailyInfo({ el, index }) {
     setFav(!fav);
     if (fav === true) {
       dispatch(asyncLike(el.post.postId));
+      console.log(el.likeSate);
     } else {
       dispatch(asyncLikeundo(el.post.postId));
+      console.log(el.likeSate);
     }
   };
 
