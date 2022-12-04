@@ -7,14 +7,18 @@ import dailyAdd from '../../images/daily_add.svg';
 import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
 import { AddComment, CommentInput } from './MainStyle';
-import { asyncPostCmtUp, asyncPostCmtDel } from '../../redux/action/MainAsync';
+import {
+  asyncPostCmtUp,
+  asyncPostCmtDel,
+  asyncPostCmtEdit,
+} from '../../redux/action/MainAsync';
 import { MypageGet } from '../../redux/action/MypageAsync';
 
 export default function DailyCmt({ index }) {
   const dispatch = useDispatch();
   const [answervalue, setAnswervalue] = useState('');
   const [cmtEditBut, setCmtEditBut] = useState(false);
-  // const [editAnwer, setEditAnswer] = useState('');
+  const [editAnswer, setEditAnswer] = useState('');
   const ac = localStorage.getItem('Authorization');
   const [cmtList, setCmtList] = useState([]);
   const [cmtSelect, setCmtSelect] = useState(false);
@@ -34,6 +38,12 @@ export default function DailyCmt({ index }) {
       setAnswervalue('');
       setCmtSelect(true);
     }
+  };
+
+  const handleEditAnswer = commentId => {
+    setCmtEditBut(!cmtEditBut);
+    dispatch(asyncPostCmtEdit(index, commentId, editAnswer));
+    setCmtSelect(true);
   };
 
   const handleCmtDel = commentId => {
@@ -117,8 +127,10 @@ export default function DailyCmt({ index }) {
                           <div className="content">
                             {all.content && cmtEditBut ? (
                               <input
-                                value={all.content}
-                                // onChange={e => setEditAnswer(e.target.value)}
+                                value={editAnswer || all.content}
+                                onChange={e => {
+                                  setEditAnswer(e.target.value);
+                                }}
                               />
                             ) : (
                               all.content
@@ -128,7 +140,11 @@ export default function DailyCmt({ index }) {
                       </div>
                       {all.userName === cmtUserId ? (
                         <div className="buttons">
-                          <button onClick={() => setCmtEditBut(!cmtEditBut)}>
+                          <button
+                            onClick={() => {
+                              handleEditAnswer(all.commentId);
+                            }}
+                          >
                             <img className="edit" src={edit} alt="edit" />
                           </button>
                           <button

@@ -15,8 +15,17 @@ import DailyCmt from './DailyCmt';
 export default function DailyInfo({ el, index }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [fav, setFav] = useState(false);
+  const [fav, setFav] = useState(el.likeSate);
   const [isComment, setIsComment] = useState(false);
+  const handleFavorite = () => {
+    setFav(!fav);
+    console.log(fav);
+    if (fav === true) {
+      dispatch(asyncLike(el.post.postId));
+    } else {
+      dispatch(asyncLikeundo(el.post.postId));
+    }
+  };
 
   return (
     <div>
@@ -47,12 +56,7 @@ export default function DailyInfo({ el, index }) {
             <span className="favorite">
               <button
                 onClick={() => {
-                  setFav(!fav);
-                  if (fav === false) {
-                    dispatch(asyncLikeundo(el.post.postId));
-                  } else {
-                    dispatch(asyncLike(el.post.postId));
-                  }
+                  handleFavorite();
                 }}
               >
                 {fav ? (

@@ -165,22 +165,15 @@ export const asyncPostCmtDel = createAsyncThunk(
 
 export const asyncPostCmtEdit = createAsyncThunk(
   'post/up',
-  (id, data, ac, re) => {
+  (index, commentId, editAnswer) => {
     axios.patch(
-      `${process.env.REACT_APP_API_URL}/comment/${id.id}`,
-      JSON.stringify({
-        contentId: data[0],
-        content: data[1],
-        memberId: data[2],
-        userName: data[3],
-        profileImage: data[4],
-        isBol: false,
-      }),
+      `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments/${commentId}`,
+      JSON.stringify({ content: editAnswer }),
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: ac,
-          RefreshToken: re,
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
         },
       },
     );
