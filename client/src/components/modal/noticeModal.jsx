@@ -35,7 +35,6 @@ function Modal() {
         <ModalMain>
           {notification &&
             notification.map(data => {
-              console.log(data.read);
               return data.read ? null : (
                 <ModalList
                   onClick={() => {
