@@ -152,14 +152,14 @@ function Calendar() {
                       <div className="oneday">
                         <span>
                           날짜 :{' '}
-                          {member[0] !== undefined
-                            ? member[0].date.slice(5)
+                          {member[member.length - 1] !== undefined
+                            ? member[member.length - 1].date.slice(5)
                             : null}
                         </span>
                         <span>
                           운동 시간 :{' '}
-                          {member[0] !== undefined
-                            ? member[0].timeRecord
+                          {member[member.length - 1] !== undefined
+                            ? member[member.length - 1].timeRecord
                             : null}
                         </span>
                       </div>
@@ -194,14 +194,14 @@ function Calendar() {
                       <div className="oneday">
                         <span>
                           날짜 :{' '}
-                          {opponent[0] !== undefined
-                            ? opponent[0].date.slice(5)
+                          {opponent[opponent.length - 1] !== undefined
+                            ? opponent[opponent.length - 1].date.slice(5)
                             : null}
                         </span>
                         <span>
                           운동 시간 :{' '}
-                          {opponent[0] !== undefined
-                            ? opponent[0].timeRecord
+                          {opponent[opponent.length - 1] !== undefined
+                            ? opponent[opponent.length - 1].timeRecord
                             : null}
                         </span>
                       </div>

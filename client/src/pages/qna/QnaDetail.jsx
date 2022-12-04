@@ -44,7 +44,7 @@ function QnaDetail() {
   const [update, setUpdate] = useState('');
   const ac = localStorage.getItem('Authorization');
   const userdata = useSelector(state => state.mypage.member.userName);
-  console.log(detaillist);
+
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -92,6 +92,7 @@ function QnaDetail() {
     dispatch(QnaanswerDetaildelete(id));
     setSelect(true);
   };
+
   useEffect(() => {
     dispatch(MypageGet());
     dispatch(QnaDetailAsync({ data }));

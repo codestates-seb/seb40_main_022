@@ -80,7 +80,7 @@ function Pagination({ currentPage, currentPageHandler, list }) {
   };
 
   const pageNextBtn = () => {
-    if (currentPage + 1 <= list.pageInfo.totalPages) {
+    if (currentPage + 1 <= list.totalPages) {
       currentPageHandler(currentPage + 1);
     }
   };
