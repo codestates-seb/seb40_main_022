@@ -34,35 +34,38 @@ function Modal() {
         <ModalHeader>알림</ModalHeader>
         <ModalMain>
           {notification &&
-            notification.map(data => {
-              return (
-                <ModalList
-                  onClick={() => {
-                    setChallenge(true);
-                    handleClick(data.url, data.id);
-                  }}
-                  className="challenge"
-                  disabled={
-                    data.content.includes('수락') ||
-                    data.content.includes('거절') ||
-                    data.content.includes('중단')
-                  }
-                >
-                  <img
-                    className="userProfile"
-                    src={mockupProfile}
-                    alt="userProfile"
-                  />
-                  <div className="content">
-                    <div className="fightday">
-                      <h3>대결 신청</h3>
-                      <span>{data.createdAt.slice(0, 10)}</span>
+            notification
+              .slice()
+              .reverse()
+              .map(data => {
+                return (
+                  <ModalList
+                    onClick={() => {
+                      setChallenge(true);
+                      handleClick(data.url, data.id);
+                    }}
+                    className="challenge"
+                    disabled={
+                      data.content.includes('수락') ||
+                      data.content.includes('거절') ||
+                      data.content.includes('중단')
+                    }
+                  >
+                    <img
+                      className="userProfile"
+                      src={mockupProfile}
+                      alt="userProfile"
+                    />
+                    <div className="content">
+                      <div className="fightday">
+                        <h3>대결 신청</h3>
+                        <span>{data.createdAt.slice(0, 10)}</span>
+                      </div>
+                      <div>{data.content}</div>
                     </div>
-                    <div>{data.content}</div>
-                  </div>
-                </ModalList>
-              );
-            })}
+                  </ModalList>
+                );
+              })}
           <Challenge
             open={challenge}
             close={() => setChallenge(false)}
