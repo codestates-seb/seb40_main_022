@@ -289,8 +289,18 @@ function ProfileEdit() {
             <button
               className="set-btn"
               onClick={() => {
-                handleSubmit();
-                navigate('/mypage');
+                if (
+                  profileImage.length !== 0 &&
+                  username.length > 0 &&
+                  PWDTest.test(password)
+                ) {
+                  handleSubmit();
+                  navigate('/mypage');
+                } else if (profileImage.length === 0)
+                  alert('이미지를 업로드해주세요');
+                else if (username.length < 1)
+                  alert('이름은 1자 이상 입력해주세요');
+                else if (!PWDTest.test(password)) alert('태그를 입력해주세요');
               }}
             >
               완료
