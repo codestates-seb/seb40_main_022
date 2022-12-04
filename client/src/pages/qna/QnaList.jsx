@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import uuidv4 from 'react-uuid';
 import Header from '../../components/header/Header';
 import searchIcon from '../../images/searchIcon.png';
 import Footer from '../../components/footer/Footer';
@@ -110,21 +111,12 @@ function QnaList() {
               />
               <span>인기 순</span>
             </label>
-            {/* <label>
-              <input
-                type="radio"
-                id="popularity"
-                name="contact"
-                onClick={() => setSort('')}
-              />
-              <span>정혹도순</span>
-            </label> */}
           </QnaRadio>
           <QnaContent>
             {result
               ? questiondata.map((data, idx) => {
                   return (
-                    <div className="qnabox">
+                    <div className="qnabox" key={uuidv4()}>
                       <article>
                         <div>
                           <Link to={`/qnadetail/${idx}`} className="titlename">
@@ -147,7 +139,7 @@ function QnaList() {
               : list &&
                 list.map((data, idx) => {
                   return (
-                    <div className="qnabox">
+                    <div className="qnabox" key={uuidv4()}>
                       <article>
                         <div>
                           <Link to={`/qnadetail/${idx}`} className="titlename">

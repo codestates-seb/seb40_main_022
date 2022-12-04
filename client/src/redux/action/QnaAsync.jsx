@@ -30,22 +30,19 @@ export const QnaDetaillistdelete = createAsyncThunk('delete', async data => {
 });
 
 export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
-  axios
-    .post(`${process.env.REACT_APP_API_URL}/questions/${data[1]}`, data[0], {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
-    })
-    .then(res => console.log(res));
+  axios.post(`${process.env.REACT_APP_API_URL}/questions/${data[1]}`, data[0], {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
   return axios
     .get(`${process.env.REACT_APP_API_URL}/questions/${data}`)
     .then(res => {
-      console.log(res);
       return res.data;
     });
 });

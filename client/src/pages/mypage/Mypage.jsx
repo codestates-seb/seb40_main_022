@@ -20,7 +20,6 @@ function Mypage() {
   const member = useSelector(state => state.mypage.member);
   const activity = useSelector(state => state.mypage.activity);
   const [btnClick, setBtnClick] = useState(false);
-  console.log(data, member, activity);
   useEffect(() => {
     dispatch(MypageGet());
   }, []);
