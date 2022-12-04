@@ -21,12 +21,27 @@ function QnaUpdate() {
   const [title, setTitle] = useState(list[+Id.id].title);
   const [content, setContent] = useState(list[+Id.id].summary);
   const [tag, setTag] = useState(list[+Id.id].tag);
+  const ac = localStorage.getItem('Authorization');
   const formdata = new FormData();
   formdata.append('title', title);
   formdata.append('content', content);
   formdata.append('tag', tag);
   const dataUp = [formdata, list[+Id.id].questionId];
   const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    if (!ac) {
+      alert('로그인 후 이용할 수 있습니다.');
+    } else if (ac && title.length <= 2) {
+      alert('제목을 3글자 이상 입력해 주세요');
+    } else if (ac && content.length <= 4) {
+      alert('내용을 5글자 이상 입력해 주세요');
+    } else {
+      dispatch(QnaAsynclistPatch({ formdata }));
+      navigate('/qna');
+    }
+  };
+
   return (
     <QnaPostBack>
       <Header />
@@ -70,8 +85,8 @@ function QnaUpdate() {
         <PostSubmit>
           <button
             onClick={() => {
+              handleSubmit();
               dispatch(QnaAsynclistPatch(dataUp));
-              navigate('/qna');
             }}
           >
             등록

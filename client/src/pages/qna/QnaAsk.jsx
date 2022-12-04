@@ -22,12 +22,22 @@ function QnaAsk() {
   const [content, setContent] = useState('');
   const dispatch = useDispatch();
   const formdata = new FormData();
+  const ac = localStorage.getItem('Authorization');
+
   formdata.append('title', title);
   formdata.append('content', content);
   formdata.append('tag', tag);
   const handleSubmit = () => {
-    dispatch(QnaAsynclistPost({ formdata }));
-    navigate('/qna');
+    if (!ac) {
+      alert('로그인 후 이용할 수 있습니다.');
+    } else if (ac && title.length <= 2) {
+      alert('제목을 3글자 이상 입력해 주세요');
+    } else if (ac && content.length <= 4) {
+      alert('내용을 5글자 이상 입력해 주세요');
+    } else {
+      dispatch(QnaAsynclistPost({ formdata }));
+      navigate('/qna');
+    }
   };
 
   return (
@@ -65,7 +75,7 @@ function QnaAsk() {
               taglist.map(data => {
                 return (
                   <button
-                    className="tags"
+                    className={tag === data ? 'oneButton' : null}
                     onClick={e => {
                       setTag(e.target.textContent);
                     }}
@@ -76,7 +86,7 @@ function QnaAsk() {
                 );
               })}
           </div>
-          {tag ? (
+          {/* {tag ? (
             <ul className="taglist">
               <li className="taglist-container">
                 <div className="tagname">{tag}</div>
@@ -90,7 +100,7 @@ function QnaAsk() {
                 </button>
               </li>
             </ul>
-          ) : null}
+          ) : null} */}
         </PostTag>
         <PostSubmit>
           <button
