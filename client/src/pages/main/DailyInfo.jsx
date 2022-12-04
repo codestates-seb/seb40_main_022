@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import comment from '../../images/comment.svg';
@@ -24,7 +25,7 @@ export default function DailyInfo({ el, index }) {
           <div className="DailyTags">
             {el.tags &&
               el.tags.map(tag => {
-                return <span>{`#${tag}`}</span>;
+                return <span key={uuidv4()}>{`#${tag}`}</span>;
               })}
           </div>
           <div className="DailyMemo">

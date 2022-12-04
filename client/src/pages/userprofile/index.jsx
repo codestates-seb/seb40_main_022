@@ -53,7 +53,7 @@ function UserProfile() {
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
-              {activity.point ? activity.point : 0}등
+              {Math.round(activity.point) ? Math.round(activity.point) : 0}점
             </div>
             <div className="box">
               <div>Point</div>

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
+import uuidv4 from 'react-uuid';
 import DailyInfomation from './DailyInfo';
 import DailyImg from './DailyImg';
 import dailyAdd from '../../images/daily_add.svg';
 import { DailyForm, DailyItem, Top, Content } from './MainStyle';
 import Loader from './Loader';
-import mockupProfile from '../../images/mockupProfile.png';
 
 export default function DailyPost() {
   const [postList, setPostList] = useState([]);
@@ -71,7 +71,7 @@ export default function DailyPost() {
         {postList[0] &&
           postList[0].map(el => {
             return (
-              <Content>
+              <Content key={uuidv4}>
                 <div className="imgprofile">
                   <button
                     onClick={() => {
@@ -87,31 +87,17 @@ export default function DailyPost() {
             );
           })}
         <Content>
-          {/* 지울코드 */}
-          <div className="mockup">
-            <div className="mockupImg mock">
-              <div className="imgprofile">
-                <button className="top_user">
-                  <img src={mockupProfile} alt="userProfile" />
-                </button>
-              </div>
-              <span className="userName">kokoko124</span>
-            </div>
-            {/* 지울코드 */}
-            <div className="mockupImg">
-              <button className="imgprofile dailynew" onClick={() => newPost()}>
-                <img src={dailyAdd} alt="dailyAdd" />
-              </button>
-              <span>새 게시물</span>
-            </div>
-          </div>
+          <button className="imgprofile dailynew" onClick={() => newPost()}>
+            <img src={dailyAdd} alt="dailyAdd" />
+          </button>
+          <span>새 게시물</span>
         </Content>
       </Top>
       <DailyForm>
         {postList &&
           postList.map(all => {
             return (
-              <div className="list">
+              <div className="list" key={uuidv4()}>
                 {all &&
                   all.map(list => {
                     return (

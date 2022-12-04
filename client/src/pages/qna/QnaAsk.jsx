@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import uuidv4 from 'react-uuid';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -78,6 +79,7 @@ function QnaAsk() {
                     onClick={e => {
                       setTag(e.target.textContent);
                     }}
+                    key={uuidv4()}
                   >
                     {data}
                   </button>

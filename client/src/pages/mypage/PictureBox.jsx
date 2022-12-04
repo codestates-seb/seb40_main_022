@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
+import uuidv4 from 'react-uuid';
 import del from '../../images/delete.svg';
 import Loader from '../main/Loader';
 import { asyncPostDel } from '../../redux/action/MainAsync';
@@ -111,7 +112,7 @@ export function PictureBox() {
       {postList &&
         postList.map(list => {
           return (
-            <div className="postList">
+            <div className="postList" key={uuidv4()}>
               {list &&
                 list
                   .filter(el => el.image !== null)

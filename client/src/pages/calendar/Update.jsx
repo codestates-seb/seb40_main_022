@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
@@ -185,7 +186,7 @@ function Update() {
                 >
                   {btns &&
                     btns.map(data => {
-                      return <option>{data}</option>;
+                      return <option key={uuidv4}>{data}</option>;
                     })}
                 </select>
               </div>
@@ -202,7 +203,7 @@ function Update() {
                   >
                     {taghealth1 &&
                       taghealth1.map(data => {
-                        return <option>{data.name}</option>;
+                        return <option key={uuidv4}>{data.name}</option>;
                       })}
                   </select>
                 </div>
@@ -268,7 +269,7 @@ function Update() {
           {ListupGet &&
             ListupGet.map(data => {
               return (
-                <div>
+                <div key={uuidv4}>
                   <span>{data.bodyPart}</span>
                   <span>{data.name}</span>
                   <span>{data.set}세트</span>
@@ -294,7 +295,7 @@ function Update() {
                 addUpdate.push(false);
               }
               return (
-                <div>
+                <div key={uuidv4}>
                   <span>{selectHealth[0].bodyPart}</span>
                   <span>{selectHealth[0].name}</span>
                   <span>{data.set}세트</span>
