@@ -28,6 +28,7 @@ export const Notifications = createAsyncThunk('notifications', () => {
   return axios
     .get(`${process.env.REACT_APP_API_URL}/notifications`, {
       headers: {
+        'Access-Control-Allow-Origin': '*',
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),
       },
@@ -69,12 +70,14 @@ export const EnemyUserInfo = createAsyncThunk('userInfo', () => {
 });
 
 export const Notificationsallam = createAsyncThunk('allam', id => {
-  axios.patch(`${process.env.REACT_APP_API_URL}/notifications/${id}`, id, {
-    headers: {
-      Authorization: localStorage.getItem('Authorization'),
-      RefreshToken: localStorage.getItem('RefreshToken'),
-    },
-  });
+  axios
+    .patch(`${process.env.REACT_APP_API_URL}/notifications/${id}`, id, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(res => console.log(res));
 });
 
 export const ChallengeSearch = createAsyncThunk('/challenge/search', data => {

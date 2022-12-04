@@ -35,11 +35,12 @@ function Modal() {
         <ModalMain>
           {notification &&
             notification.map(data => {
+              console.log(data);
               return data.read ? null : (
                 <ModalList
                   onClick={() => {
                     setChallenge(true);
-                    handleClick(data.url);
+                    handleClick(data.id);
                   }}
                   className="challenge"
                 >
