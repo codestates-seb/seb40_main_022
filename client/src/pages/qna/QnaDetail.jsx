@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import uuidv4 from 'react-uuid';
 import Header from '../../components/header/Header';
@@ -41,6 +41,8 @@ function QnaDetail() {
     Array(detaillist.answerCount).fill(false),
   );
   const [update, setUpdate] = useState('');
+  const ac = localStorage.getItem('Authorization');
+  const navigate = useNavigate();
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -58,9 +60,22 @@ function QnaDetail() {
   }
 
   const handleAnswer = () => {
-    dispatch(QnaDetailCommentAsync(Upanswer));
-    setContent('');
-    setSelect(true);
+    if (!ac) {
+      alert('로그인 후 이용할 수 있습니다.');
+    } else if (ac && content.length <= 4) {
+      alert('내용을 5글자 이상 입력해 주세요');
+    } else {
+      dispatch(QnaDetailCommentAsync(Upanswer));
+      setContent('');
+      setSelect(true);
+      navigate('/qna');
+    }
+  };
+
+  const handleUpdateDelete = () => {
+    if (!detaillist.questionWriter) {
+      alert('글 작성자가 아닙니다');
+    }
   };
   const handleAnswerUp = (idx, id) => {
     dispatch(QnaanswerContentUp(id));
@@ -104,7 +119,11 @@ function QnaDetail() {
               <button>{detaillist && detaillist.tag}</button>
             </DetailNDB>
             <DetailButton>
-              <DetailUpdate>
+              <DetailUpdate
+                onClick={() => {
+                  handleUpdateDelete();
+                }}
+              >
                 <Link to={`/qnaupdate/${+Id.id}`} className="qnaupdate">
                   <h3>수정</h3>
                 </Link>
@@ -148,6 +167,7 @@ function QnaDetail() {
                       </h4>
                     </div>
                     <button
+                      className="check"
                       onClick={() => {
                         handleAccept(AcId);
                       }}
@@ -176,6 +196,7 @@ function QnaDetail() {
                         </button>
                       )}
                       <button
+                        className="delete"
                         onClick={() => {
                           handleDelete(AcId);
                         }}
