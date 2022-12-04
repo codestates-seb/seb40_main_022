@@ -80,7 +80,7 @@ function Pagination({ currentPage, currentPageHandler, list }) {
   };
 
   const pageNextBtn = () => {
-    if (currentPage + 1 <= list.totalPages) {
+    if (currentPage + 1 <= list.pageInfo.totalPages) {
       currentPageHandler(currentPage + 1);
     }
   };
@@ -106,7 +106,6 @@ function Pagination({ currentPage, currentPageHandler, list }) {
                 {v}
               </button>
             ))}
-          {/* <div className="dot">...</div> */}
           <button onClick={pageNextBtn} className="nextbutton">
             <img src={prevIcon} alt="페이지이동" className="next" />
           </button>
