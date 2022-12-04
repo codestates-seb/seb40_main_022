@@ -21,8 +21,8 @@ function Modal() {
   const notification = useSelector(
     state => state.challenge.data.notificationResponses,
   );
-  const handleClick = id => {
-    setAcceptId(id);
+  const handleClick = (url, id) => {
+    setAcceptId(url);
     dispatch(Notificationsallam(id));
   };
   useEffect(() => {
@@ -35,12 +35,11 @@ function Modal() {
         <ModalMain>
           {notification &&
             notification.map(data => {
-              console.log(data);
-              return data.read ? null : (
+              return (
                 <ModalList
                   onClick={() => {
                     setChallenge(true);
-                    handleClick(data.id);
+                    handleClick(data.url, data.id);
                   }}
                   className="challenge"
                 >
