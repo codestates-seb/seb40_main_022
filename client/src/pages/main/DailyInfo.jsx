@@ -20,7 +20,6 @@ export default function DailyInfo({ el, index }) {
 
   const handleFavorite = () => {
     setFav(!fav);
-    console.log(fav);
     if (fav === true) {
       dispatch(asyncLike(el.post.postId));
     } else {
@@ -60,7 +59,7 @@ export default function DailyInfo({ el, index }) {
                   handleFavorite();
                 }}
               >
-                {fav ? (
+                {el.likeSate ? (
                   <img className="heart" src={heartFill} alt="heart" />
                 ) : (
                   <img className="heart" src={heart} alt="heart" />
