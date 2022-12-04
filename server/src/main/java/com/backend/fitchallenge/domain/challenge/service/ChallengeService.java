@@ -195,7 +195,7 @@ public class ChallengeService {
             throw new CannotSuspendChallenge();
         }
 
-        if (LocalDate.now() == challenge.getModifiedAt().toLocalDate()) {
+        if (LocalDate.now().isEqual(challenge.getModifiedAt().toLocalDate()) ) {
 
             Member applicant = memberService.findMemberById(challenge.getApplicantId());
             applicant.suspendChallenge();

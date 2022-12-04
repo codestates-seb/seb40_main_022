@@ -48,7 +48,7 @@ export const ChallengeAccept = createAsyncThunk('accpet', id => {
 });
 
 export const ChallengeDelete = createAsyncThunk('delete', id => {
-  axios.delete(process.env.REACT_APP_API_URL + id, {
+  axios.delete(`${process.env.REACT_APP_API_URL}${id}`, {
     headers: {
       Authorization: localStorage.getItem('Authorization'),
       RefreshToken: localStorage.getItem('RefreshToken'),
@@ -70,14 +70,12 @@ export const EnemyUserInfo = createAsyncThunk('userInfo', () => {
 });
 
 export const Notificationsallam = createAsyncThunk('allam', id => {
-  axios
-    .patch(`${process.env.REACT_APP_API_URL}/notifications/${id}`, id, {
-      headers: {
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
-    })
-    .then(res => console.log(res));
+  axios.patch(`${process.env.REACT_APP_API_URL}/notifications/${id}`, id, {
+    headers: {
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
 });
 
 export const ChallengeSearch = createAsyncThunk('/challenge/search', data => {

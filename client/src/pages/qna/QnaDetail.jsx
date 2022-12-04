@@ -31,7 +31,6 @@ function QnaDetail() {
   const list = useSelector(state => state.qnalist.list);
   const answer = useSelector(state => state.qnalist.detail.answers);
   const [content, setContent] = useState('');
-  const [update, setUpdate] = useState('');
   const Id = useParams();
   const data = list[+Id.id].questionId;
   const dispatch = useDispatch();
@@ -41,9 +40,9 @@ function QnaDetail() {
   const [answerup, setAnswerup] = useState(
     Array(detaillist.answerCount).fill(false),
   );
+  const [update, setUpdate] = useState('');
   const ac = localStorage.getItem('Authorization');
   const navigate = useNavigate();
-
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -78,10 +77,10 @@ function QnaDetail() {
       alert('글 작성자가 아닙니다');
     }
   };
-  const handleAnswerUp = idx => {
+  const handleAnswerUp = (idx, id) => {
+    dispatch(QnaanswerContentUp(id));
     answerup[idx] = !answerup[idx];
     setAnswerup(answerup);
-    dispatch(QnaanswerContentUp());
     setSelect(true);
   };
   const handleAccept = id => {
@@ -176,14 +175,26 @@ function QnaDetail() {
                       {ansdata.accepted ? 'V' : '채택'}
                     </button>
                     <div>
-                      <button
-                        className="update"
-                        onClick={() => {
-                          handleAnswerUp(idx);
-                        }}
-                      >
-                        수정
-                      </button>
+                      {answerup[idx] ? (
+                        <button
+                          onClick={() => {
+                            const Iddata = [AcId[0], AcId[1], update];
+                            handleAnswerUp(idx, Iddata);
+                          }}
+                        >
+                          완료
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            answerup[idx] = !answerup[idx];
+                            setAnswerup(answerup);
+                            setSelect(true);
+                          }}
+                        >
+                          수정
+                        </button>
+                      )}
                       <button
                         className="delete"
                         onClick={() => {

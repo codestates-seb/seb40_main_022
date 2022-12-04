@@ -96,30 +96,29 @@ export const QnaanswerAccept = createAsyncThunk('Accepted', id => {
     });
 });
 
-export const QnaanswerContentUp = createAsyncThunk(
-  'ContentUp',
-  (id, content) => {
-    axios.patch(
+export const QnaanswerContentUp = createAsyncThunk('ContentUp', id => {
+  console.log(id);
+  axios
+    .patch(
       `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}`,
-      content,
+      JSON.stringify({ content: id[2] }),
       {
         headers: {
+          'Content-Type': 'application/json;',
           Authorization: localStorage.getItem('Authorization'),
           RefreshToken: localStorage.getItem('RefreshToken'),
         },
       },
-    );
-  },
-);
+    )
+    .then(res => console.log(res));
+});
 
 export const QnaSearchreload = createAsyncThunk('search', data => {
-  console.log(data);
   return axios
     .get(
       `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=${data[2]}`,
     )
     .then(res => {
-      console.log(res);
       return res.data.data;
     });
 });
