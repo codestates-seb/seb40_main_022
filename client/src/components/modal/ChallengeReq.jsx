@@ -1,7 +1,5 @@
-import {
-  useDispatch,
-  //  useSelector
-} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
 import {
@@ -12,12 +10,18 @@ import {
   Buttons,
 } from './ChallengeStyle';
 import { LankChallenge } from '../../redux/action/LankAsync';
-import mockupProfile from '../../images/mockupProfile.png';
+import { MypageGet } from '../../redux/action/MypageAsync';
 
 export default function ChallengeReq(props) {
   const { open, close, id } = props;
   const dispatch = useDispatch();
-  // const userdb = useSelector(state => state.challenge.userInfo);
+  const userdb = useSelector(state => state.challenge.pageInfo.responses);
+  const vsUserdb = userdb && userdb.filter(el => el.memberId === id);
+  const myData = useSelector(state => state.mypage.member);
+
+  useEffect(() => {
+    dispatch(MypageGet());
+  }, []);
 
   const handleClick = () => {
     dispatch(LankChallenge(id));
@@ -39,18 +43,14 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={
-                        // userdb.applicantImage
-                        mockupProfile
-                      }
+                      src={myData.profileImage}
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">운동인1</span>
+                  <span className="userName">{myData.userName}</span>
                   <span className="userInfo">
-                    <div>신장 178cm</div>
-                    <div>몸무게 87kg</div>
-                    <div>중량 350kg</div>
+                    <div>신장 {myData.height}cm</div>
+                    <div>몸무게 {myData.weight}kg</div>
                   </span>
                 </User>
                 <span className="vsIcon">
@@ -60,18 +60,22 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={
-                        // userdb.applicantImage
-                        mockupProfile
-                      }
+                      src={vsUserdb[0].profileImage}
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">운동인2</span>
+                  <span className="userName">{vsUserdb[0].userName}</span>
                   <span className="userInfo">
-                    <div>신장 183cm</div>
-                    <div>몸무게 91kg</div>
-                    <div>중량 410kg</div>
+                    <div>
+                      신장
+                      {vsUserdb && vsUserdb[0].height ? vsUserdb[0].height : 0}
+                      cm
+                    </div>
+                    <div>
+                      몸무게
+                      {vsUserdb && vsUserdb[0].weight ? vsUserdb[0].weight : 0}
+                      kg
+                    </div>
                   </span>
                 </User>
               </VsInfo>
