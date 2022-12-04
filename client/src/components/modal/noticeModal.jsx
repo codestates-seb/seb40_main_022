@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import userProfile from '../../images/daily.jpg';
+import mockupProfile from '../../images/mockupProfile.png';
 import {
   Notice,
   NoticeSection,
@@ -21,8 +21,8 @@ function Modal() {
   const notification = useSelector(
     state => state.challenge.data.notificationResponses,
   );
-  const handleClick = id => {
-    setAcceptId(id);
+  const handleClick = (url, id) => {
+    setAcceptId(url);
     dispatch(Notificationsallam(id));
   };
   useEffect(() => {
@@ -35,18 +35,17 @@ function Modal() {
         <ModalMain>
           {notification &&
             notification.map(data => {
-              console.log(data);
-              return data.read ? null : (
+              return (
                 <ModalList
                   onClick={() => {
                     setChallenge(true);
-                    handleClick(data.id);
+                    handleClick(data.url, data.id);
                   }}
                   className="challenge"
                 >
                   <img
                     className="userProfile"
-                    src={userProfile}
+                    src={mockupProfile}
                     alt="userProfile"
                   />
                   <div className="content">

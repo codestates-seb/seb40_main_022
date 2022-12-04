@@ -77,7 +77,7 @@ function Mypage() {
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
-              {activity && activity.point ? activity.point : 0}등
+              {activity && activity.point ? Math.round(activity.point) : 0}등
             </div>
             <div className="box">
               <div>Point</div>
