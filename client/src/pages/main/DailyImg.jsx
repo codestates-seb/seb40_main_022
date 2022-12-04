@@ -9,7 +9,7 @@ export default function DailyImg({ el }) {
           {el.pictures &&
             el.pictures.map(ele => {
               return (
-                <Slide key={uuidv4()}>
+                <Slide key={uuidv4}>
                   <img className="dailyImg" src={ele} alt="daily" />
                 </Slide>
               );
