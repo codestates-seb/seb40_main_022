@@ -29,8 +29,8 @@ function ProfileEdit() {
   const [gender, setGender] = useState('male');
   const [age, setAge] = useState('');
   const [select, setSelect] = useState('');
-  const [height, setHeight] = useState(userdata.member.height);
-  const [weight, setWeight] = useState(userdata.member.weight);
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
   const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
   const [prevImage, setPrevImage] = useState('');
@@ -297,7 +297,12 @@ function ProfileEdit() {
                 if (
                   profileImage.length !== 0 &&
                   username.length > 0 &&
-                  PWDTest.test(password)
+                  PWDTest.test(password) &&
+                  age.length > 0 &&
+                  height.length > 0 &&
+                  weight.length > 0 &&
+                  kilogram.length > 0 &&
+                  period.length > 0
                 ) {
                   handleSubmit();
                   navigate('/mypage');
@@ -307,6 +312,11 @@ function ProfileEdit() {
                   alert('이름은 1자 이상 입력해주세요');
                 else if (!PWDTest.test(password))
                   alert('비밀번호는 숫자, 영문 포함 8자 이상이어야 합니다.');
+                else if (age.length < 1) alert('나이를 입력해주세요');
+                else if (height.length < 1) alert('키를 입력해주세요');
+                else if (weight.length < 1) alert('몸무게를 입력해주세요');
+                else if (kilogram.length < 1) alert('3대 중량을 입력해주세요');
+                else if (period.length < 1) alert('운동 경력을 입력해주세요');
               }}
             >
               완료

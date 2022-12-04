@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import vs from '../../images/vs.svg';
 import { Wrapper, ModalSection } from './modalstyle';
@@ -9,12 +10,19 @@ import {
   Buttons,
 } from './ChallengeStyle';
 import { LankChallenge } from '../../redux/action/LankAsync';
-import Profile from '../../images/Profile.png';
+import { MypageGet } from '../../redux/action/MypageAsync';
 
 export default function ChallengeReq(props) {
   const { open, close, id } = props;
   const dispatch = useDispatch();
-  const userdb = useSelector(state => state);
+  const userdb = useSelector(state => state.challenge.pageInfo.responses);
+  const vsUserdb = userdb && userdb.filter(el => el.memberId === id);
+  const myData = useSelector(state => state.mypage.member);
+
+  useEffect(() => {
+    dispatch(MypageGet());
+  }, []);
+
   const handleClick = () => {
     dispatch(LankChallenge(id));
     close();
@@ -35,17 +43,14 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={
-                        userdb.applicantImage ? userdb.applicantImage : Profile
-                      }
+                      src={myData.profileImage}
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">{userdb.applicantName}</span>
+                  <span className="userName">{myData.userName}</span>
                   <span className="userInfo">
-                    <div>신장 {userdb.applicantHeight}cm</div>
-                    <div>몸무게 {userdb.applicantWeight}kg</div>
-                    <div>중량 {userdb.applicantWeight}kg</div>
+                    <div>신장 {myData.height}cm</div>
+                    <div>몸무게 {myData.weight}kg</div>
                   </span>
                 </User>
                 <span className="vsIcon">
@@ -55,17 +60,22 @@ export default function ChallengeReq(props) {
                   <span>
                     <img
                       className="userProfile"
-                      src={
-                        userdb.applicantImage ? userdb.applicantImage : Profile
-                      }
+                      src={vsUserdb[0].profileImage}
                       alt="userProfile"
                     />
                   </span>
-                  <span className="userName">{userdb.applicantName}</span>
+                  <span className="userName">{vsUserdb[0].userName}</span>
                   <span className="userInfo">
-                    <div>신장 {userdb.applicantHeight}cm</div>
-                    <div>몸무게 {userdb.applicantWeight}kg</div>
-                    <div>중량 {userdb.applicantWeight}kg</div>
+                    <div>
+                      신장
+                      {vsUserdb && vsUserdb[0].height ? vsUserdb[0].height : 0}
+                      cm
+                    </div>
+                    <div>
+                      몸무게
+                      {vsUserdb && vsUserdb[0].weight ? vsUserdb[0].weight : 0}
+                      kg
+                    </div>
                   </span>
                 </User>
               </VsInfo>

@@ -147,6 +147,7 @@ export const RecordBox = styled.div`
     box-shadow: var(--box-shadow);
     :hover {
       background-color: #fa8a8a;
+      color: white;
     }
   }
   button {
