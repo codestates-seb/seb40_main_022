@@ -107,8 +107,11 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();  // Cors설정 객체생성(정책 설정)
 
         //여기에 추가설정
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 해당 인터페이스 구현 객체에 넣어준다.
