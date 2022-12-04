@@ -56,9 +56,9 @@ export const ChallengeDelete = createAsyncThunk('delete', id => {
   });
 });
 
-export const EnemyUserInfo = createAsyncThunk('userInfo', () => {
+export const EnemyUserInfo = createAsyncThunk('userInfo', id => {
   return axios
-    .get(`${process.env.REACT_APP_API_URL}/challenge/1`, {
+    .get(`${process.env.REACT_APP_API_URL}${id[0]}`, {
       headers: {
         Authorization: localStorage.getItem('Authorization'),
         RefreshToken: localStorage.getItem('RefreshToken'),

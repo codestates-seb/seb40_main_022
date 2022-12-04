@@ -22,6 +22,7 @@ function Main() {
     if (data1 !== null && data2 !== null) {
       window.localStorage.setItem('Authorization', `Bearer ${data1}`);
       window.localStorage.setItem('RefreshToken', `${data2}`);
+      window.location.reload();
       if (loginboolean === false) {
         dispatch(ReLodingLogin());
         window.location.reload();

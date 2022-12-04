@@ -81,7 +81,7 @@ function Calendar() {
                     onClick={() => {
                       dispatch(ChallengeDelete(challId));
                       setClicked(!Clicked);
-                      // window.location.href = '/record';
+                      window.location.href = '/record';
                     }}
                   >
                     중단
@@ -166,7 +166,7 @@ function Calendar() {
                       {getlist &&
                         getlist.sports.map((data, idx) => {
                           return idx < 3 ? (
-                            <div className="dayover" key={uuidv4}>
+                            <div className="dayover" key={uuidv4()}>
                               <span>{data.bodyPart}</span>
                               <span>{data.name}</span>
                               <span>
