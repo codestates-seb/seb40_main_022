@@ -15,7 +15,7 @@ function LankContent() {
   const lanklist = useSelector(state => state.challenge.member.responses);
   const url = useSelector(state => state.challenge.url);
   const searchList = useSelector(state => state.challenge.items.responses);
-  const list = useSelector(state => state.challenge.pageInfo);
+  const list = useSelector(state => state.challenge.pageInfo.pageInfo);
   const [currentPage, setCurrentPage] = useState(1);
   const SearchPaingdata = [url, currentPage];
   useEffect(() => {
@@ -24,7 +24,8 @@ function LankContent() {
 
   const currentPageHandler = page => {
     setCurrentPage(page);
-    dispatch(ChallengeSearch(url));
+    const searchdata = [url, page];
+    dispatch(ChallengeSearch(searchdata));
   };
 
   return (

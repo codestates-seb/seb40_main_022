@@ -26,6 +26,7 @@ import {
   QnaanswerAccept,
   QnaanswerContentUp,
 } from '../../redux/action/QnaAsync';
+import { MypageGet } from '../../redux/action/MypageAsync';
 
 function QnaDetail() {
   const list = useSelector(state => state.qnalist.list);
@@ -42,6 +43,8 @@ function QnaDetail() {
   );
   const [update, setUpdate] = useState('');
   const ac = localStorage.getItem('Authorization');
+  const userdata = useSelector(state => state.mypage.member.userName);
+  console.log(userdata);
   // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
@@ -90,6 +93,7 @@ function QnaDetail() {
     setSelect(true);
   };
   useEffect(() => {
+    dispatch(MypageGet());
     dispatch(QnaDetailAsync({ data }));
     setSelect(false);
   }, [select]);
@@ -116,28 +120,31 @@ function QnaDetail() {
               </div>
               <button>{detaillist && detaillist.tag}</button>
             </DetailNDB>
-            <DetailButton>
-              <DetailUpdate
-                onClick={() => {
-                  handleUpdateDelete();
-                }}
-              >
-                <Link to={`/qnaupdate/${+Id.id}`} className="qnaupdate">
-                  <h3>수정</h3>
-                </Link>
-              </DetailUpdate>
-              <DetailDelete>
-                <Link
-                  to="/qna"
-                  className="qnadelete"
+            {detaillist && detaillist.questionWriter.username === userdata ? (
+              <DetailButton>
+                <DetailUpdate
                   onClick={() => {
-                    dispatch(QnaDetaillistdelete(data));
+                    handleUpdateDelete();
                   }}
                 >
-                  <h3>삭제</h3>
-                </Link>
-              </DetailDelete>
-            </DetailButton>
+                  <Link to={`/qnaupdate/${+Id.id}`} className="qnaupdate">
+                    <h3>수정</h3>
+                  </Link>
+                </DetailUpdate>
+                <DetailDelete>
+                  <Link
+                    to="/qna"
+                    className="qnadelete"
+                    onClick={() => {
+                      dispatch(QnaDetaillistdelete(data));
+                      window.location.href = '/qna';
+                    }}
+                  >
+                    <h3>삭제</h3>
+                  </Link>
+                </DetailDelete>
+              </DetailButton>
+            ) : null}
           </section>
         </DetailTitle>
         <DetailAnswer>

@@ -69,9 +69,10 @@ const PaginationComponent = styled.div`
 `;
 
 function Pagination({ currentPage, currentPageHandler, list }) {
-  const pagination = Array(list.totalPages)
+  const pagination = Array(list && list.totalPages)
     .fill()
     .map((v, i) => i + 1);
+
   const pagePrevBtn = () => {
     if (currentPage > 1) {
       currentPageHandler(currentPage - 1);

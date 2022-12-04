@@ -42,6 +42,11 @@ function Modal() {
                     handleClick(data.url, data.id);
                   }}
                   className="challenge"
+                  disabled={
+                    data.content.includes('수락') ||
+                    data.content.includes('거절') ||
+                    data.content.includes('중단')
+                  }
                 >
                   <img
                     className="userProfile"
