@@ -73,7 +73,7 @@ export const PostContent = styled.section`
 `;
 export const PostTag = styled.section`
   display: flex;
-  width: 65%;
+  width: 73%;
   height: 100px;
   justify-content: center;
   > div {
