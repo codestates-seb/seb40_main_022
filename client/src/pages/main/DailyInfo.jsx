@@ -20,7 +20,6 @@ export default function DailyInfo({ el, index }) {
 
   const handleFavorite = () => {
     setFav(!fav);
-    console.log(fav);
     if (fav === true) {
       dispatch(asyncLike(el.post.postId));
     } else {
