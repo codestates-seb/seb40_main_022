@@ -20,8 +20,6 @@ export default function DailyCmt({ index }) {
   const lookCmt = cmtList && cmtList[cmtList.length - 1];
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   const navigate = useNavigate();
-
-  dispatch(MypageGet());
   const cmtUserId = useSelector(state => state.mypage.member.userName);
 
   const handleAnswer = e => {
@@ -45,6 +43,8 @@ export default function DailyCmt({ index }) {
   };
 
   useEffect(() => {
+    dispatch(MypageGet());
+
     const getPostCmt = async () => {
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments`,

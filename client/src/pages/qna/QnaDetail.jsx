@@ -121,7 +121,6 @@ function QnaDetail() {
                     <div>
                       <h4>{ansdata.answerWriter.username}</h4>
                       <h4>
-                        {' '}
                         {toStringByFormatting(new Date(ansdata.createdAt))}
                       </h4>
                     </div>
