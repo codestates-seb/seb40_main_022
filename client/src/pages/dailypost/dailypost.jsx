@@ -85,11 +85,7 @@ const dailypost = () => {
       content.length >= 10 &&
       tagList.length !== 0
     ) {
-      dispatch(asyncPostUp({ formData }))
-        .unwrap()
-        .then(() => {
-          window.location.href = '/';
-        });
+      dispatch(asyncPostUp({ formData }));
     } else if (files.length === 0) alert('이미지를 업로드해주세요');
     else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
     else if (tagList.length === 0) alert('태그를 입력해주세요');
