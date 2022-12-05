@@ -56,7 +56,7 @@ export const LoginAsync = createAsyncThunk('login', data => {
         },
       });
       setTimeout(Retoken, 870000);
-      window.location.href = '/dailyposts';
+      window.location.href = '/';
       return auth;
     })
     .catch(err => {
