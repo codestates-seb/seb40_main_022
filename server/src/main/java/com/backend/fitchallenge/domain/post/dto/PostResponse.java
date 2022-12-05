@@ -17,16 +17,16 @@ public class PostResponse {
 
     private List<String>  pictures;
 
-    private Boolean likeSate;
+    private Boolean likeState;
     
 
     @Builder
-    public PostResponse(List<String> tags, SimplePostMemberResponse member, SimplePostResponse post, List<String> pictures, Boolean likeSate) {
+    public PostResponse(List<String> tags, SimplePostMemberResponse member, SimplePostResponse post, List<String> pictures, Boolean likeState) {
         this.tags = tags;
         this.member = member;
         this.post = post;
         this.pictures = pictures;
-        this.likeSate = likeSate;
+        this.likeState = likeState;
     }
 
 }
