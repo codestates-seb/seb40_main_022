@@ -55,15 +55,6 @@ public class QuestionController {
 
         QuestionSearch questionSearch = questionSearchQuery.queryParsing();
 
-        return ResponseEntity.ok(questionService.getQuestionList(pageable, questionSearch));
-    }
-
-    @GetMapping("/questions/search/correct")
-    public ResponseEntity<MultiResponse<?>> correctSearchList(PageRequestTemp pageable,
-                                                              @ModelAttribute QuestionSearchQuery questionSearchQuery) {
-
-        QuestionSearch questionSearch = questionSearchQuery.elasticQueryParsing();
-
         return ResponseEntity.ok(questionService.searchQuestionList(pageable, questionSearch));
     }
 

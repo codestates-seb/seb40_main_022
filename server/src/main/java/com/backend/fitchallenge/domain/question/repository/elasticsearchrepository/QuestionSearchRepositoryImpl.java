@@ -1,7 +1,6 @@
 package com.backend.fitchallenge.domain.question.repository.elasticsearchrepository;
 
 import com.backend.fitchallenge.domain.question.dto.request.PageRequest;
-import com.backend.fitchallenge.domain.question.dto.request.PageRequestTemp;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.question.entity.QuestionDocument;
@@ -39,7 +38,7 @@ public class QuestionSearchRepositoryImpl implements QuestionSearchRepositoryCus
     private final RestHighLevelClient client;
 
     @Override
-    public List<QuestionDocument> getQuestionsOrderByIdOrView(PageRequestTemp pageable, QuestionSearch questionSearch) {
+    public List<QuestionDocument> getQuestionsOrderByIdOrView(PageRequest pageable, QuestionSearch questionSearch) {
 
         //Bool Query 는 쿼리들을 조합하는 데 사용
         BoolQueryBuilder boolQuery = boolQuery();
@@ -71,6 +70,7 @@ public class QuestionSearchRepositoryImpl implements QuestionSearchRepositoryCus
                     .field("content")
                     .field("content.nori")
                     .field("content.ngram")
+                    .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
                     .prefixLength(3)
                     .operator(Operator.AND);
 
@@ -91,7 +91,7 @@ public class QuestionSearchRepositoryImpl implements QuestionSearchRepositoryCus
     }
 
     @Override
-    public List<QuestionDocument> getQuestionsOrderByAccuracy(PageRequestTemp pageable, QuestionSearch questionSearch) {
+    public List<QuestionDocument> getQuestionsOrderByAccuracy(PageRequest pageable, QuestionSearch questionSearch) {
 
         //Bool Query 는 쿼리들을 조합하는 데 사용
         BoolQueryBuilder boolQuery = boolQuery();

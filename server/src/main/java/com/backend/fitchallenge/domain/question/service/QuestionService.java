@@ -71,7 +71,7 @@ public class QuestionService {
 
         //해당 질문 작성자 community point 증가
         Member questionWriter = findQuestion.getMember();
-        questionWriter.getMemberActivity().updatePoint(0.01);
+        questionWriter.getMemberActivity().updatePoint(0.01D);
         memberRepository.save(questionWriter);
 
         List<AnswerResponse> answerResponses = queryAnswerRepository.findAnswersAndCommentsWithWriters(id).stream()
@@ -83,7 +83,6 @@ public class QuestionService {
 
         return DetailQuestionResponse.of(findQuestion, memberResponse, answerResponses);
     }
-
 
     @Transactional(readOnly = true)
     public MultiResponse<?> getQuestionList(PageRequest pageable) {
@@ -103,44 +102,14 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public MultiResponse<?> getQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
+    public MultiResponse<?> searchQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
 
-        Long total = questionRepository.pagingCount(questionSearch);
-
-        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, questionSearch).stream()
-                .map(questionTuple -> SimpleQuestionResponse.of(
-                        Objects.requireNonNull(questionTuple.get(question)),
-                        questionTuple.get(question.answers.size()),
-                        Objects.requireNonNull(questionTuple.get(question)).getQuestionPictures().stream().findFirst()
-                                .orElse(QuestionPicture.createWithEmptyPath()).getPath(),
-                        MemberResponse.of(Objects.requireNonNull(questionTuple.get(question)).getMember()))
-                ).collect(Collectors.toList()), pageable.of(), total);
-
-        return MultiResponse.of(questionResponses);
-    }
-
-
-//    @Transactional(readOnly = true)
-//    public MultiResponse<?> getQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
-//
-//        Long total = questionRepository.pagingCount(questionSearch);
-//
-//        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, questionSearch).stream()
-//                .map(questionTuple -> SimpleQuestionResponse.of(
-//                        Objects.requireNonNull(questionTuple.get(question)),
-//                        questionTuple.get(question.answers.size()),
-//                        Objects.requireNonNull(questionTuple.get(question)).getQuestionPictures().stream().findFirst()
-//                                .orElse(QuestionPicture.createWithEmptyPath()).getPath(),
-//                        MemberResponse.of(Objects.requireNonNull(questionTuple.get(question)).getMember()))
-//                ).collect(Collectors.toList()), pageable.of(), total);
-//
-//        return MultiResponse.of(questionResponses);
-//    }
-
-    @Transactional(readOnly = true)
-    public MultiResponse<?> searchQuestionList(PageRequestTemp pageable, QuestionSearch questionSearch) {
-
-        List<QuestionDocument> documentList = questionSearchRepository.getQuestionsOrderByAccuracy(pageable, questionSearch);
+        List<QuestionDocument> documentList;
+        if (pageable.getSort().equals("accuracy")) {
+            documentList = questionSearchRepository.getQuestionsOrderByAccuracy(pageable, questionSearch);
+        } else {
+            documentList = questionSearchRepository.getQuestionsOrderByIdOrView(pageable, questionSearch);
+        }
 
         Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(documentList.stream()
                 .map(questionDocument -> SimpleQuestionResponse.of(
