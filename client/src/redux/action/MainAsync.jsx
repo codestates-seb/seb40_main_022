@@ -11,7 +11,7 @@ export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
       },
     })
     .then(() => {
-      window.location.reload();
+      window.location.href = '/';
     });
 });
 
