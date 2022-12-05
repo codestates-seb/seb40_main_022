@@ -10,9 +10,7 @@ import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.member.exception.MemberNotExist;
 import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionCreateVO;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
+import com.backend.fitchallenge.domain.question.dto.request.*;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.dto.response.SimpleQuestionResponse;
 import com.backend.fitchallenge.domain.question.entity.Question;
@@ -22,21 +20,11 @@ import com.backend.fitchallenge.domain.question.exception.NotQuestionWriter;
 import com.backend.fitchallenge.domain.question.exception.QuestionNotFound;
 import com.backend.fitchallenge.domain.question.repository.elasticsearchrepository.QuestionSearchRepository;
 import com.backend.fitchallenge.domain.question.repository.jparepository.QuestionRepository;
-import com.backend.fitchallenge.domain.question.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.Operator;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHitSupport;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +35,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.backend.fitchallenge.domain.question.entity.QQuestion.question;
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 @Service
@@ -133,10 +120,27 @@ public class QuestionService {
     }
 
 
-    @Transactional(readOnly = true)
-    public MultiResponse<?> searchQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
+//    @Transactional(readOnly = true)
+//    public MultiResponse<?> getQuestionList(PageRequest pageable, QuestionSearch questionSearch) {
+//
+//        Long total = questionRepository.pagingCount(questionSearch);
+//
+//        Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(questionRepository.findList(pageable, questionSearch).stream()
+//                .map(questionTuple -> SimpleQuestionResponse.of(
+//                        Objects.requireNonNull(questionTuple.get(question)),
+//                        questionTuple.get(question.answers.size()),
+//                        Objects.requireNonNull(questionTuple.get(question)).getQuestionPictures().stream().findFirst()
+//                                .orElse(QuestionPicture.createWithEmptyPath()).getPath(),
+//                        MemberResponse.of(Objects.requireNonNull(questionTuple.get(question)).getMember()))
+//                ).collect(Collectors.toList()), pageable.of(), total);
+//
+//        return MultiResponse.of(questionResponses);
+//    }
 
-        List<QuestionDocument> documentList = questionSearchRepository.searchByQuery(pageable, questionSearch);
+    @Transactional(readOnly = true)
+    public MultiResponse<?> searchQuestionList(PageRequestTemp pageable, QuestionSearch questionSearch) {
+
+        List<QuestionDocument> documentList = questionSearchRepository.getQuestionsOrderByAccuracy(pageable, questionSearch);
 
         Page<SimpleQuestionResponse> questionResponses = new PageImpl<>(documentList.stream()
                 .map(questionDocument -> SimpleQuestionResponse.of(

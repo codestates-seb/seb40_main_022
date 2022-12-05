@@ -1,14 +1,10 @@
 package com.backend.fitchallenge.domain.question.controller;
 
 import com.backend.fitchallenge.domain.post.service.AwsS3Service;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionCreateVO;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionSearchQuery;
-import com.backend.fitchallenge.domain.question.dto.request.QuestionUpdateVO;
+import com.backend.fitchallenge.domain.question.dto.request.*;
 import com.backend.fitchallenge.domain.question.dto.response.DetailQuestionResponse;
 import com.backend.fitchallenge.domain.question.service.QuestionService;
 import com.backend.fitchallenge.global.annotation.AuthMember;
-import com.backend.fitchallenge.domain.question.dto.request.PageRequest;
 import com.backend.fitchallenge.global.dto.response.MultiResponse;
 import com.backend.fitchallenge.global.security.userdetails.MemberDetails;
 import lombok.RequiredArgsConstructor;
@@ -62,8 +58,8 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.getQuestionList(pageable, questionSearch));
     }
 
-    @GetMapping("/questions/correctSearch")
-    public ResponseEntity<MultiResponse<?>> correctSearchList(PageRequest pageable,
+    @GetMapping("/questions/search/correct")
+    public ResponseEntity<MultiResponse<?>> correctSearchList(PageRequestTemp pageable,
                                                               @ModelAttribute QuestionSearchQuery questionSearchQuery) {
 
         QuestionSearch questionSearch = questionSearchQuery.elasticQueryParsing();
