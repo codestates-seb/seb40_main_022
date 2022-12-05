@@ -31,15 +31,15 @@ function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        <Route path="/dailyPosts" element={<Main />} />
-        <Route path="/dailyPosts/:id" element={<MainEdit />} />
-        <Route path="/questions/postUp" element={<QnaAsk />} />
+        <Route path="/dailyposts" element={<Main />} />
+        <Route path="/dailyposts/:id" element={<MainEdit />} />
+        <Route path="/questions/postup" element={<QnaAsk />} />
         <Route path="/members/login" element={<Login />} />
         <Route path="/members/signup" element={<SignUp />} />
-        <Route path="/members/myPage" element={<Mypage />} />
+        <Route path="/members/mypage" element={<Mypage />} />
         <Route path="/members/:id" element={<UserProfile />} />
-        <Route path="/members/myPage/edit" element={<ProfileEdit />} />
-        <Route path="/dailyPosts/postUp" element={<Dailypost />} />
+        <Route path="/members/mypage/edit" element={<ProfileEdit />} />
+        <Route path="/dailyposts/postup" element={<Dailypost />} />
         <Route path="/challenge" element={<Lank />} />
         <Route path="/questions" element={<QnaList />} />
         <Route path="/records" element={<Calendar />} />

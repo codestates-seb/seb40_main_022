@@ -31,6 +31,15 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    public Long rankCount(Double point){
+        return jpaQueryFactory
+                .select(member.count())
+                .from(member)
+                .where(memberActivity.point.gt(point))
+                .fetchOne();
+
+
+    }
     public List<Post> findList(Long lastPostId, Long memberId , Pageable pageable){
 
         return jpaQueryFactory
@@ -80,10 +89,16 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
+
     public Member findOpponent(Long memberId) {
+        //주석처리한 로직들은 '달력에 표시하기 위해 지난 챌린지에 대해서도 기록을 남겨놓는다면' 사용할 것들입니다.
+//        LocalDate recordDate = LocalDate.of(record.getYear(), record.getMonth(), record.getDay());
+
         return jpaQueryFactory.selectFrom(member)
                 .leftJoin(member.challenge, challenge).fetchJoin()
                 .where(challengeMemberIdEq(memberId)
+//                        , challengeStartLoe(recordDate)
+//                        , challengeEndGoe(recordDate)
                 )
                 .fetchOne();
     }

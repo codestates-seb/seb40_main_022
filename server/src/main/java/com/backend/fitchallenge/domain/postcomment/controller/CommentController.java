@@ -45,7 +45,7 @@ public class CommentController {
     @GetMapping("/comments")
     private ResponseEntity<?> getList(@PathVariable("id") Long id,
            @ModelAttribute CommentGet commentGet,
-           @PageableDefault(size = 10)  Pageable pageable) {
+           @PageableDefault(size = 5)  Pageable pageable) {
 
         return new ResponseEntity<>(commentService.getCommentList(id, commentGet.getLastCommentId(),  pageable), HttpStatus.OK);
     }

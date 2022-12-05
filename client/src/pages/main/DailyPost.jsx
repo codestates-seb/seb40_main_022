@@ -13,12 +13,6 @@ export default function DailyPost() {
   const [postList, setPostList] = useState([]);
   const lastPost = postList && postList[postList.length - 1];
   const [isLoaded, setIsLoaded] = useState(false);
-  // const [bol, setBol] = useState(true);
-
-  // const handleansbol = () => {
-  //   console.log(filteredCmt);
-  //   setBol(false);
-  // };
 
   const navigate = useNavigate();
 
@@ -26,7 +20,7 @@ export default function DailyPost() {
     if (!localStorage.getItem('Authorization')) {
       alert('로그인 후 이용할 수 있습니다.');
     } else {
-      navigate('/dailypost');
+      navigate('/dailyposts/postup');
     }
   };
 
@@ -48,7 +42,7 @@ export default function DailyPost() {
       lastPost && lastPost[lastPost.length - 1] !== undefined
         ? lastPost[lastPost.length - 1].post.postId
         : null;
-    if (lastPost && lastPostId > 1 && lastPost.length >= 3 && inView) {
+    if (lastPost && lastPostId > 1 && lastPost.length >= 4 && inView) {
       setIsLoaded(true);
       setTimeout(() => {
         axios

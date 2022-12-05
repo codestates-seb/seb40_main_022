@@ -51,7 +51,7 @@ public class RecordController {
     @PostMapping("/records/{record-id}")
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("record-id") Long recordId,
-                                       RecordUpdateVO recordUpdateVO) {
+                                       @RequestBody RecordUpdateVO recordUpdateVO) {
 
         return ResponseEntity.ok(recordService.updateRecord(memberDetails.getMemberId(), recordId, recordUpdateVO));
     }
