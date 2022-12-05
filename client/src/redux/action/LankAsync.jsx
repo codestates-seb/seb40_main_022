@@ -90,6 +90,7 @@ export const ChallengeSearch = createAsyncThunk('/challenge/search', data => {
       },
     )
     .then(res => {
+      console.log(res);
       return res.data;
     });
 });
