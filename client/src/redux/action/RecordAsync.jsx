@@ -12,8 +12,37 @@ export const RecordTagAsync = createAsyncThunk('/recordtag', tag => {
 
 export const RecordUpAsync = createAsyncThunk('/recordup', data => {
   try {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/records`,
+        JSON.stringify({
+          start: data[0],
+          startTime: data[1],
+          endTime: data[2],
+          startImagePath: data[3],
+          endImagePath: data[4],
+          sports: data[5],
+        }),
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json;',
+            Authorization: localStorage.getItem('Authorization'),
+            RefreshToken: localStorage.getItem('RefreshToken'),
+          },
+        },
+      )
+      .then(res => console.log(res));
+  } catch (err) {
+    if (err.response.status === 400) {
+      alert('입력값이 잘못되었습니다!');
+    }
+  }
+});
+export const RecordReUpAsync = createAsyncThunk('/recordup', data => {
+  try {
     axios.post(
-      `${process.env.REACT_APP_API_URL}/records`,
+      `${process.env.REACT_APP_API_URL}/records/${data[6]}`,
       JSON.stringify({
         start: data[0],
         startTime: data[1],
@@ -24,6 +53,7 @@ export const RecordUpAsync = createAsyncThunk('/recordup', data => {
       }),
       {
         headers: {
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json;',
           Authorization: localStorage.getItem('Authorization'),
           RefreshToken: localStorage.getItem('RefreshToken'),
@@ -36,7 +66,6 @@ export const RecordUpAsync = createAsyncThunk('/recordup', data => {
     }
   }
 });
-
 export const RecordListAsync = createAsyncThunk('/recordList', month => {
   return axios
     .get(`${process.env.REACT_APP_API_URL}/records?month=${month}`, {
@@ -71,7 +100,6 @@ export const RecordImgReUp = createAsyncThunk('Imgup', formdata => {
       },
     )
     .then(res => {
-      console.log(res);
       return res.data;
     });
 });

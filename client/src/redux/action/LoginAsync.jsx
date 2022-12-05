@@ -42,7 +42,6 @@ export const LoginAsync = createAsyncThunk('login', data => {
           'Access-Control-Allow-Origin': '*',
           'content-type': 'application/application.json',
         },
-        // withCredentials: false,
       },
     )
     .then(res => {
@@ -57,7 +56,7 @@ export const LoginAsync = createAsyncThunk('login', data => {
         },
       });
       setTimeout(Retoken, 870000);
-      window.location.href = '/';
+      window.location.href = '/dailyposts';
       return auth;
     })
     .catch(err => {

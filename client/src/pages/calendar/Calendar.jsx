@@ -81,7 +81,7 @@ function Calendar() {
                     onClick={() => {
                       dispatch(ChallengeDelete(challId));
                       setClicked(!Clicked);
-                      window.location.href = '/record';
+                      window.location.href = '/records';
                     }}
                   >
                     중단
@@ -106,12 +106,14 @@ function Calendar() {
           </div>
           <article className="userbox">
             <div className="deletebtn">
-              <button
-                onClick={() => navigate('/detail')}
-                className="healthaddbutton"
-              >
-                운동 기록
-              </button>
+              {getlist ? null : (
+                <button
+                  onClick={() => navigate('/records/postup')}
+                  className="healthaddbutton"
+                >
+                  운동 기록
+                </button>
+              )}
               {challId !== null ? (
                 <button
                   onClick={() => {
@@ -146,7 +148,7 @@ function Calendar() {
                     <button
                       className="userdata1"
                       onClick={() => {
-                        navigate(`/detail/${memberId}`);
+                        navigate(`/records/${memberId}/edit`);
                       }}
                     >
                       <div className="oneday">

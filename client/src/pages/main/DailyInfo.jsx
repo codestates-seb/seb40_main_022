@@ -19,12 +19,12 @@ export default function DailyInfo({ el, index }) {
   const [isComment, setIsComment] = useState(false);
 
   const handleFavorite = () => {
-    setFav(!fav);
-    console.log(fav);
     if (fav === true) {
-      dispatch(asyncLike(el.post.postId));
-    } else {
+      setFav(!fav);
       dispatch(asyncLikeundo(el.post.postId));
+    } else {
+      setFav(!fav);
+      dispatch(asyncLike(el.post.postId));
     }
   };
 
@@ -60,7 +60,7 @@ export default function DailyInfo({ el, index }) {
                   handleFavorite();
                 }}
               >
-                {fav ? (
+                {el.likeSate ? (
                   <img className="heart" src={heartFill} alt="heart" />
                 ) : (
                   <img className="heart" src={heart} alt="heart" />
