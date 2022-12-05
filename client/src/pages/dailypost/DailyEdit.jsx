@@ -183,7 +183,7 @@ function DailyEdit() {
             <button
               className="canclebutton"
               onClick={() => {
-                navigate('/dailyposts');
+                navigate('/');
               }}
             >
               취소

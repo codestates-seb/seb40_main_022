@@ -49,7 +49,7 @@ function Header() {
   return (
     <Head>
       <div className="mainHead">
-        <Link to="/dailyposts" className="logo">
+        <Link to="/" className="logo">
           <img src={Logo} alt="logo" />
           <img className="logoname" src={LogoText} alt="logo" />
         </Link>
