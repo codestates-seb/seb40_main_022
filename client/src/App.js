@@ -31,8 +31,8 @@ function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        <Route path="/dailyPosts" element={<Main />} />
-        <Route path="/dailyPosts/:id" element={<MainEdit />} />
+        <Route path="/dailyposts" element={<Main />} />
+        <Route path="/dailyposts/:id" element={<MainEdit />} />
         <Route path="/questions/postup" element={<QnaAsk />} />
         <Route path="/members/login" element={<Login />} />
         <Route path="/members/signup" element={<SignUp />} />

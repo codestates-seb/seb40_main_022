@@ -52,7 +52,7 @@ public class PostController {
     public ResponseEntity<MultiResponse<?>> getList(
             @ModelAttribute PostGet postGet,
             @AuthMember MemberDetails memberDetails,
-            @PageableDefault(size = 3) Pageable pageable) {
+            @PageableDefault(size = 4) Pageable pageable) {
 
         log.info("lastPostId = {}", postGet.getLastPostId());
 
@@ -70,7 +70,7 @@ public class PostController {
      * @param postSearch tag + lastPostId(마지막게시물 포스트 Id)
      */
     @GetMapping("/search")
-    public ResponseEntity<MultiResponse<?>> getSearchList(@PageableDefault(size = 3) Pageable pageable,
+    public ResponseEntity<MultiResponse<?>> getSearchList(@PageableDefault(size = 4) Pageable pageable,
                                                           @ModelAttribute PostSearch postSearch,
                                                           @AuthMember MemberDetails memberDetails) {
 
