@@ -10,19 +10,22 @@ public class ExtractActivity{
     private Integer kilogram;
     private Integer dayCount;
     private Double point;
+    private Long rank;
 
     @Builder
-    private ExtractActivity(Integer kilogram, Integer dayCount, Double point) {
+    private ExtractActivity(Integer kilogram, Integer dayCount, Double point, Long rank) {
         this.kilogram = kilogram;
         this.dayCount = dayCount;
         this.point = point;
+        this.rank = rank;
     }
 
-    public static ExtractActivity of(MemberActivity memberActivity){
+    public static ExtractActivity of(MemberActivity memberActivity, Long rank){
         return ExtractActivity.builder()
                 .kilogram(memberActivity.getKilogram() == null ? '0' : memberActivity.getKilogram())
                 .dayCount(memberActivity.getDayCount())
                 .point(memberActivity.getPoint())
+                .rank(rank)
                 .build();
     }
 }
