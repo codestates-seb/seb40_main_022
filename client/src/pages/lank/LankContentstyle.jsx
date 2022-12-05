@@ -21,7 +21,7 @@ export const Lankcontents = styled.section`
     font-size: 24px;
   }
   .cont-picture {
-    width: 80px;
+    max-width: 80px;
     height: 80px;
     border-radius: 40px;
     background-image: url(${UserProfile});
@@ -59,6 +59,12 @@ export const Lankcontents = styled.section`
     cursor: text;
     font-size: var(--font-18);
     box-shadow: var(--box-shadow);
+  }
+  .cont-height {
+    border: 1px solid red;
+  }
+  .cont-weight {
+    border: 1px solid blue;
   }
   > h4 {
     line-height: 70px;

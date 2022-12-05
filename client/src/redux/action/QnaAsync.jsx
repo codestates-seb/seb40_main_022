@@ -103,7 +103,6 @@ export const QnaanswerAccept = createAsyncThunk('Accepted', id => {
 });
 
 export const QnaanswerContentUp = createAsyncThunk('ContentUp', id => {
-  console.log(id);
   axios
     .patch(
       `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}`,
@@ -116,7 +115,7 @@ export const QnaanswerContentUp = createAsyncThunk('ContentUp', id => {
         },
       },
     )
-    .then(res => console.log(res));
+    .then(res => res);
 });
 
 export const QnaSearchreload = createAsyncThunk('search', data => {
