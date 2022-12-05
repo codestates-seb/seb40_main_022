@@ -35,7 +35,7 @@ function Mypage() {
               className="yes"
               onClick={() => {
                 dispatch(MyIdDelete());
-                navigate('/dailyposts');
+                navigate('/');
               }}
             >
               예

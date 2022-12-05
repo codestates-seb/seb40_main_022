@@ -18,7 +18,7 @@ function Sidebar() {
             Mypage
           </Link>
           <Link
-            to="/dailyposts"
+            to="/"
             className="sidemenu"
             onClick={() => {
               dispatch(LogoutAsync(data));
