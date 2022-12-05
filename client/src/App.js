@@ -31,22 +31,22 @@ function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/dailypost/edit/:id" element={<MainEdit />} />
-        <Route path="/qnaask" element={<QnaAsk />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/mypage" element={<Mypage />} />
+        <Route path="/dailyposts" element={<Main />} />
+        <Route path="/dailyposts/:id" element={<MainEdit />} />
+        <Route path="/questions/postup" element={<QnaAsk />} />
+        <Route path="/members/login" element={<Login />} />
+        <Route path="/members/signup" element={<SignUp />} />
+        <Route path="/members/mypage" element={<Mypage />} />
         <Route path="/members/:id" element={<UserProfile />} />
-        <Route path="/mypage/edit" element={<ProfileEdit />} />
-        <Route path="/dailypost" element={<Dailypost />} />
-        <Route path="/lank" element={<Lank />} />
-        <Route path="/qna" element={<QnaList />} />
-        <Route path="/record" element={<Calendar />} />
-        <Route path="/detail" element={<Detail />} />
-        <Route path="/detail/:id" element={<Update />} />
-        <Route path="/qnadetail/:id" element={<QnaDetail />} />
-        <Route path="/qnaupdate/:id" element={<QnaUpdate />} />
+        <Route path="/members/mypage/edit" element={<ProfileEdit />} />
+        <Route path="/dailyposts/postup" element={<Dailypost />} />
+        <Route path="/challenge" element={<Lank />} />
+        <Route path="/questions" element={<QnaList />} />
+        <Route path="/records" element={<Calendar />} />
+        <Route path="/records/postup" element={<Detail />} />
+        <Route path="/records/:id/edit" element={<Update />} />
+        <Route path="/questions/:id" element={<QnaDetail />} />
+        <Route path="/questions/:id/edit" element={<QnaUpdate />} />
       </Routes>
     </Suspense>
   );
