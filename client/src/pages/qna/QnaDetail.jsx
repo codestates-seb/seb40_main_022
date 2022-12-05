@@ -135,17 +135,17 @@ function QnaDetail() {
                     handleUpdateDelete();
                   }}
                 >
-                  <Link to={`/qnaupdate/${+Id.id}`} className="qnaupdate">
+                  <Link to={`/questions/${+Id.id}/edit`} className="qnaupdate">
                     <h3>수정</h3>
                   </Link>
                 </DetailUpdate>
                 <DetailDelete>
                   <Link
-                    to="/qna"
+                    to="/questions"
                     className="qnadelete"
                     onClick={() => {
                       dispatch(QnaDetaillistdelete(data));
-                      window.location.href = '/qna';
+                      window.location.href = '/questions';
                     }}
                   >
                     <h3>삭제</h3>

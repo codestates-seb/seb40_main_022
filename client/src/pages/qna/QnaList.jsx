@@ -73,7 +73,7 @@ function QnaList() {
           <h1>QnA</h1>
           <button
             onClick={() => {
-              navigate('/qnaask');
+              navigate('/questions/postUp');
             }}
           >
             질문
@@ -119,7 +119,7 @@ function QnaList() {
                     <div className="qnabox" key={uuidv4()}>
                       <article>
                         <div>
-                          <Link to={`/qnadetail/${idx}`} className="titlename">
+                          <Link to={`/questions/${idx}`} className="titlename">
                             {data.title}
                           </Link>
                           <h3>{data.summary}</h3>
@@ -142,7 +142,7 @@ function QnaList() {
                     <div className="qnabox" key={uuidv4()}>
                       <article>
                         <div>
-                          <Link to={`/qnadetail/${idx}`} className="titlename">
+                          <Link to={`/questions/${idx}`} className="titlename">
                             {data.title}
                           </Link>
                           <h3>{data.summary}</h3>
