@@ -14,11 +14,11 @@ function Sidebar() {
     <SideDiv>
       {IsLogin ? (
         <>
-          <Link to="/mypage" className="sidemenu">
+          <Link to="/members/mypage" className="sidemenu">
             Mypage
           </Link>
           <Link
-            to="/"
+            to="/dailyposts"
             className="sidemenu"
             onClick={() => {
               dispatch(LogoutAsync(data));
@@ -29,10 +29,10 @@ function Sidebar() {
         </>
       ) : (
         <>
-          <Link to="/login" className="sidemenu">
+          <Link to="/members/login" className="sidemenu">
             Login
           </Link>
-          <Link to="/signup" className="sidemenu">
+          <Link to="/members/signup" className="sidemenu">
             SignUp
           </Link>
         </>

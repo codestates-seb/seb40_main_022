@@ -5,26 +5,35 @@ import uuidv4 from 'react-uuid';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import comment from '../../images/comment.svg';
-import {
-  asyncLike,
-  asyncLikeundo,
-  // asyncPostCmtEdit,
-} from '../../redux/action/MainAsync';
+import { asyncLike, asyncLikeundo } from '../../redux/action/MainAsync';
 import DailyCmt from './DailyCmt';
 
 export default function DailyInfo({ el, index }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [fav, setFav] = useState(el.likeSate);
+  const [like, setLike] = useState(false);
+  const [likeAction, setLikeAction] = useState('');
   const [isComment, setIsComment] = useState(false);
 
+  console.log(el);
+
   const handleFavorite = () => {
-    setFav(!fav);
-    console.log(fav);
-    if (fav === true) {
+    // setFav(!fav);
+    // if (fav) {
+    //   setFavAction(true);
+    //   dispatch(asyncLike(el.post.postId));
+    // } else {
+    //   setFavAction(false);
+    //   dispatch(asyncLikeundo(el.post.postId));
+    // }
+    if (likeAction === '') {
       dispatch(asyncLike(el.post.postId));
+      setLike(true);
+      setLikeAction('Liked');
     } else {
       dispatch(asyncLikeundo(el.post.postId));
+      setLike(false);
+      setLikeAction('');
     }
   };
 
@@ -57,13 +66,14 @@ export default function DailyInfo({ el, index }) {
             <span className="favorite">
               <button
                 onClick={() => {
+                  setLike(!like);
                   handleFavorite();
                 }}
               >
-                {fav ? (
-                  <img className="heart" src={heartFill} alt="heart" />
-                ) : (
+                {likeAction === '' ? (
                   <img className="heart" src={heart} alt="heart" />
+                ) : (
+                  <img className="heart" src={heartFill} alt="heart" />
                 )}
                 <span>{el.post.likeCount ? el.post.likeCount : 0}</span>
               </button>

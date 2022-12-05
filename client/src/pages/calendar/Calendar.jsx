@@ -107,7 +107,7 @@ function Calendar() {
           <article className="userbox">
             <div className="deletebtn">
               <button
-                onClick={() => navigate('/detail')}
+                onClick={() => navigate('/records/postup')}
                 className="healthaddbutton"
               >
                 운동 기록
@@ -146,7 +146,7 @@ function Calendar() {
                     <button
                       className="userdata1"
                       onClick={() => {
-                        navigate(`/detail/${memberId}`);
+                        navigate(`/records/${memberId}/edit`);
                       }}
                     >
                       <div className="oneday">

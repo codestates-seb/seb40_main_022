@@ -86,7 +86,7 @@ const dailypost = () => {
       tagList.length !== 0
     ) {
       dispatch(asyncPostUp({ formData }));
-      navigate('/');
+      navigate('/dailyposts');
     } else if (files.length === 0) alert('이미지를 업로드해주세요');
     else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
     else if (tagList.length === 0) alert('태그를 입력해주세요');
@@ -191,7 +191,7 @@ const dailypost = () => {
             <button
               className="canclebutton"
               onClick={() => {
-                navigate('/');
+                navigate('/dailyposts');
               }}
             >
               취소
