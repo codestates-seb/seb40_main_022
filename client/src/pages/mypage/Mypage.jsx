@@ -23,7 +23,6 @@ function Mypage() {
   useEffect(() => {
     dispatch(MypageGet());
   }, []);
-  console.log(data);
 
   return (
     <Wrapper>

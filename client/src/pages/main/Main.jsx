@@ -28,7 +28,7 @@ function Main() {
         dispatch(ReLodingLogin())
           .unwrap()
           .then(() => {
-            return navigate('/');
+            return navigate('/dailyposts');
           });
       }
     }

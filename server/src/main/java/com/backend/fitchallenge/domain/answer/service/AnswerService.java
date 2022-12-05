@@ -71,8 +71,9 @@ public class AnswerService {
 
         if (member.getId().equals(question.getMember().getId())) {
             answer.accept();
-            if (!answer.getMember().getId().equals(member.getId())) {
-                // 채택자의 Community Point가 증가
+            Member answerWriter = answer.getMember();
+            if (!answerWriter.getId().equals(member.getId())) {
+                answerWriter.getMemberActivity().updatePoint(1.0D);
             }
         } else {
             throw new NotQuestionWriter();

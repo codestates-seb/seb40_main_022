@@ -77,6 +77,7 @@ public class MemberService {
     public DetailsMemberResponse getMyInfo(Long lastPostId, String loginEmail, Pageable pageable){
 
         Member findMember = findMember(loginEmail);
+        Long rank = memberRepository.rankCount(findMember.getMemberActivity().getPoint()) + 1L;
 
         List<Post> pages = memberRepository.findList(lastPostId, findMember.getId(), pageable);
         List<DailyPost> dailyPosts = pages.stream()
@@ -89,13 +90,14 @@ public class MemberService {
         List<Post> posts = postRepository.findByMemberId(findMember.getId());
         Integer postCounts = posts.size();
 
-        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), sliceResult, postCounts);
+        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity(),rank), sliceResult, postCounts);
     }
 
     @Transactional(readOnly = true)
     public DetailsMemberResponse getMember(Long lastPostId, Long memberId, Pageable pageable){
 
         Member findMember = findMemberById(memberId);
+        Long rank = memberRepository.rankCount(findMember.getMemberActivity().getPoint()) + 1L;
 
         List<Post> pages = memberRepository.findList(lastPostId, findMember.getId(), pageable);
         List<DailyPost> dailyPosts = pages.stream()
@@ -108,7 +110,7 @@ public class MemberService {
         List<Post> posts = postRepository.findByMemberId(memberId);
         Integer postCounts = posts.size();
 
-        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity()), sliceResult, postCounts);
+        return DetailsMemberResponse.of(ExtractMember.of(findMember), ExtractActivity.of(findMember.getMemberActivity(), rank), sliceResult, postCounts);
     }
 
     public Long deleteMember(String accessToken, String loginEmail){
