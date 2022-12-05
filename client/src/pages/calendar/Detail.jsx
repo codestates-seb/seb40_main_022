@@ -93,7 +93,7 @@ function Detail() {
     dispatch(RecordUpAsync(data))
       .unwrap()
       .then(() => {
-        window.location.href = '/record';
+        window.location.href = '/records';
       });
   };
   useEffect(() => {
@@ -309,7 +309,7 @@ function Detail() {
           <button
             className="cancle"
             onClick={() => {
-              navigate('/record');
+              navigate('/records');
             }}
           >
             나가기

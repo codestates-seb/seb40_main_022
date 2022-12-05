@@ -10,7 +10,7 @@ import rcddecordminus from '../../images/rcddecordminus.png';
 import DetailCamera from '../../images/DetailCamera.png';
 import {
   RecordTagAsync,
-  RecordUpAsync,
+  RecordReUpAsync,
   RecordImgReUp,
   RecordListDelete,
 } from '../../redux/action/RecordAsync';
@@ -31,8 +31,8 @@ function Update() {
   const [split, setSplit] = useState([]);
   const [time, setTime] = useState(member.startTime);
   const [end, setEnd] = useState(member.endTime);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [startTime, setStartTime] = useState(member.startPicture);
+  const [endTime, setEndTime] = useState(member.endPicture);
   const today = new Date().toISOString().slice(0, 10);
   const [clicked, setClicked] = useState(false);
   const [addUpdate, setAddUpdate] = useState([]);
@@ -75,7 +75,7 @@ function Update() {
   };
   const handledelete = () => {
     dispatch(RecordListDelete(recordId));
-    navigate('/record');
+    navigate('/records');
   };
   const deleteFile = name => {
     if (name === 'start') {
@@ -97,12 +97,26 @@ function Update() {
     }
   };
   const handleUp = () => {
-    const data = [today, time, end, startTime.name, endTime.name, split];
-    dispatch(RecordUpAsync(data));
+    const data = [today, time, end, startTime, endTime, split, recordId];
+    dispatch(RecordReUpAsync(data));
   };
+
   useEffect(() => {
     dispatch(RecordTagAsync(tags));
-  }, []);
+    ListupGet.map((data, idx) => {
+      return setSplit([
+        ...split,
+        {
+          sign: idx,
+          id: data.sportsId,
+          set: data.set,
+          count: data.count,
+          weight: data.weight,
+        },
+      ]);
+    });
+  }, [ListupGet]);
+
   return (
     <DetailBox>
       <Header />
@@ -269,15 +283,6 @@ function Update() {
           </button>
         </section>
         <section className="setInfo">
-          {ListupGet &&
-            ListupGet.map(data => {
-              return split.push({
-                id: data.sportsId,
-                set: data.set,
-                count: data.count,
-                weight: data.weight,
-              });
-            })}
           {split &&
             split.map((data, index) => {
               if (split.length !== addUpdate.length) {
@@ -324,7 +329,7 @@ function Update() {
           <button
             className="cancle"
             onClick={() => {
-              navigate('/record');
+              navigate('/records');
             }}
           >
             나가기

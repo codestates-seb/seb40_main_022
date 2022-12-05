@@ -73,7 +73,7 @@ function QnaList() {
           <h1>QnA</h1>
           <button
             onClick={() => {
-              navigate('/questions/postUp');
+              navigate('/questions/postup');
             }}
           >
             질문

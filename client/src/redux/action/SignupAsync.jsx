@@ -17,7 +17,7 @@ const SignupAsync = createAsyncThunk(
       .then(res => {
         if (res.status === 201) {
           alert('회원가입을 축하드립니다.');
-          window.location.href = '/login';
+          window.location.href = '/members/login';
         }
       })
       .catch(err => {
