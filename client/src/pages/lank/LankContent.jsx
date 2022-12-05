@@ -56,7 +56,7 @@ function LankContent() {
                 <h4 className="cont">{data.userName}</h4>
                 <h4 className="cont">신장 : {data.height}</h4>
                 <h4 className="cont">몸무게 : {data.weight}</h4>
-                <h4 className="cont">경력 : {data.period}</h4>
+                <h4 className="cont">경력 : {data.period}개월</h4>
                 <h4 className="cont">포인트 : {Math.round(data.point)}</h4>
                 {data.challengeStatus ? (
                   <button
