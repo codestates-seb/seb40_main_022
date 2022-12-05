@@ -26,7 +26,7 @@ function LankDropdown() {
   const handledivi = e => {
     setDivi(e.target.innerHTML);
     if (e.target.innerHTML !== '') {
-      setDiviurl(`splitEq=${e.target.innerHTML.slice(0, 1)}`);
+      setDiviurl(`split=${e.target.innerHTML.slice(0, 1)}`);
     }
   };
   const handleheight = e => {
@@ -63,7 +63,10 @@ function LankDropdown() {
         );
       } else {
         setWeighturl(
-          `weightGoe=${weight.slice(0, 2)}&weightLt=${weight.slice(7, 9)}`,
+          `weightGoe=${e.target.innerHTML.slice(
+            0,
+            2,
+          )}&weightLt=${e.target.innerHTML.slice(7, 9)}`,
         );
       }
     }
@@ -73,25 +76,25 @@ function LankDropdown() {
     setCareer(e.target.innerHTML);
     if (e.target.innerHTML !== '') {
       if (e.target.innerHTML === '10년 이상') {
-        setCareerurl(`careerGoe=10`);
+        setCareerurl(`periodGoe=10`);
       } else if (e.target.innerHTML === '1년 미만') {
-        setCareerurl(`careerLt=1`);
+        setCareerurl(`periodLt=1`);
       } else if (e.target.innerHTML.length === 8) {
         setCareerurl(
-          `careerGoe=${e.target.innerHTML.slice(
+          `periodGoe=${e.target.innerHTML.slice(
             0,
             1,
-          )}&careerLt=${e.target.innerHTML.slice(5, 7)}`,
+          )}&periodLt=${e.target.innerHTML.slice(5, 7)}`,
         );
       } else if (e.target.innerHTML.length === 7) {
         setCareerurl(
-          `careerGoe=${e.target.innerHTML.slice(
+          `periodGoe=${e.target.innerHTML.slice(
             0,
             1,
-          )}&careerLt=${e.target.innerHTML.slice(5, 6)}`,
+          )}&periodLt=${e.target.innerHTML.slice(5, 6)}`,
         );
       } else {
-        setCareerurl(`careerGoe=${e.target.innerHTML.slice(0, 1)}`);
+        setCareerurl(`periodGoe=${e.target.innerHTML.slice(0, 1)}`);
       }
     }
   };
