@@ -23,7 +23,6 @@ function Mypage() {
   useEffect(() => {
     dispatch(MypageGet());
   }, []);
-
   return (
     <Wrapper>
       <Header />
