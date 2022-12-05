@@ -33,7 +33,7 @@ function ProfileEdit() {
   const [weight, setWeight] = useState('');
   const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
-  const [prevImage, setPrevImage] = useState('');
+  const [prevImage, setPrevImage] = useState(userdata.member.profileImage);
   const [profileImage, setProfileImage] = useState(
     userdata.member.profileImage,
   );
@@ -89,7 +89,7 @@ function ProfileEdit() {
     dispatch(MypagePost(formData))
       .unwrap()
       .then(() => {
-        navigate('/mypage');
+        navigate('/members/mypage');
         window.location.reload();
       });
   };
@@ -305,7 +305,7 @@ function ProfileEdit() {
                   period.length > 0
                 ) {
                   handleSubmit();
-                  navigate('/mypage');
+                  navigate('/members/mypage');
                 } else if (profileImage.length === 0)
                   alert('이미지를 업로드해주세요');
                 else if (username.length < 1)
@@ -321,7 +321,7 @@ function ProfileEdit() {
             >
               완료
             </button>
-            <button onClick={() => navigate('/mypage')}>취소</button>
+            <button onClick={() => navigate('/members/mypage')}>취소</button>
           </BtnBox>
         </ProfileBox>
       </div>

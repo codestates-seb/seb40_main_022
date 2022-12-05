@@ -35,7 +35,7 @@ function Mypage() {
               className="yes"
               onClick={() => {
                 dispatch(MyIdDelete());
-                navigate('/dailyPosts');
+                navigate('/dailyposts');
               }}
             >
               예
@@ -57,7 +57,7 @@ function Mypage() {
         </ProfileBox>
         <NameBox>
           <div className="username">
-            {member && member.userName ? member.userName : 0}
+            {member && member.userName ? member.userName : null}
           </div>
         </NameBox>
         <FollowBox>
@@ -77,14 +77,17 @@ function Mypage() {
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
-              {activity && activity.point ? Math.round(activity.point) : 0}등
+              {activity && activity.rank ? Math.round(activity.rank) : 0}등
             </div>
             <div className="box">
               <div>Point</div>
-              {Math.round(activity.point) ? Math.round(activity.point) : 0}점
+              {activity && activity.point ? Math.round(activity.point) : 0}점
             </div>
           </div>
-          <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
+          <button
+            className="editBtn"
+            onClick={() => navigate('/members/mypage/edit')}
+          >
             정보 수정
           </button>
           <button onClick={() => setBtnClick(!btnClick)}>회원 탈퇴</button>
