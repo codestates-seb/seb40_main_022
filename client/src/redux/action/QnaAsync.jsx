@@ -41,7 +41,13 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
   return axios
-    .get(`${process.env.REACT_APP_API_URL}/questions/${data}`)
+    .get(`${process.env.REACT_APP_API_URL}/questions/${data}`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
     .then(res => {
       return res.data;
     });
@@ -96,26 +102,27 @@ export const QnaanswerAccept = createAsyncThunk('Accepted', id => {
     });
 });
 
-export const QnaanswerContentUp = createAsyncThunk(
-  'ContentUp',
-  (id, content) => {
-    axios.patch(
+export const QnaanswerContentUp = createAsyncThunk('ContentUp', id => {
+  console.log(id);
+  axios
+    .patch(
       `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}`,
-      content,
+      JSON.stringify({ content: id[2] }),
       {
         headers: {
+          'Content-Type': 'application/json;',
           Authorization: localStorage.getItem('Authorization'),
           RefreshToken: localStorage.getItem('RefreshToken'),
         },
       },
-    );
-  },
-);
+    )
+    .then(res => console.log(res));
+});
 
 export const QnaSearchreload = createAsyncThunk('search', data => {
   return axios
     .get(
-      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=1`,
+      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=${data[2]}`,
     )
     .then(res => {
       return res.data.data;

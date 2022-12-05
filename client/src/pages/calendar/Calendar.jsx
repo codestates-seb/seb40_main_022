@@ -3,6 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import crown from '../../images/crown.png';
@@ -28,9 +29,7 @@ function Calendar() {
     const TodayMonth = new Date().getMonth() + 1;
     dispatch(RecordListAsync(TodayMonth));
     dispatch(RecordListGet(memberId));
-    // .unwrap()
-    // .then(() => setTimeout(dispatch(RecordListGet(memberId)), 1000));
-  }, []);
+  }, [memberId]);
   const datelist =
     member &&
     member.map(data => {
@@ -124,15 +123,23 @@ function Calendar() {
                 </button>
               ) : null}
             </div>
-            {getlist || getopponent ? (
-              <div className={opponent ? 'userInfoBox' : 'userInfoBox2'}>
-                <div className="box2">
+            <div
+              className={
+                getlist && getlist && getopponent
+                  ? 'userInfoBox'
+                  : 'userInfoBox2'
+              }
+            >
+              {member && member.length > 0 ? (
+                <div className={member && member ? 'box1' : 'nobox'}>
                   <div
                     className={
-                      getlist && getlist !== undefined ? 'name1' : 'noname'
+                      member && member !== undefined ? 'name1' : 'noname'
                     }
                   >
-                    <img src={crown} alt="승자이미지" />
+                    {getlist && getlist.result === 'WIN' ? (
+                      <img src={crown} alt="승자이미지" />
+                    ) : null}
                     {getlist ? getlist.member.username : null}
                   </div>
                   {member && member !== undefined ? (
@@ -145,21 +152,21 @@ function Calendar() {
                       <div className="oneday">
                         <span>
                           날짜 :{' '}
-                          {member[0] !== undefined
-                            ? member[0].date.slice(5)
+                          {member[member.length - 1] !== undefined
+                            ? member[member.length - 1].date.slice(5)
                             : null}
                         </span>
                         <span>
                           운동 시간 :{' '}
-                          {member[0] !== undefined
-                            ? member[0].timeRecord
+                          {member[member.length - 1] !== undefined
+                            ? member[member.length - 1].timeRecord
                             : null}
                         </span>
                       </div>
                       {getlist &&
                         getlist.sports.map((data, idx) => {
                           return idx < 3 ? (
-                            <div className="dayover">
+                            <div className="dayover" key={uuidv4()}>
                               <span>{data.bodyPart}</span>
                               <span>{data.name}</span>
                               <span>
@@ -173,47 +180,50 @@ function Calendar() {
                     </button>
                   ) : null}
                 </div>
-                {opponent !== undefined && opponent ? (
-                  <div className="box2">
-                    <div className="name2">
-                      {getopponent && getopponent.member.username}
-                    </div>
-                    {opponent ? (
-                      <button className="userdata2">
-                        <div className="oneday">
-                          <span>
-                            날짜 :{' '}
-                            {opponent[0] !== undefined
-                              ? opponent[0].date.slice(5)
-                              : null}
-                          </span>
-                          <span>
-                            운동 시간 :{' '}
-                            {opponent[0] !== undefined
-                              ? opponent[0].timeRecord
-                              : null}
-                          </span>
-                        </div>
-                        {getopponent &&
-                          getopponent.sports.map((data, idx) => {
-                            return idx < 3 ? (
-                              <div className="dayover">
-                                <span>{data.bodyPart}</span>
-                                <span>{data.name}</span>
-                                <span>
-                                  {data.set}세트/{data.count}회
-                                </span>
-                              </div>
-                            ) : (
-                              <div className="dayover">...</div>
-                            );
-                          })}
-                      </button>
+              ) : null}
+              {getopponent && getopponent !== undefined ? (
+                <div className="box2">
+                  <div className="name2">
+                    {getopponent && getopponent.result === 'WIN' ? (
+                      <img src={crown} alt="승자이미지" />
                     ) : null}
+                    {getopponent && getopponent.member.username}
                   </div>
-                ) : null}
-              </div>
-            ) : null}
+                  {opponent ? (
+                    <button className="userdata2">
+                      <div className="oneday">
+                        <span>
+                          날짜 :{' '}
+                          {opponent[opponent.length - 1] !== undefined
+                            ? opponent[opponent.length - 1].date.slice(5)
+                            : null}
+                        </span>
+                        <span>
+                          운동 시간 :{' '}
+                          {opponent[opponent.length - 1] !== undefined
+                            ? opponent[opponent.length - 1].timeRecord
+                            : null}
+                        </span>
+                      </div>
+                      {getopponent &&
+                        getopponent.sports.map((data, idx) => {
+                          return idx < 3 ? (
+                            <div className="dayover" key={uuidv4}>
+                              <span>{data.bodyPart}</span>
+                              <span>{data.name}</span>
+                              <span>
+                                {data.set}세트/{data.count}회
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="dayover">...</div>
+                          );
+                        })}
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
           </article>
         </CalBox>
       </MainBox>

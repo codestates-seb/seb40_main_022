@@ -31,6 +31,15 @@ export const PostTitle = styled.section`
       height: 34px;
       padding: 10px;
       outline: none;
+      border: none;
+      padding: 10px;
+      box-shadow: inset var(--box-shadow);
+      outline: none;
+      border-radius: 5px;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
   }
 `;
@@ -49,12 +58,22 @@ export const PostContent = styled.section`
       padding: 10px;
       resize: none;
       outline: none;
+      border: none;
+      padding: 10px;
+      height: 200px;
+      box-shadow: inset var(--box-shadow);
+      outline: none;
+      border-radius: 5px;
+      &::placeholder {
+        color: var(--black-200);
+        font-weight: bold;
+      }
     }
   }
 `;
 export const PostTag = styled.section`
   display: flex;
-  width: 65%;
+  width: 73%;
   height: 100px;
   justify-content: center;
   > div {

@@ -27,7 +27,6 @@ export const Wrapper = styled.div`
   .modal.openModal {
     display: flex;
     align-items: center;
-    /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-bg-show 0.3s;
   }
   @keyframes modal-show {
@@ -106,7 +105,9 @@ export const ModalMain = styled.main`
   border-top: 1px solid #dee2e6;
 `;
 
-export const ModalList = styled.li`
+export const ModalList = styled.button`
+  width: 100%;
+  border: none;
   display: flex;
   list-style: none;
   padding: 10px;

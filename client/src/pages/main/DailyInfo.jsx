@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import comment from '../../images/comment.svg';
@@ -14,8 +15,18 @@ import DailyCmt from './DailyCmt';
 export default function DailyInfo({ el, index }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [fav, setFav] = useState(false);
+  const [fav, setFav] = useState(el.likeSate);
   const [isComment, setIsComment] = useState(false);
+
+  const handleFavorite = () => {
+    setFav(!fav);
+    console.log(fav);
+    if (fav === true) {
+      dispatch(asyncLike(el.post.postId));
+    } else {
+      dispatch(asyncLikeundo(el.post.postId));
+    }
+  };
 
   return (
     <div>
@@ -24,7 +35,7 @@ export default function DailyInfo({ el, index }) {
           <div className="DailyTags">
             {el.tags &&
               el.tags.map(tag => {
-                return <span>{`#${tag}`}</span>;
+                return <span key={uuidv4}>{`#${tag}`}</span>;
               })}
           </div>
           <div className="DailyMemo">
@@ -46,12 +57,7 @@ export default function DailyInfo({ el, index }) {
             <span className="favorite">
               <button
                 onClick={() => {
-                  setFav(!fav);
-                  if (fav === false) {
-                    dispatch(asyncLikeundo(el.post.postId));
-                  } else {
-                    dispatch(asyncLike(el.post.postId));
-                  }
+                  handleFavorite();
                 }}
               >
                 {fav ? (
