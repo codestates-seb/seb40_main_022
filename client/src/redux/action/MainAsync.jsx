@@ -2,17 +2,16 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
-  axios
-    .post(`${process.env.REACT_APP_API_URL}/dailyPosts`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
-      },
-    })
-    .then(() => {
-      window.location.reload();
-    });
+  axios.post(`${process.env.REACT_APP_API_URL}/dailyPosts`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: localStorage.getItem('Authorization'),
+      RefreshToken: localStorage.getItem('RefreshToken'),
+    },
+  });
+  // .then(() => {
+  //   window.location.reload();
+  // });
 });
 
 export const asyncPostUpdate = createAsyncThunk(
@@ -132,65 +131,59 @@ export const asynCmtScroll = createAsyncThunk('comment', listUp => {
 export const asyncPostCmtUp = createAsyncThunk(
   'post/up',
   ({ answervalue, index }) => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments`,
-        JSON.stringify({
-          content: answervalue,
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: localStorage.getItem('Authorization'),
-            RefreshToken: localStorage.getItem('RefreshToken'),
-          },
+    axios.post(
+      `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments`,
+      JSON.stringify({
+        content: answervalue,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
         },
-      )
-      .then(() => {
-        window.location.reload();
-      });
+      },
+    );
   },
 );
 
 export const asyncPostCmtDel = createAsyncThunk(
   'post/del',
   ({ index, commentId }) => {
-    axios
-      .delete(
-        `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments/${commentId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem('Authorization'),
-            RefreshToken: localStorage.getItem('RefreshToken'),
-          },
-        },
-      )
-      .then(() => {
-        window.location.reload();
-      });
-  },
-);
-
-export const asyncPostCmtEdit = createAsyncThunk(
-  'post/up',
-  (id, data, ac, re) => {
-    axios.patch(
-      `${process.env.REACT_APP_API_URL}/comment/${id.id}`,
-      JSON.stringify({
-        contentId: data[0],
-        content: data[1],
-        memberId: data[2],
-        userName: data[3],
-        profileImage: data[4],
-        isBol: false,
-      }),
+    axios.delete(
+      `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments/${commentId}`,
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: ac,
-          RefreshToken: re,
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
         },
       },
     );
   },
 );
+
+export const asyncPostCmtEdit = createAsyncThunk(
+  'post/up',
+  (index, commentId, editAnswer) => {
+    axios.patch(
+      `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments/${commentId}`,
+      JSON.stringify({ content: editAnswer }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
+      },
+    );
+  },
+);
+
+export const MainSearchAsync = createAsyncThunk('search', data => {
+  console.log(data);
+  axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/dailyPosts/search?tag=${data[0]}&lastPostId=${data[1]}`,
+    )
+    .then(res => console.log(res));
+});

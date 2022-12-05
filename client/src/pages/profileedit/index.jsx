@@ -21,6 +21,7 @@ import {
 function ProfileEdit() {
   const navigate = useNavigate();
   const userdata = useSelector(state => state.mypage);
+
   const [username, setUsername] = useState(userdata.member.userName);
   const [password, setPassword] = useState('');
   const [job, setJob] = useState('');
@@ -28,11 +29,11 @@ function ProfileEdit() {
   const [gender, setGender] = useState('male');
   const [age, setAge] = useState('');
   const [select, setSelect] = useState('');
-  const [height, setHeight] = useState(userdata.member.height);
-  const [weight, setWeight] = useState(userdata.member.weight);
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
   const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
-  const [prevImage, setPrevImage] = useState('');
+  const [prevImage, setPrevImage] = useState(userdata.member.profileImage);
   const [profileImage, setProfileImage] = useState(
     userdata.member.profileImage,
   );
@@ -85,7 +86,12 @@ function ProfileEdit() {
     formData.append('kilogram', kilogram);
     formData.append('period', period);
     formData.append('profileImage', profileImage);
-    dispatch(MypagePost(formData));
+    dispatch(MypagePost(formData))
+      .unwrap()
+      .then(() => {
+        navigate('/members/mypage');
+        window.location.reload();
+      });
   };
   return (
     <Wrapper>
@@ -288,13 +294,34 @@ function ProfileEdit() {
             <button
               className="set-btn"
               onClick={() => {
-                handleSubmit();
-                navigate('/mypage');
+                if (
+                  profileImage.length !== 0 &&
+                  username.length > 0 &&
+                  PWDTest.test(password) &&
+                  age.length > 0 &&
+                  height.length > 0 &&
+                  weight.length > 0 &&
+                  kilogram.length > 0 &&
+                  period.length > 0
+                ) {
+                  handleSubmit();
+                  navigate('/members/mypage');
+                } else if (profileImage.length === 0)
+                  alert('이미지를 업로드해주세요');
+                else if (username.length < 1)
+                  alert('이름은 1자 이상 입력해주세요');
+                else if (!PWDTest.test(password))
+                  alert('비밀번호는 숫자, 영문 포함 8자 이상이어야 합니다.');
+                else if (age.length < 1) alert('나이를 입력해주세요');
+                else if (height.length < 1) alert('키를 입력해주세요');
+                else if (weight.length < 1) alert('몸무게를 입력해주세요');
+                else if (kilogram.length < 1) alert('3대 중량을 입력해주세요');
+                else if (period.length < 1) alert('운동 경력을 입력해주세요');
               }}
             >
               완료
             </button>
-            <button onClick={() => navigate('/mypage')}>취소</button>
+            <button onClick={() => navigate('/members/mypage')}>취소</button>
           </BtnBox>
         </ProfileBox>
       </div>

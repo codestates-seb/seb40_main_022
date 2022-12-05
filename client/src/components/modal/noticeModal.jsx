@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import userProfile from '../../images/daily.jpg';
+import mockupProfile from '../../images/mockupProfile.png';
 import {
   Notice,
   NoticeSection,
@@ -21,8 +21,8 @@ function Modal() {
   const notification = useSelector(
     state => state.challenge.data.notificationResponses,
   );
-  const handleClick = id => {
-    setAcceptId(id);
+  const handleClick = (url, id) => {
+    setAcceptId(url);
     dispatch(Notificationsallam(id));
   };
   useEffect(() => {
@@ -34,30 +34,38 @@ function Modal() {
         <ModalHeader>알림</ModalHeader>
         <ModalMain>
           {notification &&
-            notification.map(data => {
-              return (
-                <ModalList
-                  onClick={() => {
-                    setChallenge(true);
-                    handleClick(data.url);
-                  }}
-                  className="challenge"
-                >
-                  <img
-                    className="userProfile"
-                    src={userProfile}
-                    alt="userProfile"
-                  />
-                  <div className="content">
-                    <div className="fightday">
-                      <h3>대결 신청</h3>
-                      <span>{data.createdAt}</span>
+            notification
+              .slice()
+              .reverse()
+              .map(data => {
+                return (
+                  <ModalList
+                    onClick={() => {
+                      setChallenge(true);
+                      handleClick(data.url, data.id);
+                    }}
+                    className="challenge"
+                    disabled={
+                      data.content.includes('수락') ||
+                      data.content.includes('거절') ||
+                      data.content.includes('중단')
+                    }
+                  >
+                    <img
+                      className="userProfile"
+                      src={mockupProfile}
+                      alt="userProfile"
+                    />
+                    <div className="content">
+                      <div className="fightday">
+                        <h3>대결 신청</h3>
+                        <span>{data.createdAt.slice(0, 10)}</span>
+                      </div>
+                      <div>{data.content}</div>
                     </div>
-                    <div>{data.content}</div>
-                  </div>
-                </ModalList>
-              );
-            })}
+                  </ModalList>
+                );
+              })}
           <Challenge
             open={challenge}
             close={() => setChallenge(false)}

@@ -16,6 +16,7 @@ const Foo = styled.footer`
       flex-direction: column;
     }
     .footer-left {
+      padding-bottom: 20px;
       .footer-images {
         > img {
           margin-right: 15px;

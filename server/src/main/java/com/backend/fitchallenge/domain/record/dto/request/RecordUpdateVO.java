@@ -3,11 +3,8 @@ package com.backend.fitchallenge.domain.record.dto.request;
 import com.backend.fitchallenge.domain.sports.dto.SportsRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
 import java.util.List;

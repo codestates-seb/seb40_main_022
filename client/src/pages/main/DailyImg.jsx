@@ -1,16 +1,7 @@
-// import { Link } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
 import ImageSlider, { Slide } from 'react-auto-image-slider';
-// import { asyncPostDel } from '../../redux/action/MainAsync';
+import uuidv4 from 'react-uuid';
 
 export default function DailyImg({ el }) {
-  // const dispatch = useDispatch();
-
-  // const handleDelPost = id => {
-  //   dispatch(asyncPostDel(id));
-  //   window.location.reload();
-  // };
-
   return (
     <div>
       <article className="Img">
@@ -18,25 +9,13 @@ export default function DailyImg({ el }) {
           {el.pictures &&
             el.pictures.map(ele => {
               return (
-                <Slide>
+                <Slide key={uuidv4}>
                   <img className="dailyImg" src={ele} alt="daily" />
                 </Slide>
               );
             })}
         </ImageSlider>
       </article>
-      {/* <div>
-        <Link to={`/dailypost/edit/${el.post.postId}`} className="buttons">
-          수정
-        </Link>
-        <button
-          onClick={() => {
-            handleDelPost(el.post.postId);
-          }}
-        >
-          삭제
-        </button>
-      </div> */}
     </div>
   );
 }

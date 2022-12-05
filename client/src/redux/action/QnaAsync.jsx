@@ -40,11 +40,9 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
 });
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
-  return axios
-    .get(`${process.env.REACT_APP_API_URL}/questions/${data}`)
-    .then(res => {
-      return res.data;
-    });
+  axios.get(`${process.env.REACT_APP_API_URL}/questions/${data}`).then(res => {
+    return res.data;
+  });
 });
 
 export const QnaDetailCommentAsync = createAsyncThunk('qnaanswer', data => {
@@ -96,26 +94,24 @@ export const QnaanswerAccept = createAsyncThunk('Accepted', id => {
     });
 });
 
-export const QnaanswerContentUp = createAsyncThunk(
-  'ContentUp',
-  (id, content) => {
-    axios.patch(
-      `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}`,
-      content,
-      {
-        headers: {
-          Authorization: localStorage.getItem('Authorization'),
-          RefreshToken: localStorage.getItem('RefreshToken'),
-        },
+export const QnaanswerContentUp = createAsyncThunk('ContentUp', id => {
+  axios.patch(
+    `${process.env.REACT_APP_API_URL}/questions/${id[0]}/answers/${id[1]}`,
+    JSON.stringify({ content: id[2] }),
+    {
+      headers: {
+        'Content-Type': 'application/json;',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
       },
-    );
-  },
-);
+    },
+  );
+});
 
 export const QnaSearchreload = createAsyncThunk('search', data => {
   return axios
     .get(
-      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=1`,
+      `${process.env.REACT_APP_API_URL}/questions/search?q=${data[0]}&sort=${data[1]}&page=${data[2]}`,
     )
     .then(res => {
       return res.data.data;

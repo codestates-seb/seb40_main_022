@@ -1,25 +1,32 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import uuidv4 from 'react-uuid';
 import dailyAdd from '../../images/daily_add.svg';
 import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
 import { AddComment, CommentInput } from './MainStyle';
-import { asyncPostCmtUp, asyncPostCmtDel } from '../../redux/action/MainAsync';
+import {
+  asyncPostCmtUp,
+  asyncPostCmtDel,
+  asyncPostCmtEdit,
+} from '../../redux/action/MainAsync';
+import { MypageGet } from '../../redux/action/MypageAsync';
 
 export default function DailyCmt({ index }) {
   const dispatch = useDispatch();
   const [answervalue, setAnswervalue] = useState('');
   const [cmtEditBut, setCmtEditBut] = useState(false);
-  // const [editAnwer, setEditAnswer] = useState('');
+  const [editAnswer, setEditAnswer] = useState('');
   const ac = localStorage.getItem('Authorization');
   const [cmtList, setCmtList] = useState([]);
+  const [cmtSelect, setCmtSelect] = useState(false);
   const lookCmt = cmtList && cmtList[cmtList.length - 1];
   const lastCmt = lookCmt && lookCmt[lookCmt.length - 1];
   const navigate = useNavigate();
+  const cmtUserId = useSelector(state => state.mypage.member.userName);
 
-  console.log(cmtList);
   const handleAnswer = e => {
     e.preventDefault();
     if (!ac) {
@@ -29,11 +36,19 @@ export default function DailyCmt({ index }) {
     } else if (ac && answervalue.length >= 5) {
       dispatch(asyncPostCmtUp({ answervalue, index }));
       setAnswervalue('');
+      setCmtSelect(true);
     }
+  };
+
+  const handleEditAnswer = commentId => {
+    setCmtEditBut(!cmtEditBut);
+    dispatch(asyncPostCmtEdit(index, commentId, editAnswer));
+    setCmtSelect(true);
   };
 
   const handleCmtDel = commentId => {
     dispatch(asyncPostCmtDel({ index, commentId }));
+    setCmtSelect(true);
   };
 
   const handleans = e => {
@@ -41,6 +56,8 @@ export default function DailyCmt({ index }) {
   };
 
   useEffect(() => {
+    dispatch(MypageGet());
+
     const getPostCmt = async () => {
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments`,
@@ -49,7 +66,8 @@ export default function DailyCmt({ index }) {
       setCmtList([cmt]);
     };
     getPostCmt();
-  }, []);
+    setCmtSelect(false);
+  }, [cmtSelect]);
 
   const plusBut = async () => {
     const listUp = [index, lastCmt.commentId];
@@ -58,7 +76,9 @@ export default function DailyCmt({ index }) {
         `${process.env.REACT_APP_API_URL}/dailyPosts/${listUp[0]}/comments?lastCommentId=${listUp[1]}`,
       )
       .then(res => {
-        setCmtList([...cmtList, res.data.items]);
+        if (res.data.items !== undefined) {
+          setCmtList([...cmtList, res.data.items]);
+        }
       });
   };
 
@@ -82,7 +102,7 @@ export default function DailyCmt({ index }) {
       {cmtList &&
         cmtList.map(comment => {
           return (
-            <div>
+            <div key={uuidv4}>
               {comment &&
                 comment.map(all => {
                   return (
@@ -107,8 +127,10 @@ export default function DailyCmt({ index }) {
                           <div className="content">
                             {all.content && cmtEditBut ? (
                               <input
-                                value={all.content}
-                                // onChange={e => setEditAnswer(e.target.value)}
+                                value={editAnswer || all.content}
+                                onChange={e => {
+                                  setEditAnswer(e.target.value);
+                                }}
                               />
                             ) : (
                               all.content
@@ -116,16 +138,22 @@ export default function DailyCmt({ index }) {
                           </div>
                         </div>
                       </div>
-                      <div className="buttons">
-                        <button onClick={() => setCmtEditBut(!cmtEditBut)}>
-                          <img className="edit" src={edit} alt="edit" />
-                        </button>
-                        <button
-                          onClick={() => handleCmtDel(all.commentId, index)}
-                        >
-                          <img className="delete" src={del} alt="delete" />
-                        </button>
-                      </div>
+                      {all.userName === cmtUserId ? (
+                        <div className="buttons">
+                          <button
+                            onClick={() => {
+                              handleEditAnswer(all.commentId);
+                            }}
+                          >
+                            <img className="edit" src={edit} alt="edit" />
+                          </button>
+                          <button
+                            onClick={() => handleCmtDel(all.commentId, index)}
+                          >
+                            <img className="delete" src={del} alt="delete" />
+                          </button>
+                        </div>
+                      ) : null}
                     </div>
                   );
                 })}
@@ -133,11 +161,12 @@ export default function DailyCmt({ index }) {
           );
         })}
       <div className="cmtListAdd">
-        {lastCmt && lastCmt.commentId > 1 && cmtList[0].length >= 5 ? (
+        {lastCmt && lastCmt.commentId > 1 && cmtList[0].length >= 10 ? (
           <button
             onClick={() => {
               plusBut();
             }}
+            key={uuidv4}
           >
             <img className="add" src={dailyAdd} alt="dailyAdd" />
           </button>

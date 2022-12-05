@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
@@ -100,7 +101,7 @@ const dailypost = () => {
             {imgBase64 &&
               imgBase64.map((data, index) => {
                 return (
-                  <div className="boxs">
+                  <div className="boxs" key={uuidv4()}>
                     <img src={data} alt="오완운사진" className="Imgs" />
                     <button
                       onClick={() => {
@@ -154,7 +155,7 @@ const dailypost = () => {
           <div className="taginput">
             {tagList.map(data => {
               return (
-                <div className="tags">
+                <div className="tags" key={uuidv4()}>
                   <button onClick={() => handleTagDelete(data)}>
                     <p>{`#${data}`}</p>
                   </button>

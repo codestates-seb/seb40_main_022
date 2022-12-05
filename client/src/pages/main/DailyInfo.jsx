@@ -1,21 +1,41 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
 import comment from '../../images/comment.svg';
-import {
-  asyncLike,
-  asyncLikeundo,
-  // asyncPostCmtEdit,
-} from '../../redux/action/MainAsync';
+import { asyncLike, asyncLikeundo } from '../../redux/action/MainAsync';
 import DailyCmt from './DailyCmt';
 
 export default function DailyInfo({ el, index }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [fav, setFav] = useState(false);
+  const [like, setLike] = useState(false);
+  const [likeAction, setLikeAction] = useState('');
   const [isComment, setIsComment] = useState(false);
+
+  console.log(el);
+
+  const handleFavorite = () => {
+    // setFav(!fav);
+    // if (fav) {
+    //   setFavAction(true);
+    //   dispatch(asyncLike(el.post.postId));
+    // } else {
+    //   setFavAction(false);
+    //   dispatch(asyncLikeundo(el.post.postId));
+    // }
+    if (likeAction === '') {
+      dispatch(asyncLike(el.post.postId));
+      setLike(true);
+      setLikeAction('Liked');
+    } else {
+      dispatch(asyncLikeundo(el.post.postId));
+      setLike(false);
+      setLikeAction('');
+    }
+  };
 
   return (
     <div>
@@ -24,7 +44,7 @@ export default function DailyInfo({ el, index }) {
           <div className="DailyTags">
             {el.tags &&
               el.tags.map(tag => {
-                return <span>{`#${tag}`}</span>;
+                return <span key={uuidv4}>{`#${tag}`}</span>;
               })}
           </div>
           <div className="DailyMemo">
@@ -46,18 +66,14 @@ export default function DailyInfo({ el, index }) {
             <span className="favorite">
               <button
                 onClick={() => {
-                  setFav(!fav);
-                  if (fav === false) {
-                    dispatch(asyncLikeundo(el.post.postId));
-                  } else {
-                    dispatch(asyncLike(el.post.postId));
-                  }
+                  setLike(!like);
+                  handleFavorite();
                 }}
               >
-                {fav ? (
-                  <img className="heart" src={heartFill} alt="heart" />
-                ) : (
+                {likeAction === '' ? (
                   <img className="heart" src={heart} alt="heart" />
+                ) : (
+                  <img className="heart" src={heartFill} alt="heart" />
                 )}
                 <span>{el.post.likeCount ? el.post.likeCount : 0}</span>
               </button>

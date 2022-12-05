@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 import searchIcon from '../../images/searchIcon.png';
+import resetIcon from '../../images/Vector.png';
 import {
   Dropdown,
   Dropdivi,
@@ -14,7 +15,6 @@ import { url } from '../../redux/reducer/LankSlice';
 
 function LankDropdown() {
   const dispatch = useDispatch();
-
   const [divi, setDivi] = useState('');
   const [diviurl, setDiviurl] = useState('');
   const [height, setHeight] = useState('');
@@ -102,7 +102,6 @@ function LankDropdown() {
       (weighturl.length !== 0 ? `&${weighturl}` : '') +
       (careerurl.length !== 0 ? `&${careerurl}` : ``);
     const searchurl = dataurl.slice(1, dataurl.length);
-    console.log(searchurl);
     dispatch(url(searchurl));
   };
   const handleResetClick = () => {
@@ -126,36 +125,38 @@ function LankDropdown() {
             <div>{divi}</div>
             <FontAwesomeIcon icon={faCaretDown} className="caretIcon" />
           </label>
-          <div className="content">
-            <button
-              onClick={e => {
-                handledivi(e);
-              }}
-            >
-              2분할
-            </button>
-            <button
-              onClick={e => {
-                handledivi(e);
-              }}
-            >
-              3분할
-            </button>
-            <button
-              onClick={e => {
-                handledivi(e);
-              }}
-            >
-              4분할
-            </button>
-            <button
-              onClick={e => {
-                handledivi(e);
-              }}
-            >
-              5분할
-            </button>
-          </div>
+          {divi ? null : (
+            <div className="content">
+              <button
+                onClick={e => {
+                  handledivi(e);
+                }}
+              >
+                2분할
+              </button>
+              <button
+                onClick={e => {
+                  handledivi(e);
+                }}
+              >
+                3분할
+              </button>
+              <button
+                onClick={e => {
+                  handledivi(e);
+                }}
+              >
+                4분할
+              </button>
+              <button
+                onClick={e => {
+                  handledivi(e);
+                }}
+              >
+                5분할
+              </button>
+            </div>
+          )}
         </div>
       </Dropdivi>
       <DropHeight>
@@ -166,78 +167,80 @@ function LankDropdown() {
             <div>{height}</div>
             <FontAwesomeIcon icon={faCaretDown} className="caretIcon2" />
           </label>
-          <div className="content2">
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              190cm 이상
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              185cm ~ 190cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              180cm ~ 185cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              175cm ~ 180cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              170cm ~ 175cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              165cm ~ 170cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              160cm ~ 165cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              155cm ~ 160cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              150cm ~ 155cm
-            </button>
-            <button
-              onClick={e => {
-                handleheight(e);
-              }}
-            >
-              150cm 미만
-            </button>
-          </div>
+          {height ? null : (
+            <div className="content2">
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                190cm 이상
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                185cm ~ 190cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                180cm ~ 185cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                175cm ~ 180cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                170cm ~ 175cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                165cm ~ 170cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                160cm ~ 165cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                155cm ~ 160cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                150cm ~ 155cm
+              </button>
+              <button
+                onClick={e => {
+                  handleheight(e);
+                }}
+              >
+                150cm 미만
+              </button>
+            </div>
+          )}
         </div>
       </DropHeight>
       <DropWeight>
@@ -248,99 +251,101 @@ function LankDropdown() {
             <div>{weight}</div>
             <FontAwesomeIcon icon={faCaretDown} className="caretIcon3" />
           </label>
-          <div className="content3">
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              100kg이상
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              90kg ~ 100kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              85kg ~ 90kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              80kg ~ 85kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              75kg ~ 80kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              70kg ~ 75kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              65kg ~ 70kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              60kg ~ 65kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              55kg ~ 60kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              50kg ~ 55kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              45kg ~ 50kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              40kg ~ 45kg
-            </button>
-            <button
-              onClick={e => {
-                handleweight(e);
-              }}
-            >
-              40kg 미만
-            </button>
-          </div>
+          {weight ? null : (
+            <div className="content3">
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                100kg이상
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                90kg ~ 100kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                85kg ~ 90kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                80kg ~ 85kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                75kg ~ 80kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                70kg ~ 75kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                65kg ~ 70kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                60kg ~ 65kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                55kg ~ 60kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                50kg ~ 55kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                45kg ~ 50kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                40kg ~ 45kg
+              </button>
+              <button
+                onClick={e => {
+                  handleweight(e);
+                }}
+              >
+                40kg 미만
+              </button>
+            </div>
+          )}
         </div>
       </DropWeight>
       <DropCareer>
@@ -351,70 +356,74 @@ function LankDropdown() {
             <div>{career}</div>
             <FontAwesomeIcon icon={faCaretDown} className="caretIcon4" />
           </label>
-          <div className="content4">
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              10년 이상
-            </button>
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              8년 ~ 10년
-            </button>
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              6년 ~ 8년
-            </button>
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              4년 ~ 6년
-            </button>
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              3년 이상
-            </button>
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              2년 이상
-            </button>
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              1년 이상
-            </button>
-            <button
-              onClick={e => {
-                handlecareer(e);
-              }}
-            >
-              1년 미만
-            </button>
-          </div>
+          {career ? null : (
+            <div className="content4">
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                10년 이상
+              </button>
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                8년 ~ 10년
+              </button>
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                6년 ~ 8년
+              </button>
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                4년 ~ 6년
+              </button>
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                3년 이상
+              </button>
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                2년 이상
+              </button>
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                1년 이상
+              </button>
+              <button
+                onClick={e => {
+                  handlecareer(e);
+                }}
+              >
+                1년 미만
+              </button>
+            </div>
+          )}
         </div>
       </DropCareer>
-      <button onClick={() => handleClick()}>
+      <button onClick={() => handleClick()} className="searchbutton">
         <img src={searchIcon} alt="검색아이콘" className="search" />
       </button>
-      <button onClick={() => handleResetClick()}>리셋</button>
+      <button onClick={() => handleResetClick()} className="reset">
+        <img src={resetIcon} alt="리셋아이콘" className="resetIcon" />
+      </button>
     </Dropdown>
   );
 }

@@ -9,6 +9,7 @@ const QnaSlice = createSlice({
   name: 'qna',
   initialState: {
     list: [],
+    detail: [],
     answers: [],
     search: [],
     pageInfo: [],
@@ -24,6 +25,9 @@ const QnaSlice = createSlice({
     },
     [QnaSearchreload.fulfilled]: (state, action) => {
       state.search = action.payload;
+    },
+    [QnaDetailAsync.fulfilled]: (state, action) => {
+      state.detail = action.payload;
     },
   },
 });

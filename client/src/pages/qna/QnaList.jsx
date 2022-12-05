@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import uuidv4 from 'react-uuid';
 import Header from '../../components/header/Header';
 import searchIcon from '../../images/searchIcon.png';
 import Footer from '../../components/footer/Footer';
@@ -22,39 +23,18 @@ function QnaList() {
   const list = useSelector(state => state.qnalist.list);
   const questiondata = useSelector(state => state.qnalist.search);
   const items = useSelector(state => state.qnalist.pageInfo);
-  console.log(items);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
   const [result, setResult] = useState(false);
-
-  // const [size, setSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [paginationLength] = useState(1);
-  console.log(useSelector(state => state.qnalist.list));
+  const datasearch = [search, sort, currentPage];
 
-  // const [size, setSize] = useState(10);
-  // const [paginationLength, setPaginationLength] = useState(3);
-
-  // const sizeHandler = per => setSize(per);
   const currentPageHandler = p => {
     setCurrentPage(p);
-    console.log(currentPage);
     dispatch(QnaAsynclist(p));
+    const searchlist = [search, sort, p];
+    dispatch(QnaSearchreload(searchlist));
   };
-
-  // const [page, setPage] = useState(1); //페이지
-  // const limit = 10; // posts가 보일 최대한의 갯수
-  // const offset = (page - 1) * limit; // 시작점과 끝점을 구하는 offset
-
-  // const pagesData = posts => {
-  //   if (posts) {
-  //     let result = posts.slice(offset, offset + limit);
-  //     return result;
-  //   }
-  // };
-
-  const datasearch = [search, sort];
-
   useEffect(() => {
     dispatch(QnaAsynclist(currentPage));
   }, []);
@@ -68,33 +48,49 @@ function QnaList() {
     dispatch(QnaSearchreload(datasearch));
   };
 
+  // 날짜 바꾸기
+  function leftPad(value) {
+    if (value >= 10) {
+      return value;
+    }
+    return `0${value}`;
+  }
+
+  function toStringByFormatting(source, delimiter = '-') {
+    const year = source.getFullYear();
+    const month = leftPad(source.getMonth() + 1);
+    const day = leftPad(source.getDate());
+
+    return [year, month, day].join(delimiter);
+  }
+
   return (
     <QnABack>
       <Header />
+      <QnaBan />
       <Qna>
-        <QnaBan />
         <QnaTitle>
           <h1>QnA</h1>
           <button
             onClick={() => {
-              navigate('/qnaask');
+              navigate('/questions/postup');
             }}
           >
             질문
           </button>
         </QnaTitle>
+        <QnaSearch>
+          <input
+            id="SearchIn"
+            type="text"
+            placeholder="찾으시는 질문이 있으신가요?"
+            onChange={e => setSearch(e.target.value)}
+          />
+          <button onClick={() => handleSearch()}>
+            <img src={searchIcon} alt="검색아이콘" className="search" />
+          </button>
+        </QnaSearch>
         <div className="content">
-          <QnaSearch>
-            <input
-              id="SearchIn"
-              type="text"
-              placeholder="찾으시는 질문이 있으신가요?"
-              onChange={e => setSearch(e.target.value)}
-            />
-            <button onClick={() => handleSearch()}>
-              <img src={searchIcon} alt="검색아이콘" className="search" />
-            </button>
-          </QnaSearch>
           <QnaRadio>
             <label>
               <input
@@ -115,24 +111,15 @@ function QnaList() {
               />
               <span>인기 순</span>
             </label>
-            {/* <label>
-              <input
-                type="radio"
-                id="popularity"
-                name="contact"
-                onClick={() => setSort('')}
-              />
-              <span>정혹도순</span>
-            </label> */}
           </QnaRadio>
           <QnaContent>
             {result
               ? questiondata.map((data, idx) => {
                   return (
-                    <div className="qnabox">
+                    <div className="qnabox" key={uuidv4()}>
                       <article>
                         <div>
-                          <Link to={`/qnadetail/${idx}`} className="titlename">
+                          <Link to={`/questions/${idx}`} className="titlename">
                             {data.title}
                           </Link>
                           <h3>{data.summary}</h3>
@@ -152,10 +139,10 @@ function QnaList() {
               : list &&
                 list.map((data, idx) => {
                   return (
-                    <div className="qnabox">
+                    <div className="qnabox" key={uuidv4()}>
                       <article>
                         <div>
-                          <Link to={`/qnadetail/${idx}`} className="titlename">
+                          <Link to={`/questions/${idx}`} className="titlename">
                             {data.title}
                           </Link>
                           <h3>{data.summary}</h3>
@@ -165,7 +152,10 @@ function QnaList() {
                             답변 : {data.answerCount}
                           </h3>
                           <h3>{data.member.username}</h3>
-                          <h3>{data.createdAt}</h3>
+                          <h3>
+                            {' '}
+                            {toStringByFormatting(new Date(data.createdAt))}
+                          </h3>
                           <button>{data.tag}</button>
                         </span>
                       </article>
@@ -175,11 +165,8 @@ function QnaList() {
                 })}
           </QnaContent>
           <Pagination
-            // size={size}
-            // sizeHandler={sizeHandler}
             currentPage={currentPage}
             currentPageHandler={currentPageHandler}
-            // paginationLength={paginationLength}
             items={items}
           />
         </div>

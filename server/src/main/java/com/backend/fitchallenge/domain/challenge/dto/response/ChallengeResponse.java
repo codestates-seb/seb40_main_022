@@ -15,14 +15,12 @@ public class ChallengeResponse {
 
     private Long applicantId;
     private String applicantName;
-//    private ProfileImage applicantImage;
     private String applicantImage;
     private Integer applicantHeight;
     private Integer applicantWeight;
 
     private Long counterpartId;
     private String counterpartName;
-//    private ProfileImage counterpartImage;
     private String counterpartImage;
     private Integer counterpartHeight;
     private Integer counterpartWeight;

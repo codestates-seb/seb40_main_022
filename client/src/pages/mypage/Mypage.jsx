@@ -20,7 +20,6 @@ function Mypage() {
   const member = useSelector(state => state.mypage.member);
   const activity = useSelector(state => state.mypage.activity);
   const [btnClick, setBtnClick] = useState(false);
-
   useEffect(() => {
     dispatch(MypageGet());
   }, []);
@@ -51,41 +50,44 @@ function Mypage() {
         <ProfileBox>
           <div className="circle">
             <img
-              src={member.profileImage ? member.profileImage : null}
+              src={member && member.profileImage ? member.profileImage : null}
               alt="userProfile"
             />
           </div>
         </ProfileBox>
         <NameBox>
           <div className="username">
-            {member.userName ? member.userName : 0}
+            {member && member.userName ? member.userName : null}
           </div>
         </NameBox>
         <FollowBox>
-          <div>게시물 {data.postCounts ? data.postCounts : 0}</div>
-          <div> {member.height ? member.height : 0}cm</div>
-          <div> {member.weight ? member.weight : 0}kg</div>
+          <div>게시물 {data && data.postCounts ? data.postCounts : 0}</div>
+          <div> {member && member.height ? member.height : 0}cm</div>
+          <div> {member && member.weight ? member.weight : 0}kg</div>
         </FollowBox>
         <RecordBox>
           <div className="boxs">
             <div className="box">
               <FontAwesomeIcon icon={faDumbbell} />
-              {activity.kilogram ? activity.kilogram : 0}kg
+              {activity && activity.kilogram ? activity.kilogram : 0}kg
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faCalendarDays} />
-              {activity.dayCount ? activity.dayCount : 0}일
+              {activity && activity.dayCount ? activity.dayCount : 0}일
             </div>
             <div className="box">
               <FontAwesomeIcon icon={faTrophy} />
-              {activity.point ? activity.point : 0}등
+              {activity && activity.rank ? Math.round(activity.rank) : 0}등
             </div>
             <div className="box">
               <div>Point</div>
-              {activity.point ? activity.point : 0}점
+              {activity && activity.point ? Math.round(activity.point) : 0}점
             </div>
           </div>
-          <button className="editBtn" onClick={() => navigate('/mypage/edit')}>
+          <button
+            className="editBtn"
+            onClick={() => navigate('/members/mypage/edit')}
+          >
             정보 수정
           </button>
           <button onClick={() => setBtnClick(!btnClick)}>회원 탈퇴</button>

@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import uuidv4 from 'react-uuid';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -21,12 +22,22 @@ function QnaAsk() {
   const [content, setContent] = useState('');
   const dispatch = useDispatch();
   const formdata = new FormData();
+  const ac = localStorage.getItem('Authorization');
+
   formdata.append('title', title);
   formdata.append('content', content);
   formdata.append('tag', tag);
   const handleSubmit = () => {
-    dispatch(QnaAsynclistPost({ formdata }));
-    navigate('/qna');
+    if (!ac) {
+      alert('로그인 후 이용할 수 있습니다.');
+    } else if (ac && title.length <= 2) {
+      alert('제목을 3글자 이상 입력해 주세요');
+    } else if (ac && content.length <= 4) {
+      alert('내용을 5글자 이상 입력해 주세요');
+    } else {
+      dispatch(QnaAsynclistPost({ formdata }));
+      navigate('/questions');
+    }
   };
 
   return (
@@ -35,9 +46,7 @@ function QnaAsk() {
       <QnaPost>
         <PostTitle>
           <div>
-            <label htmlFor="titleId">
-              <h2>제목</h2>
-            </label>
+            <h2>제목</h2>
             <input
               value={title}
               placeholder="제목을 입력하세요."
@@ -66,31 +75,17 @@ function QnaAsk() {
               taglist.map(data => {
                 return (
                   <button
-                    className="tags"
+                    className={tag === data ? 'oneButton' : null}
                     onClick={e => {
                       setTag(e.target.textContent);
                     }}
+                    key={uuidv4}
                   >
                     {data}
                   </button>
                 );
               })}
           </div>
-          {tag ? (
-            <ul className="taglist">
-              <li className="taglist-container">
-                <div className="tagname">{tag}</div>
-                <button
-                  className="tagdelete"
-                  onClick={() => {
-                    setTag('');
-                  }}
-                >
-                  x
-                </button>
-              </li>
-            </ul>
-          ) : null}
         </PostTag>
         <PostSubmit>
           <button
@@ -100,7 +95,7 @@ function QnaAsk() {
           >
             등록
           </button>
-          <button onClick={() => navigate('/qna')}>취소</button>
+          <button onClick={() => navigate('/questions')}>취소</button>
         </PostSubmit>
       </QnaPost>
       <Footer />
