@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
@@ -10,15 +11,15 @@ import DetailCamera from '../../images/DetailCamera.png';
 import {
   RecordTagAsync,
   RecordUpAsync,
-  RecordImgUp,
+  RecordImgReUp,
   RecordListDelete,
 } from '../../redux/action/RecordAsync';
 
 function Update() {
   const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
   const taghealth1 = useSelector(state => state.record.data.data);
+  const member = useSelector(state => state.record.GetList.member);
   const ListupGet = useSelector(state => state.record.GetList.member.sports);
-  console.log(ListupGet);
   const navigate = useNavigate();
   const startphotoUp = useRef();
   const endphotoUp = useRef();
@@ -28,23 +29,24 @@ function Update() {
   const [num, setNum] = useState(null);
   const [weight, setWeight] = useState(null);
   const [split, setSplit] = useState([]);
-  const [time, setTime] = useState('');
-  const [end, setEnd] = useState('');
+  const [time, setTime] = useState(member.startTime);
+  const [end, setEnd] = useState(member.endTime);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const today = new Date().toISOString().slice(0, 10);
   const [clicked, setClicked] = useState(false);
   const [addUpdate, setAddUpdate] = useState([]);
-  const [startrealImg, setStartRealImg] = useState('');
-  const [endrealImg, setEndRealImg] = useState('');
+  const [startrealImg, setStartRealImg] = useState(member.startPicture);
+  const [endrealImg, setEndRealImg] = useState(member.endPicture);
   const reader = new FileReader();
   const dispatch = useDispatch();
   const formdata = new FormData();
   const recordId = +useParams().id;
   const handleStartFile = e => {
     formdata.append('point', 'start');
+    formdata.append('filePath', member.startPicture);
     formdata.append('file', e.target.files[0]);
-    dispatch(RecordImgUp(formdata));
+    dispatch(RecordImgReUp(formdata));
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
@@ -54,8 +56,9 @@ function Update() {
   };
   const handleEndFile = e => {
     formdata.append('point', 'end');
+    formdata.append('filePath', member.endPicture);
     formdata.append('file', e.target.files[0]);
-    dispatch(RecordImgUp(formdata));
+    dispatch(RecordImgReUp(formdata));
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       const resultImg = reader.result;
@@ -72,6 +75,7 @@ function Update() {
   };
   const handledelete = () => {
     dispatch(RecordListDelete(recordId));
+    navigate('/record');
   };
   const deleteFile = name => {
     if (name === 'start') {
@@ -185,7 +189,7 @@ function Update() {
                 >
                   {btns &&
                     btns.map(data => {
-                      return <option>{data}</option>;
+                      return <option key={uuidv4}>{data}</option>;
                     })}
                 </select>
               </div>
@@ -202,7 +206,7 @@ function Update() {
                   >
                     {taghealth1 &&
                       taghealth1.map(data => {
-                        return <option>{data.name}</option>;
+                        return <option key={uuidv4}>{data.name}</option>;
                       })}
                   </select>
                 </div>
@@ -267,36 +271,20 @@ function Update() {
         <section className="setInfo">
           {ListupGet &&
             ListupGet.map(data => {
-              return (
-                <div>
-                  <span>{data.bodyPart}</span>
-                  <span>{data.name}</span>
-                  <span>{data.set}세트</span>
-                  <span>{data.count}회</span>
-                  <span>{data.weight}kg</span>
-                  <button onClick={() => {}}>수정</button>
-                  <button
-                    onClick={() => {
-                      dispatch(RecordListDelete(data.sportsId));
-                    }}
-                  >
-                    삭제
-                  </button>
-                </div>
-              );
+              return split.push({
+                id: data.sportsId,
+                set: data.set,
+                count: data.count,
+                weight: data.weight,
+              });
             })}
           {split &&
             split.map((data, index) => {
-              const selectHealth = taghealth1.filter(
-                list => list.sportsId === data.id,
-              );
               if (split.length !== addUpdate.length) {
                 addUpdate.push(false);
               }
               return (
-                <div>
-                  <span>{selectHealth[0].bodyPart}</span>
-                  <span>{selectHealth[0].name}</span>
+                <div key={uuidv4}>
                   <span>{data.set}세트</span>
                   <span>{data.count}회</span>
                   <span>{data.weight}kg</span>

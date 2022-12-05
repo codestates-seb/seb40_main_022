@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
+import uuidv4 from 'react-uuid';
 import DailyInfomation from './DailyInfo';
 import DailyImg from './DailyImg';
 import dailyAdd from '../../images/daily_add.svg';
@@ -12,7 +13,6 @@ export default function DailyPost() {
   const [postList, setPostList] = useState([]);
   const lastPost = postList && postList[postList.length - 1];
   const [isLoaded, setIsLoaded] = useState(false);
-
   // const [bol, setBol] = useState(true);
 
   // const handleansbol = () => {
@@ -21,12 +21,13 @@ export default function DailyPost() {
   // };
 
   const navigate = useNavigate();
+
   const newPost = () => {
-    // if (!ac) {
-    //   alert('로그인 후 이용할 수 있습니다.');
-    // } else {
-    navigate('/dailypost');
-    // }
+    if (!localStorage.getItem('Authorization')) {
+      alert('로그인 후 이용할 수 있습니다.');
+    } else {
+      navigate('/dailypost');
+    }
   };
 
   const [ref, inView] = useInView();
@@ -47,7 +48,7 @@ export default function DailyPost() {
       lastPost && lastPost[lastPost.length - 1] !== undefined
         ? lastPost[lastPost.length - 1].post.postId
         : null;
-    if (lastPost && lastPostId > 1 && lastPost.length >= 4 && inView) {
+    if (lastPost && lastPostId > 1 && lastPost.length >= 3 && inView) {
       setIsLoaded(true);
       setTimeout(() => {
         axios
@@ -55,8 +56,10 @@ export default function DailyPost() {
             `${process.env.REACT_APP_API_URL}/dailyPosts?lastPostId=${lastPostId}`,
           )
           .then(res => {
-            setPostList([...postList, res.data.items]);
-            setIsLoaded(false);
+            if (res.data.items !== undefined) {
+              setPostList([...postList, res.data.items]);
+              setIsLoaded(false);
+            }
           });
       }, 1000);
     }
@@ -68,7 +71,7 @@ export default function DailyPost() {
         {postList[0] &&
           postList[0].map(el => {
             return (
-              <Content>
+              <Content key={uuidv4}>
                 <div className="imgprofile">
                   <button
                     onClick={() => {
@@ -94,7 +97,7 @@ export default function DailyPost() {
         {postList &&
           postList.map(all => {
             return (
-              <div className="list">
+              <div className="list" key={uuidv4}>
                 {all &&
                   all.map(list => {
                     return (
@@ -104,7 +107,6 @@ export default function DailyPost() {
                       </DailyItem>
                     );
                   })}
-                {/* <div ref={ref} /> */}
               </div>
             );
           })}

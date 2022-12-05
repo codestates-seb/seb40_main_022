@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import uuidv4 from 'react-uuid';
 import { DetailBox, DetailMain } from './Style';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
@@ -14,7 +15,7 @@ import {
 } from '../../redux/action/RecordAsync';
 
 function Detail() {
-  const btns = ['등', '가슴', '어깨', '하체', '팔', '전신', '유산소', '기타'];
+  const btns = ['등', '가슴', '어깨', '하체', '팔', '유산소', '기타'];
   const taghealth1 = useSelector(state => state.record.data.data);
   const navigate = useNavigate();
   const startphotoUp = useRef();
@@ -29,7 +30,11 @@ function Detail() {
   const [split, setSplit] = useState([]);
   const [time, setTime] = useState('');
   const [end, setEnd] = useState('');
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = `0${today.getMonth() + 1}`.slice(-2);
+  const day = `0${today.getDate()}`.slice(-2);
+  const dateString = `${year}-${month}-${day}`;
   const [clicked, setClicked] = useState(false);
   const [addUpdate, setAddUpdate] = useState([]);
   const [startrealImg, setStartRealImg] = useState('');
@@ -84,7 +89,7 @@ function Detail() {
     }
   };
   const handleUp = () => {
-    const data = [today, time, end, startImagePath, endImagePath, split];
+    const data = [dateString, time, end, startImagePath, endImagePath, split];
     dispatch(RecordUpAsync(data))
       .unwrap()
       .then(() => {
@@ -94,6 +99,7 @@ function Detail() {
   useEffect(() => {
     dispatch(RecordTagAsync(tags));
   }, []);
+
   return (
     <DetailBox>
       <Header />
@@ -180,7 +186,7 @@ function Detail() {
                 >
                   {btns &&
                     btns.map(data => {
-                      return <option>{data}</option>;
+                      return <option key={uuidv4}>{data}</option>;
                     })}
                 </select>
               </div>
@@ -197,7 +203,7 @@ function Detail() {
                   >
                     {taghealth1 &&
                       taghealth1.map(data => {
-                        return <option>{data.name}</option>;
+                        return <option key={uuidv4}>{data.name}</option>;
                       })}
                   </select>
                 </div>
@@ -266,7 +272,7 @@ function Detail() {
                 addUpdate.push(false);
               }
               return (
-                <div>
+                <div key={uuidv4}>
                   <span>{data.set}세트</span>
                   <span>{data.count}회</span>
                   <span>{data.weight}kg</span>

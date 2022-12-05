@@ -1,4 +1,3 @@
-// import TopList from './TopList';
 import DailyPost from './DailyPost';
 import search from '../../images/search.svg';
 import { Inside, MainForm, MainSearch, ContentForm } from './MainStyle';
@@ -14,7 +13,6 @@ export default function MainInside() {
       </div>
       <MainForm>
         <ContentForm>
-          {/* <TopList /> */}
           <DailyPost />
         </ContentForm>
       </MainForm>
