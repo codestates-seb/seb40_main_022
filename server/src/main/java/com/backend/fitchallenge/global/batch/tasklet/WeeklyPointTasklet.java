@@ -59,13 +59,13 @@ public class WeeklyPointTasklet implements Tasklet, StepExecutionListener {
                 Integer challengePoint = challenge.getChallengePoint();
 
                 if (challengePoint > 0) {
-                    applicant.get().getMemberActivity().updatePoint(10);
+                    applicant.get().getMemberActivity().updatePoint(10.0);
                 }
                 else if (challengePoint < 0){
-                    counterPart.get().getMemberActivity().updatePoint(10);
+                    counterPart.get().getMemberActivity().updatePoint(10.0);
                 } {
-                    applicant.get().getMemberActivity().updatePoint(5);
-                    counterPart.get().getMemberActivity().updatePoint(5);
+                    applicant.get().getMemberActivity().updatePoint(5.0);
+                    counterPart.get().getMemberActivity().updatePoint(5.0);
                 }
 
                 challengeRepository.delete(challenge);
