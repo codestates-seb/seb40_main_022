@@ -21,6 +21,17 @@ function Modal() {
   const notification = useSelector(
     state => state.challenge.data.notificationResponses,
   );
+
+  const modalTitle = el => {
+    if (el.includes('중단')) {
+      return '중단';
+    }
+    if (el.includes('수락')) {
+      return '수락';
+    }
+    return '거절';
+  };
+
   const handleClick = (url, id) => {
     setAcceptId(url);
     dispatch(Notificationsallam(id));
@@ -58,7 +69,7 @@ function Modal() {
                     />
                     <div className="content">
                       <div className="fightday">
-                        <h3>대결 신청</h3>
+                        <h3>대결 {modalTitle(data.content)}</h3>
                         <span>{data.createdAt.slice(0, 10)}</span>
                       </div>
                       <div>{data.content}</div>
