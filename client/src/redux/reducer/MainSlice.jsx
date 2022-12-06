@@ -22,7 +22,6 @@ const MainSlice = createSlice({
       state.comment = action.payload;
     },
     [MainSearchAsync.fulfilled]: (state, action) => {
-      console.log(action);
       state.searchList = action.payload;
     },
   },

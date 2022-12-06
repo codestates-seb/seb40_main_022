@@ -16,12 +16,12 @@ export default function DailyPost() {
   const lastPost = postList && postList[postList.length - 1];
   const [isLoaded, setIsLoaded] = useState(false);
   const searchtag = useSelector(state => state.dailypost.search);
-  const searchList = useSelector(state => state.dailypost.searchList.items);
+  const searchList =
+    searchtag && useSelector(state => state.dailypost.searchList.items);
   const [slist, setSlist] = useState([]);
+  console.log(searchtag, searchList);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(slist);
-
   const newPost = () => {
     if (!localStorage.getItem('Authorization')) {
       alert('로그인 후 이용할 수 있습니다.');
@@ -32,18 +32,18 @@ export default function DailyPost() {
 
   const [ref, inView] = useInView();
   useEffect(() => {
-    const lastPostId = searchList
-      ? searchList[searchList.length - 1].post.postId
-      : '';
-    const data = [searchtag, lastPostId];
+    setIsLoaded(true);
+    const data = [searchtag, ''];
     dispatch(MainSearchAsync(data))
       .unwrap()
       .then(() => {
         if (searchList !== undefined) {
+          setSlist([]);
           setSlist(searchList);
+          setIsLoaded(false);
         }
       });
-  }, [searchtag]);
+  }, [searchtag, isLoaded]);
 
   useEffect(() => {
     const getPost = async () => {
