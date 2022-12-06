@@ -15,8 +15,6 @@ export default function DailyInfo({ el, index }) {
   const [likeAction, setLikeAction] = useState('');
   const [isComment, setIsComment] = useState(false);
 
-  console.log(el);
-
   const handleFavorite = () => {
     // setFav(!fav);
     // if (fav) {

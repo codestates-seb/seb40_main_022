@@ -39,7 +39,6 @@ function ProfileEdit() {
   );
   const [nameError, setNameError] = useState({ display: 'none' });
   const photoUp = useRef();
-
   const dispatch = useDispatch();
 
   const handleprofileImage = e => {
@@ -79,7 +78,6 @@ function ProfileEdit() {
     formData.append('period', period);
     formData.append('profileImage', profileImage);
     dispatch(MypagePost(formData));
-    setTimeout(((window.location.href = '/members/mypage'), 2000));
   };
   return (
     <Wrapper>
