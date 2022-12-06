@@ -54,7 +54,7 @@ public class QuestionService {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
         Question question = Question.create(questionCreateVO, member, imagePathList);
         Question savedQuestion = questionRepository.save(question);
-
+        log.info("QuestionService QuestionCreateVO: {}", questionCreateVO.getContent());
         questionSearchRepository.save(QuestionDocument.from(savedQuestion));
 
         return savedQuestion.getId();
