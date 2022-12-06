@@ -84,12 +84,35 @@ public class Member extends Auditable {
     private List<Record> records = new ArrayList<>();
 
     @Builder(builderMethodName = "createBuilder")
-    public Member(String email, String password, String username, ProfileImage profileImage) {
+    public Member(Long memberId, String email, String password, String username, ProfileImage profileImage) {
+        this.id = memberId;
         this.email = email;
         this.password = password;
         this.username = username;
         this.profileImage = profileImage;
         this.memberActivity = new MemberActivity();
+    }
+
+    @Builder(builderMethodName = "dummyBuilder")
+    public Member(Long id, String email, String password, String username,
+                  String gender, String job, String address, Integer age,
+                  Integer height, Integer weight, Integer split, Integer period,
+                  Authority authority, MemberActivity memberActivity, ProfileImage profileImage) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.gender = gender;
+        this.job = job;
+        this.address = address;
+        this.age = age;
+        this.height = height;
+        this.weight = weight;
+        this.split = split;
+        this.period = period;
+        this.authority = authority;
+        this.memberActivity = memberActivity;
+        this.profileImage = profileImage;
     }
 
     public void update(MemberUpdateVO memberUpdateVO, PasswordEncoder passwordEncoder){
@@ -103,9 +126,14 @@ public class Member extends Auditable {
         this.age = memberUpdateVO.getAge() == null ? this.age : memberUpdateVO.getAge();
         this.height = memberUpdateVO.getHeight() == null ? this.height : memberUpdateVO.getHeight();
         this.weight = memberUpdateVO.getWeight() == null ? this.weight : memberUpdateVO.getWeight();
-        this.memberActivity = MemberActivity.builder().kilogram(
-                memberUpdateVO.getKilogram() == null ? this.memberActivity.getKilogram() : memberUpdateVO.getKilogram())
-                .build();
+
+        if(memberUpdateVO.getKilogram() == null){
+            this.memberActivity = this.memberActivity;
+        }
+        else{
+            this.memberActivity = memberActivity.update(memberUpdateVO.getKilogram());
+        }
+
         this.split = memberUpdateVO.getSplit() == null ? this.split : memberUpdateVO.getSplit();
         this.period = memberUpdateVO.getPeriod() == null ? this.period : memberUpdateVO.getPeriod();
     }
