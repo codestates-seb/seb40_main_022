@@ -52,7 +52,7 @@ export default function MainInside() {
             })}
             {searchTagList.length <= 3 ? (
               <MainSearch
-                placeholder="태그를 입력하세요"
+                placeholder="태그를 입력하세요(Enter)"
                 maxLength={6}
                 value={tagsearch}
                 onChange={e => setTagSearch(e.target.value)}
