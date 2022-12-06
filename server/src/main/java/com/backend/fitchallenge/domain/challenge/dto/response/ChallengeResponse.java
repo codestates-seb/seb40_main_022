@@ -28,6 +28,7 @@ public class ChallengeResponse {
 @Builder
     public ChallengeResponse(Long applicantId, String applicantName, String applicantImage, Integer applicantHeight, Integer applicantWeight,
                              Long counterpartId, String counterpartName, String counterpartImage, Integer counterpartHeight, Integer counterpartWeight) {
+
         this.applicantId = applicantId;
         this.applicantName = applicantName;
         this.applicantImage = applicantImage;
@@ -40,7 +41,9 @@ public class ChallengeResponse {
         this.counterpartWeight = counterpartWeight;
     }
 
+
     public static ChallengeResponse of(Member applicant,  Member counterpart) {
+
         return ChallengeResponse.builder()
                 .applicantId(applicant.getId())
                 .applicantName(applicant.getUsername())

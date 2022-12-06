@@ -38,6 +38,7 @@ public class CommentService {
     private final QueryCommentRepository queryCommentRepository;
     private final MemberRepository memberRepository;
 
+
     public Long createComment(Long postId, Long memberId, CommentCreate commentCreate) {
         Post post = postService.findPostById(postId);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotExist::new);
