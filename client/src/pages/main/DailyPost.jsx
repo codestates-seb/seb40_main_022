@@ -39,6 +39,7 @@ export default function DailyPost() {
         .unwrap()
         .then(() => {
           if (searchList !== undefined) {
+            setSlist([]);
             setSlist(searchList);
             setIsLoaded(false);
           }
@@ -62,7 +63,7 @@ export default function DailyPost() {
 
   useEffect(() => {
     if (searchList) {
-      const lastPostId = searchList[searchList.length - 1].post.postId;
+      const lastPostId = slist[slist.length - 1].post.postId;
       if (searchList && searchList.length >= 4 && lastPostId > 1 && inView) {
         const data = [searchtag, lastPostId];
         setIsLoaded(true);
