@@ -29,7 +29,6 @@ function Calendar() {
   const offset = curr.getTimezoneOffset() * 60000;
   const dateOffset = new Date(curr.getTime() - offset);
   const today = dateOffset.toISOString().slice(0, 10);
-  console.log(member, getlist, getopponent, opponent);
   useEffect(() => {
     const TodayMonth = new Date().getMonth() + 1;
     dispatch(RecordListAsync(TodayMonth));

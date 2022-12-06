@@ -4,6 +4,7 @@ import {
   RecordListAsync,
   RecordListGet,
   RecordImgUp,
+  RecordImgReUp,
 } from '../action/RecordAsync';
 
 const RecordSlice = createSlice({
@@ -28,6 +29,13 @@ const RecordSlice = createSlice({
       state.GetList = action.payload;
     },
     [RecordImgUp.fulfilled]: (state, action) => {
+      if (action.payload.point === 'start') {
+        state.Start = action.payload.imagePath;
+      } else {
+        state.End = action.payload.imagePath;
+      }
+    },
+    [RecordImgReUp.fulfilled]: (state, action) => {
       if (action.payload.point === 'start') {
         state.Start = action.payload.imagePath;
       } else {

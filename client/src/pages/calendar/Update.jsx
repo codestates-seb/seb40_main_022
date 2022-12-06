@@ -31,8 +31,6 @@ function Update() {
   const [split, setSplit] = useState([]);
   const [time, setTime] = useState(member.startTime);
   const [end, setEnd] = useState(member.endTime);
-  const [startTime, setStartTime] = useState(member.startPicture);
-  const [endTime, setEndTime] = useState(member.endPicture);
   const today = new Date().toISOString().slice(0, 10);
   const [clicked, setClicked] = useState(false);
   const [addUpdate, setAddUpdate] = useState([]);
@@ -40,9 +38,11 @@ function Update() {
   const [endrealImg, setEndRealImg] = useState(member.endPicture);
   const reader = new FileReader();
   const dispatch = useDispatch();
-  const formdata = new FormData();
   const recordId = +useParams().id;
+  const startImagePath = useSelector(state => state.record.Start);
+  const endImagePath = useSelector(state => state.record.End);
   const handleStartFile = e => {
+    const formdata = new FormData();
     formdata.append('point', 'start');
     formdata.append('filePath', member.startPicture);
     formdata.append('file', e.target.files[0]);
@@ -52,9 +52,9 @@ function Update() {
       const resultImg = reader.result;
       setStartRealImg(resultImg.toString());
     };
-    setStartTime(e.target.files[0]);
   };
   const handleEndFile = e => {
+    const formdata = new FormData();
     formdata.append('point', 'end');
     formdata.append('filePath', member.endPicture);
     formdata.append('file', e.target.files[0]);
@@ -64,7 +64,6 @@ function Update() {
       const resultImg = reader.result;
       setEndRealImg(resultImg.toString());
     };
-    setEndTime(e.target.files[0]);
   };
   const handelClick = name => {
     if (name === 'start') {
@@ -80,10 +79,8 @@ function Update() {
   const deleteFile = name => {
     if (name === 'start') {
       setStartRealImg('');
-      setStartTime('');
     } else {
       setEndRealImg('');
-      setEndTime('');
     }
   };
   const tagClick = () => {
@@ -101,8 +98,8 @@ function Update() {
       today,
       time,
       end,
-      startTime.name,
-      endTime.name,
+      startImagePath,
+      endImagePath,
       split,
       recordId,
     ];

@@ -87,14 +87,18 @@ export const RecordImgUp = createAsyncThunk('Imgup', formdata => {
     });
 });
 export const RecordImgReUp = createAsyncThunk('Imgup', formdata => {
-  axios
-    .patch(`${process.env.REACT_APP_API_URL}/records/pictures`, formdata, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: localStorage.getItem('Authorization'),
-        RefreshToken: localStorage.getItem('RefreshToken'),
+  return axios
+    .post(
+      `${process.env.REACT_APP_API_URL}/records/pictures/update`,
+      formdata,
+      {
+        headers: {
+          // 'Content-Type': 'multipart/form-data',
+          Authorization: localStorage.getItem('Authorization'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
+        },
       },
-    })
+    )
     .then(res => {
       return res.data;
     });
