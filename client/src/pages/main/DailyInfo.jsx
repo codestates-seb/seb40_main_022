@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useDispatch,
+  // useSelector
+} from 'react-redux';
 import uuidv4 from 'react-uuid';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
@@ -28,8 +31,8 @@ export default function DailyInfo({ el, index }) {
     }
   };
 
-  const likeVal = useSelector(state => state.dailypost.data.items);
-  console.log(likeVal);
+  // const likeVal = useSelector(state => state.dailypost.data.items);
+  // console.log(likeVal);
 
   useEffect(() => {
     dispatch(asyncPost());

@@ -74,7 +74,6 @@ function Update() {
   };
   const handledelete = () => {
     dispatch(RecordListDelete(recordId));
-    // navigate('/records');
   };
   const deleteFile = name => {
     if (name === 'start') {
@@ -303,7 +302,6 @@ function Update() {
                   </button>
                   <button
                     onClick={() => {
-                      // dispatch(Recorddelete(data.id));
                       const filterdata = [];
                       for (let i = 0; i < split.length; i += 1) {
                         if (i !== index) {

@@ -29,7 +29,6 @@ export default function DailyPost() {
       navigate('/dailyposts/postup');
     }
   };
-  // console.log(searchList, slist, searchload);
   const [ref, inView] = useInView();
   useEffect(() => {
     if (searchtag !== '' && searchtag !== undefined) {

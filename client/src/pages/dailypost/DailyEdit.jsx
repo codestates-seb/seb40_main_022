@@ -1,39 +1,34 @@
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  // useSelector,
+  useDispatch,
+} from 'react-redux';
+// import axios from 'axios';
 import uuidv4 from 'react-uuid';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
-import {
-  // asyncPost,
-  asyncPostUp,
-} from '../../redux/action/MainAsync';
+import { asyncPost, asyncPostUpdate } from '../../redux/action/MainAsync';
 
-const dailypost = () => {
+function DailyEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const Id = useParams();
   const photoUp = useRef();
-  useEffect(() => {
-    const getPost = async () => {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/dailyPosts`,
-      );
-      return res.data.items;
-      // setPostList([post]);
-    };
-    getPost();
-  }, []);
-  const select = useSelector(state => state);
-  console.log(select);
+  // const selectdata = useSelector(state => state);
+  // console.log(selectdata);
+  // const list = selectdata.filter(postdata => postdata.post.postId === +Id.id);
   const [files, setFiles] = useState(null);
   const [imgBase64, setImgBase64] = useState([]);
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
   const [tagList, setTagList] = useState([]);
 
+  useEffect(() => {
+    dispatch(asyncPost());
+  });
   const handleFile = e => {
     setFiles(e.target.files);
     setImgBase64([]);
@@ -67,7 +62,7 @@ const dailypost = () => {
   };
 
   const handleTagDelete = tagfil => {
-    const filtertag = tagList.filter(data => data !== tagfil);
+    const filtertag = tagList.filter(el => el !== tagfil);
     setTagList(filtertag);
   };
 
@@ -76,14 +71,14 @@ const dailypost = () => {
   };
 
   const deleteFile = index => {
-    const uploadImgArr = [...files].filter((el, idx) => idx !== index);
-    setFiles([...uploadImgArr]);
-
     const imgArr = imgBase64.filter((el, idx) => idx !== index);
     setImgBase64([...imgArr]);
+
+    const uploadImgArr = files.filter((el, idx) => idx !== index);
+    setFiles([...uploadImgArr]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = new FormData();
     for (let i = 0; i < files.length; i += 1) {
       formData.append('files', files[i]);
@@ -95,12 +90,13 @@ const dailypost = () => {
       formData.append('tagDtos', el);
     });
 
+    const editId = +Id.id;
     if (
       imgBase64.length !== 0 &&
       content.length >= 10 &&
       tagList.length !== 0
     ) {
-      dispatch(asyncPostUp({ formData }));
+      dispatch(asyncPostUpdate({ formData, editId }));
     } else if (files.length === 0) alert('이미지를 업로드해주세요');
     else if (content.length < 10) alert('내용은 10자 이상 입력해주세요');
     else if (tagList.length === 0) alert('태그를 입력해주세요');
@@ -113,14 +109,12 @@ const dailypost = () => {
         <div className="DetailBox">
           <div className="Imgbox">
             {imgBase64 &&
-              imgBase64.map((data, index) => {
+              imgBase64.map((el, index) => {
                 return (
                   <div className="boxs" key={uuidv4()}>
-                    <img src={data} alt="오완운사진" className="Imgs" />
+                    <img src={el} alt="오완운사진" className="Imgs" />
                     <button
-                      onClick={() => {
-                        deleteFile(index);
-                      }}
+                      onClick={() => deleteFile(index)}
                       className="Imgdel"
                     >
                       x
@@ -128,7 +122,7 @@ const dailypost = () => {
                   </div>
                 );
               })}
-            {imgBase64.length <= 3 ? (
+            {files.length <= 3 ? (
               <div className="Imgaddbox">
                 <input
                   type="file"
@@ -138,12 +132,7 @@ const dailypost = () => {
                   accept="image/jpg, image/jpeg, image/png"
                   multiple="multiple"
                 />
-                <button
-                  className="ImgButton"
-                  onClick={() => {
-                    handelClick();
-                  }}
-                >
+                <button className="ImgButton" onClick={() => handelClick()}>
                   <img src={plus} alt="버튼로고" />
                 </button>
               </div>
@@ -167,11 +156,11 @@ const dailypost = () => {
           </div>
           <span className="tagTitle">태그</span>
           <div className="taginput">
-            {tagList.map(data => {
+            {tagList.map(el => {
               return (
                 <div className="tags" key={uuidv4()}>
-                  <button onClick={() => handleTagDelete(data)}>
-                    <p>{`#${data}`}</p>
+                  <button onClick={() => handleTagDelete(el)}>
+                    <p>{`#${el}`}</p>
                   </button>
                 </div>
               );
@@ -179,14 +168,11 @@ const dailypost = () => {
             {tagList.length <= 3 ? (
               <input
                 className="tagbox"
-                maxLength={6}
                 value={tags}
                 onChange={e => {
                   setTags(e.target.value);
                 }}
-                onKeyUp={e => {
-                  handleTag(e);
-                }}
+                onKeyUp={e => handleTag(e)}
               />
             ) : null}
           </div>
@@ -216,6 +202,6 @@ const dailypost = () => {
       <Footer />
     </DetailBody>
   );
-};
+}
 
-export default dailypost;
+export default DailyEdit;
