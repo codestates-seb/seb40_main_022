@@ -1,5 +1,6 @@
 package com.backend.fitchallenge.global.dto.request;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,4 +15,10 @@ public class LoginDto {
 
     @NotBlank(message = "비밀번호는 공백이 아니여야 합니다.")
     private String password;
+
+    @Builder
+    public LoginDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

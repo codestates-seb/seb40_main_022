@@ -17,8 +17,6 @@ public class Notification extends Auditable {
     @Column(name = "notification_id")
     private Long id;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member receiver;
@@ -28,6 +26,7 @@ public class Notification extends Auditable {
     private  String url;
 
     private Boolean isRead;
+
 
     @Builder
     public Notification( Member receiver, String content, String url, Boolean isRead) {

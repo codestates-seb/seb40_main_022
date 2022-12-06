@@ -23,10 +23,10 @@ public class RankingResponse {
     private LocalDate challengeEndDate;
 
 
-
     @Builder
     public RankingResponse(Long memberId, String userName, String profileImage, Integer height, Integer weight, Double point,
                            Integer period, Boolean challengeStatus, LocalDate challengeEndDate) {
+
         this.memberId = memberId;
         this.userName = userName;
         this.profileImage = profileImage;
@@ -39,9 +39,8 @@ public class RankingResponse {
     }
 
 
-
-
     public static RankingResponse of(RankingDto rankingDto) {
+
         return RankingResponse.builder()
                 .memberId(rankingDto.getMemberId())
                 .userName(rankingDto.getUserName())
@@ -52,10 +51,11 @@ public class RankingResponse {
                 .period(rankingDto.getPeriod())
                 .challengeStatus(false)
                 .build();
-
     }
 
+
     public static RankingResponse of(RankingDto rankingDto, LocalDate challengeEnd) {
+
         return RankingResponse.builder()
                 .memberId(rankingDto.getMemberId())
                 .userName(rankingDto.getUserName())
@@ -67,6 +67,5 @@ public class RankingResponse {
                 .challengeStatus(true)
                 .challengeEndDate(challengeEnd)
                 .build();
-
     }
 }

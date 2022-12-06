@@ -43,7 +43,6 @@ public class ChallengeService {
      * 챌린지 제안
      * 상대방에게 챌린지 제안 알림 서비스 추가 필요
      * 상대방에게 챌린지 신청 알림 전송
-     * @return
      */
     public Long suggest(Long memberId, Long counterpartId) {
 
@@ -66,6 +65,7 @@ public class ChallengeService {
         if (memberId != challenge.getCounterpartId() && memberId != challenge.getApplicantId()) {
             throw new ChallengeNotFound();
         }
+
         Member counterpart = memberService.findMemberById(challenge.getCounterpartId());
         Member applicant = memberService.findMemberById(challenge.getApplicantId());
 
@@ -96,11 +96,10 @@ public class ChallengeService {
                     }
                 }).collect(Collectors.toList());
 
-
-
         return MultiRankingResponse.withLogin(new PageImpl<>(responses,pageable,total),myChallengeStatus);
     }
 
+    //로그인 없이 랭킹조회
     public MultiRankingResponse<?> searchWithoutLogin(RankingCondition condition, Pageable pageable) {
 
         Long total = memberRepository.pagingCount(condition, pageable);
@@ -181,8 +180,6 @@ public class ChallengeService {
      * 챌린지 승락후 당일이내에 취소가능 -페널티 없음
      * 챌린지 시작후 3일이 지나지 않았으면 중단 불가
      * 챌린지 참여자들에게 중단 알림 전송
-     *
-     * @return
      */
     public Long suspend(Long memberId, Long challengeId) {
 

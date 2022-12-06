@@ -35,7 +35,6 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class PostService {
 
-
     private final PostRepository postRepository;
     private final TagService tagService;
     private final AwsS3Service awsS3Service;
@@ -60,7 +59,6 @@ public class PostService {
             Post post = Post.create(postCreate, member, imagePathList);
             return postRepository.save(post).getId();
         }
-
     }
 
     /**
@@ -73,7 +71,6 @@ public class PostService {
      */
     @Transactional(readOnly = true)
     public MultiResponse<?> getPostList(Long lastPostId, Long memberId, Pageable pageable) {
-
 
         List<PostResponse> postResponses = postRepository.findList(lastPostId, memberId, pageable).stream()
                 .map(postTuple ->
@@ -98,11 +95,6 @@ public class PostService {
 
     /**
      * 전체 게시물 조회 - 로그인 없이
-     * 무한 스크롤 페이지네이션 - noOffset, Slice
-     * 1. DB에서  member를 fetchJoin한  Post와 댓글수 조회
-     * 2. post와 연관된 PostTag, Tag, Picture 조회 - Batch Size를 설정함으로써 N+1문제 해결
-     * 3. PostResponse로 build
-     * 4. 무한 스크롤 처리
      */
     @Transactional(readOnly = true)
     public MultiResponse<?> getPostListWithoutLogin(Long lastPostId, Pageable pageable) {
@@ -165,10 +157,6 @@ public class PostService {
 
     /**
      * 게시물 검색 - 태그 기반, 로그인 X
-     * 1.DB에서 태그 이름과 일치한 태그의 Id 목록 가져온다.
-     * 2.태그 Id 목록에 해당하는 post의 id 가져오기 태그목록중 한개만 포함해도 가져온다.
-     * 3. post id에 해당하는 게시물 + 게시물댓글수 가져오기
-     * 4. 무한스크롤 페이지네이션 처리
      */
     public MultiResponse<?> getSearchListWithoutLogin( Pageable pageable, Long lastPostId, List<String> tagNames) {
 
@@ -200,8 +188,6 @@ public class PostService {
      * 1. 로그인 유저가 게시물 작성자인지 체크
      * 2. DB에 저장된 imagePath를 통해 S3에 있는 이미지 파일 수정
      * 3. Tag 수정
-     *
-     * @return 수정된 Post 정보
      */
     public PostUpdateResponse updatePost(Long postId, Long memberId, PostUpdateVO postUpdate) {
 

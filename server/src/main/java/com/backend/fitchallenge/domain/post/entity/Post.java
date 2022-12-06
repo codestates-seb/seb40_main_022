@@ -56,6 +56,7 @@ public class Post extends Auditable {
         this.content = content;
         this.view = 0L;
     }
+
     /**
      *   Tag가 없는 post 생성메서드
      *   post 생성후, createPicture 메서드로 각 이미지의 경로와 postId를 가진 Picture 생성
@@ -87,6 +88,7 @@ public class Post extends Auditable {
         return post;
     }
 
+
     public void  patchWithTag(String content, List<String> paths, List<Tag> tags ) {
         this.content = content;
         //기존 태그,사진 지운다
@@ -96,6 +98,7 @@ public class Post extends Auditable {
         tags.forEach(tag ->PostTag.create(this, tag) );
         paths.forEach(path -> Picture.create(this,path));
     }
+
 
     public void patch(String content, List<String> paths) {
         this.content = content;

@@ -50,7 +50,7 @@ public class Question extends Auditable {
     private List<Answer> answers = new ArrayList<>();
 
     @Builder
-    private Question(String title, String content, QuestionTag questionTag, Long view, Member member) {
+    public Question(String title, String content, QuestionTag questionTag, Long view, Member member) {
         this.title = title;
         this.content = content;
         this.questionTag = questionTag;

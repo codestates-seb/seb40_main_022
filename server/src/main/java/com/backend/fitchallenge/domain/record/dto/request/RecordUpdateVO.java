@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.record.dto.request;
 import com.backend.fitchallenge.domain.sports.dto.SportsRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +30,15 @@ public class RecordUpdateVO {
     private String endImagePath;
 
     private List<SportsRequest> sports;
+
+    @Builder
+    public RecordUpdateVO(LocalTime startTime, LocalTime endTime, String startImagePath, String endImagePath, List<SportsRequest> sports) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startImagePath = startImagePath;
+        this.endImagePath = endImagePath;
+        this.sports = sports;
+    }
 
     public boolean includesBothImages() {
         return this.startImagePath != null && this.endImagePath != null;
