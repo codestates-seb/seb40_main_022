@@ -25,6 +25,11 @@ function Calendar() {
   const [Clicked, setClicked] = useState(false);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
+  const curr = new Date();
+  const offset = curr.getTimezoneOffset() * 60000;
+  const dateOffset = new Date(curr.getTime() - offset);
+  const today = dateOffset.toISOString().slice(0, 10);
+  console.log(member, getlist, getopponent, opponent);
   useEffect(() => {
     const TodayMonth = new Date().getMonth() + 1;
     dispatch(RecordListAsync(TodayMonth));
@@ -48,7 +53,7 @@ function Calendar() {
       });
     });
   }
-  if (member !== null && member !== undefined) {
+  if (opponent && member !== null && member !== undefined) {
     member.map(data => {
       return datelist.push({
         title: data.result,
@@ -106,7 +111,7 @@ function Calendar() {
           </div>
           <article className="userbox">
             <div className="deletebtn">
-              {getlist ? null : (
+              {getlist && getlist.date === today ? null : (
                 <button
                   onClick={() => navigate('/records/postup')}
                   className="healthaddbutton"
@@ -175,9 +180,7 @@ function Calendar() {
                                 {data.set}세트/{data.count}회
                               </span>
                             </div>
-                          ) : (
-                            <div className="dayover">...</div>
-                          );
+                          ) : null;
                         })}
                     </button>
                   ) : null}

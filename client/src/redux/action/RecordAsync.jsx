@@ -5,44 +5,14 @@ export const RecordTagAsync = createAsyncThunk('/recordtag', tag => {
   return axios
     .get(`${process.env.REACT_APP_API_URL}/sports/detail?bodyPart=${tag}`)
     .then(res => {
-      console.log(res);
       return res.data;
     });
 });
 
 export const RecordUpAsync = createAsyncThunk('/recordup', data => {
   try {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/records`,
-        JSON.stringify({
-          start: data[0],
-          startTime: data[1],
-          endTime: data[2],
-          startImagePath: data[3],
-          endImagePath: data[4],
-          sports: data[5],
-        }),
-        {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json;',
-            Authorization: localStorage.getItem('Authorization'),
-            RefreshToken: localStorage.getItem('RefreshToken'),
-          },
-        },
-      )
-      .then(res => console.log(res));
-  } catch (err) {
-    if (err.response.status === 400) {
-      alert('입력값이 잘못되었습니다!');
-    }
-  }
-});
-export const RecordReUpAsync = createAsyncThunk('/recordup', data => {
-  try {
     axios.post(
-      `${process.env.REACT_APP_API_URL}/records/${data[6]}`,
+      `${process.env.REACT_APP_API_URL}/records`,
       JSON.stringify({
         start: data[0],
         startTime: data[1],
@@ -60,6 +30,36 @@ export const RecordReUpAsync = createAsyncThunk('/recordup', data => {
         },
       },
     );
+  } catch (err) {
+    if (err.response.status === 400) {
+      alert('입력값이 잘못되었습니다!');
+    }
+  }
+});
+export const RecordReUpAsync = createAsyncThunk('/recordup', data => {
+  try {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/records/${data[6]}`,
+        JSON.stringify({
+          start: data[0],
+          startTime: data[1],
+          endTime: data[2],
+          startImagePath: data[3],
+          endImagePath: data[4],
+          sports: data[5],
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json;',
+            Authorization: localStorage.getItem('Authorization'),
+            RefreshToken: localStorage.getItem('RefreshToken'),
+          },
+        },
+      )
+      .then(() => {
+        window.location.href = '/records';
+      });
   } catch (err) {
     if (err.response.status === 400) {
       alert('입력값이 잘못되었습니다!');
@@ -88,17 +88,13 @@ export const RecordImgUp = createAsyncThunk('Imgup', formdata => {
 });
 export const RecordImgReUp = createAsyncThunk('Imgup', formdata => {
   axios
-    .post(
-      `${process.env.REACT_APP_API_URL}/records/pictures/update`,
-      formdata,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: localStorage.getItem('Authorization'),
-          RefreshToken: localStorage.getItem('RefreshToken'),
-        },
+    .patch(`${process.env.REACT_APP_API_URL}/records/pictures`, formdata, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
       },
-    )
+    })
     .then(res => {
       return res.data;
     });
@@ -121,12 +117,16 @@ export const RecordListGet = createAsyncThunk('/record/idlist', id => {
 });
 
 export const RecordListDelete = createAsyncThunk('/record/delete', id => {
-  axios.delete(`${process.env.REACT_APP_API_URL}/records/${id}`, {
-    headers: {
-      Authorization: localStorage.getItem('Authorization'),
-      RefreshToken: localStorage.getItem('RefreshToken'),
-    },
-  });
+  axios
+    .delete(`${process.env.REACT_APP_API_URL}/records/${id}`, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(() => {
+      window.location.href = '/records';
+    });
 });
 
 export const ChallengeDelete = createAsyncThunk('/challenge/delete', id => {

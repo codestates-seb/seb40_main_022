@@ -5,6 +5,7 @@ export const Inside = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   .searchInput {
     display: flex;
     justify-content: center;
@@ -13,8 +14,10 @@ export const Inside = styled.section`
     background-color: var(--white);
     width: 850px;
     z-index: 8;
-
-    form {
+    @media screen and (max-width: 700px) {
+      width: 500px;
+    }
+    div {
       width: 78%;
       margin: 20px 0;
       position: relative;
@@ -22,10 +25,8 @@ export const Inside = styled.section`
       .searchIcon {
         position: absolute;
         cursor: pointer;
-        margin-top: 63px;
-        margin-left: -45px;
-        width: 25px;
-        height: 25px;
+        right: 10px;
+        bottom: 28px;
       }
     }
   }

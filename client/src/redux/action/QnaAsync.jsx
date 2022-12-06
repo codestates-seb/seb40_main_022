@@ -40,9 +40,11 @@ export const QnaAsynclistPatch = createAsyncThunk('qnaask', data => {
 });
 
 export const QnaDetailAsync = createAsyncThunk('qnaDetail', ({ data }) => {
-  axios.get(`${process.env.REACT_APP_API_URL}/questions/${data}`).then(res => {
-    return res.data;
-  });
+  return axios
+    .get(`${process.env.REACT_APP_API_URL}/questions/${data}`)
+    .then(res => {
+      return res.data;
+    });
 });
 
 export const QnaDetailCommentAsync = createAsyncThunk('qnaanswer', data => {
