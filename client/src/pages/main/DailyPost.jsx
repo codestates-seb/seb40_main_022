@@ -10,6 +10,7 @@ import dailyAdd from '../../images/daily_add.svg';
 import { DailyForm, DailyItem, Top, Content } from './MainStyle';
 import Loader from './Loader';
 import { MainSearchAsync } from '../../redux/action/MainAsync';
+import { searchclose } from '../../redux/reducer/MainSlice';
 
 export default function DailyPost() {
   const [postList, setPostList] = useState([]);
@@ -17,11 +18,10 @@ export default function DailyPost() {
   const [isLoaded, setIsLoaded] = useState(false);
   const searchtag = useSelector(state => state.dailypost.search);
   const searchList = useSelector(state => state.dailypost.searchList.items);
+  const searchload = useSelector(state => state.dailypost.searchload);
   const [slist, setSlist] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(slist);
-
   const newPost = () => {
     if (!localStorage.getItem('Authorization')) {
       alert('로그인 후 이용할 수 있습니다.');
@@ -29,21 +29,25 @@ export default function DailyPost() {
       navigate('/dailyposts/postup');
     }
   };
-
+  // console.log(searchList, slist, searchload);
   const [ref, inView] = useInView();
   useEffect(() => {
-    const lastPostId = searchList
-      ? searchList[searchList.length - 1].post.postId
-      : '';
-    const data = [searchtag, lastPostId];
-    dispatch(MainSearchAsync(data))
-      .unwrap()
-      .then(() => {
-        if (searchList !== undefined) {
-          setSlist(searchList);
-        }
-      });
-  }, [searchtag]);
+    if (searchtag !== '' && searchtag !== undefined) {
+      setIsLoaded(true);
+      const data = [searchtag, ''];
+      dispatch(MainSearchAsync(data))
+        .unwrap()
+        .then(() => {
+          if (searchList !== undefined) {
+            setSlist(searchList);
+            setIsLoaded(false);
+          }
+        })
+        .then(() => {
+          dispatch(searchclose());
+        });
+    }
+  }, [searchtag, searchload]);
 
   useEffect(() => {
     const getPost = async () => {
@@ -58,17 +62,8 @@ export default function DailyPost() {
 
   useEffect(() => {
     if (searchList) {
-      const lastPostId = searchList
-        ? searchList[searchList.length - 1].post.postId
-        : '';
-      if (
-        searchList &&
-        searchList.length >= 4 &&
-        lastPost &&
-        lastPostId > 1 &&
-        lastPost.length >= 4 &&
-        inView
-      ) {
+      const lastPostId = searchList[searchList.length - 1].post.postId;
+      if (searchList && searchList.length >= 4 && lastPostId > 1 && inView) {
         const data = [searchtag, lastPostId];
         setIsLoaded(true);
         setTimeout(() => {
@@ -108,7 +103,7 @@ export default function DailyPost() {
   return (
     <>
       <Top>
-        {searchList
+        {searchtag
           ? slist.slice(0, 4).map(el => {
               return (
                 <Content key={uuidv4}>
@@ -152,7 +147,7 @@ export default function DailyPost() {
         </Content>
       </Top>
       <DailyForm>
-        {searchList
+        {searchtag
           ? slist.map(all => {
               return (
                 <div className="list" key={uuidv4}>

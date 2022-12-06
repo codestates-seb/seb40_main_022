@@ -7,7 +7,6 @@ import { Inside, MainForm, MainSearch, ContentForm } from './MainStyle';
 
 export default function MainInside() {
   const [tagsearch, setTagearch] = useState('');
-
   const dispatch = useDispatch();
   const handleSearch = () => {
     const tagchange = tagsearch.split('#').join('%23');
