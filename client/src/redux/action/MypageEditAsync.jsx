@@ -10,7 +10,6 @@ export const MypageEditGet = createAsyncThunk('/mypage/edit', () => {
       },
     })
     .then(res => {
-      console.log(res);
       return res.data;
     });
 
@@ -26,8 +25,7 @@ export const MypagePost = createAsyncThunk('/myPage/edit', data => {
         RefreshToken: localStorage.getItem('RefreshToken'),
       },
     })
-    .then(res => {
-      console.log(res);
+    .then(() => {
       window.location.href = '/members/mypage';
     })
     .catch(err => {

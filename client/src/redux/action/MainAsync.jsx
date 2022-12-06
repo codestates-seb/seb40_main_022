@@ -186,7 +186,6 @@ export const MainSearchAsync = createAsyncThunk('search', data => {
       `${process.env.REACT_APP_API_URL}/dailyPosts/search?tag=${data[0]}&lastPostId=${data[1]}`,
     )
     .then(res => {
-      console.log(res);
       return res.data;
     });
 });

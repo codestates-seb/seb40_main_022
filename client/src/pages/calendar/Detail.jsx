@@ -44,6 +44,7 @@ function Detail() {
   const formdata = new FormData();
   const startImagePath = useSelector(state => state.record.Start);
   const endImagePath = useSelector(state => state.record.End);
+
   const handleStartFile = e => {
     formdata.append('point', 'start');
     formdata.append('file', e.target.files[0]);
