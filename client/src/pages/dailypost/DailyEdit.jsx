@@ -1,26 +1,34 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  // useSelector,
+  useDispatch,
+} from 'react-redux';
+// import axios from 'axios';
 import uuidv4 from 'react-uuid';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import plus from '../../images/plus.png';
 import { DetailBody, DetailMain } from './dailyStyle';
-import { asyncPostUpdate } from '../../redux/action/MainAsync';
+import { asyncPost, asyncPostUpdate } from '../../redux/action/MainAsync';
 
 function DailyEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const Id = useParams();
   const photoUp = useRef();
-  const selectdata = useSelector(state => state.dailypost.data.items);
-  const list = selectdata.filter(postdata => postdata.post.postId === +Id.id);
-  const [files, setFiles] = useState(list[0].pictures);
-  const [imgBase64, setImgBase64] = useState(list[0].pictures);
-  const [content, setContent] = useState(list[0].post.content);
+  // const selectdata = useSelector(state => state);
+  // console.log(selectdata);
+  // const list = selectdata.filter(postdata => postdata.post.postId === +Id.id);
+  const [files, setFiles] = useState(null);
+  const [imgBase64, setImgBase64] = useState([]);
+  const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
-  const [tagList, setTagList] = useState(list[0].tags);
+  const [tagList, setTagList] = useState([]);
 
+  useEffect(() => {
+    dispatch(asyncPost());
+  });
   const handleFile = e => {
     setFiles(e.target.files);
     setImgBase64([]);

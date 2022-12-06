@@ -8,10 +8,15 @@ const MainSlice = createSlice({
     comment: [],
     search: '',
     searchList: [],
+    searchload: false,
   },
   reducers: {
     searchchange: (state, action) => {
       state.search = action.payload;
+      state.searchload = true;
+    },
+    searchclose: state => {
+      state.searchload = false;
     },
   },
   extraReducers: {
@@ -22,12 +27,11 @@ const MainSlice = createSlice({
       state.comment = action.payload;
     },
     [MainSearchAsync.fulfilled]: (state, action) => {
-      console.log(action);
       state.searchList = action.payload;
     },
   },
 });
 
 // export const DetailActions = MainSlice.actions;
-export const { searchchange } = MainSlice.actions;
+export const { searchchange, searchclose } = MainSlice.actions;
 export default MainSlice.reducer;

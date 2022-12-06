@@ -24,7 +24,7 @@ function QnaList() {
   const questiondata = useSelector(state => state.qnalist.search);
   const items = useSelector(state => state.qnalist.pageInfo);
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState('recent');
+  const [sort, setSort] = useState(0);
   const [result, setResult] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const datasearch = [search, sort, currentPage];
@@ -48,7 +48,6 @@ function QnaList() {
     dispatch(QnaSearchreload(datasearch));
   };
 
-  // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
       return value;
@@ -98,7 +97,16 @@ function QnaList() {
                 id="newest"
                 name="contact"
                 defaultChecked
-                onClick={() => setSort('recent')}
+                onClick={() => setSort(0)}
+              />
+              <span>관련도 순</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="newest"
+                name="contact"
+                onClick={() => setSort(1)}
               />
               <span>최신 순</span>
             </label>
@@ -107,7 +115,7 @@ function QnaList() {
                 type="radio"
                 id="popularity"
                 name="contact"
-                onClick={() => setSort('hot')}
+                onClick={() => setSort(2)}
               />
               <span>인기 순</span>
             </label>
