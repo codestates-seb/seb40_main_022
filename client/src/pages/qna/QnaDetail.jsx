@@ -46,7 +46,6 @@ function QnaDetail() {
   const [update, setUpdate] = useState('');
   const ac = localStorage.getItem('Authorization');
   const userdata = useSelector(state => state.mypage.member.userName);
-
   function leftPad(value) {
     if (value >= 10) {
       return value;
@@ -121,7 +120,9 @@ function QnaDetail() {
                     ? detaillist.questionWriter.username
                     : null}
                 </h4>
-                <h4>{detaillist && detaillist.createdAt}</h4>
+                <h4>
+                  {detaillist && `${detaillist.createdAt}`.replace('T', ' ')}
+                </h4>
               </div>
               <button>{detaillist && detaillist.tag}</button>
             </DetailNDB>

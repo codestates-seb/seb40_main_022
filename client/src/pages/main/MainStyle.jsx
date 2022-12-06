@@ -95,6 +95,9 @@ export const ContentForm = styled.div`
   .cont-picture {
     border-radius: 50%;
   }
+  .username {
+    text-align: center;
+  }
 `;
 
 export const Top = styled.div`
