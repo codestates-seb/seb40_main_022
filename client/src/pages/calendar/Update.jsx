@@ -10,7 +10,7 @@ import rcddecordminus from '../../images/rcddecordminus.png';
 import DetailCamera from '../../images/DetailCamera.png';
 import {
   RecordTagAsync,
-  RecordUpAsync,
+  RecordReUpAsync,
   RecordImgReUp,
   RecordListDelete,
 } from '../../redux/action/RecordAsync';
@@ -31,8 +31,6 @@ function Update() {
   const [split, setSplit] = useState([]);
   const [time, setTime] = useState(member.startTime);
   const [end, setEnd] = useState(member.endTime);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
   const today = new Date().toISOString().slice(0, 10);
   const [clicked, setClicked] = useState(false);
   const [addUpdate, setAddUpdate] = useState([]);
@@ -40,9 +38,11 @@ function Update() {
   const [endrealImg, setEndRealImg] = useState(member.endPicture);
   const reader = new FileReader();
   const dispatch = useDispatch();
-  const formdata = new FormData();
   const recordId = +useParams().id;
+  const startImagePath = useSelector(state => state.record.Start);
+  const endImagePath = useSelector(state => state.record.End);
   const handleStartFile = e => {
+    const formdata = new FormData();
     formdata.append('point', 'start');
     formdata.append('filePath', member.startPicture);
     formdata.append('file', e.target.files[0]);
@@ -52,9 +52,9 @@ function Update() {
       const resultImg = reader.result;
       setStartRealImg(resultImg.toString());
     };
-    setStartTime(e.target.files[0]);
   };
   const handleEndFile = e => {
+    const formdata = new FormData();
     formdata.append('point', 'end');
     formdata.append('filePath', member.endPicture);
     formdata.append('file', e.target.files[0]);
@@ -64,7 +64,6 @@ function Update() {
       const resultImg = reader.result;
       setEndRealImg(resultImg.toString());
     };
-    setEndTime(e.target.files[0]);
   };
   const handelClick = name => {
     if (name === 'start') {
@@ -75,15 +74,12 @@ function Update() {
   };
   const handledelete = () => {
     dispatch(RecordListDelete(recordId));
-    navigate('/record');
   };
   const deleteFile = name => {
     if (name === 'start') {
       setStartRealImg('');
-      setStartTime('');
     } else {
       setEndRealImg('');
-      setEndTime('');
     }
   };
   const tagClick = () => {
@@ -97,12 +93,29 @@ function Update() {
     }
   };
   const handleUp = () => {
-    const data = [today, time, end, startTime.name, endTime.name, split];
-    dispatch(RecordUpAsync(data));
+    const data = [
+      today,
+      time,
+      end,
+      startImagePath,
+      endImagePath,
+      split,
+      recordId,
+    ];
+    dispatch(RecordReUpAsync(data));
   };
   useEffect(() => {
     dispatch(RecordTagAsync(tags));
+    ListupGet.map(data => {
+      return split.push({
+        id: data.sportsId,
+        set: data.set,
+        count: data.count,
+        weight: data.weight,
+      });
+    });
   }, []);
+
   return (
     <DetailBox>
       <Header />
@@ -269,15 +282,6 @@ function Update() {
           </button>
         </section>
         <section className="setInfo">
-          {ListupGet &&
-            ListupGet.map(data => {
-              return split.push({
-                id: data.sportsId,
-                set: data.set,
-                count: data.count,
-                weight: data.weight,
-              });
-            })}
           {split &&
             split.map((data, index) => {
               if (split.length !== addUpdate.length) {
@@ -298,7 +302,6 @@ function Update() {
                   </button>
                   <button
                     onClick={() => {
-                      // dispatch(Recorddelete(data.id));
                       const filterdata = [];
                       for (let i = 0; i < split.length; i += 1) {
                         if (i !== index) {
@@ -324,7 +327,7 @@ function Update() {
           <button
             className="cancle"
             onClick={() => {
-              navigate('/record');
+              navigate('/records');
             }}
           >
             나가기

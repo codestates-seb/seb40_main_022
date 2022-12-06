@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
 import uuidv4 from 'react-uuid';
+// import { useNavigate } from 'react-router-dom';
+import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
 import Loader from '../main/Loader';
 import { asyncPostDel } from '../../redux/action/MainAsync';
@@ -28,24 +30,22 @@ const Pictures = styled.div`
     > img {
       width: 400px;
       height: 400px;
-      /* border: 5px solid var(--white); */
     }
-    > button {
-      cursor: pointer;
-      /*width: 40px;
-      margin-top: 10px;
-      border: none;
-      background: var(--white); */
-      background: var(--white);
-      border: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
-      margin: 5px;
-      > img {
+
+    .buttons {
+      > button {
+        cursor: pointer;
+        background: var(--white);
+        border: none;
         width: 20px;
         height: 20px;
+        border-radius: 50%;
+        box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+        margin: 5px;
+        > img {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
   }
@@ -59,6 +59,7 @@ export function PictureBox() {
   const [postList, setPostList] = useState([]);
   const lastPost = postList && postList[postList.length - 1];
 
+  // const navigate = useNavigate();
   useEffect(() => {
     const getPost = async () => {
       axios
@@ -120,13 +121,23 @@ export function PictureBox() {
                     return (
                       <div key={el.postId} className="imgbox">
                         <img src={el.image} alt="" />
-                        <button
-                          onClick={() => {
-                            handleDelPost(el.postId);
-                          }}
-                        >
-                          <img className="delete" src={del} alt="delete" />
-                        </button>
+                        <div className="buttons">
+                          <button
+                            onClick={() =>
+                              // navigate(`/dailyposts/${el.postId}`)
+                              alert('구현 중입니다.')
+                            }
+                          >
+                            <img className="edit" src={edit} alt="edit" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleDelPost(el.postId);
+                            }}
+                          >
+                            <img className="delete" src={del} alt="delete" />
+                          </button>
+                        </div>
                       </div>
                     );
                   })}

@@ -49,19 +49,25 @@ function Header() {
   return (
     <Head>
       <div className="mainHead">
-        <Link to="/" className="logo">
+        <Link
+          to="/"
+          className="logo"
+          onClick={() => {
+            window.location.href = '/';
+          }}
+        >
           <img src={Logo} alt="logo" />
           <img className="logoname" src={LogoText} alt="logo" />
         </Link>
         {IsLogin ? (
           <div className="Rightheader">
-            <Link to="/record" className="logoutbut">
+            <Link to="/records" className="logoutbut">
               운동 기록
             </Link>
-            <Link to="/lank" className="logoutbut">
+            <Link to="/challenge" className="logoutbut">
               랭킹
             </Link>
-            <Link to="/qna" className="logoutbut">
+            <Link to="/questions" className="logoutbut">
               Q&A
             </Link>
             {allam && allam.length !== 0 ? (
@@ -82,10 +88,10 @@ function Header() {
           </div>
         ) : (
           <div className="Rightheader">
-            <Link to="/lank" className="logoutbut">
+            <Link to="/challenge" className="logoutbut">
               랭킹
             </Link>
-            <Link to="/qna" className="logoutbut">
+            <Link to="/questions" className="logoutbut">
               Q&A
             </Link>
             <button ref={popRef} onClick={() => setSide(!side)}>

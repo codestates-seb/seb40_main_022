@@ -39,16 +39,17 @@ public class CommentController {
 
     /**
      * 댓글 조회 - 무한 스크롤 페이지네이션
-     * @param pageable default size = 10, page = 0
+     * @param pageable default size = 5, page = 0
      * @return 댓글 목록 최신순으로 리턴
      */
     @GetMapping("/comments")
     private ResponseEntity<?> getList(@PathVariable("id") Long id,
            @ModelAttribute CommentGet commentGet,
-           @PageableDefault(size = 10)  Pageable pageable) {
+           @PageableDefault(size = 5)  Pageable pageable) {
 
         return new ResponseEntity<>(commentService.getCommentList(id, commentGet.getLastCommentId(),  pageable), HttpStatus.OK);
     }
+
 
     @PatchMapping("/comments/{comments-id}")
     private ResponseEntity<?> update(@PathVariable("id") Long id,
@@ -64,7 +65,6 @@ public class CommentController {
                                      @PathVariable("comments-id") Long commentId,
                                      @AuthMember MemberDetails memberDetails
                                     ) {
-
         commentService.deleteComment(commentId,memberDetails.getMemberId());
         return new ResponseEntity<>(HttpStatus.OK);
     }

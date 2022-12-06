@@ -44,6 +44,7 @@ function Detail() {
   const formdata = new FormData();
   const startImagePath = useSelector(state => state.record.Start);
   const endImagePath = useSelector(state => state.record.End);
+
   const handleStartFile = e => {
     formdata.append('point', 'start');
     formdata.append('file', e.target.files[0]);
@@ -93,7 +94,7 @@ function Detail() {
     dispatch(RecordUpAsync(data))
       .unwrap()
       .then(() => {
-        window.location.href = '/record';
+        window.location.href = '/records';
       });
   };
   useEffect(() => {
@@ -286,7 +287,6 @@ function Detail() {
                   </button>
                   <button
                     onClick={() => {
-                      // dispatch(Recorddelete(data.id));
                       const filterdata = [];
                       for (let i = 0; i < split.length; i += 1) {
                         if (i !== index) {
@@ -309,7 +309,7 @@ function Detail() {
           <button
             className="cancle"
             onClick={() => {
-              navigate('/record');
+              navigate('/records');
             }}
           >
             나가기

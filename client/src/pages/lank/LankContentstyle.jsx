@@ -15,13 +15,18 @@ export const Lankcontents = styled.section`
     background: none;
     border: none;
   }
+
+  .cont {
+    width: 150px;
+  }
   > h1 {
     line-height: 70px;
     font-weight: bolder;
     font-size: 24px;
+    min-width: 60px;
   }
   .cont-picture {
-    width: 80px;
+    max-width: 80px;
     height: 80px;
     border-radius: 40px;
     background-image: url(${UserProfile});

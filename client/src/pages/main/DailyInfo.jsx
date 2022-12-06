@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import {
+  useDispatch,
+  // useSelector
+} from 'react-redux';
 import uuidv4 from 'react-uuid';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
@@ -8,25 +11,29 @@ import comment from '../../images/comment.svg';
 import {
   asyncLike,
   asyncLikeundo,
-  // asyncPostCmtEdit,
+  asyncPost,
 } from '../../redux/action/MainAsync';
 import DailyCmt from './DailyCmt';
 
 export default function DailyInfo({ el, index }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [fav, setFav] = useState(el.likeSate);
+  const [like, setLike] = useState(false);
   const [isComment, setIsComment] = useState(false);
 
   const handleFavorite = () => {
-    setFav(!fav);
-    console.log(fav);
-    if (fav === true) {
+    if (!like) {
       dispatch(asyncLike(el.post.postId));
+      setLike(!like);
     } else {
       dispatch(asyncLikeundo(el.post.postId));
+      setLike(!like);
     }
   };
+
+  useEffect(() => {
+    dispatch(asyncPost());
+  }, []);
 
   return (
     <div>
@@ -42,7 +49,7 @@ export default function DailyInfo({ el, index }) {
             <p className="memo">{el.post.content}</p>
           </div>
           <div className="act">
-            <span className="date">{el.post.createdAt}</span>
+            <span className="date">{el.post.createdAt.replace('T', ' ')}</span>
             <span>
               <button
                 onClick={() => {
@@ -60,7 +67,7 @@ export default function DailyInfo({ el, index }) {
                   handleFavorite();
                 }}
               >
-                {fav ? (
+                {el.likeState ? (
                   <img className="heart" src={heartFill} alt="heart" />
                 ) : (
                   <img className="heart" src={heart} alt="heart" />
@@ -79,7 +86,9 @@ export default function DailyInfo({ el, index }) {
           >
             <img className="user" src={el.member.profileImage} alt="daily" />
           </button>
-          <span>{el.member.username ? el.member.username : null}</span>
+          <span className="username">
+            {el.member.username ? el.member.username : null}
+          </span>
         </div>
       </article>
       {isComment ? <DailyCmt index={index} /> : null}

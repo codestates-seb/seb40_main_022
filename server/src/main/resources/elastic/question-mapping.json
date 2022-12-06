@@ -1,0 +1,49 @@
+{
+  "properties": {
+    "id": {"type": "long"},
+    "title": {
+      "type": "text",
+      "fields": {
+        "nori": {
+          "type": "text",
+          "analyzer": "nori_analyzer"
+        },
+        "ngram": {
+          "type": "text",
+          "analyzer": "ngram_analyzer"
+        }
+      }
+    },
+    "content": {
+      "type": "text",
+      "fields": {
+        "nori": {
+          "type": "text",
+          "analyzer": "nori_analyzer"
+        },
+        "ngram": {
+          "type": "text",
+          "analyzer": "ngram_analyzer"
+        }
+      }
+    },
+    "tag": {
+      "type": "keyword"
+    },
+    "view": {
+      "type": "long"
+    },
+    "memberId": {
+      "type": "long"
+    },
+    "username": {
+      "type": "keyword"
+    },
+    "profileImage": {
+      "type": "keyword"
+    },
+    "answerCount": {
+      "type": "integer"
+    }
+  }
+}

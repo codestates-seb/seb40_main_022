@@ -5,27 +5,68 @@ export const Inside = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   .searchInput {
     display: flex;
     justify-content: center;
     position: fixed;
-    top: 20px;
+    top: 60px;
     background-color: var(--white);
     width: 850px;
     z-index: 8;
 
-    form {
-      width: 78%;
-      margin: 20px 0;
-      position: relative;
+    @media screen and (max-width: 700px) {
+      width: 500px;
+    }
 
-      .searchIcon {
-        position: absolute;
+    .taginput {
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: space-between;
+      width: 85%;
+      height: 50px;
+      border: none;
+      box-shadow: inset var(--box-shadow);
+      border-radius: 50px;
+      outline: 1px solid var(--black-100);
+      margin-top: 50px;
+      padding-left: 30px;
+      padding-right: 20px;
+      font-size: var(--font-20);
+      margin-bottom: 20px;
+      &::placeholder {
+        color: var(--black-300);
+      }
+
+      .tagInfo {
+        display: flex;
+      }
+
+      > button {
+        border: none;
+        background-color: var(--white);
         cursor: pointer;
-        margin-top: 63px;
-        margin-left: -45px;
-        width: 25px;
-        height: 25px;
+        .searchIcon {
+          width: 25px;
+        }
+      }
+    }
+
+    .tags {
+      display: flex;
+      align-items: center;
+
+      > button {
+        top: 0px;
+        margin-left: 5px;
+        border: none;
+        margin: 4px;
+        margin-right: 10px;
+        padding: 4px;
+        color: rgb(57, 115, 157);
+        background-color: rgb(225, 236, 244);
+        cursor: pointer;
       }
     }
   }
@@ -44,25 +85,18 @@ export const MainForm = styled.article`
 `;
 
 export const MainSearch = styled.input`
-  width: 100%;
-  height: 50px;
   border: none;
-  box-shadow: inset var(--box-shadow);
-  border-radius: 50px;
-  outline: 1px solid var(--black-100);
-  margin-top: 50px;
-  padding-left: 30px;
-  font-size: var(--font-20);
-
-  &::placeholder {
-    color: var(--black-300);
-  }
+  outline: none;
+  height: 30px;
 `;
 
 export const ContentForm = styled.div`
   margin-top: 180px;
   .cont-picture {
     border-radius: 50%;
+  }
+  .username {
+    text-align: center;
   }
 `;
 

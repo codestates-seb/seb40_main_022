@@ -14,13 +14,10 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionCreateVO {
 
-    @NotBlank(message = "제목을 입력해주세요.")
     private String title;
 
-    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
-    @NotBlank(message = "태그를 입력해주세요.")
     private String tag;
 
     private List<MultipartFile> files;

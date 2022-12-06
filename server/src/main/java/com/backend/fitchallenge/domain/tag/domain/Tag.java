@@ -20,7 +20,6 @@ public class Tag extends Auditable {
     @Column(name ="content", nullable = false)
     private String content;
 
-
     public Tag(String content) {
         this.content = content;
     }

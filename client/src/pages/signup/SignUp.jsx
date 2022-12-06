@@ -23,8 +23,8 @@ function SignUp() {
   const handleClick = () => {
     if (!EMTest.test(email)) {
       alert('이메일 형식이 잘 못 되었습니다.');
-    } else if (username.length === 0) {
-      alert('유저이름은 한 글자 이상을 적어주세요!');
+    } else if (username.length === 0 || username.length > 15) {
+      alert('유저이름은 한 글자 이상 15자 이하로 적어주세요!');
     } else if (!PWDTest.test(password) && !PWDTest.test(repassword)) {
       alert('비밀번호는 숫자, 영문을 포함한 8자이상입니다.');
     } else if (password !== repassword) {

@@ -42,7 +42,6 @@ export const LoginAsync = createAsyncThunk('login', data => {
           'Access-Control-Allow-Origin': '*',
           'content-type': 'application/application.json',
         },
-        // withCredentials: false,
       },
     )
     .then(res => {

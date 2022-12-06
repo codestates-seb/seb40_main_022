@@ -12,7 +12,7 @@ import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.question.exception.NotQuestionWriter;
 import com.backend.fitchallenge.domain.question.exception.QuestionNotFound;
-import com.backend.fitchallenge.domain.question.repository.QuestionRepository;
+import com.backend.fitchallenge.domain.question.repository.jparepository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -71,8 +71,9 @@ public class AnswerService {
 
         if (member.getId().equals(question.getMember().getId())) {
             answer.accept();
-            if (!answer.getMember().getId().equals(member.getId())) {
-                // 채택자의 Community Point가 증가
+            Member answerWriter = answer.getMember();
+            if (!answerWriter.getId().equals(member.getId())) {
+                answerWriter.getMemberActivity().updatePoint(1.0D);
             }
         } else {
             throw new NotQuestionWriter();

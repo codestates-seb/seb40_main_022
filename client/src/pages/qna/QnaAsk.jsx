@@ -35,8 +35,11 @@ function QnaAsk() {
     } else if (ac && content.length <= 4) {
       alert('내용을 5글자 이상 입력해 주세요');
     } else {
-      dispatch(QnaAsynclistPost({ formdata }));
-      navigate('/qna');
+      dispatch(QnaAsynclistPost({ formdata }))
+        .unwrap()
+        .then(() => {
+          window.location.href = '/questions';
+        });
     }
   };
 
@@ -95,7 +98,7 @@ function QnaAsk() {
           >
             등록
           </button>
-          <button onClick={() => navigate('/qna')}>취소</button>
+          <button onClick={() => navigate('/questions')}>취소</button>
         </PostSubmit>
       </QnaPost>
       <Footer />

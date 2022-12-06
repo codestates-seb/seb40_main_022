@@ -10,7 +10,6 @@ public final class PageRequest {
 
     public PageRequest(int page ) {
         this.page = page <= 0 ? 1 : page;
-
     }
 
         public org.springframework.data.domain.PageRequest of() {

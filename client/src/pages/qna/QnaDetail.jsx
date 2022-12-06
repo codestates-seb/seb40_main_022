@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import uuidv4 from 'react-uuid';
+import { useBeforeunload } from 'react-beforeunload';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -29,6 +30,7 @@ import {
 import { MypageGet } from '../../redux/action/MypageAsync';
 
 function QnaDetail() {
+  useBeforeunload(event => event.preventDefault());
   const list = useSelector(state => state.qnalist.list);
   const answer = useSelector(state => state.qnalist.detail.answers);
   const [content, setContent] = useState('');
@@ -44,7 +46,6 @@ function QnaDetail() {
   const [update, setUpdate] = useState('');
   const ac = localStorage.getItem('Authorization');
   const userdata = useSelector(state => state.mypage.member.userName);
-
   function leftPad(value) {
     if (value >= 10) {
       return value;
@@ -101,7 +102,6 @@ function QnaDetail() {
     dispatch(QnaDetailAsync({ data }));
     setSelect(false);
   }, [select]);
-
   return (
     <Detail>
       <Headerwrap>
@@ -120,7 +120,9 @@ function QnaDetail() {
                     ? detaillist.questionWriter.username
                     : null}
                 </h4>
-                <h4>{detaillist && detaillist.createdAt}</h4>
+                <h4>
+                  {detaillist && `${detaillist.createdAt}`.replace('T', ' ')}
+                </h4>
               </div>
               <button>{detaillist && detaillist.tag}</button>
             </DetailNDB>
@@ -135,17 +137,17 @@ function QnaDetail() {
                     handleUpdateDelete();
                   }}
                 >
-                  <Link to={`/qnaupdate/${+Id.id}`} className="qnaupdate">
+                  <Link to={`/questions/${+Id.id}/edit`} className="qnaupdate">
                     <h3>수정</h3>
                   </Link>
                 </DetailUpdate>
                 <DetailDelete>
                   <Link
-                    to="/qna"
+                    to="/questions"
                     className="qnadelete"
                     onClick={() => {
                       dispatch(QnaDetaillistdelete(data));
-                      window.location.href = '/qna';
+                      window.location.href = '/questions';
                     }}
                   >
                     <h3>삭제</h3>

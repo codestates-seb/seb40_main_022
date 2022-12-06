@@ -25,6 +25,10 @@ function Calendar() {
   const [Clicked, setClicked] = useState(false);
   const memberId =
     member && member.length !== 0 ? member[member.length - 1].recordId : null;
+  const curr = new Date();
+  const offset = curr.getTimezoneOffset() * 60000;
+  const dateOffset = new Date(curr.getTime() - offset);
+  const today = dateOffset.toISOString().slice(0, 10);
   useEffect(() => {
     const TodayMonth = new Date().getMonth() + 1;
     dispatch(RecordListAsync(TodayMonth));
@@ -48,7 +52,7 @@ function Calendar() {
       });
     });
   }
-  if (member !== null && member !== undefined) {
+  if (opponent && member !== null && member !== undefined) {
     member.map(data => {
       return datelist.push({
         title: data.result,
@@ -72,8 +76,7 @@ function Calendar() {
                 <div className="content">아직 대결이 종료되지 않았습니다.</div>
                 <h2>대결을 중단하시겠습니까?</h2>
                 <div className="contentbox">
-                  주의: 대결 중단시 100 point가 차감되고 <br /> 7일간 대결을
-                  하실 수 없습니다.
+                  주의: 대결 중단시 10 point가 차감됩니다.
                 </div>
                 <div className="btns">
                   <button
@@ -81,7 +84,7 @@ function Calendar() {
                     onClick={() => {
                       dispatch(ChallengeDelete(challId));
                       setClicked(!Clicked);
-                      window.location.href = '/record';
+                      window.location.href = '/records';
                     }}
                   >
                     중단
@@ -106,12 +109,14 @@ function Calendar() {
           </div>
           <article className="userbox">
             <div className="deletebtn">
-              <button
-                onClick={() => navigate('/detail')}
-                className="healthaddbutton"
-              >
-                운동 기록
-              </button>
+              {getlist && getlist.date === today ? null : (
+                <button
+                  onClick={() => navigate('/records/postup')}
+                  className="healthaddbutton"
+                >
+                  운동 기록
+                </button>
+              )}
               {challId !== null ? (
                 <button
                   onClick={() => {
@@ -146,7 +151,7 @@ function Calendar() {
                     <button
                       className="userdata1"
                       onClick={() => {
-                        navigate(`/detail/${memberId}`);
+                        navigate(`/records/${memberId}/edit`);
                       }}
                     >
                       <div className="oneday">
@@ -173,9 +178,7 @@ function Calendar() {
                                 {data.set}세트/{data.count}회
                               </span>
                             </div>
-                          ) : (
-                            <div className="dayover">...</div>
-                          );
+                          ) : null;
                         })}
                     </button>
                   ) : null}

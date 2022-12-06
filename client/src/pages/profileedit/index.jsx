@@ -33,15 +33,12 @@ function ProfileEdit() {
   const [weight, setWeight] = useState('');
   const [kilogram, setKilogram] = useState('');
   const [period, setPeriod] = useState('');
-  const [prevImage, setPrevImage] = useState('');
+  const [prevImage, setPrevImage] = useState(userdata.member.profileImage);
   const [profileImage, setProfileImage] = useState(
     userdata.member.profileImage,
   );
   const [nameError, setNameError] = useState({ display: 'none' });
-  const [passwordError, setPasswordError] = useState({ display: 'none' });
   const photoUp = useRef();
-  const PWDTest = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
-
   const dispatch = useDispatch();
 
   const handleprofileImage = e => {
@@ -64,12 +61,6 @@ function ProfileEdit() {
     if (username.length > 0) {
       setNameError({ display: 'none' });
     }
-    if (!PWDTest.test(password)) {
-      setPasswordError({ display: 'block' });
-    }
-    if (PWDTest.test(password)) {
-      setPasswordError({ display: 'none' });
-    }
   }, [username, password]);
 
   const handleSubmit = () => {
@@ -86,12 +77,7 @@ function ProfileEdit() {
     formData.append('kilogram', kilogram);
     formData.append('period', period);
     formData.append('profileImage', profileImage);
-    dispatch(MypagePost(formData))
-      .unwrap()
-      .then(() => {
-        navigate('/mypage');
-        window.location.reload();
-      });
+    dispatch(MypagePost(formData));
   };
   return (
     <Wrapper>
@@ -126,7 +112,7 @@ function ProfileEdit() {
             <ErrorP style={nameError} className="errormsg">
               이름은 1글자 이상이어야 합니다.
             </ErrorP>
-            <div className="boxname">비밀번호*</div>
+            <div className="boxname">비밀번호</div>
             <ProfileInputTop
               value={password}
               type="password"
@@ -135,9 +121,6 @@ function ProfileEdit() {
                 setPassword(e.target.value);
               }}
             />
-            <ErrorP style={passwordError} className="errormsg">
-              비밀번호는 숫자, 영문 포함 8자 이상이어야 합니다.
-            </ErrorP>
             <div className="boxname">직업</div>
             <ProfileInputTop
               value={job}
@@ -297,7 +280,7 @@ function ProfileEdit() {
                 if (
                   profileImage.length !== 0 &&
                   username.length > 0 &&
-                  PWDTest.test(password) &&
+                  username.length <= 15 &&
                   age.length > 0 &&
                   height.length > 0 &&
                   weight.length > 0 &&
@@ -305,13 +288,10 @@ function ProfileEdit() {
                   period.length > 0
                 ) {
                   handleSubmit();
-                  navigate('/mypage');
                 } else if (profileImage.length === 0)
                   alert('이미지를 업로드해주세요');
-                else if (username.length < 1)
-                  alert('이름은 1자 이상 입력해주세요');
-                else if (!PWDTest.test(password))
-                  alert('비밀번호는 숫자, 영문 포함 8자 이상이어야 합니다.');
+                else if (username.length < 1 || username.length >= 15)
+                  alert('이름은 1자 이상 15자 이하로 입력해주세요');
                 else if (age.length < 1) alert('나이를 입력해주세요');
                 else if (height.length < 1) alert('키를 입력해주세요');
                 else if (weight.length < 1) alert('몸무게를 입력해주세요');
@@ -321,7 +301,7 @@ function ProfileEdit() {
             >
               완료
             </button>
-            <button onClick={() => navigate('/mypage')}>취소</button>
+            <button onClick={() => navigate('/members/mypage')}>취소</button>
           </BtnBox>
         </ProfileBox>
       </div>
