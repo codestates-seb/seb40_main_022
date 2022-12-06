@@ -65,12 +65,6 @@ export const Lankcontents = styled.section`
     font-size: var(--font-18);
     box-shadow: var(--box-shadow);
   }
-  /* .cont-height {
-    border: 1px solid red;
-  }
-  .cont-weight {
-    border: 1px solid blue;
-  } */
   > h4 {
     line-height: 70px;
     font-size: var(--font-11);

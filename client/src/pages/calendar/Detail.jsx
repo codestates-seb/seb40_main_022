@@ -287,7 +287,6 @@ function Detail() {
                   </button>
                   <button
                     onClick={() => {
-                      // dispatch(Recorddelete(data.id));
                       const filterdata = [];
                       for (let i = 0; i < split.length; i += 1) {
                         if (i !== index) {

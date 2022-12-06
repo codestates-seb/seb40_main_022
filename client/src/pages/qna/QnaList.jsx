@@ -48,7 +48,6 @@ function QnaList() {
     dispatch(QnaSearchreload(datasearch));
   };
 
-  // 날짜 바꾸기
   function leftPad(value) {
     if (value >= 10) {
       return value;
