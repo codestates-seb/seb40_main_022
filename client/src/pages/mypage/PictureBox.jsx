@@ -124,9 +124,7 @@ export function PictureBox() {
                         <img src={el.image} alt="" />
                         <div className="buttons">
                           <button
-                            onClick={() =>
-                              navigate(`/dailypost/edit/${el.postId}`)
-                            }
+                            onClick={() => navigate(`/dailyposts/${el.postId}`)}
                           >
                             <img className="edit" src={edit} alt="edit" />
                           </button>

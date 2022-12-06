@@ -60,7 +60,6 @@ export const asyncPostScroll = createAsyncThunk('post', lastPostId => {
       },
     )
     .then(res => {
-      console.log(res);
       return res.data;
     });
   return data;
