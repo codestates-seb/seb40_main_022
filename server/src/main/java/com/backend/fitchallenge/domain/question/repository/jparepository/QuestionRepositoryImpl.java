@@ -59,7 +59,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .leftJoin(question.member).fetchJoin()
                 .limit(pageable.getSize())
                 .offset(pageable.getOffset())
-//                .orderBy(getOrderSpecifier(pageable))
+                .orderBy(question.id.desc())
                 .fetch();
     }
 
@@ -82,10 +82,10 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 //                .fetch();
 //    }
 
-    private BooleanExpression questionTagEq(String tagStringValue) {
-        //QuestionSearchQuery의 queryParsing()에서 questionTag에 해당하는 값이 입력되지 않으면 ""을 넘기도록 설정했습니다.
-        return tagStringValue.equals("") ? null : question.questionTag.stringValue().eq(tagStringValue);
-    }
+//    private BooleanExpression questionTagEq(String tagStringValue) {
+//        //QuestionSearchQuery의 queryParsing()에서 questionTag에 해당하는 값이 입력되지 않으면 ""을 넘기도록 설정했습니다.
+//        return tagStringValue.equals("") ? null : question.questionTag.stringValue().eq(tagStringValue);
+//    }
 
 //    private OrderSpecifier<?> getOrderSpecifier(PageRequest pageable) {
 //        log.info("[getOrderSpecifier] dynamicSort: {}", pageable.getDynamicSort());

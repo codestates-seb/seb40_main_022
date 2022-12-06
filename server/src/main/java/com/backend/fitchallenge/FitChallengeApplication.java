@@ -23,10 +23,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 public class FitChallengeApplication{
 
-		public static void main (String[]args){
-			SpringApplication.run(FitChallengeApplication.class, args);
-		}
-
+	public static void main (String[]args){
+		SpringApplication.run(FitChallengeApplication.class, args);
 	}
+}
 
 
