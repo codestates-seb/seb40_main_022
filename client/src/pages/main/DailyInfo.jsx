@@ -1,12 +1,6 @@
-import {
-  useState,
-  //  useEffect
-} from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  useDispatch,
-  //  useSelector
-} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import uuidv4 from 'react-uuid';
 import heart from '../../images/Heart.svg';
 import heartFill from '../../images/heart_fill.svg';
@@ -14,7 +8,7 @@ import comment from '../../images/comment.svg';
 import {
   asyncLike,
   asyncLikeundo,
-  // asyncPost,
+  asyncPost,
 } from '../../redux/action/MainAsync';
 import DailyCmt from './DailyCmt';
 
@@ -34,12 +28,12 @@ export default function DailyInfo({ el, index }) {
     }
   };
 
-  // const likeVal = useSelector(state => state.dailypost.data.items);
-  // console.log(likeVal);
+  const likeVal = useSelector(state => state.dailypost.data.items);
+  console.log(likeVal);
 
-  // useEffect(() => {
-  //   dispatch(asyncPost());
-  // }, []);
+  useEffect(() => {
+    dispatch(asyncPost());
+  }, []);
 
   return (
     <div>
@@ -73,7 +67,7 @@ export default function DailyInfo({ el, index }) {
                   handleFavorite();
                 }}
               >
-                {like ? (
+                {el.likeState ? (
                   <img className="heart" src={heartFill} alt="heart" />
                 ) : (
                   <img className="heart" src={heart} alt="heart" />
