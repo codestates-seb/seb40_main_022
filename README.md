@@ -4,7 +4,7 @@
 
 ### FitChallenge, 더 강력한 나를 만드는 도전. 
 
-### 배포 링크 : [[Fit Challenge]](http://fit-challenge-22.s3-website.ap-northeast-2.amazonaws.com)
+### 배포 링크 : [[Fit Challenge]](http://fitchallenge2.s3-website.ap-northeast-2.amazonaws.com/)
 
 
 ## 🏆 프로젝트 소개
