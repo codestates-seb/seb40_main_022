@@ -21,7 +21,6 @@ public class PostComment extends Auditable {
     @Column(name = "post_comment_id")
     private Long id;
 
-
     @Column(name = "content", nullable = false)
     private String content;
 

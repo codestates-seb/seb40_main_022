@@ -56,11 +56,11 @@ public class NotificationService {
         }
         return emitter;
     }
+
     /**
      * 알림 송신
      * 1. 알림생성 & 저장
      * 2. 수신자의 emitter들을 모두찾아 해당 emitter로 송신
-     *
      * @param receiver 수신자
      * @param challenge 챌린지
      * @param content 알림 메시지

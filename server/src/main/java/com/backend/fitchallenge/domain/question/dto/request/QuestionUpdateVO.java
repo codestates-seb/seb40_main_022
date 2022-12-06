@@ -13,10 +13,8 @@ import java.util.List;
 @Getter
 public class QuestionUpdateVO {
 
-    @NotBlank
     private String title;
 
-    @NotBlank
     private String content;
 
     private String tag;

@@ -3,6 +3,7 @@ package com.backend.fitchallenge.domain.record.dto.request;
 import com.backend.fitchallenge.domain.sports.dto.SportsRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,7 +27,7 @@ public class RecordCreateVO {
      * - 초는 제외할 수 있는 방법을 찾으면 추후 반영하겠습니다.
      */
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate start;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
@@ -40,5 +41,15 @@ public class RecordCreateVO {
     private String endImagePath;
 
     private List<SportsRequest> sports;
+
+    @Builder
+    public RecordCreateVO(LocalDate start, LocalTime startTime, LocalTime endTime, String startImagePath, String endImagePath, List<SportsRequest> sports) {
+        this.start = start;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startImagePath = startImagePath;
+        this.endImagePath = endImagePath;
+        this.sports = sports;
+    }
 
 }

@@ -32,6 +32,7 @@ public class ChallengeController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> challengeDetails(
             @AuthMember MemberDetails memberDetails,
@@ -59,6 +60,7 @@ public class ChallengeController {
         }
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> refuse(
             @AuthMember MemberDetails memberDetails,
@@ -67,6 +69,7 @@ public class ChallengeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     @DeleteMapping("/{id}/suspend")
     public ResponseEntity<?> suspend(
         @AuthMember MemberDetails memberDetails,
@@ -74,6 +77,7 @@ public class ChallengeController {
         Long challengeId = challengeService.suspend(memberDetails.getMemberId(), id);
         return new ResponseEntity<>(challengeId,HttpStatus.OK);
     }
+
 
     @PostMapping("/{id}/accept")
     public ResponseEntity<?> accept(

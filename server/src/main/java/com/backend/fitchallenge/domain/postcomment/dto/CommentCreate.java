@@ -17,7 +17,6 @@ public class CommentCreate {
         @NotBlank(message = "댓글 내용은 공백이 아니어야 합니다.")
         private String content;
 
-
         public PostComment toEntity(Post post, Member member) {
                 return PostComment.builder()
                         .content(content)

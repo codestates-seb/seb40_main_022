@@ -52,6 +52,7 @@ public class RecordController {
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("record-id") Long recordId,
                                        @RequestBody RecordUpdateVO recordUpdateVO) {
+        log.info("[RecordController] update() sports: {}", recordUpdateVO.getSports().toString());
 
         return ResponseEntity.ok(recordService.updateRecord(memberDetails.getMemberId(), recordId, recordUpdateVO));
     }
@@ -73,7 +74,7 @@ public class RecordController {
         return ResponseEntity.ok(TimePictureResponse.of(timePictureVO.getPoint(), imagePathList.get(0)));
     }
 
-    @PatchMapping("/records/pictures")
+    @PostMapping("/records/pictures/update")
     public ResponseEntity<?> updatePicture(@AuthMember MemberDetails memberDetails,
                                             TimePictureUpdateVO timePictureUpdateVO) throws IOException {
 

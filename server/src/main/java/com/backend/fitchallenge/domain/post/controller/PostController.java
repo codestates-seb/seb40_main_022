@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//fixme: 카멜케이스 적용
 @RestController
 @RequestMapping("/dailyPosts")
 @RequiredArgsConstructor
@@ -26,11 +25,11 @@ public class PostController {
     private final PostService postService;
     private final AwsS3Service awsS3Service;
 
+
     @PostMapping
     public ResponseEntity<?> create(
             @AuthMember MemberDetails memberDetails,
-            PostCreateVO postCreate
-    ) {
+            PostCreateVO postCreate) {
         //S3에 파일업로드 후 저장된경로 리스트 반환
         List<String> imagePathList = awsS3Service.StoreFile(postCreate.getFiles());
 
@@ -44,9 +43,8 @@ public class PostController {
 
     /**
      * 전체 게시물 조회
-     *
      * @param postGet  현재 유저가 보고있는 게시물의 마지막 postId를 담고있는 객체
-     * @param pageable default page = 0, size = 3
+     * @param pageable default page = 0, size = 4
      */
     @GetMapping
     public ResponseEntity<MultiResponse<?>> getList(
@@ -66,7 +64,7 @@ public class PostController {
     /**
      * 게시물 검색
      * #~~ 형식의 tag 검색어 parsing 해서 tagNames List에 추가
-     * @param pageable   size default 3
+     * @param pageable   size default 4
      * @param postSearch tag + lastPostId(마지막게시물 포스트 Id)
      */
     @GetMapping("/search")
@@ -86,11 +84,7 @@ public class PostController {
         }
     }
 
-    /**
-     * 게시물 수정
-     *
-     * @param postUpdate    게시물 수정 요청 정보
-     */
+
     @PostMapping("/{id}")
     public ResponseEntity<?> update(
             @AuthMember MemberDetails memberDetails, @PathVariable Long id,
@@ -98,11 +92,11 @@ public class PostController {
         return new ResponseEntity<>(postService.updatePost(id, memberDetails.getMemberId(), postUpdate), HttpStatus.OK);
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(
             @AuthMember MemberDetails memberDetails,
-            @PathVariable Long id
-    ) {
+            @PathVariable Long id) {
         postService.deletePost(id, memberDetails.getMemberId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
