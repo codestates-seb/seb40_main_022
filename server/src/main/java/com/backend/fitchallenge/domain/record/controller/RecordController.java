@@ -52,6 +52,7 @@ public class RecordController {
     public ResponseEntity<Long> update(@AuthMember MemberDetails memberDetails,
                                        @PathVariable("record-id") Long recordId,
                                        @RequestBody RecordUpdateVO recordUpdateVO) {
+        log.info("[RecordController] update() sports: {}", recordUpdateVO.getSports().toString());
 
         return ResponseEntity.ok(recordService.updateRecord(memberDetails.getMemberId(), recordId, recordUpdateVO));
     }

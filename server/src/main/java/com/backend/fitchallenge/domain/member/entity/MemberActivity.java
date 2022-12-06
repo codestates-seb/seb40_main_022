@@ -30,19 +30,20 @@ public class MemberActivity {
         this.dayCount = dayCount;
         this.point = point;
     }
+
     public static MemberActivity of(MemberUpdateVO memberUpdateVO){
         return MemberActivity.builder()
                 .kilogram(memberUpdateVO.getKilogram())
                 .build();
     }
 
-    public void updatePointAndDayCount(double point, int dayCount){
+    public void updatePointAndDayCount(Double point, Integer dayCount){
 
         this.point += point;
         this.dayCount += dayCount;
     }
 
-    public void updatePoint(double point){
+    public void updatePoint(Double point){
         this.point += point;
     }
 
