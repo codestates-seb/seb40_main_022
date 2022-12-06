@@ -31,7 +31,7 @@ public class AnswerResponse {
     private List<AnswerCommentResponse> comments;
 
     @Builder
-    private AnswerResponse(Long answerId,
+    public AnswerResponse(Long answerId,
                            String content,
                            boolean isAccepted,
                            LocalDateTime createdAt,

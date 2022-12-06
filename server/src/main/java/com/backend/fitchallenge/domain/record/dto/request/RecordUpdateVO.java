@@ -32,6 +32,15 @@ public class RecordUpdateVO {
 
     private List<SportsRequest> sports;
 
+    @Builder
+    public RecordUpdateVO(LocalTime startTime, LocalTime endTime, String startImagePath, String endImagePath, List<SportsRequest> sports) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startImagePath = startImagePath;
+        this.endImagePath = endImagePath;
+        this.sports = sports;
+    }
+
     public boolean includesBothImages() {
         return this.startImagePath != null && this.endImagePath != null;
     }
