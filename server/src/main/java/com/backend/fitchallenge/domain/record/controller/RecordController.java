@@ -73,7 +73,7 @@ public class RecordController {
         return ResponseEntity.ok(TimePictureResponse.of(timePictureVO.getPoint(), imagePathList.get(0)));
     }
 
-    @PatchMapping("/records/pictures")
+    @PostMapping("/records/pictures/update")
     public ResponseEntity<?> updatePicture(@AuthMember MemberDetails memberDetails,
                                             TimePictureUpdateVO timePictureUpdateVO) throws IOException {
 

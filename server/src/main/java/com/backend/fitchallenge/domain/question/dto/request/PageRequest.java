@@ -8,7 +8,7 @@ public final class PageRequest {
 
 	private static final int MAX_SIZE = 2000;
 
-	private int page;
+	private int page = 1;
 	private int size = 10;
 	private Sort.Direction direction = Sort.Direction.DESC;
 	private Sort dynamicSort;
