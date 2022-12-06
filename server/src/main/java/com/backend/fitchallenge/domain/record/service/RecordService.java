@@ -154,6 +154,7 @@ public class RecordService {
             imagePathList = List.of(recordUpdateVO.getEndImagePath());
         }
         List<Sports> sports = sportsService.getSports(recordUpdateVO.getSports());
+        log.info("[RecordService] updateRecord() sports: {}", sports.toString());
 
         findRecord.update(recordUpdateVO, imagePathList, sports);
 

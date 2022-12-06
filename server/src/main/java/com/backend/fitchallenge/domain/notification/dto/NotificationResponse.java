@@ -32,6 +32,7 @@ public class NotificationResponse {
     }
 
     public static NotificationResponse of(Notification notification) {
+
         return NotificationResponse.builder()
                 .id(notification.getId())
                 .content(notification.getContent())

@@ -6,6 +6,7 @@ import com.backend.fitchallenge.domain.sports.entity.Sports;
 import com.backend.fitchallenge.domain.sports.dto.SportsRequest;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Slf4j
 public class Record {
 
     @Id
@@ -139,7 +141,7 @@ public class Record {
         this.getRecordSports().clear();
 
         List<SportsRequest> sportsRequests = recordUpdateVO.getSports();
-
+        log.info("[Record] update() sportsRequests: {}", sportsRequests.toString());
         for (int i = 0; i < sports.size(); i++) {
             RecordSports.create(this, sports.get(i), sportsRequests.get(i));
         }

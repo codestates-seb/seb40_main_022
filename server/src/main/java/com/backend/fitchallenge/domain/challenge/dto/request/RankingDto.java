@@ -5,10 +5,10 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 
-//54p 참조
-// QueryDsl 조회용 Projection 생성
+
 @Getter
 public class RankingDto {
+
     private Long memberId;
     private String userName;
     private String profileImage;

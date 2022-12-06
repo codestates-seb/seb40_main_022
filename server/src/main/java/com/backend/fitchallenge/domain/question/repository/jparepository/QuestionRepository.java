@@ -1,4 +1,4 @@
-package com.backend.fitchallenge.domain.question.repository;
+package com.backend.fitchallenge.domain.question.repository.jparepository;
 
 import com.backend.fitchallenge.domain.question.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;

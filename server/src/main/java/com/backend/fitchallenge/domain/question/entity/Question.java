@@ -50,7 +50,7 @@ public class Question extends Auditable {
     private List<Answer> answers = new ArrayList<>();
 
     @Builder
-    private Question(String title, String content, QuestionTag questionTag, Long view, Member member) {
+    public Question(String title, String content, QuestionTag questionTag, Long view, Member member) {
         this.title = title;
         this.content = content;
         this.questionTag = questionTag;
@@ -112,7 +112,7 @@ public class Question extends Auditable {
             throw new QuestionTagNotValid();
         }
 
-        public static String fromQuery(String value) {
+        public static String valueToConstant(String value) {
             for (QuestionTag tag : QuestionTag.values()) {
                 if (tag.getValue().equals(value))
                     return tag.toString();

@@ -1,34 +1,25 @@
 package com.backend.fitchallenge.domain.question.dto.request;
 
 import lombok.Getter;
-import org.springframework.data.domain.Sort;
 
 @Getter
-public final class PageRequest {
+public class PageRequest {
+    private static final int MAX_SIZE = 2000;
 
-	private static final int MAX_SIZE = 2000;
+    private int page;
+    private int size = 10;
+    private String sort;
 
-	private int page;
-	private int size = 10;
-	private Sort.Direction direction = Sort.Direction.DESC;
-	private Sort dynamicSort;
+    public PageRequest(Integer page, Integer sort) {
+        this.page = page == null || page <= 0 ? 1 : page;
+        this.sort = sort == null || sort == 0 ? "accuracy" : sort == 1 ? "id" : sort == 2 ? "view" : "accuracy";
+    }
 
-	public PageRequest(int page, String sort) {
-		this.page = page <= 0 ? 1 : page;
-		if (sort == null || sort.isBlank()) {
-			this.dynamicSort = Sort.by(direction, "recent");
-		} else {
-			this.dynamicSort = Sort.by(direction, "hot");
-		}
-	}
+    public long getOffset() {
+        return (long)(Math.max(1, page) - 1) * Math.min(size, MAX_SIZE);
+    }
 
-	public long getOffset() {
-		return (long)(Math.max(1, page) - 1) * Math.min(size, MAX_SIZE);
-	}
-
-	// getter
-	public org.springframework.data.domain.PageRequest of() {
-		return org.springframework.data.domain.PageRequest.of(page - 1 , size);
-	}
+    public org.springframework.data.domain.PageRequest of() {
+        return org.springframework.data.domain.PageRequest.of(page - 1 , size);
+    }
 }
-

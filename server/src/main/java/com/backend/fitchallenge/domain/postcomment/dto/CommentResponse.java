@@ -14,7 +14,6 @@ public class CommentResponse {
     private String userName;
     private String profileImage;
 
-
     @Builder
     public CommentResponse(Long commentId, String content, Long memberId, String userName, String profileImage) {
         this.commentId = commentId;
@@ -23,6 +22,7 @@ public class CommentResponse {
         this.userName = userName;
         this.profileImage = profileImage;
     }
+
 
     public static CommentResponse toResponse(PostComment postComment, Member member) {
         return CommentResponse.builder()

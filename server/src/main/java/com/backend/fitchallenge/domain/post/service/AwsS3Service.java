@@ -69,12 +69,11 @@ public class AwsS3Service {
         }
         return imagePathList;
     }
+
     /**
      * S3 파일 수정
      * 1. DB에 불러온 이미지경로를 통해 S3에서 조회 및 삭제
      * 2. 새롭게 등록한 파일 S3에 저장
-     * @param paths DB에 저장되어있는 이미지경로 목록
-     * @param files 등록한 파일목록
      * @return ClounFront 도메인명 + 파일명 path목록
      */
     public List<String> UpdateFile(List<String> paths,List<MultipartFile> files) {
@@ -117,6 +116,7 @@ public class AwsS3Service {
         return imagePathList;
     }
 
+
     // S3에서 이미지 파일 삭제
     public void DeleteFile(List<String> paths) {
 
@@ -128,6 +128,7 @@ public class AwsS3Service {
             }
         }
     }
+
 
     // 파일 유무 체크
     private void isFileExist(List<MultipartFile> files) {

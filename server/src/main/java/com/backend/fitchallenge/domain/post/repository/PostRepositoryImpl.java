@@ -24,6 +24,7 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+
     /**
      * post + 댓글수 조회
      * member(작성자) fetchJoin
@@ -45,6 +46,7 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
 
     }
 
+
     @Override
     public List<Tuple> findListWithoutLogin(Long lastPostId, Pageable pageable) {
         return  jpaQueryFactory
@@ -56,6 +58,7 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
                 .orderBy(post.id.desc()) // 최신순
                 .fetch();
     }
+
 
     public List<Tuple> findSearchList( Long memberId,List<Long> postIds) {
 
@@ -69,6 +72,7 @@ public class PostRepositoryImpl implements  PostRepositoryCustom {
                 .orderBy(post.id.desc())
                 .fetch();
     }
+
 
     @Override
     public List<Tuple> findSearchListWithoutLogin(List<Long> postIds) {

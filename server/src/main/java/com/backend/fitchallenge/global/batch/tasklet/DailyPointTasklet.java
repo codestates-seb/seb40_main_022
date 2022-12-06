@@ -103,20 +103,20 @@ public class DailyPointTasklet implements Tasklet, StepExecutionListener {
 
             //총점 계산
             if(apPoint < cpPoint){
-                cpRecord.getMember().getMemberActivity().updatePoint(3);
+                cpRecord.getMember().getMemberActivity().updatePoint(3.0);
                 challenge.updatePoint(-3); // applicant는 counterpart보다 3점 뒤지게 됨.
                 memberRepository.save(cpRecord.getMember());
                 challengeRepository.save(challenge);
             }
             else if(apPoint > cpPoint){
-                apRecord.getMember().getMemberActivity().updatePoint(3);
+                apRecord.getMember().getMemberActivity().updatePoint(3.0);
                 challenge.updatePoint(3); // applicant는 counterpart보다 3점 앞서게 됨
                 memberRepository.save(apRecord.getMember());
                 challengeRepository.save(challenge);
             }
             else{
-                cpRecord.getMember().getMemberActivity().updatePoint(1);
-                apRecord.getMember().getMemberActivity().updatePoint(1);
+                cpRecord.getMember().getMemberActivity().updatePoint(1.0);
+                apRecord.getMember().getMemberActivity().updatePoint(1.0);
                 memberRepository.save(cpRecord.getMember());
                 memberRepository.save(apRecord.getMember());
             }

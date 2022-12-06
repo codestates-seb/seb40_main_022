@@ -47,6 +47,7 @@ public class RecordSports {
 
     public static void create(Record record, Sports sports, SportsRequest sportsRequest) {
         log.info(sports.toString());
+        log.info(sportsRequest.toString());
         RecordSports recordSports = RecordSports.builder()
                 .record(record)
                 .sports(sports)

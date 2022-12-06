@@ -18,7 +18,8 @@ public class SimplePostResponse {
     private Boolean commentMore;
 
     @Builder
-    public SimplePostResponse(Long postId, LocalDateTime createdAt, String content, Integer commentCount, Integer likeCount, Boolean more, Boolean commentMore) {
+    public SimplePostResponse(Long postId, LocalDateTime createdAt, String content, Integer commentCount,
+                              Integer likeCount, Boolean more, Boolean commentMore) {
         this.postId = postId;
         this.createdAt = createdAt;
         this.content = content;
@@ -29,6 +30,7 @@ public class SimplePostResponse {
     }
 
     public static SimplePostResponse of(Post post, Integer likeSize, Integer commentSize) {
+
         return SimplePostResponse.builder()
                 .postId(post.getId())
                 .createdAt(post.getCreatedAt())
@@ -39,6 +41,4 @@ public class SimplePostResponse {
                 .commentMore(false)
                 .build();
     }
-
-
 }
