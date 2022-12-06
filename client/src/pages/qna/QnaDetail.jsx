@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import uuidv4 from 'react-uuid';
+import { useBeforeunload } from 'react-beforeunload';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import {
@@ -29,6 +30,7 @@ import {
 import { MypageGet } from '../../redux/action/MypageAsync';
 
 function QnaDetail() {
+  useBeforeunload(event => event.preventDefault());
   const list = useSelector(state => state.qnalist.list);
   const answer = useSelector(state => state.qnalist.detail.answers);
   const [content, setContent] = useState('');
@@ -101,7 +103,6 @@ function QnaDetail() {
     dispatch(QnaDetailAsync({ data }));
     setSelect(false);
   }, [select]);
-
   return (
     <Detail>
       <Headerwrap>
