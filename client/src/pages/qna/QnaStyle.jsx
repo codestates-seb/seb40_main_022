@@ -23,10 +23,10 @@ export const QnaBan = styled.div`
   width: 1200px;
   margin: 0 auto;
   background: url(${QnaBanner});
-  height: 150px;
+  height: 200px;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: 50% 38%;
+  background-position: 50% 34%;
 `;
 
 export const QnaTitle = styled.div`

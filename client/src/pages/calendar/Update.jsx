@@ -75,7 +75,7 @@ function Update() {
   };
   const handledelete = () => {
     dispatch(RecordListDelete(recordId));
-    navigate('/records');
+    // navigate('/records');
   };
   const deleteFile = name => {
     if (name === 'start') {
@@ -97,25 +97,28 @@ function Update() {
     }
   };
   const handleUp = () => {
-    const data = [today, time, end, startTime, endTime, split, recordId];
+    const data = [
+      today,
+      time,
+      end,
+      startTime.name,
+      endTime.name,
+      split,
+      recordId,
+    ];
     dispatch(RecordReUpAsync(data));
   };
-
   useEffect(() => {
     dispatch(RecordTagAsync(tags));
-    ListupGet.map((data, idx) => {
-      return setSplit([
-        ...split,
-        {
-          sign: idx,
-          id: data.sportsId,
-          set: data.set,
-          count: data.count,
-          weight: data.weight,
-        },
-      ]);
+    ListupGet.map(data => {
+      return split.push({
+        id: data.sportsId,
+        set: data.set,
+        count: data.count,
+        weight: data.weight,
+      });
     });
-  }, [ListupGet]);
+  }, []);
 
   return (
     <DetailBox>

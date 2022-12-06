@@ -1,30 +1,22 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import DailyPost from './DailyPost';
 import search from '../../images/search.svg';
-import { MainSearchAsync } from '../../redux/action/MainAsync';
+import { searchchange } from '../../redux/reducer/MainSlice';
 import { Inside, MainForm, MainSearch, ContentForm } from './MainStyle';
 
 export default function MainInside() {
   const [tagsearch, setTagearch] = useState('');
-  const [postList, setPostList] = useState([]);
-  console.log(tagsearch, postList);
+
   const dispatch = useDispatch();
   const handleSearch = () => {
-    const data = [tagsearch, 16];
-    dispatch(MainSearchAsync(data));
+    const tagchange = tagsearch.split('#').join('%23');
+    dispatch(searchchange(tagchange));
+    if (tagsearch === '') {
+      window.location.reload();
+    }
   };
-  useEffect(() => {
-    const getPost = async () => {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/dailyPosts`,
-      );
-      const post = await res.data.items;
-      setPostList([post]);
-    };
-    getPost();
-  }, []);
+
   return (
     <Inside>
       <div className="searchInput">

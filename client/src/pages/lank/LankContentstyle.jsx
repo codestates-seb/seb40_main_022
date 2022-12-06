@@ -15,10 +15,15 @@ export const Lankcontents = styled.section`
     background: none;
     border: none;
   }
+
+  .cont {
+    width: 150px;
+  }
   > h1 {
     line-height: 70px;
     font-weight: bolder;
     font-size: 24px;
+    min-width: 60px;
   }
   .cont-picture {
     max-width: 80px;
@@ -60,12 +65,12 @@ export const Lankcontents = styled.section`
     font-size: var(--font-18);
     box-shadow: var(--box-shadow);
   }
-  .cont-height {
+  /* .cont-height {
     border: 1px solid red;
   }
   .cont-weight {
     border: 1px solid blue;
-  }
+  } */
   > h4 {
     line-height: 70px;
     font-size: var(--font-11);

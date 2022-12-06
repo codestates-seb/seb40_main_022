@@ -39,12 +39,16 @@ export const Notifications = createAsyncThunk('notifications', () => {
 });
 
 export const ChallengeAccept = createAsyncThunk('accpet', id => {
-  axios.post(`${process.env.REACT_APP_API_URL}${id}/accept`, id, {
-    headers: {
-      Authorization: localStorage.getItem('Authorization'),
-      RefreshToken: localStorage.getItem('RefreshToken'),
-    },
-  });
+  axios
+    .post(`${process.env.REACT_APP_API_URL}${id}/accept`, id, {
+      headers: {
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(() => {
+      window.location.reload();
+    });
 });
 
 export const ChallengeDelete = createAsyncThunk('delete', id => {
@@ -90,6 +94,7 @@ export const ChallengeSearch = createAsyncThunk('/challenge/search', data => {
       },
     )
     .then(res => {
+      console.log(res);
       return res.data;
     });
 });

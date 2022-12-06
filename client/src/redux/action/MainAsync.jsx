@@ -2,16 +2,17 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const asyncPostUp = createAsyncThunk('post/up', ({ formData }) => {
-  axios.post(`${process.env.REACT_APP_API_URL}/dailyPosts`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: localStorage.getItem('Authorization'),
-      RefreshToken: localStorage.getItem('RefreshToken'),
-    },
-  });
-  // .then(() => {
-  //   window.location.reload();
-  // });
+  axios
+    .post(`${process.env.REACT_APP_API_URL}/dailyPosts`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
+      },
+    })
+    .then(() => {
+      window.location.href = '/';
+    });
 });
 
 export const asyncPostUpdate = createAsyncThunk(
@@ -180,10 +181,12 @@ export const asyncPostCmtEdit = createAsyncThunk(
 );
 
 export const MainSearchAsync = createAsyncThunk('search', data => {
-  console.log(data);
-  axios
+  return axios
     .get(
       `${process.env.REACT_APP_API_URL}/dailyPosts/search?tag=${data[0]}&lastPostId=${data[1]}`,
     )
-    .then(res => console.log(res));
+    .then(res => {
+      console.log(res);
+      return res.data;
+    });
 });
