@@ -181,7 +181,7 @@ export const asyncPostCmtEdit = createAsyncThunk(
 );
 
 export const MainSearchAsync = createAsyncThunk('search', data => {
-  axios
+  return axios
     .get(
       `${process.env.REACT_APP_API_URL}/dailyPosts/search?tag=${data[0]}&lastPostId=${data[1]}`,
     )
