@@ -11,7 +11,6 @@ public class CommentUpdateResponse {
     private String content;
 
 
-
     @Builder
     public CommentUpdateResponse(Long commentId, String content) {
         this.commentId = commentId;

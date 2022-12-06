@@ -22,12 +22,14 @@ public class QueryNotificationRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+
     public void deleteNotificationIsRead() {
             jpaQueryFactory
                 .delete(notification)
                 .where(notification.isRead.eq(true))
                 .execute();
     }
+
 
     public void deleteNotificationIsNotRead() {
         jpaQueryFactory

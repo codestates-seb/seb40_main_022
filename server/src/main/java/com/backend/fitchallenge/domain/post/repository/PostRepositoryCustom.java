@@ -9,11 +9,8 @@ import java.util.List;
 
 @Repository
 public interface PostRepositoryCustom {
-
     List<Tuple> findList(Long lastPostId,Long memberId, Pageable pageable);
-
     List<Tuple> findListWithoutLogin(Long lastPostId, Pageable pageable);
-
     List<Tuple> findSearchList(Long memberId, List<Long> postIds);
     List<Tuple> findSearchListWithoutLogin( List<Long> postIds);
 
