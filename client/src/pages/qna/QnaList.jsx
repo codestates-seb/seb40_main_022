@@ -141,7 +141,9 @@ function QnaList() {
                             답변 : {data.answerCount}
                           </h3>
                           <h3>{data.member.username}</h3>
-                          <h3>{data.createdAt}</h3>
+                          <h3>
+                            {toStringByFormatting(new Date(data.createdAt))}
+                          </h3>
                           <button>{data.tag}</button>
                         </span>
                       </article>
