@@ -46,4 +46,12 @@ public class MemberActivity {
         this.point += point;
     }
 
+    public MemberActivity update(int kilogram){
+        return MemberActivity.builder()
+                .kilogram(kilogram)
+                .dayCount(this.dayCount)
+                .point(this.point)
+                .build();
+    }
+
 }

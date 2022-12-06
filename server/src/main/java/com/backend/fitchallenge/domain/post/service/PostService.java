@@ -84,7 +84,7 @@ public class PostService {
                                         .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                                 .pictures(postTuple.get(post).getPictures().stream()
                                         .map(picture -> picture.getPath()).collect(toList()))
-                                .likeSate(Optional.ofNullable(postTuple.get(likes.id)).isPresent())
+                                .likeState(Optional.ofNullable(postTuple.get(likes.id)).isPresent())
                                 .build()
                 ).collect(toList());
 
@@ -117,7 +117,7 @@ public class PostService {
                                         .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                                 .pictures(postTuple.get(post).getPictures().stream()
                                         .map(picture -> picture.getPath()).collect(toList()))
-                                .likeSate(false)
+                                .likeState(false)
                                 .build()
                 ).collect(toList());
 
@@ -155,7 +155,7 @@ public class PostService {
                                 .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                         .pictures(tuple.get(post).getPictures().stream()
                                 .map(picture -> picture.getPath()).collect(toList()))
-                        .likeSate(Optional.ofNullable(tuple.get(likes.id)).isPresent())
+                        .likeState(Optional.ofNullable(tuple.get(likes.id)).isPresent())
                         .build()).collect(toList());
 
         Slice<PostResponse> result = checkLastPage(responses, pageable);
@@ -187,7 +187,7 @@ public class PostService {
                                 .map(postTag -> postTag.getTag().getContent()).collect(toList()))
                         .pictures(tuple.get(post).getPictures().stream()
                                 .map(picture -> picture.getPath()).collect(toList()))
-                        .likeSate(false)
+                        .likeState(false)
                         .build()).collect(toList());
 
         Slice<PostResponse> result = checkLastPage(responses, pageable);

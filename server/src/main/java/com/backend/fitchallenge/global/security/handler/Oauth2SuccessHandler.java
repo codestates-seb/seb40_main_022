@@ -113,7 +113,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("fit-challenge-22.s3-website.ap-northeast-2.amazonaws.com")
+                .host("fitchallenge2.s3-website.ap-northeast-2.amazonaws.com")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
