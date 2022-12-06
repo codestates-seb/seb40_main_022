@@ -76,8 +76,7 @@ function Calendar() {
                 <div className="content">아직 대결이 종료되지 않았습니다.</div>
                 <h2>대결을 중단하시겠습니까?</h2>
                 <div className="contentbox">
-                  주의: 대결 중단시 100 point가 차감되고 <br /> 7일간 대결을
-                  하실 수 없습니다.
+                  주의: 대결 중단시 10 point가 차감됩니다.
                 </div>
                 <div className="btns">
                   <button

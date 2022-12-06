@@ -76,25 +76,23 @@ function LankDropdown() {
     setCareer(e.target.innerHTML);
     if (e.target.innerHTML !== '') {
       if (e.target.innerHTML === '10년 이상') {
-        setCareerurl(`periodGoe=10`);
+        setCareerurl(`periodGoe=120`);
       } else if (e.target.innerHTML === '1년 미만') {
-        setCareerurl(`periodLt=1`);
+        setCareerurl(`periodLt=12`);
       } else if (e.target.innerHTML.length === 8) {
         setCareerurl(
-          `periodGoe=${e.target.innerHTML.slice(
-            0,
-            1,
-          )}&periodLt=${e.target.innerHTML.slice(5, 7)}`,
+          `periodGoe=${+e.target.innerHTML.slice(0, 1) * 12}&periodLt=${
+            +e.target.innerHTML.slice(5, 7) * 12
+          }`,
         );
       } else if (e.target.innerHTML.length === 7) {
         setCareerurl(
-          `periodGoe=${e.target.innerHTML.slice(
-            0,
-            1,
-          )}&periodLt=${e.target.innerHTML.slice(5, 6)}`,
+          `periodGoe=${+e.target.innerHTML.slice(0, 1) * 12}&periodLt=${
+            +e.target.innerHTML.slice(5, 6) * 12
+          }`,
         );
       } else {
-        setCareerurl(`periodGoe=${e.target.innerHTML.slice(0, 1)}`);
+        setCareerurl(`periodGoe=${+e.target.innerHTML.slice(0, 1) * 12}`);
       }
     }
   };

@@ -31,9 +31,6 @@ export default function DailyInfo({ el, index }) {
     }
   };
 
-  // const likeVal = useSelector(state => state.dailypost.data.items);
-  // console.log(likeVal);
-
   useEffect(() => {
     dispatch(asyncPost());
   }, []);
@@ -52,7 +49,7 @@ export default function DailyInfo({ el, index }) {
             <p className="memo">{el.post.content}</p>
           </div>
           <div className="act">
-            <span className="date">{el.post.createdAt}</span>
+            <span className="date">{el.post.createdAt.replace('T', ' ')}</span>
             <span>
               <button
                 onClick={() => {
@@ -89,7 +86,9 @@ export default function DailyInfo({ el, index }) {
           >
             <img className="user" src={el.member.profileImage} alt="daily" />
           </button>
-          <span>{el.member.username ? el.member.username : null}</span>
+          <span className="username">
+            {el.member.username ? el.member.username : null}
+          </span>
         </div>
       </article>
       {isComment ? <DailyCmt index={index} /> : null}

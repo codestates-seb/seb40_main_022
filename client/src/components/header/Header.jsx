@@ -49,7 +49,13 @@ function Header() {
   return (
     <Head>
       <div className="mainHead">
-        <Link to="/" className="logo">
+        <Link
+          to="/"
+          className="logo"
+          onClick={() => {
+            window.location.href = '/';
+          }}
+        >
           <img src={Logo} alt="logo" />
           <img className="logoname" src={LogoText} alt="logo" />
         </Link>

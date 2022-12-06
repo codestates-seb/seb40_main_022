@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/footer/Footer';
 import Head from '../../components/header/Header';
 import MainInside from './MainInside';
@@ -18,7 +17,6 @@ function Main() {
   const data2 = new URL(window.location.href).searchParams.get('refresh_token');
   const loginboolean = useSelector(state => state.authToken.isLogin);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (data1 !== null && data2 !== null) {
@@ -28,7 +26,7 @@ function Main() {
         dispatch(ReLodingLogin())
           .unwrap()
           .then(() => {
-            return navigate('/dailyposts');
+            window.location.href = '/';
           });
       }
     }

@@ -280,6 +280,7 @@ function ProfileEdit() {
                 if (
                   profileImage.length !== 0 &&
                   username.length > 0 &&
+                  username.length <= 15 &&
                   age.length > 0 &&
                   height.length > 0 &&
                   weight.length > 0 &&
@@ -289,8 +290,8 @@ function ProfileEdit() {
                   handleSubmit();
                 } else if (profileImage.length === 0)
                   alert('이미지를 업로드해주세요');
-                else if (username.length < 1)
-                  alert('이름은 1자 이상 입력해주세요');
+                else if (username.length < 1 || username.length >= 15)
+                  alert('이름은 1자 이상 15자 이하로 입력해주세요');
                 else if (age.length < 1) alert('나이를 입력해주세요');
                 else if (height.length < 1) alert('키를 입력해주세요');
                 else if (weight.length < 1) alert('몸무게를 입력해주세요');

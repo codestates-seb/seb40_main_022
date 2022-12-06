@@ -72,7 +72,11 @@ function QnaList() {
           <h1>QnA</h1>
           <button
             onClick={() => {
-              navigate('/questions/postup');
+              if (localStorage.getItem('Authorization')) {
+                navigate('/questions/postup');
+              } else {
+                navigate('/members/login');
+              }
             }}
           >
             질문
