@@ -26,10 +26,13 @@ function Modal() {
     if (el.includes('중단')) {
       return '중단';
     }
+    if (el.includes('거절')) {
+      return '거절';
+    }
     if (el.includes('수락')) {
       return '수락';
     }
-    return '거절';
+    return '신청';
   };
 
   const handleClick = (url, id) => {
