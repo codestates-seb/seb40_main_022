@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 public class RankingCondition {
     //분할, 키, 몸무게, 경력
-
     private Integer split; 
     private Integer heightGoe;
     private Integer heightLt;

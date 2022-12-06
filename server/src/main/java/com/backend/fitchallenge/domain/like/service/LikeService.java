@@ -27,7 +27,6 @@ public class LikeService {
 
         Likes likes = Likes.toEntity(member, post);
         likeRepository.up(likes);
-
     }
 
     public void cancel(Long postId, Long memberId) {
