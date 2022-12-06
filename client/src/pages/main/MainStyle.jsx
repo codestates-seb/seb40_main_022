@@ -47,6 +47,9 @@ export const Inside = styled.section`
         border: none;
         background-color: var(--white);
         cursor: pointer;
+        .searchIcon {
+          width: 25px;
+        }
       }
     }
 
@@ -59,6 +62,7 @@ export const Inside = styled.section`
         margin-left: 5px;
         border: none;
         margin: 4px;
+        margin-right: 10px;
         padding: 4px;
         color: rgb(57, 115, 157);
         background-color: rgb(225, 236, 244);

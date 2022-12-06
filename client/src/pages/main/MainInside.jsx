@@ -12,7 +12,6 @@ export default function MainInside() {
   const dispatch = useDispatch();
   const handleSearch = () => {
     const tagchange = searchTagList.join('').split('#').join('%23');
-    console.log(tagchange);
     dispatch(searchchange(tagchange));
     if (searchTagList === '') {
       window.location.reload();
@@ -22,7 +21,8 @@ export default function MainInside() {
   const handleTag = e => {
     if (e.key === 'Enter' && e.target.value !== '') {
       const updateTagList = [...searchTagList];
-      updateTagList.push(`#${tagsearch}`);
+      const filSearch = tagsearch.split('#').join('');
+      updateTagList.push(`#${filSearch}`);
       const filteredTagList = updateTagList.filter(
         (el, idx) => updateTagList.indexOf(el) === idx,
       );

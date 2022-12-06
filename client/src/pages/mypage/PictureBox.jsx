@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useInView } from 'react-intersection-observer';
 import uuidv4 from 'react-uuid';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import edit from '../../images/edit.svg';
 import del from '../../images/delete.svg';
 import Loader from '../main/Loader';
@@ -30,7 +30,6 @@ const Pictures = styled.div`
     > img {
       width: 400px;
       height: 400px;
-      /* border: 5px solid var(--white); */
     }
 
     .buttons {
@@ -60,7 +59,7 @@ export function PictureBox() {
   const [postList, setPostList] = useState([]);
   const lastPost = postList && postList[postList.length - 1];
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     const getPost = async () => {
       axios
@@ -124,7 +123,10 @@ export function PictureBox() {
                         <img src={el.image} alt="" />
                         <div className="buttons">
                           <button
-                            onClick={() => navigate(`/dailyposts/${el.postId}`)}
+                            onClick={() =>
+                              // navigate(`/dailyposts/${el.postId}`)
+                              alert('구현 중입니다.')
+                            }
                           >
                             <img className="edit" src={edit} alt="edit" />
                           </button>

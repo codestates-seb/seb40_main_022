@@ -41,8 +41,9 @@ export default function DailyCmt({ index }) {
   };
 
   const handleEditAnswer = commentId => {
+    const data = [index, commentId, editAnswer];
     setCmtEditBut(!cmtEditBut);
-    dispatch(asyncPostCmtEdit(index, commentId, editAnswer));
+    dispatch(asyncPostCmtEdit(data));
     setCmtSelect(true);
   };
 
@@ -125,7 +126,9 @@ export default function DailyCmt({ index }) {
                         <div className="id_content">
                           <div className="cmtUserName">{all.userName}</div>
                           <div className="content">
-                            {all.content && cmtEditBut ? (
+                            {all.content &&
+                            cmtEditBut &&
+                            all.userName === cmtUserId ? (
                               <input
                                 value={editAnswer || all.content}
                                 onChange={e => {

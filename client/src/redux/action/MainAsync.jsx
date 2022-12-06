@@ -163,31 +163,26 @@ export const asyncPostCmtDel = createAsyncThunk(
   },
 );
 
-export const asyncPostCmtEdit = createAsyncThunk(
-  'post/up',
-  (index, commentId, editAnswer) => {
-    axios.patch(
-      `${process.env.REACT_APP_API_URL}/dailyPosts/${index}/comments/${commentId}`,
-      JSON.stringify({ content: editAnswer }),
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: localStorage.getItem('Authorization'),
-          RefreshToken: localStorage.getItem('RefreshToken'),
-        },
+export const asyncPostCmtEdit = createAsyncThunk('post/up', data => {
+  axios.patch(
+    `${process.env.REACT_APP_API_URL}/dailyPosts/${data[0]}/comments/${data[1]}`,
+    JSON.stringify({ content: data[2] }),
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('Authorization'),
+        RefreshToken: localStorage.getItem('RefreshToken'),
       },
-    );
-  },
-);
+    },
+  );
+});
 
 export const MainSearchAsync = createAsyncThunk('search', data => {
-  console.log(data);
   return axios
     .get(
       `${process.env.REACT_APP_API_URL}/dailyPosts/search?tag=${data[0]}&lastPostId=${data[1]}`,
     )
     .then(res => {
-      console.log(res);
       return res.data;
     });
 });
