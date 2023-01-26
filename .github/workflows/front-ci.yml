@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+    branches: [ main, dev ]
+env:
+  S3_BUCKET_NAME: pre-project-bucket-seb40-017
+jobs:
+  frontend:
+    name: CI with Node.js
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: client
+
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v3
+
+      - name: node.js 14설치
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+
+      - name: npm 설치
+        run: npm install
+
+      - name: npm 빌드
+        run: npm run build
