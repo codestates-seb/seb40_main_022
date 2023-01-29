@@ -14,4 +14,8 @@ public class ChatMessage {
     public enum MessageType {
         ENTER, TALK
     }
+
+    public  void setMessage(String message) {
+        this.message = message;
+    }
 }
