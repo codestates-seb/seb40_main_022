@@ -18,14 +18,14 @@ public class ChatRoomController {
 
     // 채팅 리스트 화면
     @GetMapping("/room")
-    public String rooms(Model model) {
+    public String room(Model model) {
         return "/chat/room";
     }
 
     //모든 채팅방 목록 반환
-    @GetMapping("rooms")
+    @GetMapping("/rooms")
     @ResponseBody
-    public List<ChatRoom> room() {
+    public List<ChatRoom> rooms() {
         return chatRoomRepository.findAllRoom();
     }
 

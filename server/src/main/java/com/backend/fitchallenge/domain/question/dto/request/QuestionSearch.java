@@ -1,9 +1,6 @@
 package com.backend.fitchallenge.domain.question.dto.request;
 
-import com.backend.fitchallenge.domain.question.entity.Question;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class QuestionSearch {

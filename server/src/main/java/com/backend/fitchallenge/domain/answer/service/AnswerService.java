@@ -12,7 +12,8 @@ import com.backend.fitchallenge.domain.member.repository.MemberRepository;
 import com.backend.fitchallenge.domain.question.entity.Question;
 import com.backend.fitchallenge.domain.question.exception.NotQuestionWriter;
 import com.backend.fitchallenge.domain.question.exception.QuestionNotFound;
-import com.backend.fitchallenge.domain.question.repository.jparepository.QuestionRepository;
+
+import com.backend.fitchallenge.domain.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

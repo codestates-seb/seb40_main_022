@@ -5,13 +5,15 @@ import com.backend.fitchallenge.domain.challenge.dto.response.RankingResponse;
 import com.backend.fitchallenge.domain.member.SimplePostMemberResponse;
 import com.backend.fitchallenge.domain.member.entity.Member;
 import com.backend.fitchallenge.domain.notification.dto.NotificationResponse;
-import com.backend.fitchallenge.domain.post.dto.request.PostCreateVO;
-import com.backend.fitchallenge.domain.post.dto.request.PostUpdateVO;
-import com.backend.fitchallenge.domain.post.dto.response.PostResponse;
-import com.backend.fitchallenge.domain.post.dto.response.SimplePostResponse;
+
+import com.backend.fitchallenge.domain.post.dto.PostCreateVO;
+import com.backend.fitchallenge.domain.post.dto.PostResponse;
+import com.backend.fitchallenge.domain.post.dto.PostUpdateVO;
+import com.backend.fitchallenge.domain.post.dto.SimplePostResponse;
 import com.backend.fitchallenge.domain.post.entity.Post;
-import com.backend.fitchallenge.domain.postcomment.dto.response.CommentResponse;
-import com.backend.fitchallenge.domain.postcomment.dto.response.CommentUpdateResponse;
+
+import com.backend.fitchallenge.domain.postcomment.dto.CommentResponse;
+import com.backend.fitchallenge.domain.postcomment.dto.CommentUpdateResponse;
 import com.backend.fitchallenge.domain.postcomment.entity.PostComment;
 import com.backend.fitchallenge.domain.tag.dto.TagDto;
 import lombok.NoArgsConstructor;

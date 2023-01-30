@@ -7,15 +7,18 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionUpdateVO {
 
+    private Long id;
+
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String content;
 
     private String tag;

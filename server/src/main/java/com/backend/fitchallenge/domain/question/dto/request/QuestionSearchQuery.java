@@ -1,5 +1,7 @@
 package com.backend.fitchallenge.domain.question.dto.request;
 
+import com.backend.fitchallenge.domain.question.entity.Question;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +28,6 @@ public class QuestionSearchQuery {
 
         String noTagOneSpaceString = m.replaceAll("").replaceAll("\\s+", " ");
 
-        return QuestionSearch.of(noTagOneSpaceString, tagName);
+        return QuestionSearch.of(noTagOneSpaceString, Question.QuestionTag.fromQuery(tagName));
     }
 }

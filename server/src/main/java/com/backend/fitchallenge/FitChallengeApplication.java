@@ -1,6 +1,6 @@
 package com.backend.fitchallenge;
 
-import com.backend.fitchallenge.domain.question.repository.elasticsearchrepository.QuestionSearchRepository;
+
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,11 +18,6 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 @EnableScheduling
 @EnableBatchProcessing
-@EnableJpaRepositories(excludeFilters = {
-		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
-			QuestionSearchRepository.class
-		})
-})
 public class FitChallengeApplication{
 
    @PostConstruct

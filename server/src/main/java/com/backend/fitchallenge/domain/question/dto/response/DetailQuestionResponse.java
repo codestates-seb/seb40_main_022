@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 @Getter
 public class DetailQuestionResponse {
 
-    private Long questionId;
-
     private String title;
 
     private String content;
@@ -37,8 +35,7 @@ public class DetailQuestionResponse {
     private List<AnswerResponse> answers;
 
     @Builder
-    private DetailQuestionResponse(Long questionId, String title, String content, String tag, List<String> pictures, Long view, Integer answerCount, LocalDateTime createdAt, LocalDateTime modifiedAt, MemberResponse memberResponse, List<AnswerResponse> answers) {
-        this.questionId = questionId;
+    private DetailQuestionResponse(String title, String content, String tag, List<String> pictures, Long view, Integer answerCount, LocalDateTime createdAt, LocalDateTime modifiedAt, MemberResponse memberResponse, List<AnswerResponse> answers) {
         this.title = title;
         this.content = content;
         this.tag = tag;
@@ -53,7 +50,6 @@ public class DetailQuestionResponse {
 
     public static DetailQuestionResponse of(Question question, MemberResponse memberResponse, List<AnswerResponse> answers) {
         return DetailQuestionResponse.builder()
-                .questionId(question.getId())
                 .title(question.getTitle())
                 .content(question.getContent())
                 .tag(question.getQuestionTag().getValue())

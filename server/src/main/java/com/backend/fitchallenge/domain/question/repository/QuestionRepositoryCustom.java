@@ -1,8 +1,10 @@
-package com.backend.fitchallenge.domain.question.repository.jparepository;
+package com.backend.fitchallenge.domain.question.repository;
+
 
 import com.backend.fitchallenge.domain.question.dto.request.PageRequest;
 import com.backend.fitchallenge.domain.question.dto.request.QuestionSearch;
 import com.backend.fitchallenge.domain.question.entity.Question;
+
 import com.querydsl.core.Tuple;
 import org.springframework.stereotype.Repository;
 
@@ -14,11 +16,9 @@ public interface QuestionRepositoryCustom {
 
     Long pagingCount();
 
-    Long pagingCount(QuestionSearch questionSearch);
-
     Optional<Question> findQuestionWithWriter(Long id);
 
     List<Tuple> findList(PageRequest pageable);
 
-//    List<Tuple> findList(PageRequest pageable, QuestionSearch questionSearch);
+    List<Tuple> findList(PageRequest pageable, QuestionSearch questionSearch);
 }

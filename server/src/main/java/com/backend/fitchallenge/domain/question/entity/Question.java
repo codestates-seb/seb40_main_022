@@ -50,7 +50,7 @@ public class Question extends Auditable {
     private List<Answer> answers = new ArrayList<>();
 
     @Builder
-    public Question(String title, String content, QuestionTag questionTag, Long view, Member member) {
+    private Question(String title, String content, QuestionTag questionTag, Long view, Member member) {
         this.title = title;
         this.content = content;
         this.questionTag = questionTag;
@@ -58,7 +58,7 @@ public class Question extends Auditable {
         this.member = member;
     }
 
-    public static Question create(QuestionCreateVO questionCreateVO, Member member, List<String> paths) {
+    public static Question createQuestion(QuestionCreateVO questionCreateVO, Member member, List<String> paths) {
         Question question = Question.builder()
                 .title(questionCreateVO.getTitle())
                 .content(questionCreateVO.getContent())
@@ -67,12 +67,12 @@ public class Question extends Auditable {
                 .member(member)
                 .build();
 
-        paths.forEach(path -> QuestionPicture.create(path, question));
+        paths.forEach(path -> QuestionPicture.createPicture(path, question));
 
         return question;
     }
 
-    public void update(QuestionUpdateVO questionUpdateVO) {
+    public void updateQuestion(QuestionUpdateVO questionUpdateVO) {
         String changedTitle = questionUpdateVO.getTitle();
         String changedContent = questionUpdateVO.getContent();
         String changedTag = questionUpdateVO.getTag();
@@ -112,7 +112,7 @@ public class Question extends Auditable {
             throw new QuestionTagNotValid();
         }
 
-        public static String valueToConstant(String value) {
+        public static String fromQuery(String value) {
             for (QuestionTag tag : QuestionTag.values()) {
                 if (tag.getValue().equals(value))
                     return tag.toString();
