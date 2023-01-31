@@ -15,6 +15,12 @@ module.exports = {
   //   },
   // ],
   rules: {
+    "prettier/prettier": [
+      "error",
+      {
+          "endOfLine": "auto"
+      }
+],
     'no-alert': 'off',
     'import/no-unresolved': 'off',
     'react/button-has-type': 'off',

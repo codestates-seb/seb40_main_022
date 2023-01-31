@@ -70,6 +70,9 @@ function Header() {
             <Link to="/questions" className="logoutbut">
               Q&A
             </Link>
+            <Link to="http://localhost:8080/chat/room" className="logoutbut">
+              채팅
+            </Link>
             {allam && allam.length !== 0 ? (
               <button ref={noticeRef} onClick={() => setModalOpen(true)}>
                 <img src={ballliston} className="noticeModal" alt="핑크색 종" />
@@ -93,6 +96,9 @@ function Header() {
             </Link>
             <Link to="/questions" className="logoutbut">
               Q&A
+            </Link>
+            <Link to="http://localhost:8080/chat/room" className="logoutbut">
+              채팅
             </Link>
             <button ref={popRef} onClick={() => setSide(!side)}>
               <img src={sidebar} alt="sidebar" className="sideb" />
